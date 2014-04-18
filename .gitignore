@@ -1,0 +1,53 @@
+# Maven
+target/
+
+# Eclipse
+.settings/
+.classpath
+.project
+bin/
+
+# NetBeans
+nbproject/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Ant
+build/
+dist/
+
+# Matlab
+*.asv
+*.m~
+*.mex*
+slprj/
+
+# Vim
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+# SVN
+.svn
+
+# HotSpot
+hs_err*.log
+
+# Glimpse Specific
+ignore-strings
+results-filtered
+results-unfiltered
+search-strings
+search-git.sh
