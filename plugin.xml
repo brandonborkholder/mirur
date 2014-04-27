@@ -17,6 +17,20 @@
       </view>
    </extension>
    <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Sample Category"
+            id="test-plugin">
+      </category>
+      <view
+            name="MyVars"
+            icon="icons/sample.gif"
+            category="test-plugin"
+            class="testplugin.views.VariablesView"
+            id="testplugin.views.VariablesView">
+      </view>
+   </extension>
+   <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
@@ -25,6 +39,18 @@
                relative="org.eclipse.ui.views.ProblemView"
                relationship="right"
                id="testplugin.views.SampleView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               ratio="0.2"
+               relative="org.eclipse.debug.ui.VariableView"
+               relationship="stack"
+               id="testplugin.views.VariablesView">
          </view>
       </perspectiveExtension>
    </extension>
