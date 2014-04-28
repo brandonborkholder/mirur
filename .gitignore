@@ -53,3 +53,5 @@ search-strings
 search-git.sh
 
 lib/
+*.dll
+*.so

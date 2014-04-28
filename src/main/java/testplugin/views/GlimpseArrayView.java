@@ -37,6 +37,5 @@ public class GlimpseArrayView extends ViewPart {
     @Override
     public void dispose() {
         animator.stop();
-        canvas.dispose();
     }
 }
