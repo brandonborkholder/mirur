@@ -13,3 +13,20 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.debug.ui;bundle-version="3.6.250"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/glimpse-core-2.1.2.jar,
+ lib/glimpse-extras-swt-2.1.2.jar,
+ lib/glimpse-util-2.1.2.jar,
+ lib/antlr-runtime-3.4.jar,
+ lib/fastutil-6.5.12.jar,
+ lib/glimpse-core-2.1.2-sources.jar,
+ lib/glimpse-extras-swt-2.1.2-sources.jar,
+ lib/glimpse-util-2.1.2-sources.jar,
+ lib/gluegen-rt-2.1.5-01-natives-windows-amd64.jar,
+ lib/gluegen-rt-2.1.5-01.jar,
+ lib/gluegen-rt-main-2.1.5-01.jar,
+ lib/guava-15.0.jar,
+ lib/jogl-all-2.1.5-01-natives-windows-amd64.jar,
+ lib/jogl-all-2.1.5-01.jar,
+ lib/jogl-all-main-2.1.5-01.jar,
+ lib/miglayout-core-4.2.jar,
+ lib/stringtemplate-3.2.1.jar
