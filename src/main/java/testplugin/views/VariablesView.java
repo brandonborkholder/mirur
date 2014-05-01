@@ -35,7 +35,6 @@ import org.eclipse.ui.IViewSite;
 public class VariablesView extends AbstractDebugView implements IDebugContextListener {
     private TreeViewer treeViewer;
     private IContentProvider treeContentProvider;
-    private DebugViewListener listener = new SysoutDebugViewListener();
 
     @Override
     public Viewer createViewer(Composite parent) {
@@ -151,6 +150,7 @@ public class VariablesView extends AbstractDebugView implements IDebugContextLis
     protected void treeSelectionChanged(ISelection selection) {
         VarTreeNode node = (VarTreeNode) ((IStructuredSelection) selection).getFirstElement();
 
+        DebugViewListener listener = DebugViewListeners.SINGLETON;
         listener.clear();
 
         try {
