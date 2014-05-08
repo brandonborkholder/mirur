@@ -52,6 +52,6 @@ results-unfiltered
 search-strings
 search-git.sh
 
-lib/
 *.dll
 *.so
+*.jar
