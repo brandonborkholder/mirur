@@ -7,7 +7,7 @@ import com.metsci.glimpse.support.color.GlimpseColor;
 public class LinePlot extends SimplePlot2D {
     private XYLinePainter painter;
 
-    public LinePlot() {
+    public LinePlot(Array1D array) {
         setTitleHeight(0);
         setAxisSizeX(20);
         setAxisSizeY(20);
@@ -20,9 +20,11 @@ public class LinePlot extends SimplePlot2D {
         painter.setLineColor(GlimpseColor.getRed());
         painter.setPointSize(3);
         painter.setLineThickness(1.5f);
+
+        display(array);
     }
 
-    public void display(Array1D array) {
+    private void display(Array1D array) {
         float[] data = array.toFloats();
         float[] indexes = new float[data.length];
         for (int i = 0; i < indexes.length; i++) {

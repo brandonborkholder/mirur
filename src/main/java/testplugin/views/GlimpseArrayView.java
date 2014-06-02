@@ -62,7 +62,7 @@ public class GlimpseArrayView extends ViewPart implements DebugViewListener {
 
     @Override
     public void inspect(double[] data) {
-        swapLayout(new LinePlot(), new Array1DFloats(data));
+        updateLayout(data, new Array1DFloats(data));
     }
 
     @Override
@@ -77,10 +77,14 @@ public class GlimpseArrayView extends ViewPart implements DebugViewListener {
     public void clear() {
     }
 
-    private void swapLayout(GlimpseLayout newLayout, Array1D array) {
-        canvas.removeLayout(currentLayout);
-        currentLayout = newLayout;
-        canvas.addLayout(newLayout);
-        ((LinePlot) newLayout).display(array);
+    private void updateLayout(Object data, Array1D array) {
+        canvas.removeAllLayouts();
+
+        for (VisDebugPlugin plugin : VisDebugPlugins.plugins()) {
+            if (plugin.supportsData(data.getClass())) {
+                plugin.installLayout(canvas, array);
+                break;
+            }
+        }
     }
 }
