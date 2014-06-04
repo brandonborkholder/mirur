@@ -30,6 +30,8 @@ public class GlimpseArrayView extends ViewPart implements DebugViewListener {
         canvas.addLayout(currentLayout);
 
         DebugViewListeners.SINGLETON.add(this);
+
+        getViewSite().getActionBars().getToolBarManager().add(new ListDisplaysAction());
     }
 
     @Override

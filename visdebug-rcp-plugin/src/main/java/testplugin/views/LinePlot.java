@@ -9,8 +9,8 @@ public class LinePlot extends SimplePlot2D {
 
     public LinePlot(Array1D array) {
         setTitleHeight(0);
-        setAxisSizeX(20);
-        setAxisSizeY(20);
+        setAxisSizeX(25);
+        setAxisSizeY(30);
 
         painter = new XYLinePainter();
         addPainter(painter, DATA_LAYER);
@@ -21,6 +21,11 @@ public class LinePlot extends SimplePlot2D {
         painter.setPointSize(3);
         painter.setLineThickness(1.5f);
 
+        getCrosshairPainter().showSelectionBox(false);
+
+        ArrayValueTipPainter valuePainter = new ArrayValueTipPainter(getAxis(), array);
+        addPainter0(valuePainter, null, Integer.MAX_VALUE);
+
         display(array);
     }
 
@@ -30,6 +35,18 @@ public class LinePlot extends SimplePlot2D {
         for (int i = 0; i < indexes.length; i++) {
             indexes[i] = i;
         }
+
+        float min = Float.POSITIVE_INFINITY;
+        float max = Float.NEGATIVE_INFINITY;
+        for (float v : data) {
+            min = Math.min(v, min);
+            max = Math.max(v, max);
+        }
+
+        getAxisX().setMin(0);
+        getAxisX().setMax(data.length - 1);
+        getAxisY().setMin(min);
+        getAxisY().setMax(max);
 
         painter.setData(indexes, data);
     }
