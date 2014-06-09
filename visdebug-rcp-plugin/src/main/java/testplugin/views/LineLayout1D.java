@@ -7,12 +7,14 @@ import com.metsci.glimpse.layout.GlimpseLayout;
 
 public class LineLayout1D implements VisDebugPlugin {
     @Override
-    public boolean supportsData(Class<?> clazz) {
-        return int[].class.equals(clazz) ||
+    public boolean supportsData(PrimitiveArray array) {
+        Class<?> clazz = array.getData().getClass();
+        return array instanceof Array1D &&
+               (int[].class.equals(clazz) ||
                 float[].class.equals(clazz) ||
                 double[].class.equals(clazz) ||
                 char[].class.equals(clazz) ||
-                short[].class.equals(clazz);
+                short[].class.equals(clazz));
     }
 
     @Override
@@ -26,8 +28,8 @@ public class LineLayout1D implements VisDebugPlugin {
     }
 
     @Override
-    public void installLayout(GlimpseCanvas canvas, Array1D data) {
-        GlimpseLayout layout = new LinePlot(data);
+    public void installLayout(GlimpseCanvas canvas, PrimitiveArray array) {
+        GlimpseLayout layout = new LinePlot((Array1D) array);
         canvas.addLayout(layout);
     }
 

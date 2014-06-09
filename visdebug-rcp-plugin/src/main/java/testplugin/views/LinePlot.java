@@ -8,9 +8,9 @@ public class LinePlot extends SimplePlot2D {
     private XYLinePainter painter;
 
     public LinePlot(Array1D array) {
-        setTitleHeight(0);
         setAxisSizeX(25);
         setAxisSizeY(30);
+        setTitle(array.getName());
 
         painter = new XYLinePainter();
         addPainter(painter, DATA_LAYER);

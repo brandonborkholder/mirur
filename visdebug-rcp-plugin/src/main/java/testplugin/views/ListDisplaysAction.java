@@ -8,12 +8,12 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-public class ListDisplaysAction extends Action implements IMenuCreator {
+public abstract class ListDisplaysAction extends Action implements IMenuCreator {
     public ListDisplaysAction() {
         setMenuCreator(this);
-		setText("Painters");
-		setToolTipText("Select Painter");
-		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR));
+        setText("Painters");
+        setToolTipText("Select Painter");
+        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR));
     }
 
     @Override
@@ -24,15 +24,17 @@ public class ListDisplaysAction extends Action implements IMenuCreator {
     @Override
     public Menu getMenu(Control parent) {
         Menu menu = new Menu(parent);
-        Action plugin1 = new Action("plugin 1") {
-            @Override
-            public void run() {
-                System.out.println("Plugin1 called");
-            }
-        };
 
-        ActionContributionItem item = new ActionContributionItem(plugin1);
-        item.fill(menu, -1);
+        for (final VisDebugPlugin plugin : VisDebugPlugins.plugins()) {
+            Action selectAction = new Action(plugin.getName()) {
+                @Override
+                public void run() {
+                    select(plugin);
+                }
+            };
+            ActionContributionItem item = new ActionContributionItem(selectAction);
+            item.fill(menu, -1);
+        }
 
         return menu;
     }
@@ -41,4 +43,12 @@ public class ListDisplaysAction extends Action implements IMenuCreator {
     public Menu getMenu(Menu parent) {
         throw new UnsupportedOperationException();
     }
+
+    private void select(VisDebugPlugin plugin) {
+        setPainter(plugin);
+    }
+
+    protected abstract void setPainter(VisDebugPlugin painter);
+
+    protected abstract PrimitiveArray getActiveData();
 }

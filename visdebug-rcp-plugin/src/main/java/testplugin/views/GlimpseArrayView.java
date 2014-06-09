@@ -12,11 +12,16 @@ import com.metsci.glimpse.plot.SimplePlot2D;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 import com.metsci.glimpse.swt.misc.SwtLookAndFeel;
 
-public class GlimpseArrayView extends ViewPart implements DebugViewListener {
+public class GlimpseArrayView extends ViewPart {
+    private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
+
     private NewtSwtGlimpseCanvas canvas;
     private FPSAnimator animator;
 
     private GlimpseLayout currentLayout;
+
+    private VisDebugPlugin currentPainter;
+    private PrimitiveArray currentData;
 
     @Override
     public void createPartControl(Composite parent) {
@@ -29,9 +34,23 @@ public class GlimpseArrayView extends ViewPart implements DebugViewListener {
 
         canvas.addLayout(currentLayout);
 
-        DebugViewListeners.SINGLETON.add(this);
+        getViewSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, new VariableSelectListener() {
+            @Override
+            protected void setSelection(PrimitiveArray selected) {
+                inspect(selected);
+            }
+        });
+        getViewSite().getActionBars().getToolBarManager().add(new ListDisplaysAction() {
+            @Override
+            protected void setPainter(VisDebugPlugin painter) {
+                updatePainter(painter);
+            }
 
-        getViewSite().getActionBars().getToolBarManager().add(new ListDisplaysAction());
+            @Override
+            protected PrimitiveArray getActiveData() {
+                return currentData;
+            }
+        });
     }
 
     @Override
@@ -41,52 +60,27 @@ public class GlimpseArrayView extends ViewPart implements DebugViewListener {
 
     @Override
     public void dispose() {
-        DebugViewListeners.SINGLETON.remove(this);
         animator.stop();
         super.dispose();
     }
 
-    @Override
-    public void inspect(int[] data) {
+    private void inspect(PrimitiveArray selected) {
+        currentData = selected;
+        refreshDataAndPainter();
     }
 
-    @Override
-    public void inspect(float[] data) {
+    private void updatePainter(VisDebugPlugin painter) {
+        currentPainter = painter;
+        refreshDataAndPainter();
     }
 
-    @Override
-    public void inspect(short[] data) {
-    }
+    private void refreshDataAndPainter() {
+        if (currentPainter != null && currentData != null && currentPainter.supportsData(currentData)) {
+            canvas.removeAllLayouts();
 
-    @Override
-    public void inspect(byte[] data) {
-    }
-
-    @Override
-    public void inspect(double[] data) {
-        updateLayout(data, new Array1DFloats(data));
-    }
-
-    @Override
-    public void inspect(long[] data) {
-    }
-
-    @Override
-    public void inspect(char[] data) {
-    }
-
-    @Override
-    public void clear() {
-    }
-
-    private void updateLayout(Object data, Array1D array) {
-        canvas.removeAllLayouts();
-
-        for (VisDebugPlugin plugin : VisDebugPlugins.plugins()) {
-            if (plugin.supportsData(data.getClass())) {
-                plugin.installLayout(canvas, array);
-                break;
-            }
+            currentPainter.installLayout(canvas, currentData);
+        } else {
+            // TODO how now?
         }
     }
 }

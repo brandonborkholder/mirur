@@ -26,7 +26,7 @@
             name="MyVars"
             icon="icons/sample.gif"
             category="test-plugin"
-            class="testplugin.views.VariablesView"
+            class="testplugin.views.VariableSelectListener"
             id="testplugin.views.VariablesView">
       </view>
    </extension>
