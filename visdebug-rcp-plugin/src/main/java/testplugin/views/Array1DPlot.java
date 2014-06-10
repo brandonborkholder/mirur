@@ -1,25 +1,15 @@
 package testplugin.views;
 
-import com.metsci.glimpse.painter.plot.XYLinePainter;
+import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 import com.metsci.glimpse.plot.SimplePlot2D;
-import com.metsci.glimpse.support.color.GlimpseColor;
 
-public class LinePlot extends SimplePlot2D {
-    private XYLinePainter painter;
-
-    public LinePlot(Array1D array) {
+public class Array1DPlot extends SimplePlot2D {
+    public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array) {
         setAxisSizeX(25);
         setAxisSizeY(30);
         setTitle(array.getName());
 
-        painter = new XYLinePainter();
-        addPainter(painter, DATA_LAYER);
-
-        painter.showLines(true);
-        painter.showPoints(true);
-        painter.setLineColor(GlimpseColor.getRed());
-        painter.setPointSize(3);
-        painter.setLineThickness(1.5f);
+        addPainter(dataPainter, DATA_LAYER);
 
         getCrosshairPainter().showSelectionBox(false);
 
@@ -47,7 +37,5 @@ public class LinePlot extends SimplePlot2D {
         getAxisX().setMax(data.length - 1);
         getAxisY().setMin(min);
         getAxisY().setMax(max);
-
-        painter.setData(indexes, data);
     }
 }

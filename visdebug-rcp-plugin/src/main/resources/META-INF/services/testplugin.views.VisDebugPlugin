@@ -1,1 +1,2 @@
-testplugin.views.LineLayout1D
+testplugin.views.LinePlugin
+testplugin.views.BarPlugin
