@@ -4,11 +4,11 @@ import org.eclipse.swt.graphics.Image;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 
-public abstract class SimplePlugin1D implements VisDebugPlugin {
+public abstract class SimplePlugin2D implements VisDebugPlugin {
     private final String name;
     private final Image icon;
 
-    public SimplePlugin1D(String name, Image icon) {
+    public SimplePlugin2D(String name, Image icon) {
         this.name = name;
         this.icon = icon;
     }
@@ -16,13 +16,14 @@ public abstract class SimplePlugin1D implements VisDebugPlugin {
     @Override
     public boolean supportsData(PrimitiveArray array) {
         Class<?> clazz = array.getData().getClass();
-        return array instanceof Array1D &&
-                (int[].class.equals(clazz) ||
-                 float[].class.equals(clazz) ||
-                 double[].class.equals(clazz) ||
-                 char[].class.equals(clazz) ||
-                 short[].class.equals(clazz) ||
-                 boolean[].class.equals(clazz));
+        return array instanceof Array2D &&
+               ((Array2D) array).isSquare() &&
+                (int[][].class.equals(clazz) ||
+                 float[][].class.equals(clazz) ||
+                 double[][].class.equals(clazz) ||
+                 char[][].class.equals(clazz) ||
+                 short[][].class.equals(clazz) ||
+                 boolean[][].class.equals(clazz));
 
     }
 
@@ -38,10 +39,10 @@ public abstract class SimplePlugin1D implements VisDebugPlugin {
 
     @Override
     public void installLayout(GlimpseCanvas canvas, PrimitiveArray array) {
-        installLayout(canvas, (Array1D) array);
+        installLayout(canvas, (Array2D) array);
     }
 
-    protected abstract void installLayout(GlimpseCanvas canvas, Array1D array);
+    protected abstract void installLayout(GlimpseCanvas canvas, Array2D array);
 
     @Override
     public void removeLayout(GlimpseCanvas canvas) {

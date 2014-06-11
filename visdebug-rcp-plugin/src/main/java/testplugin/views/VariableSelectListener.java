@@ -24,11 +24,7 @@ public abstract class VariableSelectListener implements ISelectionListener, INul
             if (o instanceof JDILocalVariable) {
                 try {
                     String name = ((JDILocalVariable) o).getName();
-                    Object array = toPrimitiveArray(((JDILocalVariable) o).getValue());
-
-                    if (array != null) {
-                        selected = new Array1DImpl(name, array);
-                    }
+                    selected = toPrimitiveArray(name, ((JDILocalVariable) o).getValue());
                 } catch (DebugException e) {
                     throw new RuntimeException(e);
                 }
@@ -40,11 +36,121 @@ public abstract class VariableSelectListener implements ISelectionListener, INul
 
     protected abstract void setSelection(PrimitiveArray selected);
 
-    private Object toPrimitiveArray(IValue value) throws DebugException {
+    private PrimitiveArray toPrimitiveArray(String name, IValue value) throws DebugException {
         if (!(value instanceof IJavaArray)) {
             return null;
         }
 
+        IJavaArray val = (IJavaArray) value;
+        IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
+        switch (componentType.getName()) {
+        case "int":
+        case "float":
+        case "boolean":
+        case "double":
+        case "char":
+        case "long":
+        case "short":
+        case "byte": {
+            Object o = toPrimitiveArray1d(value);
+            return new Array1DImpl(name, o);
+        }
+
+        case "int[]":
+        case "float[]":
+        case "boolean[]":
+        case "double[]":
+        case "char[]":
+        case "long[]":
+        case "short[]":
+        case "byte[]": {
+            Object o = toPrimitiveArray2d(value);
+            // TODO check for squareness
+            return new Array2DSquare(name, o);
+        }
+
+        default:
+            return null;
+        }
+    }
+
+    private Object toPrimitiveArray2d(IValue value) throws DebugException {
+        IJavaArray val = (IJavaArray) value;
+        int len = val.getLength();
+
+        IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
+        switch (componentType.getName()) {
+        case "int[]": {
+            int[][] v = new int[len][];
+            for (int i = 0; i < len; i++) {
+                int[] w = (int[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "float[]": {
+            float[][] v = new float[len][];
+            for (int i = 0; i < len; i++) {
+                float[] w = (float[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "double[]": {
+            double[][] v = new double[len][];
+            for (int i = 0; i < len; i++) {
+                double[] w = (double[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "long[]": {
+            long[][] v = new long[len][];
+            for (int i = 0; i < len; i++) {
+                long[] w = (long[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "short[]": {
+            short[][] v = new short[len][];
+            for (int i = 0; i < len; i++) {
+                short[] w = (short[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "char[]": {
+            char[][] v = new char[len][];
+            for (int i = 0; i < len; i++) {
+                char[] w = (char[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "byte[]": {
+            byte[][] v = new byte[len][];
+            for (int i = 0; i < len; i++) {
+                byte[] w = (byte[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+        case "boolean[]": {
+            boolean[][] v = new boolean[len][];
+            for (int i = 0; i < len; i++) {
+                boolean[] w = (boolean[]) toPrimitiveArray1d(val.getValue(i));
+                v[i] = w;
+            }
+            return v;
+        }
+
+        default:
+            return null;
+        }
+    }
+
+    private Object toPrimitiveArray1d(IValue value) throws DebugException {
         IJavaArray val = (IJavaArray) value;
         int len = val.getLength();
 
@@ -103,6 +209,14 @@ public abstract class VariableSelectListener implements ISelectionListener, INul
             for (int i = 0; i < len; i++) {
                 IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
                 v[i] = pv.getCharValue();
+            }
+            return v;
+        }
+        case "boolean": {
+            boolean[] v = new boolean[len];
+            for (int i = 0; i < len; i++) {
+                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
+                v[i] = pv.getBooleanValue();
             }
             return v;
         }

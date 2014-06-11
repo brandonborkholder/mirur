@@ -1,2 +1,3 @@
 testplugin.views.LinePlugin
 testplugin.views.BarPlugin
+testplugin.views.HeatmapPlugin

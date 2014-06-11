@@ -20,21 +20,16 @@ public class Array1DPlot extends SimplePlot2D {
     }
 
     private void display(Array1D array) {
-        float[] data = array.toFloats();
-        float[] indexes = new float[data.length];
-        for (int i = 0; i < indexes.length; i++) {
-            indexes[i] = i;
-        }
-
         float min = Float.POSITIVE_INFINITY;
         float max = Float.NEGATIVE_INFINITY;
+        float[] data = array.toFloats();
         for (float v : data) {
             min = Math.min(v, min);
             max = Math.max(v, max);
         }
 
         getAxisX().setMin(0);
-        getAxisX().setMax(data.length - 1);
+        getAxisX().setMax(data.length);
         getAxisY().setMin(min);
         getAxisY().setMax(max);
     }
