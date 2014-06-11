@@ -6,6 +6,7 @@ import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaArrayType;
 import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
 import org.eclipse.jdt.debug.core.IJavaType;
+import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.internal.debug.core.model.JDILocalVariable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -153,70 +154,63 @@ public abstract class VariableSelectListener implements ISelectionListener, INul
     private Object toPrimitiveArray1d(IValue value) throws DebugException {
         IJavaArray val = (IJavaArray) value;
         int len = val.getLength();
+        IJavaValue[] all = val.getValues();
 
         IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
         switch (componentType.getName()) {
         case "int": {
             int[] v = new int[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getIntValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getIntValue();
             }
             return v;
         }
         case "float": {
             float[] v = new float[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getFloatValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getFloatValue();
             }
             return v;
         }
         case "double": {
             double[] v = new double[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getDoubleValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getDoubleValue();
             }
             return v;
         }
         case "short": {
             short[] v = new short[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getShortValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getShortValue();
             }
             return v;
         }
         case "long": {
             long[] v = new long[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getLongValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getLongValue();
             }
             return v;
         }
         case "byte": {
             byte[] v = new byte[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getByteValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getByteValue();
             }
             return v;
         }
         case "char": {
             char[] v = new char[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getCharValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getCharValue();
             }
             return v;
         }
         case "boolean": {
             boolean[] v = new boolean[len];
             for (int i = 0; i < len; i++) {
-                IJavaPrimitiveValue pv = (IJavaPrimitiveValue) val.getValue(i);
-                v[i] = pv.getBooleanValue();
+                v[i] = ((IJavaPrimitiveValue) all[i]).getBooleanValue();
             }
             return v;
         }
