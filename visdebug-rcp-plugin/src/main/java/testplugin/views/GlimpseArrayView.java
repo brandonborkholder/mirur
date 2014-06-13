@@ -8,7 +8,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.FPSAnimator;
 import com.metsci.glimpse.layout.GlimpseLayout;
-import com.metsci.glimpse.plot.SimplePlot2D;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 import com.metsci.glimpse.swt.misc.SwtLookAndFeel;
 
@@ -19,6 +18,7 @@ public class GlimpseArrayView extends ViewPart {
     private FPSAnimator animator;
 
     private GlimpseLayout currentLayout;
+    private GlimpseLayout invalidPlaceholder;
 
     private VisDebugPlugin currentPainter;
     private PrimitiveArray currentData;
@@ -30,9 +30,11 @@ public class GlimpseArrayView extends ViewPart {
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
 
-        currentLayout = new SimplePlot2D();
+        invalidPlaceholder = new InvalidPlaceholderLayout();
+        currentLayout = invalidPlaceholder;
 
         canvas.addLayout(currentLayout);
+        canvas.setLookAndFeel(new SwtLookAndFeel());
 
         getViewSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, new VariableSelectListener() {
             @Override
@@ -75,12 +77,11 @@ public class GlimpseArrayView extends ViewPart {
     }
 
     private void refreshDataAndPainter() {
+        canvas.removeAllLayouts();
         if (currentPainter != null && currentData != null && currentPainter.supportsData(currentData)) {
-            canvas.removeAllLayouts();
-
             currentPainter.installLayout(canvas, currentData);
         } else {
-            // TODO how now?
+            canvas.addLayout(invalidPlaceholder);
         }
     }
 }

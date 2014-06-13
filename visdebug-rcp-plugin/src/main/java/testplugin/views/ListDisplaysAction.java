@@ -25,14 +25,17 @@ public abstract class ListDisplaysAction extends Action implements IMenuCreator 
     public Menu getMenu(Control parent) {
         Menu menu = new Menu(parent);
 
+        PrimitiveArray data = getActiveData();
+
         for (final VisDebugPlugin plugin : VisDebugPlugins.plugins()) {
-            Action selectAction = new Action(plugin.getName()) {
+            Action action = new Action(plugin.getName()) {
                 @Override
                 public void run() {
                     select(plugin);
                 }
             };
-            ActionContributionItem item = new ActionContributionItem(selectAction);
+            action.setEnabled(data == null || plugin.supportsData(data));
+            ActionContributionItem item = new ActionContributionItem(action);
             item.fill(menu, -1);
         }
 

@@ -23,8 +23,6 @@ public class HeatmapPlugin extends SimplePlugin2D {
         plot.setAxisLabelX(array.getName() + "[]");
         plot.setAxisLabelY(array.getName() + "[][]");
 
-        plot.lockAspectRatioXY(1.0f);
-
         plot.getCrosshairPainter().showSelectionBox(false);
 
         HeatMapPainter painter = new HeatMapPainter(plot.getAxisZ());
@@ -39,7 +37,7 @@ public class HeatmapPlugin extends SimplePlugin2D {
 
         Projection projection = new FlatProjection(0, dim0, 0, dim1);
         texture.setProjection(projection);
-        texture.setData(array.toFloats());
+        texture.setData(array.toFloats(), true);
 
         painter.setData(texture);
         painter.setColorScale(colors);
@@ -51,6 +49,18 @@ public class HeatmapPlugin extends SimplePlugin2D {
         plot.getAxisX().setMax(dim0);
         plot.getAxisY().setMin(0);
         plot.getAxisY().setMax(dim1);
+
+        float minZ = Float.POSITIVE_INFINITY;
+        float maxZ = Float.NEGATIVE_INFINITY;
+        float[][] data = array.toFloats();
+        for (float[] row : data) {
+            for (float v : row) {
+                minZ = Math.min(minZ, v);
+                maxZ = Math.max(maxZ, v);
+            }
+        }
+        plot.getAxisZ().setMin(minZ);
+        plot.getAxisZ().setMax(maxZ);
 
         canvas.addLayout(plot);
     }
