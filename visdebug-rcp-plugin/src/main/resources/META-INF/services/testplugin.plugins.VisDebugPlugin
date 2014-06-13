@@ -1,0 +1,3 @@
+testplugin.plugins.line1d.LinePlugin
+testplugin.plugins.bar1d.BarPlugin
+testplugin.plugins.heatmap2d.HeatmapPlugin

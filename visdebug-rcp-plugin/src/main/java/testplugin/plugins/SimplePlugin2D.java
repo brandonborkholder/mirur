@@ -1,6 +1,9 @@
-package testplugin.views;
+package testplugin.plugins;
 
 import org.eclipse.swt.graphics.Image;
+
+import testplugin.views.Array2D;
+import testplugin.views.PrimitiveArray;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 

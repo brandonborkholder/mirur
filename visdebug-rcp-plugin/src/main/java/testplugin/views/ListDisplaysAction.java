@@ -8,6 +8,9 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import testplugin.plugins.VisDebugPlugin;
+import testplugin.plugins.VisDebugPlugins;
+
 public abstract class ListDisplaysAction extends Action implements IMenuCreator {
     public ListDisplaysAction() {
         setMenuCreator(this);

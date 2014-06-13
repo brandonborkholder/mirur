@@ -6,6 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import testplugin.plugins.VisDebugPlugin;
+
 import com.jogamp.opengl.util.FPSAnimator;
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;

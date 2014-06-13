@@ -1,4 +1,7 @@
-package testplugin.views;
+package testplugin.plugins.heatmap2d;
+
+import testplugin.plugins.SimplePlugin2D;
+import testplugin.views.Array2D;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.gl.texture.ColorTexture1D;

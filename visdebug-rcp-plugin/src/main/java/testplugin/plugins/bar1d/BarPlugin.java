@@ -1,4 +1,8 @@
-package testplugin.views;
+package testplugin.plugins.bar1d;
+
+import testplugin.plugins.SimplePlugin1D;
+import testplugin.views.Array1D;
+import testplugin.views.Array1DPlot;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.layout.GlimpseLayout;

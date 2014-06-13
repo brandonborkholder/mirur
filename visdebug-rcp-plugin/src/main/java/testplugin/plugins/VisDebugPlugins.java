@@ -1,4 +1,4 @@
-package testplugin.views;
+package testplugin.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
