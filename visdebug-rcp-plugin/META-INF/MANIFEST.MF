@@ -47,4 +47,6 @@ Bundle-ClassPath: .,
  gluegen-rt-2.1.5-01-natives-windows-amd64.jar,
  gluegen-rt-2.1.5-01-natives-windows-i586.jar,
  glimpse-extras-swt-2.1.2.jar,
- org.eclipse.swt.gtk.linux.x86_64-4.3.jar
+ org.eclipse.swt.gtk.linux.x86_64-4.3.jar,
+ commons-math3-3.3.jar,
+ target/classes/

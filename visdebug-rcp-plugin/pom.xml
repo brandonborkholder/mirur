@@ -148,5 +148,10 @@
             <artifactId>glimpse-extras-swt</artifactId>
             <version>2.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.3</version>
+        </dependency>
     </dependencies>
 </project>

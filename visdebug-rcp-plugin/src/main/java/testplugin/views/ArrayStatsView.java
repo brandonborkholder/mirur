@@ -1,6 +1,7 @@
 package testplugin.views;
 
 import static testplugin.views.Model.MODEL;
+import static testplugin.views.PrimitiveTest.getPrimitiveComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
 
     private void refreshData() {
         Object data = null;
-        if (currentData instanceof Array1D) {
+        if (currentData instanceof Array1D || currentData instanceof Array2D) {
             data = currentData.getData();
         } else {
             table.setInput(null);
@@ -82,16 +83,55 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
             return;
         }
 
-        final List<ArrayStatisticVisitor> statsVisitors = new ArrayList<>();
-        statsVisitors.add(new ArrayStatisticVisitor.Min());
-        statsVisitors.add(new ArrayStatisticVisitor.Max());
-        statsVisitors.add(new ArrayStatisticVisitor.Sum());
-        statsVisitors.add(new ArrayStatisticVisitor.Mean());
-        statsVisitors.add(new ArrayStatisticVisitor.CountNaN());
-        statsVisitors.add(new ArrayStatisticVisitor.CountNegInf());
-        statsVisitors.add(new ArrayStatisticVisitor.CountPosInf());
-
+        List<ArrayStatisticVisitor> statsVisitors = getStats(data.getClass());
         new StatsComputeJob(data, statsVisitors).schedule();
+    }
+
+    private List<ArrayStatisticVisitor> getStats(Class<?> clazz) {
+        List<ArrayStatisticVisitor> stats = new ArrayList<>();
+
+        String primitive = getPrimitiveComponent(clazz).getSimpleName();
+        switch (primitive) {
+        case "double":
+        case "float":
+            stats.add(new ArrayStatisticVisitor.Min());
+            stats.add(new ArrayStatisticVisitor.Max());
+            stats.add(new ArrayStatisticVisitor.Sum());
+            stats.add(new ArrayStatisticVisitor.Mean());
+            stats.add(new ArrayStatisticVisitor.Variance());
+            stats.add(new ArrayStatisticVisitor.CountNegInf());
+            stats.add(new ArrayStatisticVisitor.CountPosInf());
+            stats.add(new ArrayStatisticVisitor.CountNaN());
+            stats.add(new ArrayStatisticVisitor.CountNegative());
+            stats.add(new ArrayStatisticVisitor.CountPositive());
+            stats.add(new ArrayStatisticVisitor.CountZero());
+            break;
+
+        case "long":
+        case "int":
+        case "short":
+        case "byte":
+        case "char":
+            stats.add(new ArrayStatisticVisitor.Min());
+            stats.add(new ArrayStatisticVisitor.Max());
+            stats.add(new ArrayStatisticVisitor.SumLong());
+            stats.add(new ArrayStatisticVisitor.Mean());
+            stats.add(new ArrayStatisticVisitor.Variance());
+            stats.add(new ArrayStatisticVisitor.CountNegative());
+            stats.add(new ArrayStatisticVisitor.CountPositive());
+            stats.add(new ArrayStatisticVisitor.CountZero());
+            break;
+
+        case "boolean":
+            stats.add(new ArrayStatisticVisitor.CountTrue());
+            stats.add(new ArrayStatisticVisitor.CountFalse());
+            break;
+
+        default:
+            throw new AssertionError(clazz.getSimpleName());
+        }
+
+        return stats;
     }
 
     private void updateTable(String[][] data) {
