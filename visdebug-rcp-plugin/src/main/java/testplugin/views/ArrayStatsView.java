@@ -5,12 +5,17 @@ import static testplugin.views.Model.MODEL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import test_plugin.Activator;
@@ -77,7 +82,7 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
             return;
         }
 
-        List<ArrayStatisticVisitor> statsVisitors = new ArrayList<>();
+        final List<ArrayStatisticVisitor> statsVisitors = new ArrayList<>();
         statsVisitors.add(new ArrayStatisticVisitor.Min());
         statsVisitors.add(new ArrayStatisticVisitor.Max());
         statsVisitors.add(new ArrayStatisticVisitor.Sum());
@@ -86,13 +91,43 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
         statsVisitors.add(new ArrayStatisticVisitor.CountNegInf());
         statsVisitors.add(new ArrayStatisticVisitor.CountPosInf());
 
-        List<String[]> keyValues = new ArrayList<>();
-        for (ArrayStatisticVisitor visitor : statsVisitors) {
-            VisitArray.visit(data, visitor);
-            keyValues.add(new String[] { visitor.getName(), visitor.getStatistic() });
+        new StatsComputeJob(data, statsVisitors).schedule();
+    }
+
+    private void updateTable(String[][] data) {
+        table.setInput(data);
+        table.refresh();
+    }
+
+    private class StatsComputeJob extends Job {
+        final Object array;
+        final List<ArrayStatisticVisitor> statistics;
+
+        public StatsComputeJob(Object array, List<ArrayStatisticVisitor> statistics) {
+            super("Calculate Array Statistics");
+            this.array = array;
+            this.statistics = statistics;
+
+            setPriority(Job.SHORT);
         }
 
-        table.setInput(keyValues.toArray());
-        table.refresh();
+        @Override
+        protected IStatus run(IProgressMonitor monitor) {
+            List<String[]> keyValues = new ArrayList<>();
+            for (ArrayStatisticVisitor visitor : statistics) {
+                VisitArray.visit(array, visitor);
+                keyValues.add(new String[] { visitor.getName(), visitor.getStatistic() });
+            }
+
+            final String[][] data = keyValues.toArray(new String[0][]);
+            Display.getDefault().asyncExec(new Runnable() {
+                @Override
+                public void run() {
+                    updateTable(data);
+                }
+            });
+
+            return Status.OK_STATUS;
+        }
     }
 }
