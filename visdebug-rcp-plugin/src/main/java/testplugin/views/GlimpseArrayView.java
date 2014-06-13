@@ -1,5 +1,7 @@
 package testplugin.views;
 
+import static testplugin.views.Model.MODEL;
+
 import javax.media.opengl.GLProfile;
 
 import org.eclipse.swt.SWT;
@@ -50,7 +52,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         });
 
         Activator.getDefault().initVariableSelectListener(this);
-        Model.MODEL.addArrayListener(this);
+        MODEL.addArrayListener(this);
     }
 
     @Override
@@ -60,6 +62,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
+        MODEL.removeArrayListener(this);
         animator.stop();
         super.dispose();
     }

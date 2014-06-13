@@ -4,10 +4,6 @@
 
    <extension
          point="org.eclipse.ui.views">
-      <category
-            name="Sample Category"
-            id="test-plugin">
-      </category>
       <view
             allowMultiple="false"
             category="org.eclipse.debug.ui"
@@ -15,6 +11,17 @@
             icon="icons/sample.gif"
             id="testplugin.views.GlimpseArrayView"
             name="VisDebug">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.eclipse.debug.ui"
+            class="testplugin.views.ArrayStatsView"
+            icon="icons/sample.gif"
+            id="testplugin.views.ArrayStatsView"
+            name="Array Info">
       </view>
    </extension>
    <extension

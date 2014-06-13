@@ -12,6 +12,10 @@ public class Model {
         arrayListeners.add(listener);
     }
 
+    public void removeArrayListener(ArraySelectListener listener) {
+        arrayListeners.remove(listener);
+    }
+
     public void select(PrimitiveArray selected) {
         for (ArraySelectListener l : arrayListeners) {
             l.selected(selected);
