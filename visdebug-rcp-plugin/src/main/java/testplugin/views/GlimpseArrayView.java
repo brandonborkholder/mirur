@@ -6,6 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import test_plugin.Activator;
 import testplugin.plugins.VisDebugPlugin;
 
 import com.jogamp.opengl.util.FPSAnimator;
@@ -13,9 +14,7 @@ import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 import com.metsci.glimpse.swt.misc.SwtLookAndFeel;
 
-public class GlimpseArrayView extends ViewPart {
-    private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
-
+public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     private NewtSwtGlimpseCanvas canvas;
     private FPSAnimator animator;
 
@@ -38,12 +37,6 @@ public class GlimpseArrayView extends ViewPart {
         canvas.addLayout(currentLayout);
         canvas.setLookAndFeel(new SwtLookAndFeel());
 
-        getViewSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, new VariableSelectListener() {
-            @Override
-            protected void setSelection(PrimitiveArray selected) {
-                inspect(selected);
-            }
-        });
         getViewSite().getActionBars().getToolBarManager().add(new ListDisplaysAction() {
             @Override
             protected void setPainter(VisDebugPlugin painter) {
@@ -55,6 +48,9 @@ public class GlimpseArrayView extends ViewPart {
                 return currentData;
             }
         });
+
+        Activator.getDefault().initVariableSelectListener(this);
+        Model.MODEL.addArrayListener(this);
     }
 
     @Override
@@ -68,8 +64,9 @@ public class GlimpseArrayView extends ViewPart {
         super.dispose();
     }
 
-    private void inspect(PrimitiveArray selected) {
-        currentData = selected;
+    @Override
+    public void selected(PrimitiveArray array) {
+        currentData = array;
         refreshDataAndPainter();
     }
 

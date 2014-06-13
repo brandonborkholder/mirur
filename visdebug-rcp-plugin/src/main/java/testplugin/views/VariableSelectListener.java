@@ -15,7 +15,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 
 @SuppressWarnings("restriction")
-public abstract class VariableSelectListener implements ISelectionListener, INullSelectionListener {
+public class VariableSelectListener implements ISelectionListener, INullSelectionListener {
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
         if (selection instanceof TreeSelection) {
@@ -35,7 +35,9 @@ public abstract class VariableSelectListener implements ISelectionListener, INul
         }
     }
 
-    protected abstract void setSelection(PrimitiveArray selected);
+    private void setSelection(PrimitiveArray selected) {
+        Model.MODEL.select(selected);
+    }
 
     private PrimitiveArray toPrimitiveArray(String name, IValue value) throws DebugException {
         if (!(value instanceof IJavaArray)) {
