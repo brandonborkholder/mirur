@@ -3,11 +3,14 @@ package testplugin.plugins.heatmap2d;
 import testplugin.plugins.SimplePlugin2D;
 import testplugin.views.Array2D;
 
+import com.metsci.glimpse.axis.tagged.NamedConstraint;
+import com.metsci.glimpse.axis.tagged.Tag;
+import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.gl.texture.ColorTexture1D;
-import com.metsci.glimpse.painter.texture.HeatMapPainter;
-import com.metsci.glimpse.plot.ColorAxisPlot2D;
+import com.metsci.glimpse.painter.texture.TaggedHeatMapPainter;
 import com.metsci.glimpse.plot.Plot2D;
+import com.metsci.glimpse.plot.TaggedColorAxisPlot2D;
 import com.metsci.glimpse.support.colormap.ColorGradients;
 import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.projection.Projection;
@@ -20,7 +23,7 @@ public class HeatmapPlugin extends SimplePlugin2D {
 
     @Override
     protected void installLayout(GlimpseCanvas canvas, Array2D array) {
-        ColorAxisPlot2D plot = new ColorAxisPlot2D();
+        TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D();
 
         plot.setTitle(array.getName());
         plot.setAxisLabelX(array.getName() + "[]");
@@ -28,7 +31,20 @@ public class HeatmapPlugin extends SimplePlugin2D {
 
         plot.getCrosshairPainter().showSelectionBox(false);
 
-        HeatMapPainter painter = new HeatMapPainter(plot.getAxisZ());
+        TaggedAxis1D axisZ = plot.getAxisZ();
+        TaggedHeatMapPainter painter = new TaggedHeatMapPainter(axisZ);
+
+        final Tag t1 = axisZ.addTag("T1", 0.0).setAttribute(Tag.TEX_COORD_ATTR, 0.0f);
+        final Tag t2 = axisZ.addTag("T2", 0.0).setAttribute(Tag.TEX_COORD_ATTR, 1.0f);
+
+        axisZ.addConstraint(new NamedConstraint("C1") {
+            @Override
+            public void applyConstraint(TaggedAxis1D axis) {
+                if (t1.getValue() > t2.getValue()) {
+                    t1.setValue(t2.getValue());
+                }
+            }
+        });
 
         ColorTexture1D colors = new ColorTexture1D(1024);
         colors.setColorGradient(ColorGradients.gray);
@@ -64,6 +80,9 @@ public class HeatmapPlugin extends SimplePlugin2D {
         }
         plot.getAxisZ().setMin(minZ);
         plot.getAxisZ().setMax(maxZ);
+
+        t1.setValue(minZ);
+        t2.setValue(maxZ);
 
         canvas.addLayout(plot);
     }
