@@ -4,6 +4,7 @@ import static testplugin.views.Model.MODEL;
 
 import javax.media.opengl.GLProfile;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
@@ -17,6 +18,8 @@ import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 import com.metsci.glimpse.swt.misc.SwtLookAndFeel;
 
 public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
+    private ResetAxesAction resetAction;
+
     private NewtSwtGlimpseCanvas canvas;
     private FPSAnimator animator;
 
@@ -40,7 +43,8 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         canvas.addLayout(currentLayout);
         canvas.setLookAndFeel(new SwtLookAndFeel());
 
-        getViewSite().getActionBars().getToolBarManager().add(new ListDisplaysAction() {
+        IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
+        tbm.add(new ListDisplaysAction() {
             @Override
             protected void setPainter(VisDebugPlugin painter) {
                 updatePainter(painter);
@@ -51,6 +55,13 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
                 return currentData;
             }
         });
+        resetAction = new ResetAxesAction() {
+            @Override
+            public void run() {
+                resetAxes();
+            }
+        };
+        tbm.add(resetAction);
 
         Activator.getDefault().initVariableSelectListener(this);
         MODEL.addArrayListener(this);
@@ -79,13 +90,21 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         refreshDataAndPainter();
     }
 
+    private void resetAxes() {
+        if (currentPainter != null) {
+            currentPainter.resetAxes();
+        }
+    }
+
     private void refreshDataAndPainter() {
         if (currentPainter != null) {
+            resetAction.setEnabled(false);
             currentPainter.uninstall(canvas);
         }
 
         if (currentPlugin != null && currentData != null && currentPlugin.supportsData(currentData)) {
             currentPainter = currentPlugin.install(canvas, currentData);
+            resetAction.setEnabled(true);
         } else {
             canvas.addLayout(invalidPlaceholder);
         }
