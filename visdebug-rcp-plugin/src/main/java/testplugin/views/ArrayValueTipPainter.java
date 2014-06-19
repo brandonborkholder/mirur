@@ -23,7 +23,11 @@ public class ArrayValueTipPainter extends LegendPainter {
         double selected = srcAxis.getAxisX().getSelectionCenter();
         int idx = (int) Math.round(selected);
         if (idx != lastIndex) {
-            String text = "[" + idx + "] = " + format(idx);
+            String text = "N/A";
+            if (0 <= idx && idx < array.getSize(0)) {
+                text = "[" + idx + "] = " + format(idx);
+            }
+
             clear();
             addItem(text, GlimpseColor.getBlack());
             lastIndex = idx;
