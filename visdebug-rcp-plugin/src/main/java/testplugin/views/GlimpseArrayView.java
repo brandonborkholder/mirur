@@ -23,8 +23,9 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     private GlimpseLayout currentLayout;
     private GlimpseLayout invalidPlaceholder;
 
-    private VisDebugPlugin currentPainter;
+    private VisDebugPlugin currentPlugin;
     private PrimitiveArray currentData;
+    private DataPainter currentPainter;
 
     @Override
     public void createPartControl(Composite parent) {
@@ -73,15 +74,18 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         refreshDataAndPainter();
     }
 
-    private void updatePainter(VisDebugPlugin painter) {
-        currentPainter = painter;
+    private void updatePainter(VisDebugPlugin plugin) {
+        currentPlugin = plugin;
         refreshDataAndPainter();
     }
 
     private void refreshDataAndPainter() {
-        canvas.removeAllLayouts();
-        if (currentPainter != null && currentData != null && currentPainter.supportsData(currentData)) {
-            currentPainter.installLayout(canvas, currentData);
+        if (currentPainter != null) {
+            currentPainter.uninstall(canvas);
+        }
+
+        if (currentPlugin != null && currentData != null && currentPlugin.supportsData(currentData)) {
+            currentPainter = currentPlugin.install(canvas, currentData);
         } else {
             canvas.addLayout(invalidPlaceholder);
         }

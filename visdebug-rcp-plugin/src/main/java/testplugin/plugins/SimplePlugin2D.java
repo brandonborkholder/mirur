@@ -5,8 +5,6 @@ import org.eclipse.swt.graphics.Image;
 import testplugin.views.Array2D;
 import testplugin.views.PrimitiveArray;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-
 public abstract class SimplePlugin2D implements VisDebugPlugin {
     private final String name;
     private final Image icon;
@@ -38,17 +36,5 @@ public abstract class SimplePlugin2D implements VisDebugPlugin {
     @Override
     public Image getIcon() {
         return icon;
-    }
-
-    @Override
-    public void installLayout(GlimpseCanvas canvas, PrimitiveArray array) {
-        installLayout(canvas, (Array2D) array);
-    }
-
-    protected abstract void installLayout(GlimpseCanvas canvas, Array2D array);
-
-    @Override
-    public void removeLayout(GlimpseCanvas canvas) {
-        canvas.removeAllLayouts();
     }
 }

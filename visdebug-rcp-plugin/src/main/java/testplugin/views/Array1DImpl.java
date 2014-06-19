@@ -64,6 +64,11 @@ public class Array1DImpl implements Array1D {
     }
 
     @Override
+    public String getSignature() {
+        return orig.getClass().getSimpleName();
+    }
+
+    @Override
     public Object getData() {
         return orig;
     }

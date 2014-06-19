@@ -2,6 +2,7 @@ package testplugin.plugins;
 
 import org.eclipse.swt.graphics.Image;
 
+import testplugin.views.DataPainter;
 import testplugin.views.PrimitiveArray;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
@@ -13,7 +14,5 @@ public interface VisDebugPlugin {
 
     Image getIcon();
 
-    void installLayout(GlimpseCanvas canvas, PrimitiveArray array);
-
-    void removeLayout(GlimpseCanvas canvas);
+    DataPainter install(GlimpseCanvas canvas, PrimitiveArray array);
 }

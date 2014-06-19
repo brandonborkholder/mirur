@@ -76,6 +76,11 @@ public class Array2DSquare implements Array2D {
     }
 
     @Override
+    public String getSignature() {
+        return orig.getClass().getSimpleName();
+    }
+
+    @Override
     public boolean isSquare() {
         return true;
     }

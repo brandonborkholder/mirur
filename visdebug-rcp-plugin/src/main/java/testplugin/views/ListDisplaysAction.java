@@ -13,10 +13,11 @@ import testplugin.plugins.VisDebugPlugins;
 
 public abstract class ListDisplaysAction extends Action implements IMenuCreator {
     public ListDisplaysAction() {
+        setId(ListDisplaysAction.class.getName());
         setMenuCreator(this);
         setText("Painters");
         setToolTipText("Select Painter");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR));
+        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
     }
 
     @Override

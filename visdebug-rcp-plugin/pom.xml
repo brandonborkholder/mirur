@@ -145,6 +145,11 @@
         </dependency>
         <dependency>
             <groupId>com.metsci.glimpse</groupId>
+            <artifactId>glimpse-core-examples</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.metsci.glimpse</groupId>
             <artifactId>glimpse-extras-swt</artifactId>
             <version>2.1.2</version>
         </dependency>

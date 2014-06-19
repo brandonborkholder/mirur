@@ -3,9 +3,12 @@ package testplugin.plugins;
 import org.eclipse.swt.graphics.Image;
 
 import testplugin.views.Array1D;
+import testplugin.views.Array1DPlot;
+import testplugin.views.DataPainter;
 import testplugin.views.PrimitiveArray;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 
 public abstract class SimplePlugin1D implements VisDebugPlugin {
     private final String name;
@@ -21,11 +24,11 @@ public abstract class SimplePlugin1D implements VisDebugPlugin {
         Class<?> clazz = array.getData().getClass();
         return array instanceof Array1D &&
                 (int[].class.equals(clazz) ||
-                 float[].class.equals(clazz) ||
-                 double[].class.equals(clazz) ||
-                 char[].class.equals(clazz) ||
-                 short[].class.equals(clazz) ||
-                 boolean[].class.equals(clazz));
+                        float[].class.equals(clazz) ||
+                        double[].class.equals(clazz) ||
+                        char[].class.equals(clazz) ||
+                        short[].class.equals(clazz) ||
+                        boolean[].class.equals(clazz));
 
     }
 
@@ -40,14 +43,16 @@ public abstract class SimplePlugin1D implements VisDebugPlugin {
     }
 
     @Override
-    public void installLayout(GlimpseCanvas canvas, PrimitiveArray array) {
-        installLayout(canvas, (Array1D) array);
+    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
+        final Array1D array1d = (Array1D) array;
+        GlimpseDataPainter2D painter = createPainter(array1d);
+        Array1DPlot plot = new Array1DPlot(painter, array1d);
+
+        canvas.addLayout(plot);
+        DataPainterImpl result = new DataPainterImpl(plot);
+        result.addAxis(plot.getAxis());
+        return result;
     }
 
-    protected abstract void installLayout(GlimpseCanvas canvas, Array1D array);
-
-    @Override
-    public void removeLayout(GlimpseCanvas canvas) {
-        canvas.removeAllLayouts();
-    }
+    protected abstract GlimpseDataPainter2D createPainter(Array1D array);
 }

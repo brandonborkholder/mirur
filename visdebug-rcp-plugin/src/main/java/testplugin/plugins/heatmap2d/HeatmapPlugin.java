@@ -1,7 +1,10 @@
 package testplugin.plugins.heatmap2d;
 
+import testplugin.plugins.DataPainterImpl;
 import testplugin.plugins.SimplePlugin2D;
 import testplugin.views.Array2D;
+import testplugin.views.DataPainter;
+import testplugin.views.PrimitiveArray;
 
 import com.metsci.glimpse.axis.tagged.NamedConstraint;
 import com.metsci.glimpse.axis.tagged.Tag;
@@ -22,10 +25,12 @@ public class HeatmapPlugin extends SimplePlugin2D {
     }
 
     @Override
-    protected void installLayout(GlimpseCanvas canvas, Array2D array) {
+    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
+        Array2D array2d = (Array2D) array;
+
         TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D();
 
-        plot.setTitle(array.getName());
+        plot.setTitle(array.getSignature() + " " + array.getName());
         plot.setAxisLabelX(array.getName() + "[]");
         plot.setAxisLabelY(array.getName() + "[][]");
 
@@ -56,7 +61,7 @@ public class HeatmapPlugin extends SimplePlugin2D {
 
         Projection projection = new FlatProjection(0, dim0, 0, dim1);
         texture.setProjection(projection);
-        texture.setData(array.toFloats(), true);
+        texture.setData(array2d.toFloats(), true);
 
         painter.setData(texture);
         painter.setColorScale(colors);
@@ -71,7 +76,7 @@ public class HeatmapPlugin extends SimplePlugin2D {
 
         float minZ = Float.POSITIVE_INFINITY;
         float maxZ = Float.NEGATIVE_INFINITY;
-        float[][] data = array.toFloats();
+        float[][] data = array2d.toFloats();
         for (float[] row : data) {
             for (float v : row) {
                 minZ = Math.min(minZ, v);
@@ -85,5 +90,9 @@ public class HeatmapPlugin extends SimplePlugin2D {
         t2.setValue(maxZ);
 
         canvas.addLayout(plot);
+        DataPainterImpl result = new DataPainterImpl(plot);
+        result.addAxis(plot.getAxis());
+        result.addAxis(plot.getAxisZ());
+        return result;
     }
 }

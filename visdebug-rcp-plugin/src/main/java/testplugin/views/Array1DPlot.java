@@ -7,7 +7,7 @@ public class Array1DPlot extends SimplePlot2D {
     public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array) {
         setAxisSizeX(25);
         setAxisSizeY(30);
-        setTitle(array.getName());
+        setTitle(array.getSignature() + " " + array.getName());
 
         addPainter(dataPainter, DATA_LAYER);
 
