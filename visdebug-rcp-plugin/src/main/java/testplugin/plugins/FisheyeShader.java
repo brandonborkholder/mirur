@@ -6,13 +6,17 @@ import com.metsci.glimpse.support.shader.geometry.SimpleShader;
 
 public class FisheyeShader extends SimpleShader {
     private final ShaderArg radius;
-    private final ShaderArg position;
+    private final ShaderArg center;
+    private final ShaderArg factor;
 
     public FisheyeShader() {
         super("fisheye", ShaderType.vertex, "shaders/fisheye.vs");
 
         radius = getArg("radius");
-        position = getArg("pos");
+        center = getArg("center");
+        factor = getArg("factor");
+
+        factor.setValue(2);
     }
 
     public void setRadius(float radius) {
@@ -20,6 +24,6 @@ public class FisheyeShader extends SimpleShader {
     }
 
     public void setMousePosition(float position) {
-        this.position.setValue(position);
+        this.center.setValue(position);
     }
 }
