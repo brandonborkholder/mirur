@@ -6,8 +6,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.widgets.Menu;
 
+import testplugin.FisheyeAction;
 import testplugin.views.DataPainter;
 
 import com.metsci.glimpse.axis.Axis1D;
@@ -45,7 +48,9 @@ public class DataPainterImpl implements DataPainter {
 
     @Override
     public Menu populateMenu(Menu parent) {
-        return null;
+        ContributionItem item = new ActionContributionItem(new FisheyeAction());
+        item.fill(parent, -1);
+        return parent;
     }
 
     @Override

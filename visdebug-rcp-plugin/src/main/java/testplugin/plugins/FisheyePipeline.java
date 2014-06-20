@@ -1,11 +1,11 @@
 package testplugin.plugins;
 
-import javax.media.opengl.GL2;
+import testplugin.InitializablePipeline;
 
+import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.gl.shader.Pipeline;
 
-public class FisheyePipeline extends Pipeline {
+public class FisheyePipeline extends InitializablePipeline {
     private FisheyeShader shader;
 
     public FisheyePipeline() {
@@ -17,16 +17,15 @@ public class FisheyePipeline extends Pipeline {
         this.shader = shader;
     }
 
-    public void beginUse(GL2 gl, Axis2D axis) {
-        double radius = 0.1 * (axis.getMaxX() - axis.getMinX());
-        shader.setRadius((float) radius);
-        shader.setMousePosition((float) axis.getAxisX().getSelectionCenter());
-
-        super.beginUse(gl);
+    @Override
+    protected void initialize(Axis2D axis) {
+        initialize(axis.getAxisX());
     }
 
     @Override
-    public void beginUse(GL2 gl) {
-        throw new UnsupportedOperationException();
+    protected void initialize(Axis1D axis) {
+        double radius = 0.1 * (axis.getMax() - axis.getMin());
+        shader.setRadius((float) radius);
+        shader.setMousePosition((float) axis.getSelectionCenter());
     }
 }
