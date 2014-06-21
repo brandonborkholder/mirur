@@ -18,10 +18,12 @@ import org.eclipse.swt.widgets.Display;
 
 @SuppressWarnings("restriction")
 public class CopyJDIArrayJob extends Job {
+    private final SelectionCache cache;
     private final JDILocalVariable var;
 
-    public CopyJDIArrayJob(JDILocalVariable var) throws DebugException {
+    public CopyJDIArrayJob(SelectionCache cache, JDILocalVariable var) throws DebugException {
         super("Copying " + var.getName());
+        this.cache = cache;
 
         this.var = var;
 
@@ -32,12 +34,24 @@ public class CopyJDIArrayJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         try {
-            final PrimitiveArray array = toPrimitiveArray(var.getName(), var.getValue());
+            String name = var.getName();
+            if (name.equals(cache.getCurrent())) {
+                return Status.OK_STATUS;
+            }
 
+            PrimitiveArray array = cache.getArray(name);
+
+            if (array == null) {
+                array = toPrimitiveArray(name, var.getValue());
+                cache.put(name, array);
+            }
+
+            cache.setCurrent(name);
+            final PrimitiveArray result = array;
             Display.getDefault().asyncExec(new Runnable() {
                 @Override
                 public void run() {
-                    MODEL.select(array);
+                    MODEL.select(result);
                 }
             });
         } catch (DebugException ex) {

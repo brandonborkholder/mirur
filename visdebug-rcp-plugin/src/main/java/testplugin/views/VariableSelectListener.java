@@ -10,6 +10,8 @@ import org.eclipse.ui.IWorkbenchPart;
 
 @SuppressWarnings("restriction")
 public class VariableSelectListener implements ISelectionListener, INullSelectionListener {
+    private final SelectionCache cache = new SelectionCache();
+
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
         if (selection instanceof TreeSelection) {
@@ -17,7 +19,7 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
 
             if (o instanceof JDILocalVariable) {
                 try {
-                    new CopyJDIArrayJob((JDILocalVariable) o).schedule();
+                    new CopyJDIArrayJob(cache, (JDILocalVariable) o).schedule();
                 } catch (DebugException ex) {
                     throw new RuntimeException(ex);
                 }
