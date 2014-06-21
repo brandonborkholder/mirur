@@ -7,6 +7,7 @@ import javax.media.opengl.GLProfile;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 import test_plugin.Activator;
@@ -61,6 +62,16 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
                 resetAxes();
             }
         };
+        tbm.add(new PluginMenuAction() {
+            @Override
+            public Menu getMenu(Menu parent) {
+                if (currentPainter != null) {
+                    currentPainter.populateMenu(parent);
+                }
+
+                return parent;
+            }
+        });
         tbm.add(resetAction);
 
         Activator.getDefault().initVariableSelectListener(this);

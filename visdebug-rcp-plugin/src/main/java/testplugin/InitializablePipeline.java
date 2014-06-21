@@ -11,6 +11,16 @@ import com.metsci.glimpse.layout.GlimpseAxisLayout1D;
 import com.metsci.glimpse.layout.GlimpseAxisLayout2D;
 
 public abstract class InitializablePipeline extends Pipeline {
+    public static final InitializablePipeline DEFAULT = new InitializablePipeline("default", null, null, null) {
+        @Override
+        protected void initialize(Axis1D axis) {
+        }
+
+        @Override
+        protected void initialize(Axis2D axis) {
+        }
+    };
+
     public InitializablePipeline(String name, Shader geom, Shader vert, Shader frag) {
         super(name, geom, vert, frag);
     }

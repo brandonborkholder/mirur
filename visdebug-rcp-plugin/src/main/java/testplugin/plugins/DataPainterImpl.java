@@ -6,11 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.widgets.Menu;
 
-import testplugin.FisheyeAction;
 import testplugin.views.DataPainter;
 
 import com.metsci.glimpse.axis.Axis1D;
@@ -23,10 +22,16 @@ import com.metsci.glimpse.layout.GlimpseLayout;
 public class DataPainterImpl implements DataPainter {
     private final GlimpseLayout layout;
     private final List<ResetAction> resets;
+    private final List<Action> actions;
 
     public DataPainterImpl(GlimpseLayout layout) {
         this.layout = layout;
         resets = new ArrayList<>();
+        actions = new ArrayList<>();
+    }
+
+    public void addAction(Action action) {
+        actions.add(action);
     }
 
     public void addAxis(Axis1D axis) {
@@ -47,10 +52,10 @@ public class DataPainterImpl implements DataPainter {
     }
 
     @Override
-    public Menu populateMenu(Menu parent) {
-        ContributionItem item = new ActionContributionItem(new FisheyeAction());
-        item.fill(parent, -1);
-        return parent;
+    public void populateMenu(Menu parent) {
+        for (Action a : actions) {
+            new ActionContributionItem(a).fill(parent, -1);
+        }
     }
 
     @Override

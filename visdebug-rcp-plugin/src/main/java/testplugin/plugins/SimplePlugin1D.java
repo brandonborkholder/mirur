@@ -2,6 +2,8 @@ package testplugin.plugins;
 
 import org.eclipse.swt.graphics.Image;
 
+import testplugin.FisheyeAction;
+import testplugin.InitializablePipeline;
 import testplugin.views.Array1D;
 import testplugin.views.Array1DPlot;
 import testplugin.views.DataPainter;
@@ -28,7 +30,7 @@ public abstract class SimplePlugin1D implements VisDebugPlugin {
                         double[].class.equals(clazz) ||
                         char[].class.equals(clazz) ||
                         short[].class.equals(clazz) ||
-                        boolean[].class.equals(clazz));
+                boolean[].class.equals(clazz));
 
     }
 
@@ -46,10 +48,20 @@ public abstract class SimplePlugin1D implements VisDebugPlugin {
     public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
         final Array1D array1d = (Array1D) array;
         GlimpseDataPainter2D painter = createPainter(array1d);
-        Array1DPlot plot = new Array1DPlot(painter, array1d);
+        final Array1DPlot plot = new Array1DPlot(painter, array1d);
 
         canvas.addLayout(plot);
         DataPainterImpl result = new DataPainterImpl(plot);
+        result.addAction(new FisheyeAction() {
+            @Override
+            public void run() {
+                if (isChecked()) {
+                    plot.setShaders(new FisheyePipeline());
+                } else {
+                    plot.setShaders(InitializablePipeline.DEFAULT);
+                }
+            }
+        });
         result.addAxis(plot.getAxis());
         return result;
     }

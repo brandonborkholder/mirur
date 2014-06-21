@@ -1,13 +1,9 @@
 package testplugin.views;
 
+import testplugin.InitializablePipeline;
 import testplugin.ShaderWrapperPainter;
-import testplugin.plugins.FisheyePipeline;
 
-import com.metsci.glimpse.axis.painter.NumericAxisPainter;
-import com.metsci.glimpse.axis.painter.label.AxisLabelHandler;
-import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
-import com.metsci.glimpse.painter.base.GlimpsePainter;
 import com.metsci.glimpse.plot.SimplePlot2D;
 
 public class Array1DPlot extends SimplePlot2D {
@@ -26,21 +22,11 @@ public class Array1DPlot extends SimplePlot2D {
         display(array);
 
         shaderWrapper = new ShaderWrapperPainter();
+        addPainter(dataPainter, shaderWrapper, DATA_LAYER);
+    }
 
-        GlimpseLayout layoutX = getLayoutX();
-        GlimpsePainter p = getAxisPainterX();
-        layoutX.removePainter(p);
-        layoutX.addPainter(p, shaderWrapper);
-
-        GlimpseLayout layoutXY = getLayoutCenter();
-        p = dataPainter;
-        layoutXY.addPainter(p, shaderWrapper, DATA_LAYER);
-        layoutXY.removePainter(getGridPainter());
-        layoutXY.addPainter(getGridPainter(), shaderWrapper, BACKGROUND_LAYER);
-        layoutXY.removePainter(getCrosshairPainter());
-        layoutXY.addPainter(getCrosshairPainter(), shaderWrapper, FOREGROUND_LAYER);
-
-        shaderWrapper.setPipeline(new FisheyePipeline());
+    public void setShaders(InitializablePipeline pipeline) {
+        shaderWrapper.setPipeline(pipeline);
     }
 
     private void display(Array1D array) {

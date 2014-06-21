@@ -8,7 +8,7 @@ import com.metsci.glimpse.layout.GlimpseLayout;
 public interface DataPainter {
     GlimpseLayout getLayout();
 
-    Menu populateMenu(Menu parent);
+    void populateMenu(Menu parent);
 
     void resetAxes();
 
