@@ -13,6 +13,7 @@ import org.eclipse.ui.part.ViewPart;
 import test_plugin.Activator;
 import testplugin.plugins.VisDebugPlugin;
 
+import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
@@ -22,7 +23,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     private ResetAxesAction resetAction;
 
     private NewtSwtGlimpseCanvas canvas;
-    private FPSAnimator animator;
+    private AnimatorBase animator;
 
     private GlimpseLayout currentLayout;
     private GlimpseLayout invalidPlaceholder;
@@ -111,13 +112,16 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         if (currentPainter != null) {
             resetAction.setEnabled(false);
             currentPainter.uninstall(canvas);
+            animator.stop();
         }
 
         if (currentPlugin != null && currentData != null && currentPlugin.supportsData(currentData)) {
             currentPainter = currentPlugin.install(canvas, currentData);
             resetAction.setEnabled(true);
+            animator.start();
         } else {
             canvas.addLayout(invalidPlaceholder);
+            canvas.paint();
         }
     }
 }
