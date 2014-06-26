@@ -5,9 +5,8 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
+import test_plugin.Activator;
 import testplugin.plugins.VisDebugPlugin;
 import testplugin.plugins.VisDebugPlugins;
 
@@ -17,7 +16,7 @@ public abstract class ListDisplaysAction extends Action implements IMenuCreator 
         setMenuCreator(this);
         setText("Painters");
         setToolTipText("Select Painter");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
+        setImageDescriptor(Activator.getImageDescriptor(Icons.NEWVIEW_PATH));
     }
 
     @Override

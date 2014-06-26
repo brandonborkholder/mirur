@@ -4,8 +4,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
+
+import test_plugin.Activator;
 
 public abstract class PluginMenuAction extends Action implements IMenuCreator {
     public PluginMenuAction() {
@@ -13,7 +13,7 @@ public abstract class PluginMenuAction extends Action implements IMenuCreator {
         setMenuCreator(this);
         setText("Options");
         setToolTipText("Select Painter Options");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+        setImageDescriptor(Activator.getImageDescriptor(Icons.CONFIG_PATH));
     }
 
     @Override

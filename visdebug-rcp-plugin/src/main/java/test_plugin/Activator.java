@@ -1,5 +1,6 @@
 package test_plugin;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -8,6 +9,8 @@ import testplugin.views.VariableSelectListener;
 
 public class Activator extends AbstractUIPlugin {
     private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
+
+    private static final String PLUGIN_ID = "visdebug-core";
 
     private static Activator plugin;
 
@@ -34,5 +37,9 @@ public class Activator extends AbstractUIPlugin {
             part.getViewSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, new VariableSelectListener());
             isVariableSelectInitialized = true;
         }
+    }
+
+    public static ImageDescriptor getImageDescriptor(String path) {
+        return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
 }
