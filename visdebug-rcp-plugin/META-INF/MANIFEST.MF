@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: test-plugin
-Bundle-SymbolicName: visdebug-core;singleton:=true
-Bundle-Version: 0.1.0.SNAPSHOT
-Bundle-Activator: test_plugin.Activator
+Bundle-Name: Mirur
+Bundle-SymbolicName: mirur.mirur-ui;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: mirur.plugin.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.debug.core,

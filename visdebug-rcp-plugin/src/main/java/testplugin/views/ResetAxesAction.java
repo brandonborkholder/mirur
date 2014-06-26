@@ -1,8 +1,8 @@
 package testplugin.views;
 
-import org.eclipse.jface.action.Action;
+import mirur.plugin.Activator;
 
-import test_plugin.Activator;
+import org.eclipse.jface.action.Action;
 
 public abstract class ResetAxesAction extends Action {
     public ResetAxesAction() {

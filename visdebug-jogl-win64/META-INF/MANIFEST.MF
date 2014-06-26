@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Visdebug-jogl-win64
-Bundle-SymbolicName: visdebug-jogl-win64;singleton:=true
+Bundle-Name: mirur-jogl-win64
+Bundle-SymbolicName: mirur.jogl-win64;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Fragment-Host: visdebug-core;bundle-version="0.1.0"
+Fragment-Host: mirur.mirur-ui;bundle-version="0.1.0.qualifier"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Eclipse-PlatformFilter: (& (osgi.os=win32) (osgi.arch=x86_64))

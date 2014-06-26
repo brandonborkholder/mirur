@@ -1,4 +1,4 @@
-package test_plugin;
+package mirur.plugin;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IViewPart;

@@ -4,13 +4,14 @@ import static testplugin.views.Model.MODEL;
 
 import javax.media.opengl.GLProfile;
 
+import mirur.plugin.Activator;
+
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
-import test_plugin.Activator;
 import testplugin.plugins.VisDebugPlugin;
 
 import com.jogamp.opengl.util.AnimatorBase;

@@ -1,11 +1,11 @@
 package testplugin.views;
 
+import mirur.plugin.Activator;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-
-import test_plugin.Activator;
 
 public abstract class PluginMenuAction extends Action implements IMenuCreator {
     public PluginMenuAction() {

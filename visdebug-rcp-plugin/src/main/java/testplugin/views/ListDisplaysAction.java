@@ -1,12 +1,13 @@
 package testplugin.views;
 
+import mirur.plugin.Activator;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
-import test_plugin.Activator;
 import testplugin.plugins.VisDebugPlugin;
 import testplugin.plugins.VisDebugPlugins;
 

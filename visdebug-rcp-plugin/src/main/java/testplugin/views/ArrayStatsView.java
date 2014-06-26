@@ -6,6 +6,8 @@ import static testplugin.views.PrimitiveTest.getPrimitiveComponent;
 import java.util.ArrayList;
 import java.util.List;
 
+import mirur.plugin.Activator;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -18,8 +20,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
-
-import test_plugin.Activator;
 
 public class ArrayStatsView extends ViewPart implements ArraySelectListener {
     private PrimitiveArray currentData;
