@@ -7,7 +7,7 @@
       <view
             allowMultiple="false"
             category="org.eclipse.debug.ui"
-            class="testplugin.views.GlimpseArrayView"
+            class="mirur.plugin.painterview.GlimpseArrayView"
             icon="icons/sample.gif"
             id="testplugin.views.GlimpseArrayView"
             name="VisDebug">
@@ -18,7 +18,7 @@
       <view
             allowMultiple="false"
             category="org.eclipse.debug.ui"
-            class="testplugin.views.ArrayStatsView"
+            class="mirur.plugin.statsview.ArrayStatsView"
             icon="icons/sample.gif"
             id="testplugin.views.ArrayStatsView"
             name="Array Info">

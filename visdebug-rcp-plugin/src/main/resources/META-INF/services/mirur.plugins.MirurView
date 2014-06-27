@@ -1,0 +1,3 @@
+mirur.plugins.line1d.LineView
+mirur.plugins.bar1d.BarView
+mirur.plugins.heatmap2d.HeatmapView

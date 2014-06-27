@@ -5,8 +5,6 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import testplugin.views.VariableSelectListener;
-
 public class Activator extends AbstractUIPlugin {
     private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
 
