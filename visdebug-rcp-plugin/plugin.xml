@@ -8,9 +8,9 @@
             allowMultiple="false"
             category="org.eclipse.debug.ui"
             class="mirur.plugin.painterview.GlimpseArrayView"
-            icon="icons/sample.gif"
+            icon="icons/mirur.gif"
             id="testplugin.views.GlimpseArrayView"
-            name="VisDebug">
+            name="Mirur Array">
       </view>
    </extension>
    <extension
@@ -19,9 +19,9 @@
             allowMultiple="false"
             category="org.eclipse.debug.ui"
             class="mirur.plugin.statsview.ArrayStatsView"
-            icon="icons/sample.gif"
+            icon="icons/mirur.gif"
             id="testplugin.views.ArrayStatsView"
-            name="Array Info">
+            name="Mirur Statistics">
       </view>
    </extension>
    <extension
@@ -35,12 +35,6 @@
                relative="org.eclipse.ui.views.ProblemView">
          </view>
       </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.eclipse.help.contexts">
-      <contexts
-            file="contexts.xml">
-      </contexts>
    </extension>
 
 </plugin>
