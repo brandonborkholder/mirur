@@ -4,7 +4,6 @@ import static mirur.plugin.Model.MODEL;
 
 import javax.media.opengl.GLProfile;
 
-import mirur.plugin.Activator;
 import mirur.plugin.ArraySelectListener;
 import mirur.plugin.InvalidPlaceholderLayout;
 import mirur.plugin.ListDisplaysAction;
@@ -82,8 +81,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         });
         tbm.add(resetAction);
 
-        Activator.getDefault().initVariableSelectListener(this);
-        MODEL.addArrayListener(this);
+        MODEL.addArrayListener(this, this);
     }
 
     @Override
@@ -93,13 +91,13 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
-        MODEL.removeArrayListener(this);
+        MODEL.removeArrayListener(this, this);
         animator.stop();
         super.dispose();
     }
 
     @Override
-    public void selected(PrimitiveArray array) {
+    public void arraySelected(PrimitiveArray array) {
         currentData = array;
         refreshDataAndPainter();
     }

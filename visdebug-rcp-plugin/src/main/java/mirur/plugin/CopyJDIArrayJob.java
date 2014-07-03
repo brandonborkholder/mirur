@@ -15,7 +15,6 @@ import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.internal.debug.core.model.JDILocalVariable;
-import org.eclipse.swt.widgets.Display;
 
 @SuppressWarnings("restriction")
 public class CopyJDIArrayJob extends Job {
@@ -48,13 +47,8 @@ public class CopyJDIArrayJob extends Job {
             }
 
             cache.setCurrent(name);
-            final PrimitiveArray result = array;
-            Display.getDefault().asyncExec(new Runnable() {
-                @Override
-                public void run() {
-                    MODEL.select(result);
-                }
-            });
+            PrimitiveArray result = array;
+            MODEL.select(result);
         } catch (DebugException ex) {
             throw new RuntimeException(ex);
         }

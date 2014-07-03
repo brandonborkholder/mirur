@@ -6,7 +6,6 @@ import static mirur.plugin.PrimitiveTest.getPrimitiveComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-import mirur.plugin.Activator;
 import mirur.plugin.Array1D;
 import mirur.plugin.Array2D;
 import mirur.plugin.ArraySelectListener;
@@ -57,8 +56,7 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
             }
         });
 
-        Activator.getDefault().initVariableSelectListener(this);
-        MODEL.addArrayListener(this);
+        MODEL.addArrayListener(this, this);
     }
 
     @Override
@@ -68,12 +66,12 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
-        MODEL.removeArrayListener(this);
+        MODEL.removeArrayListener(this, this);
         super.dispose();
     }
 
     @Override
-    public void selected(PrimitiveArray array) {
+    public void arraySelected(PrimitiveArray array) {
         currentData = array;
         refreshData();
     }

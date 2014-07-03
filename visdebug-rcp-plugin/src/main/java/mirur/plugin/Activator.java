@@ -1,18 +1,13 @@
 package mirur.plugin;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin {
-    private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
-
-    private static final String PLUGIN_ID = "visdebug-core";
+    private static final String PLUGIN_ID = "mirur.mirur-ui";
 
     private static Activator plugin;
-
-    private boolean isVariableSelectInitialized = false;
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -28,13 +23,6 @@ public class Activator extends AbstractUIPlugin {
 
     public static Activator getDefault() {
         return plugin;
-    }
-
-    public void initVariableSelectListener(IViewPart part) {
-        if (!isVariableSelectInitialized) {
-            part.getViewSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, new VariableSelectListener());
-            isVariableSelectInitialized = true;
-        }
     }
 
     public static ImageDescriptor getImageDescriptor(String path) {
