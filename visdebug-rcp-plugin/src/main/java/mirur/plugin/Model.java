@@ -13,7 +13,6 @@ public class Model {
     private boolean isVarListenerAttached;
 
     private List<ArraySelectListener> arrayListeners;
-
     private PrimitiveArray lastSelected;
 
     private Model() {
@@ -27,19 +26,27 @@ public class Model {
             throw new NullPointerException("listener cannot be null");
         }
 
+        if (arrayListeners.contains(listener)) {
+            return;
+        }
+
         arrayListeners.add(listener);
+        notifySelectedAsync(listener, lastSelected);
 
         if (!isVarListenerAttached && !arrayListeners.isEmpty()) {
             varListener.install(part.getSite().getWorkbenchWindow());
             isVarListenerAttached = true;
+            varListener.forceUpdateNotify();
         }
-
-        notifySelectedAsync(listener, lastSelected);
     }
 
     public synchronized void removeArrayListener(IViewPart part, ArraySelectListener listener) {
         if (listener == null) {
             throw new NullPointerException("listener cannot be null");
+        }
+
+        if (!arrayListeners.contains(listener)) {
+            return;
         }
 
         arrayListeners.remove(listener);
@@ -60,7 +67,12 @@ public class Model {
     }
 
     public void select(PrimitiveArray selected) {
-        lastSelected = selected;
+        if (lastSelected == selected) {
+            return;
+        } else {
+            lastSelected = selected;
+        }
+
         for (ArraySelectListener l : arrayListeners) {
             notifySelectedAsync(l, selected);
         }

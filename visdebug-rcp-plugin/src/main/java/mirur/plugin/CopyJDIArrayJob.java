@@ -14,17 +14,19 @@ import org.eclipse.jdt.debug.core.IJavaArrayType;
 import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
-import org.eclipse.jdt.internal.debug.core.model.JDILocalVariable;
+import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
+import org.eclipse.jdt.internal.debug.core.model.JDIVariable;
 
 @SuppressWarnings("restriction")
 public class CopyJDIArrayJob extends Job {
     private final SelectionCache cache;
-    private final JDILocalVariable var;
+    private final JDIVariable var;
+    private final JDIStackFrame frame;
 
-    public CopyJDIArrayJob(SelectionCache cache, JDILocalVariable var) throws DebugException {
+    public CopyJDIArrayJob(SelectionCache cache, JDIVariable var, JDIStackFrame frame) throws DebugException {
         super("Copying " + var.getName());
         this.cache = cache;
-
+        this.frame = frame;
         this.var = var;
 
         setPriority(Job.SHORT);
@@ -35,20 +37,14 @@ public class CopyJDIArrayJob extends Job {
     protected IStatus run(IProgressMonitor monitor) {
         try {
             String name = var.getName();
-            if (name.equals(cache.getCurrent())) {
-                return Status.OK_STATUS;
-            }
-
-            PrimitiveArray array = cache.getArray(name);
+            PrimitiveArray array = cache.getArray(name, frame);
 
             if (array == null) {
                 array = toPrimitiveArray(name, var.getValue());
-                cache.put(name, array);
+                cache.put(name, frame, array);
             }
 
-            cache.setCurrent(name);
-            PrimitiveArray result = array;
-            MODEL.select(result);
+            MODEL.select(array);
         } catch (DebugException ex) {
             throw new RuntimeException(ex);
         }
