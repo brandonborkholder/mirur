@@ -1,7 +1,7 @@
 package mirur.plugins;
 
-import mirur.plugin.Array2D;
-import mirur.plugin.PrimitiveArray;
+import mirur.core.Array2D;
+import mirur.core.PrimitiveArray;
 
 import org.eclipse.swt.graphics.Image;
 

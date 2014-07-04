@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.core;
 
 public interface PrimitiveArray {
     String getName();

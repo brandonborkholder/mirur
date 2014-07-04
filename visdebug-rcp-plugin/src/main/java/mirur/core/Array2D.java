@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.core;
 
 public interface Array2D extends PrimitiveArray {
     float[][] toFloats();

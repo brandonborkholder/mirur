@@ -1,7 +1,8 @@
-package mirur.plugin;
+package mirur.core;
 
-import static mirur.plugin.PrimitiveTest.isPrimitiveArray1d;
-import static mirur.plugin.PrimitiveTest.isPrimitiveArray2d;
+import static mirur.core.PrimitiveTest.isPrimitiveArray1d;
+import static mirur.core.PrimitiveTest.isPrimitiveArray2d;
+
 
 public class VisitArray {
     public static ArrayVisitor visit(Object array, ArrayVisitor visitor) {

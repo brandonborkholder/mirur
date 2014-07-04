@@ -2,7 +2,7 @@ package mirur.plugins;
 
 import javax.media.opengl.GL2;
 
-import mirur.plugin.Array2D;
+import mirur.core.Array2D;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseContext;

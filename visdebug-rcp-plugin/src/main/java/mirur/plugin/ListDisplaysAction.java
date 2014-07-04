@@ -1,5 +1,6 @@
 package mirur.plugin;
 
+import mirur.core.PrimitiveArray;
 import mirur.plugins.MirurView;
 import mirur.plugins.MirurViews;
 

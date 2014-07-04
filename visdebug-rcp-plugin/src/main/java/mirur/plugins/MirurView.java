@@ -1,6 +1,6 @@
 package mirur.plugins;
 
-import mirur.plugin.PrimitiveArray;
+import mirur.core.PrimitiveArray;
 
 import org.eclipse.swt.graphics.Image;
 

@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.core;
 
 public class PrimitiveTest {
     public static boolean isPrimitiveArray1d(Class<?> clazz) {

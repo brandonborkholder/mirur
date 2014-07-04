@@ -1,7 +1,7 @@
 package mirur.plugins.heatmap2d;
 
-import mirur.plugin.Array2D;
-import mirur.plugin.PrimitiveArray;
+import mirur.core.Array2D;
+import mirur.core.PrimitiveArray;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.SimplePlugin2D;

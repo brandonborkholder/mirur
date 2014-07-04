@@ -9,7 +9,7 @@
             category="org.eclipse.debug.ui"
             class="mirur.plugin.painterview.GlimpseArrayView"
             icon="icons/mirur.gif"
-            id="testplugin.views.GlimpseArrayView"
+            id="mirur.plugin.painterview.GlimpseArrayView"
             name="Mirur Array">
       </view>
    </extension>
@@ -20,16 +20,28 @@
             category="org.eclipse.debug.ui"
             class="mirur.plugin.statsview.ArrayStatsView"
             icon="icons/mirur.gif"
-            id="testplugin.views.ArrayStatsView"
+            id="mirur.plugin.statsview.ArrayStatsView"
             name="Mirur Statistics">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
+            targetID="org.eclipse.debug.ui.DebugPerspective">
          <view
-               id="testplugin.views.GlimpseArrayView"
+               id="mirur.plugin.painterview.GlimpseArrayView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               id="mirur.plugin.statsview.ArrayStatsView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">

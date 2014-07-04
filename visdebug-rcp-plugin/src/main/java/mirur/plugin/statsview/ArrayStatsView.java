@@ -1,16 +1,16 @@
 package mirur.plugin.statsview;
 
+import static mirur.core.PrimitiveTest.getPrimitiveComponent;
 import static mirur.plugin.Model.MODEL;
-import static mirur.plugin.PrimitiveTest.getPrimitiveComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mirur.plugin.Array1D;
-import mirur.plugin.Array2D;
+import mirur.core.Array1D;
+import mirur.core.Array2D;
+import mirur.core.PrimitiveArray;
+import mirur.core.VisitArray;
 import mirur.plugin.ArraySelectListener;
-import mirur.plugin.PrimitiveArray;
-import mirur.plugin.VisitArray;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

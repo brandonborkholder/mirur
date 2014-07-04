@@ -1,7 +1,7 @@
 package mirur.plugin.statsview;
 
-import mirur.plugin.ArrayVisitor;
-import mirur.plugin.SimpleArrayVisitor;
+import mirur.core.ArrayVisitor;
+import mirur.core.SimpleArrayVisitor;
 
 public interface ArrayStatisticVisitor extends ArrayVisitor {
     String getName();

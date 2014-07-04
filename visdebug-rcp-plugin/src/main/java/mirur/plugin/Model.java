@@ -3,6 +3,8 @@ package mirur.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import mirur.core.PrimitiveArray;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 

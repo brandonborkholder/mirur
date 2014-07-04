@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.core;
 
 import java.nio.FloatBuffer;
 

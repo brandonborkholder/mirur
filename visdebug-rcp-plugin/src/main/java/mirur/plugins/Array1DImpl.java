@@ -2,7 +2,7 @@ package mirur.plugins;
 
 import java.nio.FloatBuffer;
 
-import mirur.plugin.Array1D;
+import mirur.core.Array1D;
 
 public class Array1DImpl implements Array1D {
     private final String name;

@@ -1,6 +1,8 @@
 package mirur.plugin;
 
 import static mirur.plugin.Model.MODEL;
+import mirur.core.Array2DSquare;
+import mirur.core.PrimitiveArray;
 import mirur.plugins.Array1DImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;

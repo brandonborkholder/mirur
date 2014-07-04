@@ -1,6 +1,6 @@
 package mirur.plugins.line1d;
 
-import mirur.plugin.Array1D;
+import mirur.core.Array1D;
 import mirur.plugins.SimplePlugin1D;
 
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;

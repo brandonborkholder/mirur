@@ -3,6 +3,8 @@ package mirur.plugin;
 import java.util.HashMap;
 import java.util.Map;
 
+import mirur.core.PrimitiveArray;
+
 import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
 
 @SuppressWarnings("restriction")

@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import mirur.plugin.Array1D;
+import mirur.core.Array1D;
 import mirur.plugin.SimpleGLBuffer;
 
 import com.metsci.glimpse.axis.Axis2D;

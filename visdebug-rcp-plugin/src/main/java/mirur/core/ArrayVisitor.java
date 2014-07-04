@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.core;
 
 public interface ArrayVisitor {
     void visit(int i, double v);

@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.core;
 
 public class Array2DSquare implements Array2D {
     private final String name;

@@ -4,11 +4,11 @@ import static mirur.plugin.Model.MODEL;
 
 import javax.media.opengl.GLProfile;
 
+import mirur.core.PrimitiveArray;
 import mirur.plugin.ArraySelectListener;
 import mirur.plugin.InvalidPlaceholderLayout;
 import mirur.plugin.ListDisplaysAction;
 import mirur.plugin.PluginMenuAction;
-import mirur.plugin.PrimitiveArray;
 import mirur.plugin.ResetAxesAction;
 import mirur.plugins.DataPainter;
 import mirur.plugins.MirurView;
