@@ -3,16 +3,16 @@ package mirur.plugins;
 import mirur.core.Array1D;
 import mirur.core.PrimitiveArray;
 
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 
 public abstract class SimplePlugin1D implements MirurView {
     private final String name;
-    private final Image icon;
+    private final ImageDescriptor icon;
 
-    public SimplePlugin1D(String name, Image icon) {
+    public SimplePlugin1D(String name, ImageDescriptor icon) {
         this.name = name;
         this.icon = icon;
     }
@@ -26,7 +26,7 @@ public abstract class SimplePlugin1D implements MirurView {
                         double[].class.equals(clazz) ||
                         char[].class.equals(clazz) ||
                         short[].class.equals(clazz) ||
-                boolean[].class.equals(clazz));
+                        boolean[].class.equals(clazz));
 
     }
 
@@ -36,7 +36,7 @@ public abstract class SimplePlugin1D implements MirurView {
     }
 
     @Override
-    public Image getIcon() {
+    public ImageDescriptor getIcon() {
         return icon;
     }
 

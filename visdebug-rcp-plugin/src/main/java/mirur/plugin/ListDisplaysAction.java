@@ -31,7 +31,7 @@ public abstract class ListDisplaysAction extends Action implements IMenuCreator 
         PrimitiveArray data = getActiveData();
 
         for (final MirurView plugin : MirurViews.plugins()) {
-            Action action = new Action(plugin.getName()) {
+            Action action = new Action(plugin.getName(), plugin.getIcon()) {
                 @Override
                 public void run() {
                     select(plugin);

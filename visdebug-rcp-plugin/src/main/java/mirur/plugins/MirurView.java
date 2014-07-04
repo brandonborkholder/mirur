@@ -2,7 +2,7 @@ package mirur.plugins;
 
 import mirur.core.PrimitiveArray;
 
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 
@@ -11,7 +11,7 @@ public interface MirurView {
 
     String getName();
 
-    Image getIcon();
+    ImageDescriptor getIcon();
 
     DataPainter install(GlimpseCanvas canvas, PrimitiveArray array);
 }
