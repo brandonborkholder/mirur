@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>mirur.mirur-ui</groupId>
-    <artifactId>mirur-jogl-linux64</artifactId>
+    <artifactId>mirur-jogl-osx</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>jogl-win64-fragment</name>
+    <name>jogl-osx-fragment</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,13 +45,13 @@
                                     <groupId>org.jogamp.jogl</groupId>
                                     <artifactId>jogl-all</artifactId>
                                     <version>2.1.5-01</version>
-                                    <classifier>natives-linux-amd64</classifier>
+                                    <classifier>natives-macosx-universal</classifier>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.jogamp.gluegen</groupId>
                                     <artifactId>gluegen-rt</artifactId>
                                     <version>2.1.5-01</version>
-                                    <classifier>natives-linux-amd64</classifier>
+                                    <classifier>natives-macosx-universal</classifier>
                                 </artifactItem>
                             </artifactItems>
                             <includes>*.so,*.dll,*.jnilib</includes>

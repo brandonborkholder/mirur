@@ -2,8 +2,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tmp.borkholder.visdebug</groupId>
-    <artifactId>visdebug-jogl-win64</artifactId>
+    <groupId>mirur.mirur-ui</groupId>
+    <artifactId>mirur-jogl-win64</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -54,7 +54,7 @@
                                     <classifier>natives-windows-amd64</classifier>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*.so,*.dll</includes>
+                            <includes>*.so,*.dll,*.jnilib</includes>
                             <outputDirectory>${basedir}</outputDirectory>
                             <overwriteReleases>true</overwriteReleases>
                             <overwriteSnapshots>true</overwriteSnapshots>
@@ -74,6 +74,7 @@
                                 <include>*.jar</include>
                                 <include>*.dll</include>
                                 <include>*.so</include>
+                                <include>*.jnilib</include>
                             </includes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
