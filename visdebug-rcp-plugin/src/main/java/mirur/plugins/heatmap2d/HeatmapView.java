@@ -83,6 +83,9 @@ public class HeatmapView extends SimplePlugin2D {
                 maxZ = Math.max(maxZ, v);
             }
         }
+        if (minZ == maxZ) {
+            maxZ += 1;
+        }
         plot.getAxisZ().setMin(minZ);
         plot.getAxisZ().setMax(maxZ);
 
