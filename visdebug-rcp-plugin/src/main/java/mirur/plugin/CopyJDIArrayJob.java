@@ -30,7 +30,7 @@ public class CopyJDIArrayJob extends Job {
         this.var = var;
 
         setPriority(Job.SHORT);
-        setUser(true);
+        setUser(false);
     }
 
     @Override
