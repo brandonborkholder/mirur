@@ -14,6 +14,7 @@ public class Array1DPlot extends SimplePlot2D {
 
     public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array) {
         setAxisSizeX(25);
+        setTitleHeight(30);
 
         setData(array);
 

@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.plugins;
 
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.painter.decoration.BackgroundPainter;
