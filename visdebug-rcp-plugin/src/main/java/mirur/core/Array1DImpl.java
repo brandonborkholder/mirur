@@ -97,10 +97,4 @@ public class Array1DImpl implements Array1D {
     public int getSize(int dimension) {
         return array.length;
     }
-
-    @Override
-    public String format(int index) {
-        // TODO Not implemented yet...
-        throw new AssertionError("Not implemented yet...");
-    }
 }

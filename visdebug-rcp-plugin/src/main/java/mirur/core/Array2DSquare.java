@@ -115,9 +115,4 @@ public class Array2DSquare implements Array2D {
             throw new AssertionError("No dimension: " + dimension);
         }
     }
-
-    @Override
-    public String format(int i, int j) {
-        throw new AssertionError("Not implemented yet...");
-    }
 }

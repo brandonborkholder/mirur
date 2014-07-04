@@ -2,6 +2,7 @@ package mirur.plugins.heatmap2d;
 
 import mirur.core.Array2D;
 import mirur.core.PrimitiveArray;
+import mirur.plugins.Array2DTitlePainter;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.SimplePlugin2D;
@@ -11,9 +12,13 @@ import com.metsci.glimpse.axis.tagged.Tag;
 import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.gl.texture.ColorTexture1D;
+import com.metsci.glimpse.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.painter.texture.TaggedHeatMapPainter;
 import com.metsci.glimpse.plot.Plot2D;
 import com.metsci.glimpse.plot.TaggedColorAxisPlot2D;
+import com.metsci.glimpse.support.color.GlimpseColor;
 import com.metsci.glimpse.support.colormap.ColorGradients;
 import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.projection.Projection;
@@ -26,11 +31,26 @@ public class HeatmapView extends SimplePlugin2D {
 
     @Override
     public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
-        Array2D array2d = (Array2D) array;
+        final Array2D array2d = (Array2D) array;
 
-        TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D();
+        TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
+            @Override
+            protected SimpleTextPainter createTitlePainter() {
+                SimpleTextPainter painter = new Array2DTitlePainter(getAxis());
+                painter.setHorizontalPosition(HorizontalPosition.Left);
+                painter.setVerticalPosition(VerticalPosition.Center);
+                painter.setColor(GlimpseColor.getBlack());
+                return painter;
+            }
 
-        plot.setTitle(array.getSignature() + " " + array.getName());
+            @Override
+            protected void initializePainters() {
+                super.initializePainters();
+
+                ((Array2DTitlePainter) titlePainter).setArray(array2d);
+            }
+        };
+
         plot.setAxisLabelX(array.getName() + "[]");
         plot.setAxisLabelY(array.getName() + "[][]");
 
