@@ -1,24 +1,30 @@
 package mirur.plugins.line1d;
 
+import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
+
 import java.nio.FloatBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import mirur.core.Array1D;
+import mirur.plugin.MirurLAF;
 import mirur.plugin.SimpleGLBuffer;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseBounds;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
-import com.metsci.glimpse.support.color.GlimpseColor;
+import com.metsci.glimpse.support.settings.LookAndFeel;
 
 public class LinePainter extends GlimpseDataPainter2D {
     private SimpleGLBuffer dataBuffer = new SimpleGLBuffer();
-    private float[] color = GlimpseColor.getBlack();
+    private float[] color = getBlack();
 
-    public void setColor(float[] rgba) {
-        color = rgba.clone();
+    @Override
+    public void setLookAndFeel(LookAndFeel laf) {
+        super.setLookAndFeel(laf);
+
+        color = laf.getColor(MirurLAF.DATA_COLOR);
     }
 
     public void setData(Array1D data) {

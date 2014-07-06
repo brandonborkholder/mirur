@@ -6,6 +6,7 @@ import javax.media.opengl.GLProfile;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugin.ArraySelectListener;
+import mirur.plugin.MirurLAF;
 import mirur.plugin.ResetAxesAction;
 import mirur.plugin.SelectViewAction;
 import mirur.plugin.ViewMenuAction;
@@ -21,13 +22,14 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
+import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
-import com.metsci.glimpse.swt.misc.SwtLookAndFeel;
 
 public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     private ResetAxesAction resetAction;
     private ViewMenuAction viewMenuAction;
 
+    private LookAndFeel laf;
     private NewtSwtGlimpseCanvas canvas;
     private AnimatorBase animator;
 
@@ -40,7 +42,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     @Override
     public void createPartControl(Composite parent) {
         canvas = new NewtSwtGlimpseCanvas(parent, GLProfile.getGL2GL3(), SWT.DOUBLE_BUFFERED);
-        canvas.setLookAndFeel(new SwtLookAndFeel());
+        laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
 
@@ -123,11 +125,11 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
             currentPainter = currentPlugin.install(canvas, currentData);
             resetAction.setEnabled(true);
             viewMenuAction.setEnabled(true);
-            canvas.setLookAndFeel(new SwtLookAndFeel());
+            canvas.setLookAndFeel(laf);
             animator.start();
         } else {
             currentPainter = invalidPlaceholder.install(canvas, currentData);
-            canvas.setLookAndFeel(new SwtLookAndFeel());
+            canvas.setLookAndFeel(laf);
             canvas.paint();
         }
     }

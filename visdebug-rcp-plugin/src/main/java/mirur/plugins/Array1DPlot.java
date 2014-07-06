@@ -7,7 +7,6 @@ import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.plot.SimplePlot2D;
-import com.metsci.glimpse.support.color.GlimpseColor;
 
 public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;
@@ -35,7 +34,6 @@ public class Array1DPlot extends SimplePlot2D {
         SimpleTextPainter painter = new Array1DTitlePainter(getAxis());
         painter.setHorizontalPosition(HorizontalPosition.Left);
         painter.setVerticalPosition(VerticalPosition.Center);
-        painter.setColor(GlimpseColor.getBlack());
         return painter;
     }
 
