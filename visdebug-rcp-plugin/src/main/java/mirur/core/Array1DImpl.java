@@ -1,6 +1,5 @@
 package mirur.core;
 
-import java.nio.FloatBuffer;
 
 public class Array1DImpl implements Array1D {
     private final String name;
@@ -76,11 +75,6 @@ public class Array1DImpl implements Array1D {
     @Override
     public float[] toFloats() {
         return array;
-    }
-
-    @Override
-    public void pour(FloatBuffer buffer) {
-        buffer.put(toFloats());
     }
 
     @Override
