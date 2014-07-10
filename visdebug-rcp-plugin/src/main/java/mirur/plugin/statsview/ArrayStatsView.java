@@ -1,7 +1,6 @@
 package mirur.plugin.statsview;
 
 import static mirur.core.PrimitiveTest.getPrimitiveComponent;
-import static mirur.plugin.Model.MODEL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,7 @@ import mirur.core.Array2D;
 import mirur.core.PrimitiveArray;
 import mirur.core.VisitArray;
 import mirur.plugin.ArraySelectListener;
+import mirur.plugin.ModelHookupListener;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 public class ArrayStatsView extends ViewPart implements ArraySelectListener {
+    public static final String ID = ArrayStatsView.class.getName();
+
     private PrimitiveArray currentData;
 
     private TableViewer table;
@@ -56,7 +58,7 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
             }
         });
 
-        MODEL.addArrayListener(this, this);
+        ModelHookupListener.install(ID, this);
     }
 
     @Override
@@ -66,7 +68,6 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
-        MODEL.removeArrayListener(this, this);
         super.dispose();
     }
 

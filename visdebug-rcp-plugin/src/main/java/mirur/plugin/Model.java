@@ -52,6 +52,7 @@ public class Model {
         }
 
         arrayListeners.remove(listener);
+        listener.arraySelected(null);
 
         if (isVarListenerAttached && arrayListeners.isEmpty()) {
             varListener.uninstall(part.getSite().getWorkbenchWindow());

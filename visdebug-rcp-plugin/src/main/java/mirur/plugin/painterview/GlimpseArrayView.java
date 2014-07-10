@@ -1,12 +1,11 @@
 package mirur.plugin.painterview;
 
-import static mirur.plugin.Model.MODEL;
-
 import javax.media.opengl.GLProfile;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugin.ArraySelectListener;
 import mirur.plugin.MirurLAF;
+import mirur.plugin.ModelHookupListener;
 import mirur.plugin.ResetAxesAction;
 import mirur.plugin.SelectViewAction;
 import mirur.plugin.ViewMenuAction;
@@ -26,6 +25,8 @@ import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
 public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
+    private static final String ID = GlimpseArrayView.class.getName();
+
     private ResetAxesAction resetAction;
     private ViewMenuAction viewMenuAction;
 
@@ -81,7 +82,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
         refreshDataAndPainter();
 
-        MODEL.addArrayListener(this, this);
+        ModelHookupListener.install(ID, this);
     }
 
     @Override
@@ -91,7 +92,6 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
-        MODEL.removeArrayListener(this, this);
         animator.stop();
         super.dispose();
     }
