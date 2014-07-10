@@ -19,6 +19,7 @@ import com.metsci.glimpse.painter.texture.TaggedHeatMapPainter;
 import com.metsci.glimpse.plot.Plot2D;
 import com.metsci.glimpse.plot.TaggedColorAxisPlot2D;
 import com.metsci.glimpse.support.color.GlimpseColor;
+import com.metsci.glimpse.support.colormap.ColorGradient;
 import com.metsci.glimpse.support.colormap.ColorGradients;
 import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.projection.Projection;
@@ -71,8 +72,8 @@ public class HeatmapView extends SimplePlugin2D {
             }
         });
 
-        ColorTexture1D colors = new ColorTexture1D(1024);
-        colors.setColorGradient(ColorGradients.gray);
+        final ColorTexture1D colors = new ColorTexture1D(1024);
+        colors.setColorGradient(ColorGradients.jet);
 
         int dim0 = array.getSize(0);
         int dim1 = array.getSize(1);
@@ -116,6 +117,12 @@ public class HeatmapView extends SimplePlugin2D {
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
         result.addAxis(plot.getAxisZ());
+        result.addAction(new GradientChooserAction() {
+            @Override
+            protected void select(ColorGradient gradient) {
+                colors.setColorGradient(gradient);
+            }
+        });
         return result;
     }
 }
