@@ -6,5 +6,6 @@ import org.eclipse.jface.action.IAction;
 public class FisheyeAction extends Action {
     public FisheyeAction() {
         super("Fisheye", IAction.AS_CHECK_BOX);
+        setId(FisheyeAction.class.getName());
     }
 }

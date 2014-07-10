@@ -3,6 +3,7 @@ package mirur.plugins;
 import mirur.core.Array1D;
 import mirur.core.PrimitiveArray;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
@@ -26,7 +27,7 @@ public abstract class SimplePlugin1D implements MirurView {
                         double[].class.equals(clazz) ||
                         char[].class.equals(clazz) ||
                         short[].class.equals(clazz) ||
-                        boolean[].class.equals(clazz));
+                boolean[].class.equals(clazz));
 
     }
 
@@ -42,13 +43,24 @@ public abstract class SimplePlugin1D implements MirurView {
 
     @Override
     public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
-        final Array1D array1d = (Array1D) array;
+        Array1D array1d = (Array1D) array;
         GlimpseDataPainter2D painter = createPainter(array1d);
-        final Array1DPlot plot = new Array1DPlot(painter, array1d);
+        Array1DPlot plot = new Array1DPlot(painter, array1d);
 
-        canvas.addLayout(plot);
         DataPainterImpl result = new DataPainterImpl(plot);
-        result.addAction(new FisheyeAction() {
+        result.addAction(getFisheyeAction(plot));
+        result.addAxis(plot.getAxis());
+
+        finalInstall(canvas, result);
+        return result;
+    }
+
+    protected void finalInstall(GlimpseCanvas canvas, DataPainter painter) {
+        canvas.addLayout(painter.getLayout());
+    }
+
+    protected Action getFisheyeAction(final Array1DPlot plot) {
+        return new FisheyeAction() {
             @Override
             public void run() {
                 if (isChecked()) {
@@ -57,9 +69,7 @@ public abstract class SimplePlugin1D implements MirurView {
                     plot.setShaders(InitializablePipeline.DEFAULT);
                 }
             }
-        });
-        result.addAxis(plot.getAxis());
-        return result;
+        };
     }
 
     protected abstract GlimpseDataPainter2D createPainter(Array1D array);
