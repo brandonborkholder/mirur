@@ -89,7 +89,9 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
 
     @Override
     public void debugContextChanged(DebugContextEvent event) {
-        update();
+        if (event.getFlags() == DebugContextEvent.ACTIVATED) {
+            update();
+        }
     }
 
     @Override
