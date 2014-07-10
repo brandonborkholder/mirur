@@ -41,7 +41,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void createPartControl(Composite parent) {
-        canvas = new NewtSwtGlimpseCanvas(parent, GLProfile.getGL2GL3(), SWT.DOUBLE_BUFFERED);
+        canvas = new BugFixNewtSwtGlimpseCanvas(parent, GLProfile.getGL2GL3(), SWT.DOUBLE_BUFFERED);
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
