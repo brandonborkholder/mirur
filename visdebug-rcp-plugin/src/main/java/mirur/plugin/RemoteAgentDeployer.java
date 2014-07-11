@@ -9,6 +9,8 @@ import java.io.OutputStream;
 
 import mirur.core.MirurAgent;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -49,7 +51,7 @@ public class RemoteAgentDeployer {
             while (true) {
                 int count = in.read(buf);
                 if (count > 0) {
-                    out.write(buf);
+                    out.write(buf, 0, count);
                 } else {
                     break;
                 }
@@ -73,10 +75,16 @@ public class RemoteAgentDeployer {
     }
 
     private File getClassesDirectory(IJavaProject project) throws JavaModelException {
-        for (IClasspathEntry e : project.getRawClasspath()) {
+        final IClasspathEntry[] rawClasspath = project.getRawClasspath();
+        for (IClasspathEntry e : rawClasspath) {
             if (e.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
                 IPath path = e.getOutputLocation();
-                return path.toFile();
+                if (path == null) {
+                    path = project.getOutputLocation();
+                }
+
+                IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+                return file.getRawLocation().toFile();
             }
         }
 

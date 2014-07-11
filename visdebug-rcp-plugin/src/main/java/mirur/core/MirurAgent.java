@@ -7,6 +7,11 @@ import java.util.Iterator;
 public class MirurAgent {
     private static final Object INVALID = Void.TYPE;
 
+    public static Object test(Object value) {
+        System.out.println("Testing with " + value);
+        return value != null;
+    }
+
     public static Object toArray(Object value) {
         if (value == null) {
             return null;
