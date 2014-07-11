@@ -5,9 +5,8 @@ import java.util.Map;
 
 import mirur.core.PrimitiveArray;
 
-import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
-@SuppressWarnings("restriction")
 public class SelectionCache {
     private Map<Key, PrimitiveArray> cache;
 
@@ -19,19 +18,23 @@ public class SelectionCache {
         cache.clear();
     }
 
-    public PrimitiveArray getArray(String name, JDIStackFrame frame) {
+    public boolean contains(String name, IJavaStackFrame frame) {
+        return cache.containsKey(new Key(name, frame));
+    }
+
+    public PrimitiveArray getArray(String name, IJavaStackFrame frame) {
         return cache.get(new Key(name, frame));
     }
 
-    public void put(String name, JDIStackFrame frame, PrimitiveArray array) {
+    public void put(String name, IJavaStackFrame frame, PrimitiveArray array) {
         cache.put(new Key(name, frame), array);
     }
 
     private static class Key {
         final String name;
-        final JDIStackFrame frame;
+        final IJavaStackFrame frame;
 
-        Key(String name, JDIStackFrame frame) {
+        Key(String name, IJavaStackFrame frame) {
             this.name = name;
             this.frame = frame;
         }

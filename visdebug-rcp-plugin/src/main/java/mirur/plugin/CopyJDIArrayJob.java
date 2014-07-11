@@ -14,22 +14,20 @@ import org.eclipse.debug.core.model.IValue;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaArrayType;
 import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
-import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
-import org.eclipse.jdt.internal.debug.core.model.JDIVariable;
 
-@SuppressWarnings("restriction")
 public class CopyJDIArrayJob extends Job {
-    private final SelectionCache cache;
-    private final JDIVariable var;
-    private final JDIStackFrame frame;
+    private final String name;
+    private final IValue value;
+    private final IJavaStackFrame frame;
 
-    public CopyJDIArrayJob(SelectionCache cache, JDIVariable var, JDIStackFrame frame) throws DebugException {
-        super("Copying " + var.getName());
-        this.cache = cache;
+    public CopyJDIArrayJob(String variableName, IValue value, IJavaStackFrame frame) {
+        super("Copying " + variableName);
+        this.name = variableName;
         this.frame = frame;
-        this.var = var;
+        this.value = value;
 
         setPriority(Job.SHORT);
         setUser(false);
@@ -38,11 +36,14 @@ public class CopyJDIArrayJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         try {
-            String name = var.getName();
-            PrimitiveArray array = cache.getArray(name, frame);
+            SelectionCache cache = Activator.getVariableCache();
 
-            if (array == null) {
-                array = toPrimitiveArray(name, var.getValue());
+            PrimitiveArray array = null;
+            if (cache.contains(name, frame)) {
+                // might be null if we've tried before
+                array = cache.getArray(name, frame);
+            } else {
+                array = toPrimitiveArray(name, value);
                 cache.put(name, frame, array);
             }
 

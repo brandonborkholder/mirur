@@ -9,6 +9,8 @@ public class Activator extends AbstractUIPlugin {
 
     private static Activator plugin;
 
+    private static SelectionCache variableCache = new SelectionCache();
+
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
@@ -27,5 +29,9 @@ public class Activator extends AbstractUIPlugin {
 
     public static ImageDescriptor getImageDescriptor(String path) {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
+    }
+
+    public static SelectionCache getVariableCache() {
+        return variableCache;
     }
 }

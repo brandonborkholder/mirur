@@ -4,13 +4,14 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.ui.AbstractDebugView;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.debug.ui.contexts.IDebugContextService;
-import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
-import org.eclipse.jdt.internal.debug.core.model.JDIVariable;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.INullSelectionListener;
@@ -20,11 +21,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-@SuppressWarnings("restriction")
 public class VariableSelectListener implements ISelectionListener, INullSelectionListener, IDebugEventSetListener, IDebugContextListener {
     private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
-
-    private final SelectionCache cache = new SelectionCache();
 
     public void install(IWorkbenchWindow window) {
         DebugPlugin.getDefault().addDebugEventListener(this);
@@ -43,30 +41,36 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
 
         window.getSelectionService().removePostSelectionListener(VARIABLE_VIEW_ID, this);
 
-        cache.clear();
+        Activator.getVariableCache().clear();
     }
 
     private void update() {
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         IDebugContextService service = DebugUITools.getDebugContextManager().getContextService(window);
         ISelection contextSelection = service.getActiveContext();
-        JDIStackFrame frame = extract(contextSelection, JDIStackFrame.class);
+        IJavaStackFrame frame = extract(contextSelection, IJavaStackFrame.class);
 
-        JDIVariable variable = null;
+        IJavaVariable variable = null;
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
         if (view instanceof AbstractDebugView) {
             ISelection varSelection = ((AbstractDebugView) view).getViewer().getSelection();
-            variable = extract(varSelection, JDIVariable.class);
+            variable = extract(varSelection, IJavaVariable.class);
         }
 
         if (frame == null || variable == null) {
             Model.MODEL.select(null);
         } else {
+            String varName;
+            IValue value;
             try {
-                new CopyJDIArrayJob(cache, variable, frame).schedule();
+                value = variable.getValue();
+                varName = variable.getName();
             } catch (DebugException ex) {
                 throw new RuntimeException(ex);
             }
+
+//            new CopyJDIArrayJob(varName, value, frame).schedule();
+            new InvokeRemoteMethodJob(variable, frame).schedule();
         }
     }
 
@@ -102,7 +106,7 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
             if ((kind == DebugEvent.RESUME && event.getDetail() == DebugEvent.EVALUATION_IMPLICIT) || kind == DebugEvent.SUSPEND) {
                 // probably generating a .toString on the variable
             } else {
-                cache.clear();
+                Activator.getVariableCache().clear();
             }
         } else {
             for (DebugEvent e : events) {

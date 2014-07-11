@@ -1,11 +1,13 @@
 package mirur.core;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
 public class MirurAgent {
-    private static final Object INVALID = Void.TYPE;
+    private static final Object INVALID = null;
+
+    private double[] array;
+    private int index;
 
     public static Object test(Object value) {
         System.out.println("Testing with " + value);
@@ -28,26 +30,26 @@ public class MirurAgent {
             // array of possibly primitive wrappers
             Object[] array = (Object[]) value;
 
-            Collection2DoubleArrayHelper helper = new Collection2DoubleArrayHelper(array.length);
-            for (int i = 0; i < array.length && helper.isValid; i++) {
-                helper.tryAdd(array[i]);
+            MirurAgent helper = new MirurAgent(array.length);
+            for (int i = 0; i < array.length; i++) {
+                if (!helper.tryAdd(array[i])) {
+                    return INVALID;
+                }
             }
 
-            if (helper.isValid) {
-                return helper.toArray();
-            }
+            return helper.toArray();
         } else if (value instanceof Collection<?>) {
             // collection of possibly primitive wrappers
             Collection<?> c = (Collection<?>) value;
             Iterator<?> itr = c.iterator();
-            Collection2DoubleArrayHelper helper = new Collection2DoubleArrayHelper(c.size());
-            while (itr.hasNext() && helper.isValid) {
-                helper.tryAdd(itr.next());
+            MirurAgent helper = new MirurAgent(c.size());
+            while (itr.hasNext()) {
+                if (!helper.tryAdd(itr.next())) {
+                    return INVALID;
+                }
             }
 
-            if (helper.isValid) {
-                return helper.toArray();
-            }
+            return helper.toArray();
         }
 
         return INVALID;
@@ -57,33 +59,29 @@ public class MirurAgent {
         return clazz.isArray() && clazz.getComponentType().isPrimitive();
     }
 
-    private static class Collection2DoubleArrayHelper {
-        private boolean isValid;
+    private MirurAgent(int guessSize) {
+        array = new double[guessSize];
+        index = 0;
+    }
 
-        private double[] array;
-        private int index;
-
-        Collection2DoubleArrayHelper(int guessSize) {
-            array = new double[guessSize];
-            isValid = true;
-            index = 0;
+    private Object toArray() {
+        if (index == 0) {
+            return INVALID;
+        } else if (index == array.length - 1) {
+            return array;
+        } else {
+            double[] copy = new double[index];
+            System.arraycopy(array, 0, copy, 0, index);
+            return copy;
         }
+    }
 
-        Object toArray() {
-            if (index == array.length - 1) {
-                return array;
-            } else {
-                return Arrays.copyOfRange(array, 0, index);
-            }
-        }
-
-        boolean tryAdd(Object value) {
-            if (value instanceof Number) {
-                array[index++] = ((Number) value).doubleValue();
-                return true;
-            } else {
-                return false;
-            }
+    private boolean tryAdd(Object value) {
+        if (value instanceof Number) {
+            array[index++] = ((Number) value).doubleValue();
+            return true;
+        } else {
+            return false;
         }
     }
 }
