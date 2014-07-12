@@ -27,4 +27,21 @@ public class PrimitiveTest {
             throw new IllegalArgumentException(clazz.getName() + " is not a primitive array");
         }
     }
+
+    public static boolean isPrimitiveName(String typeName) {
+        switch (typeName.toLowerCase()) {
+        case "double":
+        case "long":
+        case "float":
+        case "int":
+        case "short":
+        case "char":
+        case "byte":
+        case "boolean":
+            return true;
+
+        default:
+            return false;
+        }
+    }
 }

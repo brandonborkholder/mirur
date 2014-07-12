@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IIndexedValue;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaArrayType;
@@ -20,10 +21,10 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 
 public class CopyJDIArrayJob extends Job {
     private final String name;
-    private final IValue value;
+    private final IIndexedValue value;
     private final IJavaStackFrame frame;
 
-    public CopyJDIArrayJob(String variableName, IValue value, IJavaStackFrame frame) {
+    public CopyJDIArrayJob(String variableName, IIndexedValue value, IJavaStackFrame frame) {
         super("Copying " + variableName);
         this.name = variableName;
         this.frame = frame;
@@ -49,13 +50,14 @@ public class CopyJDIArrayJob extends Job {
 
             MODEL.select(array);
         } catch (DebugException ex) {
+            MODEL.select(null);
             throw new RuntimeException(ex);
         }
 
         return Status.OK_STATUS;
     }
 
-    private PrimitiveArray toPrimitiveArray(String name, IValue value) throws DebugException {
+    private PrimitiveArray toPrimitiveArray(String name, IIndexedValue value) throws DebugException {
         if (!(value instanceof IJavaArray)) {
             return null;
         }

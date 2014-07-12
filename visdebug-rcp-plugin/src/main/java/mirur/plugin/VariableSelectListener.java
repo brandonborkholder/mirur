@@ -1,16 +1,25 @@
 package mirur.plugin;
 
+import static mirur.plugin.Model.MODEL;
+import mirur.core.PrimitiveArray;
+import mirur.core.PrimitiveTest;
+
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IIndexedValue;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.ui.AbstractDebugView;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.debug.ui.contexts.IDebugContextService;
+import org.eclipse.jdt.debug.core.IJavaArray;
+import org.eclipse.jdt.debug.core.IJavaArrayType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaType;
+import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -58,20 +67,42 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         }
 
         if (frame == null || variable == null) {
-            Model.MODEL.select(null);
+            MODEL.select(null);
         } else {
-            String varName;
-            IValue value;
             try {
-                value = variable.getValue();
-                varName = variable.getName();
-            } catch (DebugException ex) {
-                throw new RuntimeException(ex);
-            }
+                IValue value = variable.getValue();
+                String varName = variable.getName();
 
-//            new CopyJDIArrayJob(varName, value, frame).schedule();
-            new InvokeRemoteMethodJob(variable, frame).schedule();
+                if (Activator.getVariableCache().contains(varName, frame)) {
+                    PrimitiveArray array = Activator.getVariableCache().getArray(varName, frame);
+                    MODEL.select(array);
+                } else if (isPrimitiveArray(value)) {
+                    new CopyJDIArrayJob(varName, (IIndexedValue) value, frame).schedule();
+                } else if (value instanceof IJavaValue) {
+                    new InvokeRemoteMethodJob(variable, frame).schedule();
+                } else {
+                    MODEL.select(null);
+                }
+            } catch (DebugException ex) {
+                MODEL.select(null);
+                throw new VariableTransferException(ex);
+            }
         }
+    }
+
+    private boolean isPrimitiveArray(IValue value) throws DebugException {
+        if (value instanceof IJavaArray) {
+            IJavaArrayType arrayType = (IJavaArrayType) ((IJavaArray) value).getJavaType();
+            IJavaType componentType = arrayType.getComponentType();
+            if (PrimitiveTest.isPrimitiveName(componentType.getName())) {
+                return true;
+            } else if (componentType instanceof IJavaArrayType) {
+                IJavaType component2Type = ((IJavaArrayType) componentType).getComponentType();
+                return PrimitiveTest.isPrimitiveName(component2Type.getName());
+            }
+        }
+
+        return false;
     }
 
     @SuppressWarnings("unchecked")

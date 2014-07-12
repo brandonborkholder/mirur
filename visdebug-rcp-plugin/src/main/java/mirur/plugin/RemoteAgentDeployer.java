@@ -12,20 +12,32 @@ import mirur.core.MirurAgent;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 
 public class RemoteAgentDeployer {
     private byte[] agentClassBytes;
 
-    public void install(IJavaProject project) {
-        try {
-            File classFileDest = getAgentDestination(project);
-            writeAgent(classFileDest);
-        } catch (JavaModelException | IOException ex) {
-            throw new RuntimeException(ex);
+    public void install(IJavaDebugTarget target, IJavaProject project) throws JavaModelException, IOException, DebugException, VariableTransferException {
+        if (!isValidJVMVersion(target.getVersion())) {
+            throw new VariableTransferException(VariableTransferException.ERR_Invalid_Jvm_Version);
         }
+
+        File classFileDest = getAgentDestination(project);
+        if (!classFileDest.isFile()) {
+            writeAgent(classFileDest);
+        }
+    }
+
+    private boolean isValidJVMVersion(String version) {
+        int secondDot = version.indexOf('.');
+        secondDot = version.indexOf('.', secondDot + 1);
+        String major = version.substring(0, secondDot);
+
+        return Double.parseDouble(major) >= 1.5;
     }
 
     private void writeAgent(File classFileDest) throws IOException {
@@ -89,14 +101,5 @@ public class RemoteAgentDeployer {
         }
 
         return null;
-    }
-
-    public boolean isInstalled(IJavaProject project) {
-        try {
-            File classFileDest = getAgentDestination(project);
-            return classFileDest.isFile();
-        } catch (JavaModelException ex) {
-            return false;
-        }
     }
 }

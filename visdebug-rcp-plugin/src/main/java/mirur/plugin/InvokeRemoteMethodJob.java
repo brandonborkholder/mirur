@@ -1,6 +1,10 @@
 package mirur.plugin;
 
+import static mirur.plugin.Model.MODEL;
 import static org.eclipse.jdt.internal.debug.core.JavaDebugUtils.resolveJavaProject;
+
+import java.io.IOException;
+
 import mirur.core.MirurAgent;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -9,6 +13,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -38,32 +44,16 @@ public class InvokeRemoteMethodJob extends Job {
         IJavaProject project = resolveJavaProject(frame);
 
         try {
-            if (!isValidJVMVersion(target.getVersion())) {
-                return Status.OK_STATUS;
+            if (target instanceof IJavaDebugTarget && project != null && thread.isSuspended()) {
+                new RemoteAgentDeployer().install(target, project);
+
+                thread.queueRunnable(new AgentInvokeRunnable(target, thread, frame, var));
             }
-        } catch (DebugException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        if (target instanceof IJavaDebugTarget && project != null && thread.isSuspended()) {
-            deployAgent(project);
-
-            thread.queueRunnable(new AgentInvokeRunnable(target, thread, frame, var));
+        } catch (DebugException | JavaModelException | IOException | VariableTransferException ex) {
+            MODEL.select(null);
         }
 
         return Status.OK_STATUS;
-    }
-
-    private boolean isValidJVMVersion(String version) {
-        int secondDot = version.indexOf('.');
-        secondDot = version.indexOf('.', secondDot + 1);
-        String major = version.substring(0, secondDot);
-
-        return Double.parseDouble(major) >= 1.5;
-    }
-
-    private void deployAgent(IJavaProject project) {
-        new RemoteAgentDeployer().install(project);
     }
 
     private static class AgentInvokeRunnable implements Runnable {
@@ -88,14 +78,17 @@ public class InvokeRemoteMethodJob extends Job {
 
                 String name = var.getName();
 
-                if (!result.isNull()) {
-                    new CopyJDIArrayJob(name, result, frame).schedule();
+                if (result instanceof IJavaArray) {
+                    new CopyJDIArrayJob(name, (IJavaArray) result, frame).schedule();
                 }
             } catch (DebugException ex) {
                 IStatus status = ex.getStatus();
                 if (status != null && status.getException() != null) {
                     status.getException().printStackTrace();
                 }
+
+                MODEL.select(null);
+                throw new VariableTransferException(ex);
             }
         }
 

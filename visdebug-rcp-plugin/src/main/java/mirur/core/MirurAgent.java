@@ -6,6 +6,7 @@ import java.util.Iterator;
 public class MirurAgent {
     private static final Object INVALID = null;
 
+    private int guessedSize;
     private double[] array;
     private int index;
 
@@ -60,12 +61,14 @@ public class MirurAgent {
     }
 
     private MirurAgent(int guessSize) {
-        array = new double[guessSize];
+        guessedSize = guessSize;
         index = 0;
+        // don't allocate until we are able to add a valid number
+        array = null;
     }
 
     private Object toArray() {
-        if (index == 0) {
+        if (index == 0 || array == null) {
             return INVALID;
         } else if (index == array.length - 1) {
             return array;
@@ -78,6 +81,10 @@ public class MirurAgent {
 
     private boolean tryAdd(Object value) {
         if (value instanceof Number) {
+            if (array == null) {
+                array = new double[guessedSize];
+            }
+
             array[index++] = ((Number) value).doubleValue();
             return true;
         } else {
