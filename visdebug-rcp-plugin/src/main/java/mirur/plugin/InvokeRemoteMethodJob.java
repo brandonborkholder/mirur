@@ -1,19 +1,21 @@
 package mirur.plugin;
 
 import static mirur.plugin.Model.MODEL;
-import static org.eclipse.jdt.internal.debug.core.JavaDebugUtils.resolveJavaProject;
+import static org.eclipse.jdt.internal.debug.core.JavaDebugUtils.resolveJavaElement;
 
 import java.io.IOException;
 
 import mirur.core.MirurAgent;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
@@ -41,19 +43,32 @@ public class InvokeRemoteMethodJob extends Job {
     protected IStatus run(IProgressMonitor monitor) {
         IJavaThread thread = (IJavaThread) frame.getThread();
         IJavaDebugTarget target = (IJavaDebugTarget) thread.getDebugTarget();
-        IJavaProject project = resolveJavaProject(frame);
 
         try {
+            IJavaProject project = resolveJavaProject();
+
             if (target instanceof IJavaDebugTarget && project != null && thread.isSuspended()) {
                 new RemoteAgentDeployer().install(target, project);
 
                 thread.queueRunnable(new AgentInvokeRunnable(target, thread, frame, var));
             }
-        } catch (DebugException | JavaModelException | IOException | VariableTransferException ex) {
+        } catch (IOException | VariableTransferException | CoreException ex) {
             MODEL.select(null);
+            throw new VariableTransferException(ex);
         }
 
         return Status.OK_STATUS;
+    }
+
+    private IJavaProject resolveJavaProject() throws CoreException {
+        ILaunch launch = frame.getLaunch();
+        // TODO this should try to find the main class and get that project (this frame could be in the JDK)
+        IJavaElement element = resolveJavaElement(frame, launch);
+        if (element == null) {
+            return null;
+        } else {
+            return element.getJavaProject();
+        }
     }
 
     private static class AgentInvokeRunnable implements Runnable {
