@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaType;
@@ -47,10 +48,12 @@ public class InvokeRemoteMethodJob extends Job {
         try {
             IJavaProject project = resolveJavaProject();
 
-            if (target instanceof IJavaDebugTarget && project != null && thread.isSuspended()) {
+            if (project != null && thread.isSuspended() && var.getJavaType() instanceof IJavaReferenceType) {
                 new RemoteAgentDeployer().install(target, project);
 
                 thread.queueRunnable(new AgentInvokeRunnable(target, thread, frame, var));
+            } else {
+                MODEL.select(null);
             }
         } catch (IOException | VariableTransferException | CoreException ex) {
             MODEL.select(null);
@@ -95,6 +98,11 @@ public class InvokeRemoteMethodJob extends Job {
 
                 if (result instanceof IJavaArray) {
                     new CopyJDIArrayJob(name, (IJavaArray) result, frame).schedule();
+                } else if (result.isNull()) {
+                    Activator.getVariableCache().put(name, frame, null);
+                    MODEL.select(null);
+                } else {
+                    MODEL.select(null);
                 }
             } catch (DebugException ex) {
                 IStatus status = ex.getStatus();
