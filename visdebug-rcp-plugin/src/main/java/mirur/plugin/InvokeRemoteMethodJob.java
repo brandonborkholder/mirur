@@ -1,6 +1,5 @@
 package mirur.plugin;
 
-import static mirur.plugin.Model.MODEL;
 import static org.eclipse.jdt.internal.debug.core.JavaDebugUtils.resolveJavaElement;
 
 import java.io.IOException;
@@ -53,10 +52,10 @@ public class InvokeRemoteMethodJob extends Job {
 
                 thread.queueRunnable(new AgentInvokeRunnable(target, thread, frame, var));
             } else {
-                MODEL.select(null);
+                Activator.getSelectionModel().select(null);
             }
         } catch (IOException | VariableTransferException | CoreException ex) {
-            MODEL.select(null);
+            Activator.getSelectionModel().select(null);
             throw new VariableTransferException(ex);
         }
 
@@ -100,9 +99,9 @@ public class InvokeRemoteMethodJob extends Job {
                     new CopyJDIArrayJob(name, (IJavaArray) result, frame).schedule();
                 } else if (result.isNull()) {
                     Activator.getVariableCache().put(name, frame, null);
-                    MODEL.select(null);
+                    Activator.getSelectionModel().select(null);
                 } else {
-                    MODEL.select(null);
+                    Activator.getSelectionModel().select(null);
                 }
             } catch (DebugException ex) {
                 IStatus status = ex.getStatus();
@@ -110,7 +109,7 @@ public class InvokeRemoteMethodJob extends Job {
                     status.getException().printStackTrace();
                 }
 
-                MODEL.select(null);
+                Activator.getSelectionModel().select(null);
                 throw new VariableTransferException(ex);
             }
         }

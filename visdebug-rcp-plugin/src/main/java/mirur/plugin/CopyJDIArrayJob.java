@@ -1,6 +1,5 @@
 package mirur.plugin;
 
-import static mirur.plugin.Model.MODEL;
 import mirur.core.Array1DImpl;
 import mirur.core.Array2DSquare;
 import mirur.core.PrimitiveArray;
@@ -48,9 +47,9 @@ public class CopyJDIArrayJob extends Job {
                 cache.put(name, frame, array);
             }
 
-            MODEL.select(array);
+            Activator.getSelectionModel().select(array);
         } catch (DebugException ex) {
-            MODEL.select(null);
+            Activator.getSelectionModel().select(null);
             throw new RuntimeException(ex);
         }
 

@@ -1,6 +1,5 @@
 package mirur.plugin;
 
-import static mirur.plugin.Model.MODEL;
 import mirur.core.PrimitiveArray;
 import mirur.core.PrimitiveTest;
 
@@ -67,7 +66,7 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         }
 
         if (frame == null || variable == null) {
-            MODEL.select(null);
+            Activator.getSelectionModel().select(null);
         } else {
             try {
                 IValue value = variable.getValue();
@@ -75,16 +74,16 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
 
                 if (Activator.getVariableCache().contains(varName, frame)) {
                     PrimitiveArray array = Activator.getVariableCache().getArray(varName, frame);
-                    MODEL.select(array);
+                    Activator.getSelectionModel().select(array);
                 } else if (isPrimitiveArray(value)) {
                     new CopyJDIArrayJob(varName, (IIndexedValue) value, frame).schedule();
                 } else if (value instanceof IJavaValue) {
                     new InvokeRemoteMethodJob(variable, frame).schedule();
                 } else {
-                    MODEL.select(null);
+                    Activator.getSelectionModel().select(null);
                 }
             } catch (DebugException ex) {
-                MODEL.select(null);
+                Activator.getSelectionModel().select(null);
                 throw new VariableTransferException(ex);
             }
         }

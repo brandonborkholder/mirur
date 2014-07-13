@@ -8,16 +8,14 @@ import mirur.core.PrimitiveArray;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 
-public class Model {
-    public static final Model MODEL = new Model();
-
+public class SelectionModel {
     private VariableSelectListener varListener;
     private boolean isVarListenerAttached;
 
     private List<ArraySelectListener> arrayListeners;
     private PrimitiveArray lastSelected;
 
-    private Model() {
+    public SelectionModel() {
         varListener = new VariableSelectListener();
         isVarListenerAttached = false;
         arrayListeners = new ArrayList<>();

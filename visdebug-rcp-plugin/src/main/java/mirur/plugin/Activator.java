@@ -11,6 +11,8 @@ public class Activator extends AbstractUIPlugin {
 
     private static SelectionCache variableCache = new SelectionCache();
 
+    private static SelectionModel selectionModel = new SelectionModel();
+
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
@@ -33,5 +35,9 @@ public class Activator extends AbstractUIPlugin {
 
     public static SelectionCache getVariableCache() {
         return variableCache;
+    }
+
+    public static SelectionModel getSelectionModel() {
+        return selectionModel;
     }
 }

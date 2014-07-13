@@ -30,7 +30,7 @@ public class ModelHookupListener implements IPartListener2 {
     @Override
     public void partClosed(IWorkbenchPartReference partRef) {
         if (partID.equals(partRef.getId())) {
-            Model.MODEL.removeArrayListener(part, listener);
+            Activator.getSelectionModel().removeArrayListener(part, listener);
 
             part.getSite().getPage().removePartListener(this);
         }
@@ -43,21 +43,21 @@ public class ModelHookupListener implements IPartListener2 {
     @Override
     public void partOpened(IWorkbenchPartReference partRef) {
         if (partID.equals(partRef.getId())) {
-            Model.MODEL.addArrayListener(part, listener);
+            Activator.getSelectionModel().addArrayListener(part, listener);
         }
     }
 
     @Override
     public void partHidden(IWorkbenchPartReference partRef) {
         if (partID.equals(partRef.getId())) {
-            Model.MODEL.removeArrayListener(part, listener);
+            Activator.getSelectionModel().removeArrayListener(part, listener);
         }
     }
 
     @Override
     public void partVisible(IWorkbenchPartReference partRef) {
         if (partID.equals(partRef.getId())) {
-            Model.MODEL.addArrayListener(part, listener);
+            Activator.getSelectionModel().addArrayListener(part, listener);
         }
     }
 
