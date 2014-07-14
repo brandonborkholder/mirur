@@ -9,8 +9,8 @@
             category="org.eclipse.debug.ui"
             class="mirur.plugin.painterview.GlimpseArrayView"
             icon="icons/mirur.gif"
-            id="mirur.plugin.painterview.GlimpseArrayView"
-            name="Mirur Array">
+            id="mirur.views.Painter"
+            name="Mirur Painter">
       </view>
    </extension>
    <extension
@@ -20,7 +20,7 @@
             category="org.eclipse.debug.ui"
             class="mirur.plugin.statsview.ArrayStatsView"
             icon="icons/mirur.gif"
-            id="mirur.plugin.statsview.ArrayStatsView"
+            id="mirur.views.Statistics"
             name="Mirur Statistics">
       </view>
    </extension>

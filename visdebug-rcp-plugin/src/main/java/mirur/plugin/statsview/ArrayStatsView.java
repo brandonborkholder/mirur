@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 public class ArrayStatsView extends ViewPart implements ArraySelectListener {
-    public static final String ID = ArrayStatsView.class.getName();
+    public static final String ID = "mirur.views.Statistics";
 
     private PrimitiveArray currentData;
 

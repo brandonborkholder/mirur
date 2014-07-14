@@ -25,7 +25,7 @@ import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
 public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
-    private static final String ID = GlimpseArrayView.class.getName();
+    private static final String ID = "mirur.views.Painter";
 
     private ResetAxesAction resetAction;
     private ViewMenuAction viewMenuAction;
