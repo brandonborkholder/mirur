@@ -520,7 +520,18 @@ http://creativecommons.org/licenses/by/3.0/
          unpack="false"/>
 
    <plugin
+         id="mirur.jogl-linux32"
+         os="linux"
+         arch="x86"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
+   <plugin
          id="mirur.jogl-linux64"
+         os="linux"
+         arch="x86_64"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -528,6 +539,7 @@ http://creativecommons.org/licenses/by/3.0/
 
    <plugin
          id="mirur.jogl-osx"
+         os="macosx"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -535,6 +547,8 @@ http://creativecommons.org/licenses/by/3.0/
 
    <plugin
          id="mirur.jogl-win32"
+         os="win32"
+         arch="x86"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -542,6 +556,8 @@ http://creativecommons.org/licenses/by/3.0/
 
    <plugin
          id="mirur.jogl-win64"
+         os="win32"
+         arch="x86_64"
          download-size="0"
          install-size="0"
          version="0.0.0"
