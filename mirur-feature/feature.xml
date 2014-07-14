@@ -516,30 +516,35 @@ http://creativecommons.org/licenses/by/3.0/
          id="mirur.mirur-ui"
          download-size="0"
          install-size="0"
-         version="0.1.0.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="mirur.jogl-linux64"
          download-size="0"
          install-size="0"
-         version="0.1.0.qualifier"
-         fragment="true"
-         unpack="false"/>
+         version="0.0.0"
+         fragment="true"/>
 
    <plugin
          id="mirur.jogl-osx"
          download-size="0"
          install-size="0"
-         version="0.1.0.qualifier"
+         version="0.0.0"
+         fragment="true"/>
+
+   <plugin
+         id="mirur.jogl-win32"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          fragment="true"/>
 
    <plugin
          id="mirur.jogl-win64"
          download-size="0"
          install-size="0"
-         version="0.1.0.qualifier"
-         fragment="true"
-         unpack="false"/>
+         version="0.0.0"
+         fragment="true"/>
 
 </feature>
