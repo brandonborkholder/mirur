@@ -29,7 +29,7 @@
       <perspectiveExtension
             targetID="org.eclipse.debug.ui.DebugPerspective">
          <view
-               id="mirur.plugin.painterview.GlimpseArrayView"
+               id="mirur.views.Painter"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
@@ -41,7 +41,7 @@
       <perspectiveExtension
             targetID="org.eclipse.debug.ui.DebugPerspective">
          <view
-               id="mirur.plugin.statsview.ArrayStatsView"
+               id="mirur.views.Statistics"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
