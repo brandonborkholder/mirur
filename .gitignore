@@ -3,8 +3,6 @@ target/
 
 # Eclipse
 .settings/
-.classpath
-.project
 bin/
 
 # NetBeans
