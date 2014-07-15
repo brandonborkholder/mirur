@@ -43,12 +43,12 @@ public class Array2DTitlePainter extends SimpleTextPainter {
     }
 
     private String format(int i, int j) {
-        if (0 <= i && j < array.getSize(1)) {
+        if (0 <= i && i < array.getSize(0) && 0 < j && j < array.getSize(1)) {
             String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), i, j).getText();
             return String.format("%s[%d][%d] = %s", array.getName(), i, j, value);
         } else {
             Class<?> innerComponent = array.getData().getClass().getComponentType().getComponentType();
-            return String.format("%s[%d] %s", innerComponent, array.getSize(0), array.getSize(1), array.getName());
+            return String.format("%s[%d][%s] %s", innerComponent, array.getSize(0), array.getSize(1), array.getName());
         }
     }
 }
