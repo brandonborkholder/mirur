@@ -10,12 +10,13 @@ import mirur.core.Array2D;
 import mirur.core.PrimitiveArray;
 import mirur.core.VisitArray;
 import mirur.plugin.ArraySelectListener;
-import mirur.plugin.ModelHookupListener;
+import mirur.plugin.SelectListenerToggle;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -29,6 +30,8 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
     public static final String ID = "mirur.views.Statistics";
 
     private PrimitiveArray currentData;
+
+    private SelectListenerToggle selectListenerToggle;
 
     private TableViewer table;
 
@@ -58,7 +61,11 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
             }
         });
 
-        ModelHookupListener.install(ID, this);
+        selectListenerToggle = new SelectListenerToggle(ID, this, this);
+        getSite().getPage().addPartListener(selectListenerToggle);
+
+        IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
+        tbm.add(selectListenerToggle);
     }
 
     @Override
@@ -68,6 +75,7 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
+        getSite().getPage().removePartListener(selectListenerToggle);
         super.dispose();
     }
 

@@ -5,8 +5,8 @@ import javax.media.opengl.GLProfile;
 import mirur.core.PrimitiveArray;
 import mirur.plugin.ArraySelectListener;
 import mirur.plugin.MirurLAF;
-import mirur.plugin.ModelHookupListener;
 import mirur.plugin.ResetAxesAction;
+import mirur.plugin.SelectListenerToggle;
 import mirur.plugin.SelectViewAction;
 import mirur.plugin.ViewMenuAction;
 import mirur.plugins.DataPainter;
@@ -29,6 +29,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     private ResetAxesAction resetAction;
     private ViewMenuAction viewMenuAction;
+    private SelectListenerToggle selectListenerToggle;
 
     private LookAndFeel laf;
     private NewtSwtGlimpseCanvas canvas;
@@ -75,14 +76,17 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
                 return parent;
             }
         };
+        selectListenerToggle = new SelectListenerToggle(ID, this, this);
+
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
+        tbm.add(selectListenerToggle);
+
+        getSite().getPage().addPartListener(selectListenerToggle);
 
         invalidPlaceholder = new InvalidPlaceholderView();
 
         refreshDataAndPainter();
-
-        ModelHookupListener.install(ID, this);
     }
 
     @Override
@@ -92,6 +96,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void dispose() {
+        getSite().getPage().removePartListener(selectListenerToggle);
         animator.stop();
         super.dispose();
     }
