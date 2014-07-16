@@ -41,9 +41,11 @@ public class Array1DPlot extends SimplePlot2D {
         shaderWrapper.setPipeline(pipeline);
     }
 
-    private void setData(Array1D array) {
+    protected void setTitlePainterData(Array1D array) {
         ((Array1DTitlePainter) titlePainter).setArray(array);
+    }
 
+    protected void updateAxesBounds(Array1D array) {
         float min = Float.POSITIVE_INFINITY;
         float max = Float.NEGATIVE_INFINITY;
         float[] data = array.toFloats();
@@ -56,5 +58,10 @@ public class Array1DPlot extends SimplePlot2D {
         getAxisX().setMax(data.length);
         getAxisY().setMin(min);
         getAxisY().setMax(max);
+    }
+
+    protected void setData(Array1D array) {
+        updateAxesBounds(array);
+        setTitlePainterData(array);
     }
 }
