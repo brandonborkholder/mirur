@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) {
     	double[] random = new double[500];
     	for (int i = 0; i < random.length; i++) {
     		random[i] = Math.random();
@@ -16,12 +17,14 @@ public class Main {
     			surf[i][j] = (float) Math.random() * i;
     		}
     	}
-    	
+
     	List<Double> dblList = new ArrayList<>();
     	for (int i = 0; i < 50; i++){
     		dblList.add(Math.random());
     	}
-    	
+
+    	Foo foo = new Foo(random, dblList);
+
     	System.out.println("Debug here");
     }
 }
