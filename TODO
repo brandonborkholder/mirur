@@ -1,2 +1,5 @@
+fix exception handling
+persist preferences for linking views
+add anonymous statistics logging
+add new page to Statistics view to view the table of data and export to file
 compile with Java 1.5 to be more portable
-add synchronize button
