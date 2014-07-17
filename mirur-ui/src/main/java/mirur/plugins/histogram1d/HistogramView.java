@@ -38,10 +38,8 @@ public class HistogramView extends SimplePlugin1D {
             @Override
             protected void updateAxesBounds(Array1D array) {
                 painter.autoAdjustAxisBounds(axis);
-                System.out.println(axis.getAxisX());
                 // TODO bug fix, should be fixed in next Glimpse
                 axis.getAxisX().setMax(axis.getAxisX().getMax() + painter.getBinSize());
-                System.out.println(axis.getAxisX());
             }
         };
 
