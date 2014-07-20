@@ -2,13 +2,17 @@ package mirur.plugin;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class SelectListenerToggle extends Action implements IPartListener2 {
+public class SelectListenerToggle extends Action implements IPartListener2, IPropertyChangeListener {
+    public static final String SELECTED_KEY = "toggle.listen.array.selection";
+
     private final String partID;
     private final ViewPart part;
     private final ArraySelectListener listener;
@@ -24,7 +28,16 @@ public class SelectListenerToggle extends Action implements IPartListener2 {
         this.part = part;
         this.listener = listener;
 
-        setChecked(true);
+        setChecked(Activator.getPreferences().doSyncWithVariablesView(partID));
+
+        addPropertyChangeListener(this);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if (CHECKED.equals(event.getProperty())) {
+            Activator.getPreferences().setSyncWithVariablesView(partID, (Boolean) event.getNewValue());
+        }
     }
 
     @Override

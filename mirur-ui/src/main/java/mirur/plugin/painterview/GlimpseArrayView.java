@@ -119,11 +119,12 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     }
 
     private void refreshDataAndPainter() {
+        resetAction.setEnabled(false);
+        viewMenuAction.setEnabled(false);
+        animator.stop();
+
         if (currentPainter != null) {
-            resetAction.setEnabled(false);
-            viewMenuAction.setEnabled(false);
             currentPainter.uninstall(canvas);
-            animator.stop();
         }
 
         if (currentData != null && currentPlugin != null && currentPlugin.supportsData(currentData)) {
