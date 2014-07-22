@@ -1,11 +1,11 @@
 package mirur.core;
 
-public class Array2DSquare implements Array2D {
+public class Array2DRectangular implements Array2D {
     private final String name;
     private final float[][] array;
     private final Object orig;
 
-    public Array2DSquare(String name, Object array) {
+    public Array2DRectangular(String name, Object array) {
         this.name = name;
         this.orig = array;
 
@@ -81,8 +81,8 @@ public class Array2DSquare implements Array2D {
     }
 
     @Override
-    public boolean isSquare() {
-        return true;
+    public boolean isJagged() {
+        return false;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package mirur.plugin;
 
 import mirur.core.Array1DImpl;
-import mirur.core.Array2DSquare;
+import mirur.core.Array2DRectangular;
 import mirur.core.PrimitiveArray;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -86,7 +86,7 @@ public class CopyJDIArrayJob extends Job {
         case "byte[]": {
             Object o = toPrimitiveArray2d(value);
             // TODO check for squareness
-            return new Array2DSquare(name, o);
+            return new Array2DRectangular(name, o);
         }
 
         default:
