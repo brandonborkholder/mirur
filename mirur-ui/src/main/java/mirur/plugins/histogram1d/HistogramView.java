@@ -18,6 +18,12 @@ public class HistogramView extends SimplePlugin1D {
     }
 
     @Override
+    public boolean supportsData(PrimitiveArray array) {
+        Class<?> clazz = array.getData().getClass();
+        return super.supportsData(array) && !(boolean[].class.equals(clazz));
+    }
+
+    @Override
     public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
         final Array1D array1d = (Array1D) array;
         final HistogramPainter painter = createPainter(array1d);

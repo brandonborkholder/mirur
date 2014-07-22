@@ -82,7 +82,7 @@ public class HeatmapView extends SimplePlugin2D {
 
         Projection projection = new FlatProjection(0, dim0, 0, dim1);
         texture.setProjection(projection);
-        texture.setData(array2d.toFloats(), true);
+        texture.setData(array2d.toFloats(), false);
 
         painter.setData(texture);
         painter.setColorScale(colors);
