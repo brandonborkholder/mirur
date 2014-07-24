@@ -2,77 +2,18 @@ package mirur.core;
 
 public class Array2DRectangular implements Array2D {
     private final String name;
-    private final float[][] array;
     private final Object orig;
+
+    private final int size0;
+    private final int size1;
 
     public Array2DRectangular(String name, Object array) {
         this.name = name;
         this.orig = array;
 
-        float[][] data;
-        if (array instanceof int[][]) {
-            int[][] vals = (int[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = vals[i][j];
-                }
-            }
-        } else if (array instanceof char[][]) {
-            char[][] vals = (char[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = vals[i][j];
-                }
-            }
-        } else if (array instanceof byte[][]) {
-            byte[][] vals = (byte[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = vals[i][j];
-                }
-            }
-        } else if (array instanceof boolean[][]) {
-            boolean[][] vals = (boolean[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = vals[i][j] ? 1 : 0;
-                }
-            }
-        } else if (array instanceof short[][]) {
-            short[][] vals = (short[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = vals[i][j];
-                }
-            }
-        } else if (array instanceof double[][]) {
-            double[][] vals = (double[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = (float) vals[i][j];
-                }
-            }
-        } else if (array instanceof long[][]) {
-            long[][] vals = (long[][]) array;
-            data = new float[vals.length][vals[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[0].length; j++) {
-                    data[i][j] = vals[i][j];
-                }
-            }
-        } else if (array instanceof float[][]) {
-            data = (float[][]) array;
-        } else {
-            throw new AssertionError("Forget something?");
-        }
-
-        this.array = data;
+        NonJaggedArraySizeVisitor sizeVisitor = VisitArray.visit(array, new NonJaggedArraySizeVisitor());
+        size0 = sizeVisitor.getSize0();
+        size1 = sizeVisitor.getSize1();
     }
 
     @Override
@@ -91,11 +32,6 @@ public class Array2DRectangular implements Array2D {
     }
 
     @Override
-    public float[][] toFloats() {
-        return array;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -108,9 +44,9 @@ public class Array2DRectangular implements Array2D {
     @Override
     public int getSize(int dimension) {
         if (dimension == 0) {
-            return array.length;
+            return size0;
         } else if (dimension == 1) {
-            return array[0].length;
+            return size1;
         } else {
             throw new AssertionError("No dimension: " + dimension);
         }
