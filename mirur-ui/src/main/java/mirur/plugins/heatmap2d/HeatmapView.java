@@ -1,7 +1,11 @@
 package mirur.plugins.heatmap2d;
 
+import java.nio.FloatBuffer;
+
 import mirur.core.Array2D;
+import mirur.core.MinMaxValueVisitor;
 import mirur.core.PrimitiveArray;
+import mirur.core.VisitArray;
 import mirur.plugins.Array2DTitlePainter;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
@@ -24,6 +28,7 @@ import com.metsci.glimpse.support.colormap.ColorGradients;
 import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.projection.Projection;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
+import com.metsci.glimpse.support.texture.FloatTextureProjected2D.MutatorFloat2D;
 
 public class HeatmapView extends SimplePlugin2D {
     public HeatmapView() {
@@ -82,7 +87,13 @@ public class HeatmapView extends SimplePlugin2D {
 
         Projection projection = new FlatProjection(0, dim0, 0, dim1);
         texture.setProjection(projection);
-        texture.setData(array2d.toFloats(), false);
+        texture.mutate(new MutatorFloat2D() {
+            @Override
+            public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
+                data.clear();
+                VisitArray.visit(array2d.getData(), new ToFloatBufferVisitor(data));
+            }
+        });
 
         painter.setData(texture);
         painter.setColorScale(colors);
@@ -95,15 +106,9 @@ public class HeatmapView extends SimplePlugin2D {
         plot.getAxisY().setMin(0);
         plot.getAxisY().setMax(dim1);
 
-        float minZ = Float.POSITIVE_INFINITY;
-        float maxZ = Float.NEGATIVE_INFINITY;
-        float[][] data = array2d.toFloats();
-        for (float[] row : data) {
-            for (float v : row) {
-                minZ = Math.min(minZ, v);
-                maxZ = Math.max(maxZ, v);
-            }
-        }
+        MinMaxValueVisitor minMaxVisitor = VisitArray.visit(array2d.getData(), new MinMaxValueVisitor());
+        float minZ = (float) minMaxVisitor.getMin();
+        float maxZ = (float) minMaxVisitor.getMax();
         if (minZ == maxZ) {
             maxZ += 1;
         }

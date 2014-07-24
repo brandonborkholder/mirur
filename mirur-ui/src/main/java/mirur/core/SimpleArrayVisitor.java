@@ -1,38 +1,38 @@
 package mirur.core;
 
-public abstract class SimpleArrayVisitor implements ArrayVisitor {
+public abstract class SimpleArrayVisitor extends AbstractArrayVisitor {
     @Override
-    public void visit(int i, long v) {
-        visit(i, (double) v);
+    public void visit(int i, int j, long v) {
+        visit(i, j, (double) v);
     }
 
     @Override
-    public void visit(int i, float v) {
-        visit(i, (double) v);
+    public void visit(int i, int j, float v) {
+        visit(i, j, (double) v);
     }
 
     @Override
-    public void visit(int i, int v) {
-        visit(i, (double) v);
+    public void visit(int i, int j, int v) {
+        visit(i, j, (double) v);
     }
 
     @Override
-    public void visit(int i, short v) {
-        visit(i, (double) v);
+    public void visit(int i, int j, short v) {
+        visit(i, j, (double) v);
     }
 
     @Override
-    public void visit(int i, char v) {
-        visit(i, (double) v);
+    public void visit(int i, int j, char v) {
+        visit(i, j, (double) v);
     }
 
     @Override
-    public void visit(int i, byte v) {
-        visit(i, (double) v);
+    public void visit(int i, int j, byte v) {
+        visit(i, j, (double) v);
     }
 
     @Override
-    public void visit(int i, boolean v) {
-        visit(i, v ? 1.0 : 0.0);
+    public void visit(int i, int j, boolean v) {
+        visit(i, j, v ? 1.0 : 0.0);
     }
 }

@@ -1,14 +1,14 @@
 package mirur.plugin.statsview;
 
-import mirur.core.ArrayVisitor;
-import mirur.core.SimpleArrayVisitor;
+import mirur.core.AbstractArrayElementVisitor;
+import mirur.core.ArrayElementVisitor;
 
-public interface ArrayStatisticVisitor extends ArrayVisitor {
+public interface ArrayStatisticVisitor extends ArrayElementVisitor {
     String getName();
 
     String getStatistic();
 
-    abstract class AbstractStatisticVisitor extends SimpleArrayVisitor implements ArrayStatisticVisitor {
+    abstract class AbstractStatisticVisitor extends AbstractArrayElementVisitor implements ArrayStatisticVisitor {
         private final String name;
 
         protected boolean isValid;
@@ -33,14 +33,14 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        public void visit(int i, double v) {
+        public void visit(double v) {
             if (!Double.isNaN(v)) {
-                visit(v);
+                visit0(v);
                 isValid = true;
             }
         }
 
-        protected abstract void visit(double v);
+        protected abstract void visit0(double v);
 
         protected abstract String getValue();
     }
@@ -53,7 +53,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             sum += v;
         }
 
@@ -71,7 +71,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             mean.increment(v);
         }
 
@@ -89,7 +89,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             var.increment(v);
         }
 
@@ -107,7 +107,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (max < v) {
                 max = v;
             }
@@ -127,7 +127,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (v < min) {
                 min = v;
             }
@@ -147,13 +147,13 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        public void visit(int i, double v) {
-            visit(v);
+        public void visit(double v) {
+            visit0(v);
             isValid = true;
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (Double.isNaN(v)) {
                 count++;
             }
@@ -173,13 +173,13 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        public void visit(int i, double v) {
-            visit(v);
+        public void visit(double v) {
+            visit0(v);
             isValid = true;
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (v == Double.POSITIVE_INFINITY) {
                 count++;
             }
@@ -199,13 +199,13 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        public void visit(int i, double v) {
-            visit(v);
+        public void visit(double v) {
+            visit0(v);
             isValid = true;
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (v == Double.NEGATIVE_INFINITY) {
                 count++;
             }
@@ -230,7 +230,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (v > 0) {
                 count++;
             }
@@ -250,7 +250,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (v < 0) {
                 count++;
             }
@@ -270,23 +270,23 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        protected void visit(double v) {
+        protected void visit0(double v) {
             if (v == 0) {
                 count++;
             }
         }
     }
 
-    public static class CountTrue extends SimpleArrayVisitor implements ArrayStatisticVisitor {
+    public static class CountTrue extends AbstractArrayElementVisitor implements ArrayStatisticVisitor {
         int count;
 
         @Override
-        public void visit(int i, boolean v) {
+        public void visit(boolean v) {
             count += v ? 1 : 0;
         }
 
         @Override
-        public void visit(int i, double v) {
+        public void visit(double v) {
             throw new UnsupportedOperationException();
         }
 
@@ -301,16 +301,16 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
     }
 
-    public static class CountFalse extends SimpleArrayVisitor implements ArrayStatisticVisitor {
+    public static class CountFalse extends AbstractArrayElementVisitor implements ArrayStatisticVisitor {
         int count;
 
         @Override
-        public void visit(int i, boolean v) {
+        public void visit(boolean v) {
             count += v ? 0 : 1;
         }
 
         @Override
-        public void visit(int i, double v) {
+        public void visit(double v) {
             throw new UnsupportedOperationException();
         }
 
@@ -325,7 +325,7 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
     }
 
-    public static class SumLong implements ArrayStatisticVisitor {
+    public static class SumLong extends AbstractArrayElementVisitor implements ArrayStatisticVisitor {
         long sum;
 
         @Override
@@ -339,43 +339,43 @@ public interface ArrayStatisticVisitor extends ArrayVisitor {
         }
 
         @Override
-        public void visit(int i, long v) {
+        public void visit(long v) {
             sum += v;
         }
 
         @Override
-        public void visit(int i, boolean v) {
-            visit(i, v ? 1 : 0);
+        public void visit(boolean v) {
+            visit(v ? 1 : 0);
         }
 
         @Override
-        public void visit(int i, double v) {
-            visit(i, (long) v);
+        public void visit(double v) {
+            visit((long) v);
         }
 
         @Override
-        public void visit(int i, float v) {
-            visit(i, (long) v);
+        public void visit(float v) {
+            visit((long) v);
         }
 
         @Override
-        public void visit(int i, int v) {
-            visit(i, (long) v);
+        public void visit(int v) {
+            visit((long) v);
         }
 
         @Override
-        public void visit(int i, short v) {
-            visit(i, (long) v);
+        public void visit(short v) {
+            visit((long) v);
         }
 
         @Override
-        public void visit(int i, char v) {
-            visit(i, (long) v);
+        public void visit(char v) {
+            visit((long) v);
         }
 
         @Override
-        public void visit(int i, byte v) {
-            visit(i, (long) v);
+        public void visit(byte v) {
+            visit((long) v);
         }
     }
 }
