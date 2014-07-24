@@ -23,6 +23,7 @@ public abstract class SimplePlugin1D implements MirurView {
         Class<?> clazz = array.getData().getClass();
         return array instanceof Array1D &&
                 (int[].class.equals(clazz) ||
+                        long[].class.equals(clazz) ||
                         float[].class.equals(clazz) ||
                         double[].class.equals(clazz) ||
                         char[].class.equals(clazz) ||

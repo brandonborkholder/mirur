@@ -20,6 +20,7 @@ public abstract class SimplePlugin2D implements MirurView {
         return array instanceof Array2D &&
                 !((Array2D) array).isJagged() &&
                 (int[][].class.equals(clazz) ||
+                        long[][].class.equals(clazz) ||
                         float[][].class.equals(clazz) ||
                         double[][].class.equals(clazz) ||
                         char[][].class.equals(clazz) ||
