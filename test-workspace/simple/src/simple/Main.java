@@ -47,7 +47,7 @@ public class Main {
 
         Foo foo = new Foo(double1d, dblList);
 
-        float[][] float2dLarge = new float[100][50000];
+        float[][] float2dLarge = new float[200][100000];
         for (int i = 0; i < float2dLarge.length; i++) {
             for (int j = 0; j < float2dLarge[0].length; j++) {
                 float2dLarge[i][j] = (float) v() * i;

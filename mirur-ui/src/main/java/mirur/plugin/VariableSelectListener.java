@@ -75,10 +75,10 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
                 if (Activator.getVariableCache().contains(varName, frame)) {
                     PrimitiveArray array = Activator.getVariableCache().getArray(varName, frame);
                     Activator.getSelectionModel().select(array);
+                } else if (value instanceof IJavaValue) {
+                    new ReceiveArrayJob(varName, variable, frame).schedule();
                 } else if (isPrimitiveArray(value)) {
                     new CopyJDIArrayJob(varName, (IIndexedValue) value, frame).schedule();
-                } else if (value instanceof IJavaValue) {
-                    new InvokeRemoteMethodJob(variable, frame).schedule();
                 } else {
                     Activator.getSelectionModel().select(null);
                 }
@@ -90,7 +90,10 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
     }
 
     private boolean isPrimitiveArray(IValue value) throws DebugException {
-        if (value instanceof IJavaArray) {
+        if (value instanceof IIndexedValue) {
+            String refTypeName = ((IIndexedValue) value).getReferenceTypeName();
+            System.out.println(refTypeName);
+        } else if (value instanceof IJavaArray) {
             IJavaArrayType arrayType = (IJavaArrayType) ((IJavaArray) value).getJavaType();
             IJavaType componentType = arrayType.getComponentType();
             if (PrimitiveTest.isPrimitiveName(componentType.getName())) {

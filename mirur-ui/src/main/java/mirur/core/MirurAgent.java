@@ -1,5 +1,10 @@
 package mirur.core;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -13,6 +18,18 @@ public class MirurAgent {
     public static Object test(Object value) {
         System.out.println("Testing with " + value);
         return value != null;
+    }
+
+    public static void sendAsArray(Object object, int port) throws IOException {
+        Socket socket = new Socket(InetAddress.getByName(null), port);
+        OutputStream out = socket.getOutputStream();
+        ObjectOutputStream objOut = new ObjectOutputStream(out);
+
+        Object array = toArray(object);
+        objOut.writeObject(array);
+
+        objOut.close();
+        socket.close();
     }
 
     public static Object toArray(Object value) {
