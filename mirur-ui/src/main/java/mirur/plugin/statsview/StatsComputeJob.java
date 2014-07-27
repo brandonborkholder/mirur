@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mirur.core.PrimitiveArray;
-import mirur.core.VisitArray;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 
 public abstract class StatsComputeJob extends Job {
     private final PrimitiveArray array;
     private final List<ArrayStatisticVisitor> statistics;
 
     public StatsComputeJob(PrimitiveArray array, List<ArrayStatisticVisitor> statistics) {
-        super("Calculate Array Statistics");
+        super("Calculating Array Statistics");
         this.array = array;
         this.statistics = statistics;
 
@@ -26,22 +24,35 @@ public abstract class StatsComputeJob extends Job {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-        List<String[]> keyValues = new ArrayList<>();
-        for (ArrayStatisticVisitor visitor : statistics) {
-            VisitArray.visit(array.getData(), visitor);
-            keyValues.add(new String[] { visitor.getName(), visitor.getStatistic() });
+        List<Job> jobs = new ArrayList<>(statistics.size());
+
+        monitor.beginTask(getName(), statistics.size());
+        for (int i = 0; i < statistics.size(); i++) {
+            final int index = i;
+            Job job = new StatisticComputeJob(array, statistics.get(i)) {
+                @Override
+                protected void finished(String statValue) {
+                    update(index, statValue);
+                    monitor.worked(1);
+                }
+            };
+            job.schedule();
+            jobs.add(job);
         }
 
-        final String[][] data = keyValues.toArray(new String[0][]);
-        Display.getDefault().asyncExec(new Runnable() {
-            @Override
-            public void run() {
-                finished(data);
+        try {
+            for (Job job : jobs) {
+                job.join();
             }
-        });
+        } catch (InterruptedException ex) {
+            // TODO how to handle this
+            throw new RuntimeException(ex);
+        }
+
+        monitor.done();
 
         return Status.OK_STATUS;
     }
 
-    protected abstract void finished(String[][] data);
+    protected abstract void update(int index, String value);
 }

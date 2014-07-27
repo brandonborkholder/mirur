@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.Page;
 
 public class StatisticsPage extends Page {
@@ -68,17 +69,32 @@ public class StatisticsPage extends Page {
     }
 
     private void computeStats(PrimitiveArray array, List<ArrayStatisticVisitor> statsVisitors) {
-        new StatsComputeJob(array, statsVisitors) {
+        final String[][] data = new String[statsVisitors.size()][2];
+        for (int i = 0; i < data.length; i++) {
+            data[i][0] = statsVisitors.get(i).getName();
+            data[i][1] = "\u2014";
+        }
+
+        updateTable(data);
+
+        StatsComputeJob job = new StatsComputeJob(array, statsVisitors) {
             @Override
-            protected void finished(String[][] data) {
+            protected void update(int index, String value) {
+                data[index][1] = value;
                 updateTable(data);
             }
-        }.schedule();
+        };
+        job.schedule();
     }
 
     private void updateTable(String[][] data) {
-        table.setInput(data);
-        table.refresh();
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                table.setInput(data);
+                table.refresh();
+            }
+        });
     }
 
     private List<ArrayStatisticVisitor> getStats(PrimitiveArray array) {
