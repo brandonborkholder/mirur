@@ -23,7 +23,7 @@ public abstract class StatsComputeJob extends Job {
     }
 
     @Override
-    protected IStatus run(IProgressMonitor monitor) {
+    protected IStatus run(final IProgressMonitor monitor) {
         List<Job> jobs = new ArrayList<>(statistics.size());
 
         monitor.beginTask(getName(), statistics.size());

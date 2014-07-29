@@ -87,7 +87,7 @@ public class StatisticsPage extends Page {
         job.schedule();
     }
 
-    private void updateTable(String[][] data) {
+    private void updateTable(final String[][] data) {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
