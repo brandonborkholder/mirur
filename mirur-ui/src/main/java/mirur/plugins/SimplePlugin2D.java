@@ -18,7 +18,6 @@ public abstract class SimplePlugin2D implements MirurView {
     public boolean supportsData(PrimitiveArray array) {
         Class<?> clazz = array.getData().getClass();
         return array instanceof Array2D &&
-                !((Array2D) array).isJagged() &&
                 (int[][].class.equals(clazz) ||
                         long[][].class.equals(clazz) ||
                         float[][].class.equals(clazz) ||

@@ -1,8 +1,11 @@
 package mirur.plugin;
 
 import mirur.core.Array1DImpl;
+import mirur.core.Array2DJagged;
 import mirur.core.Array2DRectangular;
+import mirur.core.IsJaggedVisitor;
 import mirur.core.PrimitiveArray;
+import mirur.core.VisitArray;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -85,8 +88,11 @@ public class CopyJDIArrayJob extends Job {
         case "short[]":
         case "byte[]": {
             Object o = toPrimitiveArray2d(value);
-            // TODO check for squareness
-            return new Array2DRectangular(name, o);
+            if (VisitArray.visit2d(o, new IsJaggedVisitor()).isJagged()) {
+                return new Array2DJagged(name, o);
+            } else {
+                return new Array2DRectangular(name, o);
+            }
         }
 
         default:

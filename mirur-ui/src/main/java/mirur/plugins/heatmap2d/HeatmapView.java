@@ -91,7 +91,11 @@ public class HeatmapView extends SimplePlugin2D {
             @Override
             public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
                 data.clear();
-                VisitArray.visit(array2d.getData(), new ToFloatBufferVisitor(data));
+                if (array2d.isJagged()) {
+                    VisitArray.visit2d(array2d.getData(), new JaggedToFloatBufferVisitor(data, dataSizeY, Float.NaN));
+                } else {
+                    VisitArray.visit2d(array2d.getData(), new ToFloatBufferVisitor(data));
+                }
             }
         });
 

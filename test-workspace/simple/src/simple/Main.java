@@ -54,6 +54,15 @@ public class Main {
             }
         }
 
+        float[][] jagged = new float[100][];
+        for (int i = 0; i < jagged.length; i++) {
+            int len = (int) (v() * 100);
+            jagged[i] = new float[len];
+            for (int j = 0; j < len; j++) {
+                jagged[i][j] = (float) v();
+            }
+        }
+
         System.out.println("Debug here");
     }
 

@@ -39,11 +39,11 @@ public class Array1DTitlePainter extends SimpleTextPainter {
     }
 
     private String format(int index) {
-        if (0 <= index && index < array.getSize(0)) {
-            String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), index).getText();
-            return String.format("%s[%d] = %s", array.getName(), index, value);
-        } else {
+        String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), index).getText();
+        if (value == null) {
             return String.format("%s[%d] %s", array.getData().getClass().getComponentType(), array.getSize(0), array.getName());
+        } else {
+            return String.format("%s[%d] = %s", array.getName(), index, value);
         }
     }
 }

@@ -11,8 +11,11 @@ import java.util.concurrent.FutureTask;
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
 import mirur.core.Array2D;
+import mirur.core.Array2DJagged;
 import mirur.core.Array2DRectangular;
+import mirur.core.IsJaggedVisitor;
 import mirur.core.PrimitiveTest;
+import mirur.core.VisitArray;
 
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -51,8 +54,13 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
             Array1D array = new Array1DImpl(var.getName(), value);
             Activator.getSelectionModel().select(array);
         } else if (PrimitiveTest.isPrimitiveArray2d(value.getClass())) {
-            // TODO test if rectangular
-            Array2D array = new Array2DRectangular(var.getName(), value);
+            Array2D array = null;
+            if (VisitArray.visit2d(value, new IsJaggedVisitor()).isJagged()) {
+                array = new Array2DJagged(var.getName(), value);
+            } else {
+                array = new Array2DRectangular(var.getName(), value);
+            }
+
             Activator.getSelectionModel().select(array);
         } else {
             Activator.getSelectionModel().select(null);

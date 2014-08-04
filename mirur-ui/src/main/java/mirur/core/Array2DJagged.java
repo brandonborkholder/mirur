@@ -1,17 +1,17 @@
 package mirur.core;
 
-public class Array2DRectangular implements Array2D {
+public class Array2DJagged implements Array2D {
     private final String name;
     private final Object orig;
 
     private final int size0;
     private final int size1;
 
-    public Array2DRectangular(String name, Object array) {
+    public Array2DJagged(String name, Object array) {
         this.name = name;
         this.orig = array;
 
-        NonJaggedArraySizeVisitor sizeVisitor = VisitArray.visit2d(array, new NonJaggedArraySizeVisitor());
+        JaggedArraySizeVisitor sizeVisitor = VisitArray.visit2d(array, new JaggedArraySizeVisitor());
         size0 = sizeVisitor.getSize0();
         size1 = sizeVisitor.getSize1();
     }
@@ -23,7 +23,7 @@ public class Array2DRectangular implements Array2D {
 
     @Override
     public boolean isJagged() {
-        return false;
+        return true;
     }
 
     @Override
