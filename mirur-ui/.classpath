@@ -18,6 +18,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jogl-all-main-2.1.5-01.jar" sourcepath="lib/jogl-all-main-2.1.5-01-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/miglayout-core-4.2.jar" sourcepath="lib/miglayout-core-4.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/stringtemplate-3.2.1.jar" sourcepath="lib/stringtemplate-3.2.1-sources.jar"/>
-	<classpathentry kind="src" path="src/main/resources/"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/mirur-agent"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
