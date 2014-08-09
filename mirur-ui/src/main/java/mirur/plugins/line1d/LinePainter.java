@@ -8,6 +8,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import mirur.core.Array1D;
+import mirur.core.VisitArray;
 import mirur.plugin.MirurLAF;
 import mirur.plugin.SimpleGLBuffer;
 
@@ -28,14 +29,12 @@ public class LinePainter extends GlimpseDataPainter2D {
     }
 
     public void setData(Array1D data) {
-        float[] values = data.toFloats();
-        int numFloats = values.length * 2;
-        FloatBuffer buffer = dataBuffer.getBuffer(numFloats);
+        int numValues = data.getSize();
+        int requiredFloats = FillWithLinesVisitor.requiredSpace(numValues);
+        FloatBuffer buffer = dataBuffer.getBuffer(requiredFloats);
 
-        for (int i = 0; i < values.length; i++) {
-            buffer.put(i);
-            buffer.put(values[i]);
-        }
+        VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(buffer));
+
         buffer.flip();
         dataBuffer.setDirty();
     }

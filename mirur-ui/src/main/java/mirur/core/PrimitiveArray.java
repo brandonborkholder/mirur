@@ -8,6 +8,4 @@ public interface PrimitiveArray {
     Object getData();
 
     int getNumDimensions();
-
-    int getSize(int dimension);
 }

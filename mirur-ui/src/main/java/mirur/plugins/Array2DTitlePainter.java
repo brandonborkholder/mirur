@@ -46,7 +46,7 @@ public class Array2DTitlePainter extends SimpleTextPainter {
         String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), i, j).getText();
         if (value == null) {
             Class<?> innerComponent = array.getData().getClass().getComponentType().getComponentType();
-            return String.format("%s[%d][%s] %s", innerComponent, array.getSize(0), array.getSize(1), array.getName());
+            return String.format("%s[%d][%s] %s", innerComponent, array.getMaxSize(0), array.getMaxSize(1), array.getName());
         } else {
             return String.format("%s[%d][%d] = %s", array.getName(), i, j, value);
         }

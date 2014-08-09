@@ -1,80 +1,25 @@
 package mirur.core;
 
-
 public class Array1DImpl implements Array1D {
     private final String name;
-    private final float[] array;
-    private final Object orig;
+    private final Object data;
+    private final int size;
 
     public Array1DImpl(String name, Object array) {
         this.name = name;
-        this.orig = array;
+        this.data = array;
 
-        float[] data;
-        if (array instanceof int[]) {
-            int[] vals = (int[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = vals[i];
-            }
-        } else if (array instanceof char[]) {
-            char[] vals = (char[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = vals[i];
-            }
-        } else if (array instanceof byte[]) {
-            byte[] vals = (byte[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = vals[i];
-            }
-        } else if (array instanceof boolean[]) {
-            boolean[] vals = (boolean[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = vals[i] ? 1 : 0;
-            }
-        } else if (array instanceof short[]) {
-            short[] vals = (short[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = vals[i];
-            }
-        } else if (array instanceof double[]) {
-            double[] vals = (double[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = (float) vals[i];
-            }
-        } else if (array instanceof long[]) {
-            long[] vals = (long[]) array;
-            data = new float[vals.length];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = vals[i];
-            }
-        } else if (array instanceof float[]) {
-            data = (float[]) array;
-        } else {
-            throw new AssertionError("Forget something?");
-        }
-
-        this.array = data;
+        size = VisitArray.visit1d(array, new Array1dSizeVisitor()).getSize();
     }
 
     @Override
     public String getSignature() {
-        return orig.getClass().getSimpleName();
+        return data.getClass().getSimpleName();
     }
 
     @Override
     public Object getData() {
-        return orig;
-    }
-
-    @Override
-    public float[] toFloats() {
-        return array;
+        return data;
     }
 
     @Override
@@ -88,7 +33,7 @@ public class Array1DImpl implements Array1D {
     }
 
     @Override
-    public int getSize(int dimension) {
-        return array.length;
+    public int getSize() {
+        return size;
     }
 }

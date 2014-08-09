@@ -41,7 +41,6 @@ public class HistogramBinTextPainter extends SimpleTextPainter {
     }
 
     private String format(double bin, double binWidth, int count) {
-        return String.format("%s[%d] has %d values in [%g, %g)", array.getName(),
-                array.getSize(0), count, bin, bin + binWidth);
+        return String.format("%s[%d] has %d values in [%g, %g)", array.getName(), array.getSize(), count, bin, bin + binWidth);
     }
 }

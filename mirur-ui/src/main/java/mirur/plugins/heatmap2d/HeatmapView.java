@@ -36,8 +36,8 @@ public class HeatmapView extends SimplePlugin2D {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
-        final Array2D array2d = (Array2D) array;
+    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array0) {
+        final Array2D array = (Array2D) array0;
 
         TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
             @Override
@@ -53,7 +53,7 @@ public class HeatmapView extends SimplePlugin2D {
             protected void initializePainters() {
                 super.initializePainters();
 
-                ((Array2DTitlePainter) titlePainter).setArray(array2d);
+                ((Array2DTitlePainter) titlePainter).setArray(array);
             }
         };
 
@@ -80,8 +80,8 @@ public class HeatmapView extends SimplePlugin2D {
         final ColorTexture1D colors = new ColorTexture1D(1024);
         colors.setColorGradient(ColorGradients.jet);
 
-        int dim0 = array.getSize(0);
-        int dim1 = array.getSize(1);
+        int dim0 = array.getMaxSize(0);
+        int dim1 = array.getMaxSize(1);
 
         FloatTextureProjected2D texture = new FloatTextureProjected2D(dim0, dim1);
 
@@ -91,10 +91,10 @@ public class HeatmapView extends SimplePlugin2D {
             @Override
             public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
                 data.clear();
-                if (array2d.isJagged()) {
-                    VisitArray.visit2d(array2d.getData(), new JaggedToFloatBufferVisitor(data, dataSizeY, Float.NaN));
+                if (array.isJagged()) {
+                    VisitArray.visit2d(array.getData(), new JaggedToFloatBufferVisitor(data, dataSizeY, Float.NaN));
                 } else {
-                    VisitArray.visit2d(array2d.getData(), new ToFloatBufferVisitor(data));
+                    VisitArray.visit2d(array.getData(), new ToFloatBufferVisitor(data));
                 }
             }
         });
@@ -110,7 +110,7 @@ public class HeatmapView extends SimplePlugin2D {
         plot.getAxisY().setMin(0);
         plot.getAxisY().setMax(dim1);
 
-        MinMaxValueVisitor minMaxVisitor = VisitArray.visit(array2d.getData(), new MinMaxValueVisitor());
+        MinMaxValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxValueVisitor());
         float minZ = (float) minMaxVisitor.getMin();
         float maxZ = (float) minMaxVisitor.getMax();
         if (minZ == maxZ) {

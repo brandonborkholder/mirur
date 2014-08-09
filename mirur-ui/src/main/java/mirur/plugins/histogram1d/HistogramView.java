@@ -2,6 +2,7 @@ package mirur.plugins.histogram1d;
 
 import mirur.core.Array1D;
 import mirur.core.PrimitiveArray;
+import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
@@ -61,7 +62,8 @@ public class HistogramView extends SimplePlugin1D {
     @Override
     protected HistogramPainter createPainter(Array1D array) {
         HistogramPainter painter = new HistogramPainter();
-        painter.setData(array.toFloats());
+        float[] asFloats = VisitArray.visit1d(array.getData(), new ToFloatsVisitor()).getFloats();
+        painter.setData(asFloats);
         return painter;
     }
 }

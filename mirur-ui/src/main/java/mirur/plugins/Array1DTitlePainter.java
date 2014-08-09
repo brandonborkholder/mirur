@@ -41,7 +41,7 @@ public class Array1DTitlePainter extends SimpleTextPainter {
     private String format(int index) {
         String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), index).getText();
         if (value == null) {
-            return String.format("%s[%d] %s", array.getData().getClass().getComponentType(), array.getSize(0), array.getName());
+            return String.format("%s[%d] %s", array.getData().getClass().getComponentType(), array.getSize(), array.getName());
         } else {
             return String.format("%s[%d] = %s", array.getName(), index, value);
         }

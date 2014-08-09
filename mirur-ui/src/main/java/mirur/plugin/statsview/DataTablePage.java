@@ -47,7 +47,7 @@ public class DataTablePage extends Page {
     public void setInput(PrimitiveArray array) {
         if (array instanceof Array1D) {
             this.array = array.getData();
-            table.setItemCount(array.getSize(0));
+            table.setItemCount(((Array1D) array).getSize());
         } else {
             this.array = null;
             table.setItemCount(0);

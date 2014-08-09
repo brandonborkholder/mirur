@@ -42,7 +42,7 @@ public class Array2DRectangular implements Array2D {
     }
 
     @Override
-    public int getSize(int dimension) {
+    public int getMaxSize(int dimension) {
         if (dimension == 0) {
             return size0;
         } else if (dimension == 1) {

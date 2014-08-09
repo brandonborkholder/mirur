@@ -8,6 +8,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import mirur.core.Array1D;
+import mirur.core.VisitArray;
 import mirur.plugin.MirurLAF;
 import mirur.plugin.SimpleGLBuffer;
 
@@ -28,20 +29,12 @@ public class VerticalBarPainter extends GlimpseDataPainter2D {
     }
 
     public void setData(Array1D data) {
-        float[] values = data.toFloats();
-        int numFloats = values.length * 8;
-        FloatBuffer buffer = dataBuffer.getBuffer(numFloats);
+        int numValues = data.getSize();
+        int requiredFloats = FillWithBarsVisitor.requiredSpace(numValues);
+        FloatBuffer buffer = dataBuffer.getBuffer(requiredFloats);
 
-        for (int i = 0; i < values.length; i++) {
-            buffer.put(i - 0.5f);
-            buffer.put(values[i]);
-            buffer.put(i - 0.5f);
-            buffer.put(0);
-            buffer.put(i + 0.5f);
-            buffer.put(values[i]);
-            buffer.put(i + 0.5f);
-            buffer.put(0);
-        }
+        VisitArray.visit1d(data.getData(), new FillWithBarsVisitor(buffer));
+
         buffer.flip();
         dataBuffer.setDirty();
     }
