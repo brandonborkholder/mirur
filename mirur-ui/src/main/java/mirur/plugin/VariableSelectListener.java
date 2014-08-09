@@ -16,6 +16,7 @@ import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.debug.ui.contexts.IDebugContextService;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaArrayType;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
@@ -140,6 +141,9 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
                 // probably generating a .toString on the variable
             } else {
                 Activator.getVariableCache().clear();
+                if (kind == DebugEvent.TERMINATE && event.getSource() instanceof IJavaDebugTarget) {
+                    Activator.getAgentDeployer().clear((IJavaDebugTarget) event.getSource());
+                }
             }
         } else {
             for (DebugEvent e : events) {

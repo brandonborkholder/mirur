@@ -36,7 +36,7 @@ public abstract class InvokeRemoteMethodJob extends Job {
 
         try {
             if (thread.isSuspended() && var.getJavaType() instanceof IJavaReferenceType) {
-                IJavaClassType agentType = new RemoteAgentDeployer().install(target, thread);
+                IJavaClassType agentType = Activator.getAgentDeployer().install(target, thread);
 
                 thread.queueRunnable(new AgentInvokeRunnable(agentType));
             } else {

@@ -16,6 +16,8 @@ public class Activator extends AbstractUIPlugin {
 
     private static Preferences preferences = new Preferences(InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID));
 
+    private static RemoteAgentDeployer agentDeployer = new RemoteAgentDeployer();
+
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
@@ -47,5 +49,9 @@ public class Activator extends AbstractUIPlugin {
 
     public static Preferences getPreferences() {
         return preferences;
+    }
+
+    public static RemoteAgentDeployer getAgentDeployer() {
+        return agentDeployer;
     }
 }

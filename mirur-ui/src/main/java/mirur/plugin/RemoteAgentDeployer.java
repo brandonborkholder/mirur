@@ -10,7 +10,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.util.concurrent.SynchronousQueue;
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import mirur.core.MirurAgent;
 
@@ -25,6 +30,8 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 
 public class RemoteAgentDeployer {
     private File agentClassesDir;
+
+    private Map<IJavaDebugTarget, IJavaClassType> cache = Collections.synchronizedMap(new WeakHashMap<IJavaDebugTarget, IJavaClassType>());
 
     public IJavaClassType install(IJavaDebugTarget target, IJavaThread thread) throws VariableTransferException, DebugException {
         if (!isValidJVMVersion(target.getVersion())) {
@@ -41,13 +48,31 @@ public class RemoteAgentDeployer {
             }
         }
 
-        SynchronousQueue<IJavaClassType> agentTypeQueue = new SynchronousQueue<>();
-        thread.queueRunnable(new LoadAgentClasses(target, thread, MirurAgent.class.getName(), agentTypeQueue));
+        IJavaClassType agentType = cache.get(thread);
+
+        // only load the agent once per jvm and then cache the class
+        if (agentType == null) {
+            agentType = loadRemoteAgent(target, thread);
+            cache.put(target, agentType);
+        }
+
+        return agentType;
+    }
+
+    public void clear(IJavaDebugTarget target) {
+        cache.remove(target);
+    }
+
+    private IJavaClassType loadRemoteAgent(IJavaDebugTarget target, IJavaThread thread) throws VariableTransferException {
+        FutureTask<IJavaClassType> future = new FutureTask<>(new LoadAgentClasses(target, thread, MirurAgent.class.getName()));
+        thread.queueRunnable(future);
 
         try {
-            return agentTypeQueue.take();
+            return future.get();
         } catch (InterruptedException ex) {
             throw new VariableTransferException(ex);
+        } catch (ExecutionException ex) {
+            throw new VariableTransferException(ex.getCause());
         }
     }
 
@@ -149,27 +174,21 @@ public class RemoteAgentDeployer {
         return (IJavaClassType) ((IJavaClassObject) classObject).getInstanceType();
     }
 
-    private class LoadAgentClasses implements Runnable {
+    private class LoadAgentClasses implements Callable<IJavaClassType> {
         final IJavaDebugTarget target;
         final IJavaThread thread;
         final String agentClassName;
-        final SynchronousQueue<IJavaClassType> agentClassQueue;
 
-        LoadAgentClasses(IJavaDebugTarget target, IJavaThread thread, String agentClassName, SynchronousQueue<IJavaClassType> agentClassQueue) {
+        LoadAgentClasses(IJavaDebugTarget target, IJavaThread thread, String agentClassName) {
             this.target = target;
             this.thread = thread;
             this.agentClassName = agentClassName;
-            this.agentClassQueue = agentClassQueue;
         }
 
         @Override
-        public void run() {
-            try {
-                IJavaClassType agentType = loadAgentClass(target, thread, agentClassesDir, agentClassName);
-                agentClassQueue.put(agentType);
-            } catch (DebugException | MalformedURLException | InterruptedException ex) {
-                throw new VariableTransferException(VariableTransferException.ERR_Could_Not_Load_Agent_In_Classloader, ex);
-            }
+        public IJavaClassType call() throws Exception {
+            IJavaClassType agentType = loadAgentClass(target, thread, agentClassesDir, agentClassName);
+            return agentType;
         }
     }
 }
