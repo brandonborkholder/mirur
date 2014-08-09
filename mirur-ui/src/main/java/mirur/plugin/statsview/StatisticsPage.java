@@ -115,6 +115,7 @@ public class StatisticsPage extends Page {
             stats.add(new ArrayStatisticVisitor.CountNegative());
             stats.add(new ArrayStatisticVisitor.CountPositive());
             stats.add(new ArrayStatisticVisitor.CountZero());
+            stats.add(new ArrayStatisticVisitor.BytesInMemory());
             break;
 
         case "long":
@@ -130,11 +131,13 @@ public class StatisticsPage extends Page {
             stats.add(new ArrayStatisticVisitor.CountNegative());
             stats.add(new ArrayStatisticVisitor.CountPositive());
             stats.add(new ArrayStatisticVisitor.CountZero());
+            stats.add(new ArrayStatisticVisitor.BytesInMemory());
             break;
 
         case "boolean":
             stats.add(new ArrayStatisticVisitor.CountTrue());
             stats.add(new ArrayStatisticVisitor.CountFalse());
+            stats.add(new ArrayStatisticVisitor.BytesInMemory());
             break;
 
         default:
