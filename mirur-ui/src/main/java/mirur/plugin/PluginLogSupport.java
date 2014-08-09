@@ -26,7 +26,7 @@ public class PluginLogSupport {
             return;
         }
 
-        Logger logger = Logger.getLogger("mirur");
+        Logger logger = Logger.getLogger("");
 
         if (logger == null) {
             return;

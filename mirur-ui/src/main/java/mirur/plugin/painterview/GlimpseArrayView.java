@@ -21,6 +21,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
+import com.metsci.glimpse.gl.GLCapabilityEventListener;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
@@ -44,6 +45,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
     @Override
     public void createPartControl(Composite parent) {
         canvas = new BugFixNewtSwtGlimpseCanvas(parent, GLProfile.getGL2GL3(), SWT.DOUBLE_BUFFERED);
+        canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener());
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
