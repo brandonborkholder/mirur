@@ -54,7 +54,7 @@ public class RemoteAgentDeployer {
             }
         }
 
-        IJavaClassType agentType = cache.get(thread);
+        IJavaClassType agentType = cache.get(target);
 
         // only load the agent once per jvm and then cache the class
         if (agentType == null) {

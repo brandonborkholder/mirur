@@ -11,12 +11,11 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 
-import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
-import mirur.core.Array2D;
 import mirur.core.Array2DJagged;
 import mirur.core.Array2DRectangular;
 import mirur.core.IsJaggedVisitor;
+import mirur.core.PrimitiveArray;
 import mirur.core.PrimitiveTest;
 import mirur.core.VisitArray;
 
@@ -56,18 +55,18 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
 
         Object arrayObject = socketTask.get();
 
+        PrimitiveArray array;
         if (arrayObject == null) {
+            array = null;
             Activator.getSelectionModel().select(null);
         } else if (PrimitiveTest.isPrimitiveArray1d(arrayObject.getClass())) {
             Activator.getStatistics().transformedViaAgent(var.getGenericSignature());
 
-            Array1D array = new Array1DImpl(var.getName(), arrayObject);
+            array = new Array1DImpl(var.getName(), arrayObject);
             Activator.getStatistics().receivedFromTarget(array);
-            Activator.getSelectionModel().select(array);
         } else if (PrimitiveTest.isPrimitiveArray2d(arrayObject.getClass())) {
             Activator.getStatistics().transformedViaAgent(var.getGenericSignature());
 
-            Array2D array = null;
             if (VisitArray.visit2d(arrayObject, new IsJaggedVisitor()).isJagged()) {
                 array = new Array2DJagged(var.getName(), arrayObject);
             } else {
@@ -75,10 +74,12 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
             }
 
             Activator.getStatistics().receivedFromTarget(array);
-            Activator.getSelectionModel().select(array);
         } else {
-            Activator.getSelectionModel().select(null);
+            array = null;
         }
+
+        Activator.getVariableCache().put(var.getName(), frame, array);
+        Activator.getSelectionModel().select(array);
     }
 
     private class IncomingConnectionTask implements Callable<Object> {
@@ -92,17 +93,19 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
 
         @Override
         public Object call() throws Exception {
-            barrier.await();
-            Socket sock = serverSocket.accept();
+            try {
+                barrier.await();
+                Socket sock = serverSocket.accept();
 
-            InputStream in = sock.getInputStream();
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            Object value = objIn.readObject();
-            objIn.close();
+                InputStream in = sock.getInputStream();
+                ObjectInputStream objIn = new ObjectInputStream(in);
+                Object value = objIn.readObject();
+                objIn.close();
 
-            serverSocket.close();
-
-            return value;
+                return value;
+            } finally {
+                serverSocket.close();
+            }
         }
     }
 }
