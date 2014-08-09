@@ -28,12 +28,10 @@ public class RemoteToArrayJob extends InvokeRemoteMethodJob {
         String originalObjectSignature = value.getSignature();
         Activator.getStatistics().transformedViaAgent(originalObjectSignature);
 
-        String name = var.getName();
-
         if (result instanceof IJavaArray) {
-            new CopyJDIArrayJob(name, (IJavaArray) result, frame).schedule();
+            new CopyJDIArrayJob(var, (IJavaArray) result, frame).schedule();
         } else if (result.isNull()) {
-            Activator.getVariableCache().put(name, frame, null);
+            Activator.getVariableCache().put(var, frame, null);
             Activator.getSelectionModel().select(null);
         } else {
             failed(null);

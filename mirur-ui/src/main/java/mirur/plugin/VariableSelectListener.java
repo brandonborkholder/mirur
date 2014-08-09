@@ -73,13 +73,13 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
                 IValue value = variable.getValue();
                 String varName = variable.getName();
 
-                if (Activator.getVariableCache().contains(varName, frame)) {
-                    PrimitiveArray array = Activator.getVariableCache().getArray(varName, frame);
+                if (Activator.getVariableCache().contains(variable, frame)) {
+                    PrimitiveArray array = Activator.getVariableCache().getArray(variable, frame);
                     Activator.getSelectionModel().select(array);
                 } else if (value instanceof IJavaValue) {
                     new ReceiveArrayJob(varName, variable, frame).schedule();
                 } else if (isPrimitiveArray(value)) {
-                    new CopyJDIArrayJob(varName, (IIndexedValue) value, frame).schedule();
+                    new CopyJDIArrayJob(variable, (IIndexedValue) value, frame).schedule();
                 } else {
                     Activator.getSelectionModel().select(null);
                 }

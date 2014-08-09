@@ -20,15 +20,16 @@ import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
+import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class CopyJDIArrayJob extends Job {
-    private final String name;
+    private final IJavaVariable var;
     private final IIndexedValue value;
     private final IJavaStackFrame frame;
 
-    public CopyJDIArrayJob(String variableName, IIndexedValue value, IJavaStackFrame frame) {
-        super("Copying " + variableName);
-        this.name = variableName;
+    public CopyJDIArrayJob(IJavaVariable var, IIndexedValue value, IJavaStackFrame frame) {
+        super("Copying " + var.toString());
+        this.var = var;
         this.frame = frame;
         this.value = value;
 
@@ -42,18 +43,18 @@ public class CopyJDIArrayJob extends Job {
             SelectionCache cache = Activator.getVariableCache();
 
             PrimitiveArray array = null;
-            if (cache.contains(name, frame)) {
+            if (cache.contains(var, frame)) {
                 // might be null if we've tried before
-                array = cache.getArray(name, frame);
+                array = cache.getArray(var, frame);
             } else {
-                array = toPrimitiveArray(name, value);
-                cache.put(name, frame, array);
+                array = toPrimitiveArray(var.getName(), value);
+                cache.put(var, frame, array);
             }
 
             Activator.getSelectionModel().select(array);
         } catch (DebugException ex) {
             Activator.getSelectionModel().select(null);
-            throw new RuntimeException(ex);
+            throw new VariableTransferException(ex);
         }
 
         return Status.OK_STATUS;

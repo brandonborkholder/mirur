@@ -6,7 +6,12 @@ import java.util.Map;
 import mirur.core.PrimitiveArray;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaVariable;
 
+/**
+ * We want to cache a variable that we've already transfered. But a variable is only cacheable as long as it's not
+ * modified. So we cache the variable and stack frame. When the thread resumes, then the cache needs to be cleared.
+ */
 public class SelectionCache {
     private Map<Key, PrimitiveArray> cache;
 
@@ -18,37 +23,37 @@ public class SelectionCache {
         cache.clear();
     }
 
-    public boolean contains(String name, IJavaStackFrame frame) {
-        return cache.containsKey(new Key(name, frame));
+    public boolean contains(IJavaVariable variable, IJavaStackFrame frame) {
+        return cache.containsKey(new Key(variable, frame));
     }
 
-    public PrimitiveArray getArray(String name, IJavaStackFrame frame) {
-        return cache.get(new Key(name, frame));
+    public PrimitiveArray getArray(IJavaVariable variable, IJavaStackFrame frame) {
+        return cache.get(new Key(variable, frame));
     }
 
-    public void put(String name, IJavaStackFrame frame, PrimitiveArray array) {
-        cache.put(new Key(name, frame), array);
+    public void put(IJavaVariable variable, IJavaStackFrame frame, PrimitiveArray array) {
+        cache.put(new Key(variable, frame), array);
     }
 
     private static class Key {
-        final String name;
+        final IJavaVariable var;
         final IJavaStackFrame frame;
 
-        Key(String name, IJavaStackFrame frame) {
-            this.name = name;
+        Key(IJavaVariable var, IJavaStackFrame frame) {
+            this.var = var;
             this.frame = frame;
         }
 
         @Override
         public int hashCode() {
-            return name.hashCode() * 13 + frame.hashCode();
+            return var.hashCode() * 13 + frame.hashCode();
         }
 
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof Key) {
                 Key k = (Key) obj;
-                return k.name.equals(name) && k.frame.equals(frame);
+                return k.var.equals(var) && k.frame.equals(frame);
             } else {
                 return false;
             }

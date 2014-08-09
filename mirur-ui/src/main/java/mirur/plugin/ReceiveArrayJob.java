@@ -78,7 +78,7 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
             array = null;
         }
 
-        Activator.getVariableCache().put(var.getName(), frame, array);
+        Activator.getVariableCache().put(var, frame, array);
         Activator.getSelectionModel().select(array);
     }
 
