@@ -10,7 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.concurrent.SynchronousQueue;
 
 import mirur.core.MirurAgent;
@@ -57,20 +56,21 @@ public class RemoteAgentDeployer {
     }
 
     private File explodeAgentClasses() throws IOException {
-        Path tmpClasspath = Files.createTempDirectory("miruragent");
+        File tmpClasspathDir = Files.createTempDirectory("miruragent").toFile();
 
         for (String className : getAgentClasses()) {
             String asFile = className.replace('.', '/').concat(".class");
-            File classFile = new File(tmpClasspath.toFile(), asFile);
+            File classFile = new File(tmpClasspathDir, asFile);
             File classFileParent = classFile.getParentFile();
             if (!classFileParent.exists()) {
                 classFileParent.mkdirs();
             }
 
             writeClass(asFile, classFile);
+            classFile.deleteOnExit();
         }
 
-        return tmpClasspath.toFile();
+        return tmpClasspathDir;
     }
 
     private void writeClass(String classFile, File fileDest) throws IOException {
