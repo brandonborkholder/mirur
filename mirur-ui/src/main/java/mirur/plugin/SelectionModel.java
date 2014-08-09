@@ -74,6 +74,8 @@ public class SelectionModel {
             lastSelected = selected;
         }
 
+        Activator.getStatistics().selected(selected);
+
         for (ArraySelectListener l : arrayListeners) {
             notifySelectedAsync(l, selected);
         }

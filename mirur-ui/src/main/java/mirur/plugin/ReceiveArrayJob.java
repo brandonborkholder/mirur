@@ -1,5 +1,7 @@
 package mirur.plugin;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
+
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
@@ -7,6 +9,7 @@ import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Logger;
 
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
@@ -23,6 +26,8 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class ReceiveArrayJob extends InvokeRemoteMethodJob {
+    private static final Logger LOGGER = Logger.getLogger(ReceiveArrayJob.class.getName());
+
     public ReceiveArrayJob(String name, IJavaVariable var, IJavaStackFrame frame) {
         super("Receiving Array", var, frame);
     }
@@ -35,6 +40,8 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
 
         CyclicBarrier barrier = new CyclicBarrier(2);
 
+        logFine(LOGGER, "Waiting to receive array on port %d", port);
+
         FutureTask<Object> socketTask = new FutureTask<>(new IncomingConnectionTask(barrier, serverSocket));
         new Thread(socketTask, "mirur-socket-listen").start();
 
@@ -42,25 +49,32 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
         barrier.await();
 
         IJavaValue portValue = target.newValue(port);
-
-        IJavaValue[] args = new IJavaValue[] { (IJavaValue) var.getValue(), portValue };
+        IJavaValue value = (IJavaValue) var.getValue();
+        IJavaValue[] args = new IJavaValue[] { value, portValue };
         agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;I)V", args, thread);
+        logFine(LOGGER, "Called MirurAgent.sendAsArray(Object, int) successfully");
 
-        Object value = socketTask.get();
+        Object arrayObject = socketTask.get();
 
-        if (value == null) {
+        if (arrayObject == null) {
             Activator.getSelectionModel().select(null);
-        } else if (PrimitiveTest.isPrimitiveArray1d(value.getClass())) {
-            Array1D array = new Array1DImpl(var.getName(), value);
+        } else if (PrimitiveTest.isPrimitiveArray1d(arrayObject.getClass())) {
+            Activator.getStatistics().transformedViaAgent(var.getGenericSignature());
+
+            Array1D array = new Array1DImpl(var.getName(), arrayObject);
+            Activator.getStatistics().receivedFromTarget(array);
             Activator.getSelectionModel().select(array);
-        } else if (PrimitiveTest.isPrimitiveArray2d(value.getClass())) {
+        } else if (PrimitiveTest.isPrimitiveArray2d(arrayObject.getClass())) {
+            Activator.getStatistics().transformedViaAgent(var.getGenericSignature());
+
             Array2D array = null;
-            if (VisitArray.visit2d(value, new IsJaggedVisitor()).isJagged()) {
-                array = new Array2DJagged(var.getName(), value);
+            if (VisitArray.visit2d(arrayObject, new IsJaggedVisitor()).isJagged()) {
+                array = new Array2DJagged(var.getName(), arrayObject);
             } else {
-                array = new Array2DRectangular(var.getName(), value);
+                array = new Array2DRectangular(var.getName(), arrayObject);
             }
 
+            Activator.getStatistics().receivedFromTarget(array);
             Activator.getSelectionModel().select(array);
         } else {
             Activator.getSelectionModel().select(null);

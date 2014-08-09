@@ -10,20 +10,31 @@ public class Activator extends AbstractUIPlugin {
 
     private static Activator plugin;
 
-    private static SelectionCache variableCache = new SelectionCache();
+    private static SelectionCache variableCache;
 
-    private static SelectionModel selectionModel = new SelectionModel();
+    private static SelectionModel selectionModel;
 
-    private static Preferences preferences = new Preferences(InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID));
+    private static Preferences preferences;
 
-    private static RemoteAgentDeployer agentDeployer = new RemoteAgentDeployer();
+    private static RemoteAgentDeployer agentDeployer;
+
+    private static StatisticsCollector statsCollector;
 
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
 
+        preferences = new Preferences(InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID));
+
         PluginLogSupport.initializeLogger();
+
+        statsCollector = new StatisticsCollector();
+        agentDeployer = new RemoteAgentDeployer();
+        variableCache = new SelectionCache();
+        selectionModel = new SelectionModel();
+
+        getStatistics().started();
     }
 
     @Override
@@ -55,5 +66,9 @@ public class Activator extends AbstractUIPlugin {
 
     public static RemoteAgentDeployer getAgentDeployer() {
         return agentDeployer;
+    }
+
+    public static StatisticsCollector getStatistics() {
+        return statsCollector;
     }
 }

@@ -70,8 +70,9 @@ public abstract class InvokeRemoteMethodJob extends Job {
         public void run() {
             try {
                 invokeAgent(agentType);
+            } catch (VariableTransferException ex) {
+                throw ex;
             } catch (Exception ex) {
-                failed(ex);
                 throw new VariableTransferException(ex);
             }
         }
