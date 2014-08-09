@@ -1,5 +1,8 @@
 package mirur.plugin;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
+import static com.metsci.glimpse.util.logging.LoggerUtils.logFiner;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Logger;
 
 import mirur.core.MirurAgent;
 
@@ -29,6 +33,8 @@ import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 public class RemoteAgentDeployer {
+    private static final Logger LOGGER = Logger.getLogger(RemoteAgentDeployer.class.getName());
+
     private File agentClassesDir;
 
     private Map<IJavaDebugTarget, IJavaClassType> cache = Collections.synchronizedMap(new WeakHashMap<IJavaDebugTarget, IJavaClassType>());
@@ -82,6 +88,7 @@ public class RemoteAgentDeployer {
 
     private File explodeAgentClasses() throws IOException {
         File tmpClasspathDir = Files.createTempDirectory("miruragent").toFile();
+        logFine(LOGGER, "Writing agent class files to %s", tmpClasspathDir);
 
         for (String className : getAgentClasses()) {
             String asFile = className.replace('.', '/').concat(".class");
@@ -91,6 +98,7 @@ public class RemoteAgentDeployer {
                 classFileParent.mkdirs();
             }
 
+            logFine(LOGGER, "Writing agent class %s file to %s", className, classFile);
             writeClass(asFile, classFile);
             classFile.deleteOnExit();
         }
@@ -126,7 +134,7 @@ public class RemoteAgentDeployer {
 
     private IJavaClassType loadAgentClass(IJavaDebugTarget target, IJavaThread thread, File classpathDir, String agentClassName)
             throws DebugException, MalformedURLException {
-        // get the types we need
+        logFine(LOGGER, "Loading the agent using the isolated ClassLoader");
 
         // java.net.URLClassLoader
         IJavaType[] types = target.getJavaTypes(URLClassLoader.class.getName());
@@ -144,32 +152,39 @@ public class RemoteAgentDeployer {
         types = target.getJavaTypes(Array.class.getName());
         IJavaClassType arrayType = (IJavaClassType) types[0];
 
+        logFiner(LOGGER, "Retrieve all necessary types successfully");
+
         // create the URL object we need
         // new URL(String)
         IJavaValue classNameString = target.newValue(classpathDir.toURI().toURL().toString());
         IJavaValue[] args = new IJavaValue[] { classNameString };
         // IJavaObject urlObject = (IJavaObject) urlType.sendMessage("<init>", "(Ljava/lang/String;)V", args, thread);
         IJavaObject urlObject = urlType.newInstance("(Ljava/lang/String;)V", args, thread);
+        logFiner(LOGGER, "Called URL.<init>(String) successfully");
 
         // create the URL[] array
         // Array.newInstance(Class,int)
         args = new IJavaValue[] { urlType.getClassObject(), target.newValue(1) };
         IJavaValue urlArrayObject = arrayType.sendMessage("newInstance", "(Ljava/lang/Class;I)Ljava/lang/Object;", args, thread);
+        logFiner(LOGGER, "Called Array.newInstance(Class, int) successfully");
 
         // set the value
         // Array.set(Object,int,Object)
         args = new IJavaValue[] { urlArrayObject, target.newValue(0), urlObject };
         arrayType.sendMessage("set", "(Ljava/lang/Object;ILjava/lang/Object;)V", args, thread);
+        logFiner(LOGGER, "Called Array.set(Object, int, Object) successfully");
 
         // create the URLClassLoader
         // URLClassLoader.newInstance(URL[])
         args = new IJavaValue[] { urlArrayObject };
         IJavaValue classLoaderObject = classloaderType.sendMessage("newInstance", "([Ljava/net/URL;)Ljava/net/URLClassLoader;", args, thread);
+        logFiner(LOGGER, "Called URLClassLoader.newInstance(URL[]) successfully");
 
         // load the class
         // Class.forName(String,boolean,ClassLoader)
         args = new IJavaValue[] { target.newValue(agentClassName), target.newValue(true), classLoaderObject };
         IJavaValue classObject = classType.sendMessage("forName", "(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;", args, thread);
+        logFiner(LOGGER, "Called Class.forName(String, ClassLoader) successfully");
 
         return (IJavaClassType) ((IJavaClassObject) classObject).getInstanceType();
     }
@@ -187,8 +202,7 @@ public class RemoteAgentDeployer {
 
         @Override
         public IJavaClassType call() throws Exception {
-            IJavaClassType agentType = loadAgentClass(target, thread, agentClassesDir, agentClassName);
-            return agentType;
+            return loadAgentClass(target, thread, agentClassesDir, agentClassName);
         }
     }
 }
