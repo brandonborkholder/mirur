@@ -16,11 +16,10 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
     public static final String ID = "mirur.views.Statistics";
 
     private SelectListenerToggle selectListenerToggle;
-    private ShowArrayDataToggle showDataToggle;
+    private SaveArrayToFileAction saveArrayAction;
 
     private PageBook book;
     private StatisticsPage statsPage;
-    private DataTablePage dataPage;
     private Page activePage;
 
     @Override
@@ -28,29 +27,18 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
         book = new PageBook(parent, SWT.NONE);
 
         statsPage = new StatisticsPage();
-        dataPage = new DataTablePage();
 
         initPage(statsPage);
-        initPage(dataPage);
         showPage(statsPage);
 
         selectListenerToggle = new SelectListenerToggle(ID, this, this);
-        showDataToggle = new ShowArrayDataToggle() {
-            @Override
-            public void run() {
-                if (isChecked()) {
-                    showPage(dataPage);
-                } else {
-                    showPage(statsPage);
-                }
-            }
-        };
         getSite().getPage().addPartListener(selectListenerToggle);
 
-        showDataToggle.setChecked(false);
+        saveArrayAction = new SaveArrayToFileAction();
+        saveArrayAction.setEnabled(false);
 
         IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-        tbm.add(showDataToggle);
+        tbm.add(saveArrayAction);
         tbm.add(selectListenerToggle);
     }
 
@@ -74,7 +62,6 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
     @Override
     public void dispose() {
         statsPage.dispose();
-        dataPage.dispose();
         book.dispose();
 
         getSite().getPage().removePartListener(selectListenerToggle);
@@ -83,7 +70,8 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
 
     @Override
     public void arraySelected(PrimitiveArray array) {
-        dataPage.setInput(array);
         statsPage.setInput(array);
+
+        saveArrayAction.setEnabled(array != null && (array.getNumDimensions() == 1 || array.getNumDimensions() == 2));
     }
 }

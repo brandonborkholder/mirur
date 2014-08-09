@@ -80,4 +80,8 @@ public class SelectionModel {
             notifySelectedAsync(l, selected);
         }
     }
+
+    public PrimitiveArray getActiveSelected() {
+        return lastSelected;
+    }
 }
