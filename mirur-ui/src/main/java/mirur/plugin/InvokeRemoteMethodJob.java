@@ -26,7 +26,6 @@ public abstract class InvokeRemoteMethodJob extends Job {
         this.var = var;
 
         setPriority(Job.SHORT);
-        setUser(false);
     }
 
     @Override

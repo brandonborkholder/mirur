@@ -1,12 +1,5 @@
 package mirur.plugin;
 
-import mirur.core.Array1DImpl;
-import mirur.core.Array2DJagged;
-import mirur.core.Array2DRectangular;
-import mirur.core.IsJaggedVisitor;
-import mirur.core.PrimitiveArray;
-import mirur.core.VisitArray;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -34,24 +27,13 @@ public class CopyJDIArrayJob extends Job {
         this.value = value;
 
         setPriority(Job.SHORT);
-        setUser(false);
     }
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         try {
-            SelectionCache cache = Activator.getVariableCache();
-
-            PrimitiveArray array = null;
-            if (cache.contains(var, frame)) {
-                // might be null if we've tried before
-                array = cache.getArray(var, frame);
-            } else {
-                array = toPrimitiveArray(var.getName(), value);
-                cache.put(var, frame, array);
-            }
-
-            Activator.getSelectionModel().select(array);
+            Object arrayObject = toPrimitiveArray(var.getName(), value);
+            new SubmitArrayToUIJob(var.getName(), var, frame, arrayObject).schedule();
         } catch (DebugException ex) {
             Activator.getSelectionModel().select(null);
             throw new VariableTransferException(ex);
@@ -60,10 +42,12 @@ public class CopyJDIArrayJob extends Job {
         return Status.OK_STATUS;
     }
 
-    private PrimitiveArray toPrimitiveArray(String name, IIndexedValue value) throws DebugException {
+    private Object toPrimitiveArray(String name, IIndexedValue value) throws DebugException {
         if (!(value instanceof IJavaArray)) {
             return null;
         }
+
+        Object arrayObject;
 
         IJavaArray val = (IJavaArray) value;
         IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
@@ -76,8 +60,8 @@ public class CopyJDIArrayJob extends Job {
         case "long":
         case "short":
         case "byte": {
-            Object o = toPrimitiveArray1d(value);
-            return new Array1DImpl(name, o);
+            arrayObject = toPrimitiveArray1d(value);
+            break;
         }
 
         case "int[]":
@@ -88,17 +72,15 @@ public class CopyJDIArrayJob extends Job {
         case "long[]":
         case "short[]":
         case "byte[]": {
-            Object o = toPrimitiveArray2d(value);
-            if (VisitArray.visit2d(o, new IsJaggedVisitor()).isJagged()) {
-                return new Array2DJagged(name, o);
-            } else {
-                return new Array2DRectangular(name, o);
-            }
+            arrayObject = toPrimitiveArray2d(value);
+            break;
         }
 
         default:
-            return null;
+            arrayObject = null;
         }
+
+        return arrayObject;
     }
 
     private Object toPrimitiveArray2d(IValue value) throws DebugException {

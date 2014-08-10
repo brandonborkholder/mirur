@@ -52,6 +52,10 @@ public class Array1DPlot extends SimplePlot2D {
         double min = minMaxVisitor.getMin();
         double max = minMaxVisitor.getMax();
 
+        if (min == max) {
+            max++;
+        }
+
         getAxisX().setMin(0);
         getAxisX().setMax(array.getSize());
         getAxisY().setMin(min);

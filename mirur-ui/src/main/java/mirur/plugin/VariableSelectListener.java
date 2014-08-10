@@ -93,6 +93,7 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
     private boolean isPrimitiveArray(IValue value) throws DebugException {
         if (value instanceof IIndexedValue) {
             String refTypeName = ((IIndexedValue) value).getReferenceTypeName();
+            // XXX handle this
             System.out.println(refTypeName);
         } else if (value instanceof IJavaArray) {
             IJavaArrayType arrayType = (IJavaArrayType) ((IJavaArray) value).getJavaType();

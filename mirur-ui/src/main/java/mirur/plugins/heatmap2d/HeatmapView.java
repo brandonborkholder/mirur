@@ -111,11 +111,12 @@ public class HeatmapView extends SimplePlugin2D {
         plot.getAxisY().setMax(dim1);
 
         MinMaxValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxValueVisitor());
-        float minZ = (float) minMaxVisitor.getMin();
-        float maxZ = (float) minMaxVisitor.getMax();
+        double minZ = minMaxVisitor.getMin();
+        double maxZ = minMaxVisitor.getMax();
         if (minZ == maxZ) {
-            maxZ += 1;
+            maxZ++;
         }
+
         plot.getAxisZ().setMin(minZ);
         plot.getAxisZ().setMax(maxZ);
 
