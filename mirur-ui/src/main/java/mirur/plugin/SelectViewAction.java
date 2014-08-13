@@ -7,6 +7,7 @@ import mirur.plugins.MirurViews;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Control;
@@ -59,6 +60,11 @@ public abstract class SelectViewAction extends Action implements IMenuCreator {
             ActionContributionItem item = new ActionContributionItem(action);
             item.fill(menu, -1);
         }
+
+        new Separator().fill(menu, -1);
+
+        ActionContributionItem item = new ActionContributionItem(new RequestNewViewAction());
+        item.fill(menu, -1);
 
         return menu;
     }

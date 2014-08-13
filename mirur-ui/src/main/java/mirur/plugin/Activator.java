@@ -2,6 +2,8 @@ package mirur.plugin;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -70,5 +72,16 @@ public class Activator extends AbstractUIPlugin {
 
     public static StatisticsCollector getStatistics() {
         return statsCollector;
+    }
+
+    public static Image getCachedImage(String name) {
+        ImageRegistry registry = getDefault().getImageRegistry();
+        Image image = registry.get(name);
+        if (image == null) {
+            registry.put(name, getImageDescriptor(name));
+            image = registry.get(name);
+        }
+
+        return image;
     }
 }
