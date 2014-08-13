@@ -2,7 +2,7 @@
 <feature
       id="mirur.feature"
       label="Mirur"
-      version="0.2.0.qualifier"
+      version="0.3.0.qualifier"
       os="linux,macosx,win32"
       arch="x86,x86_64">
 
