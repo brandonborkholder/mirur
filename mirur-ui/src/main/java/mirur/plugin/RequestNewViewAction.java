@@ -53,6 +53,7 @@ public class RequestNewViewAction extends Action {
         builder.append("\n");
         builder.append("     I'd like to be able to show each line in a different color or all the same");
         builder.append("\n");
+        builder.append("\n");
         builder.append("Followup Information:");
         builder.append("\n");
         builder.append("your name and email if you'd like us to follow up with you");
@@ -63,8 +64,8 @@ public class RequestNewViewAction extends Action {
 
     public RequestNewViewAction() {
         setId(RequestNewViewAction.class.getName());
-        setText("Submit New View ...");
-        setToolTipText("Submit an Idea for a New View");
+        setText("Request New View ...");
+        setToolTipText("Submit an idea for a new view on your data");
     }
 
     @Override
@@ -103,7 +104,7 @@ public class RequestNewViewAction extends Action {
             textArea.setLayoutData(gridData);
             textArea.setText(scrollableText);
 
-            setMessage("Enter the details below to request a new view of your data.");
+            setMessage("Enter the details below to request a new view of your data");
             setTitleImage(Activator.getCachedImage(Icons.MIRUR_64_PATH));
             setTitle("Submit Idea for a New View");
 
