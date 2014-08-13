@@ -19,7 +19,7 @@ public class PluginLogSupport {
     private static final Level LEVEL = Level.ALL;
 
     public static final void initializeLogger() {
-        try (InputStream stream = PluginLogSupport.class.getClassLoader().getResourceAsStream("src/main/resources/logging.properties")) {
+        try (InputStream stream = PluginLogSupport.class.getClassLoader().getResourceAsStream("logging.properties")) {
             LogManager.getLogManager().readConfiguration(stream);
         } catch (IOException ex) {
             Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Could not initialize logging", ex));
