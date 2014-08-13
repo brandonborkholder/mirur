@@ -91,8 +91,10 @@ public class StatisticsPage extends Page {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
-                table.setInput(data);
-                table.refresh();
+                if (!table.getControl().isDisposed()) {
+                    table.setInput(data);
+                    table.refresh();
+                }
             }
         });
     }
