@@ -6,32 +6,20 @@ import java.util.List;
 public class Main {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
-        double[] double1d = new double[500];
-        for (int i = 0; i < double1d.length; i++) {
-            double1d[i] = v();
+        double[] measurements = new double[500];
+        for (int i = 0; i < measurements.length; i++) {
+            measurements[i] = v();
         }
 
-        short[] short1d = new short[500];
-        for (int i = 0; i < short1d.length; i++) {
-            short1d[i] = (short) (512 * v());
+        boolean[] included = new boolean[500];
+        for (int i = 0; i < included.length; i++) {
+            included[i] = v() > 0.3;
         }
 
-        long[] long1d = new long[500];
-        for (int i = 0; i < long1d.length; i++) {
-            long1d[i] = (long) (Long.MAX_VALUE / 2 * v());
-        }
-
-        char[] char1d = "the lazy fox jumped over the brown dog".toCharArray();
-
-        boolean[] bool1d = new boolean[500];
-        for (int i = 0; i < bool1d.length; i++) {
-            bool1d[i] = v() > 0.3;
-        }
-
-        float[][] float2d = new float[500][500];
-        for (int i = 0; i < float2d.length; i++) {
-            for (int j = 0; j < float2d[0].length; j++) {
-                float2d[i][j] = (float) v() * i;
+        float[][] surface = new float[500][500];
+        for (int i = 0; i < surface.length; i++) {
+            for (int j = 0; j < surface[0].length; j++) {
+                surface[i][j] = (float) v() * i;
             }
         }
 
@@ -45,21 +33,21 @@ public class Main {
             dblList.add(v());
         }
 
-        Foo foo = new Foo(double1d, dblList);
+        Input foo = new Input(measurements, dblList);
 
-        float[][] float2dLarge = new float[200][100000];
-        for (int i = 0; i < float2dLarge.length; i++) {
-            for (int j = 0; j < float2dLarge[0].length; j++) {
-                float2dLarge[i][j] = (float) v() * i;
+        float[][] hiRes = new float[200][100000];
+        for (int i = 0; i < hiRes.length; i++) {
+            for (int j = 0; j < hiRes[0].length; j++) {
+                hiRes[i][j] = (float) v() * i;
             }
         }
 
-        float[][] jagged = new float[100][];
-        for (int i = 0; i < jagged.length; i++) {
+        float[][] jaggedSurface = new float[100][];
+        for (int i = 0; i < jaggedSurface.length; i++) {
             int len = (int) (v() * 100);
-            jagged[i] = new float[len];
+            jaggedSurface[i] = new float[len];
             for (int j = 0; j < len; j++) {
-                jagged[i][j] = (float) v();
+                jaggedSurface[i][j] = (float) v();
             }
         }
 
