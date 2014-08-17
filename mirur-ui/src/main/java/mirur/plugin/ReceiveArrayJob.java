@@ -34,7 +34,9 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
         logFine(LOGGER, "Waiting to receive array on port %d", port);
 
         FutureTask<Object> socketTask = new FutureTask<>(new IncomingConnectionTask(barrier, serverSocket));
-        new Thread(socketTask, "mirur-socket-listen").start();
+        Thread waitingThread = new Thread(socketTask, "mirur-socket-listen");
+        waitingThread.setDaemon(true);
+        waitingThread.start();
 
         // TODO I really don't like this method of waiting until the socket is listening
         barrier.await();
