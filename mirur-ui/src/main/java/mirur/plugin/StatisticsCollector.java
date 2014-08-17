@@ -55,7 +55,7 @@ public class StatisticsCollector {
     }
 
     public void started() {
-        log("Starting pluging");
+        // nothing useful to send here
     }
 
     public void transformedViaAgent(String originalObjectSignature) {
@@ -73,7 +73,6 @@ public class StatisticsCollector {
     }
 
     public void shuttingDown() {
-        log("Shutting down");
         send();
     }
 
