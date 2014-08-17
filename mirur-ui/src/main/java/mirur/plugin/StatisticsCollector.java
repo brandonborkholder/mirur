@@ -3,6 +3,7 @@ package mirur.plugin;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logInfo;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logSevere;
+import static mirur.plugin.Activator.getPreferences;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeJson;
 
 import java.io.BufferedReader;
@@ -25,6 +26,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 public class StatisticsCollector {
     private static final Logger LOGGER = Logger.getLogger(StatisticsCollector.class.getName());
+    private static final int MAX_LOG_SIZE = 10000;
 
     private List<StatsEntry> log = new ArrayList<>();
 
@@ -33,6 +35,10 @@ public class StatisticsCollector {
 
         synchronized (log) {
             log.add(new StatsEntry(text));
+
+            if (log.size() >= MAX_LOG_SIZE) {
+                send();
+            }
         }
     }
 
@@ -43,7 +49,7 @@ public class StatisticsCollector {
             log.clear();
         }
 
-        if (!log0.isEmpty()) {
+        if (!log0.isEmpty() && getPreferences().doSubmitStatistics()) {
             new SubmitStatsJob(log0).schedule();
         }
     }

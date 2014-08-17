@@ -1,5 +1,7 @@
 package mirur.plugin;
 
+import static mirur.plugin.Activator.getPreferences;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -28,7 +30,13 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
         this.part = part;
         this.listener = listener;
 
-        setChecked(Activator.getPreferences().doSyncWithVariablesView(partID));
+        setChecked(getPreferences().doSyncWithVariablesView(partID));
+        getPreferences().addChangeListener(new Runnable() {
+            @Override
+            public void run() {
+                setChecked(getPreferences().doSyncWithVariablesView(SelectListenerToggle.this.partID));
+            }
+        });
 
         addPropertyChangeListener(this);
     }
@@ -36,7 +44,7 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
     @Override
     public void propertyChange(PropertyChangeEvent event) {
         if (CHECKED.equals(event.getProperty())) {
-            Activator.getPreferences().setSyncWithVariablesView(partID, (Boolean) event.getNewValue());
+            getPreferences().setSyncWithVariablesView(partID, (Boolean) event.getNewValue());
         }
     }
 

@@ -36,12 +36,12 @@ public class Activator extends AbstractUIPlugin {
         variableCache = new SelectionCache();
         selectionModel = new SelectionModel();
 
-        getStatistics().started();
+        statsCollector.started();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        getStatistics().shuttingDown();
+        statsCollector.shuttingDown();
 
         plugin = null;
         preferences.flush();

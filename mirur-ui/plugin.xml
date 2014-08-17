@@ -48,5 +48,18 @@
          </view>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="mirur.plugin.MirurPreferencesPage"
+            id="mirur.preferences.main"
+            name="Mirur">
+      </page>
+   </extension>
+   <extension
+         id="mirur.preferences.initializer"
+         point="org.eclipse.core.runtime.preferences">
+         <initializer class="mirur.plugin.PreferencesInitializer"/>
+   </extension>
 
 </plugin>
