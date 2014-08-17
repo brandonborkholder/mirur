@@ -41,6 +41,8 @@ public class Activator extends AbstractUIPlugin {
 
     @Override
     public void stop(BundleContext context) throws Exception {
+        getStatistics().shuttingDown();
+
         plugin = null;
         preferences.flush();
         super.stop(context);

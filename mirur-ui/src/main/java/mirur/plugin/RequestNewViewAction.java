@@ -185,13 +185,13 @@ public class RequestNewViewAction extends Action {
             builder.append("{");
             builder.append("\n");
             builder.append("\"FromName\": ");
-            builder.append("\"mirur-plugin\",");
+            builder.append("\"mirur-plugin-request\",");
             builder.append("\n");
             builder.append("\"FromAddress\": ");
-            builder.append("\"mirur@borkhobs.simpleyak.com\",");
+            builder.append("\"mirur-request@mirur.simpleyak.com\",");
             builder.append("\n");
             builder.append("\"ToAddress\": ");
-            builder.append("\"borkhobs+mirurfeedback@gmail.com\",");
+            builder.append("\"plugin-dropbox@mirur.io\",");
             builder.append("\n");
             builder.append("\"TextBody\": ");
             builder.append("\"");

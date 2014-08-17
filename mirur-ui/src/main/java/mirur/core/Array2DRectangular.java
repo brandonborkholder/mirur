@@ -51,4 +51,9 @@ public class Array2DRectangular implements Array2D {
             throw new AssertionError("No dimension: " + dimension);
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s[%d][%d]", orig.getClass().getComponentType().getComponentType(), size0, size1);
+    }
 }

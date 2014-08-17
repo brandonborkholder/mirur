@@ -36,4 +36,9 @@ public class Array1DImpl implements Array1D {
     public int getSize() {
         return size;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s[%d]", data.getClass().getComponentType().getSimpleName(), size);
+    }
 }

@@ -5,7 +5,8 @@ public class Array2DJagged implements Array2D {
     private final Object orig;
 
     private final int size0;
-    private final int size1;
+    private final int minSize1;
+    private final int maxSize1;
 
     public Array2DJagged(String name, Object array) {
         this.name = name;
@@ -13,7 +14,8 @@ public class Array2DJagged implements Array2D {
 
         JaggedArraySizeVisitor sizeVisitor = VisitArray.visit2d(array, new JaggedArraySizeVisitor());
         size0 = sizeVisitor.getSize0();
-        size1 = sizeVisitor.getSize1();
+        minSize1 = sizeVisitor.getMinSize1();
+        maxSize1 = sizeVisitor.getMaxSize1();
     }
 
     @Override
@@ -46,9 +48,14 @@ public class Array2DJagged implements Array2D {
         if (dimension == 0) {
             return size0;
         } else if (dimension == 1) {
-            return size1;
+            return maxSize1;
         } else {
             throw new AssertionError("No dimension: " + dimension);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s[%d][%d-%d]", orig.getClass().getComponentType().getComponentType(), size0, minSize1, maxSize1);
     }
 }

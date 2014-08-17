@@ -4,14 +4,19 @@ import static java.lang.Math.max;
 
 public class JaggedArraySizeVisitor extends AbstractArrayVisitor {
     private int size0;
-    private int size1;
+    private int maxSize1;
+    private int minSize1;
 
     public int getSize0() {
         return size0;
     }
 
-    public int getSize1() {
-        return size1;
+    public int getMinSize1() {
+        return minSize1;
+    }
+
+    public int getMaxSize1() {
+        return maxSize1;
     }
 
     @Override
@@ -64,42 +69,42 @@ public class JaggedArraySizeVisitor extends AbstractArrayVisitor {
 
     @Override
     public void visit(int i, double[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, long[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, float[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, int[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, short[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, char[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, byte[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
     public void visit(int i, boolean[] v) {
-        size1 = max(size1, v.length);
+        maxSize1 = max(maxSize1, v.length);
     }
 
     @Override
