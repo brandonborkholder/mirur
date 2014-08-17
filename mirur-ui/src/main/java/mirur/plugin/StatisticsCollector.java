@@ -59,11 +59,11 @@ public class StatisticsCollector {
     }
 
     public void transformedViaAgent(String originalObjectSignature) {
-        log("MirurAgent transformed " + originalObjectSignature);
+        log("agent transformed " + originalObjectSignature);
     }
 
     public void receivedFromTarget(PrimitiveArray array) {
-        log("Received " + array);
+        log("received " + array);
     }
 
     public void selected(PrimitiveArray array) {

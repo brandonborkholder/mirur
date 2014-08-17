@@ -4,11 +4,7 @@ import javax.media.opengl.GLProfile;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugin.ArraySelectListener;
-import mirur.plugin.MirurLAF;
-import mirur.plugin.ResetAxesAction;
 import mirur.plugin.SelectListenerToggle;
-import mirur.plugin.SelectViewAction;
-import mirur.plugin.ViewMenuAction;
 import mirur.plugins.DataPainter;
 import mirur.plugins.InvalidPlaceholderView;
 import mirur.plugins.MirurView;

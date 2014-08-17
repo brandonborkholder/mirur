@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.plugin.painterview;
 
 import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
 import static com.metsci.glimpse.support.color.GlimpseColor.getGray;

@@ -7,7 +7,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.fixedfunc.GLPointerFunc;
 
-import mirur.plugin.MirurLAF;
+import mirur.plugin.painterview.MirurLAF;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseBounds;

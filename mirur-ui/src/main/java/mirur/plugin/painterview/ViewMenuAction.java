@@ -1,4 +1,7 @@
-package mirur.plugin;
+package mirur.plugin.painterview;
+
+import mirur.plugin.Activator;
+import mirur.plugin.Icons;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;

@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.plugin.painterview;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;

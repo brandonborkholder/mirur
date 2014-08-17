@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.plugin.painterview;
 
 import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logInfo;
@@ -13,6 +13,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
+
+import mirur.plugin.Activator;
+import mirur.plugin.Icons;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

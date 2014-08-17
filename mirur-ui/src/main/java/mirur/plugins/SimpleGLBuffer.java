@@ -1,4 +1,4 @@
-package mirur.plugin;
+package mirur.plugins;
 
 import static com.metsci.glimpse.gl.util.GLErrorUtils.logGLError;
 

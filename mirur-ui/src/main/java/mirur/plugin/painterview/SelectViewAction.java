@@ -1,6 +1,8 @@
-package mirur.plugin;
+package mirur.plugin.painterview;
 
 import mirur.core.PrimitiveArray;
+import mirur.plugin.Activator;
+import mirur.plugin.Icons;
 import mirur.plugins.MirurView;
 import mirur.plugins.MirurViews;
 

@@ -9,8 +9,8 @@ import javax.media.opengl.GL2;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;
-import mirur.plugin.MirurLAF;
-import mirur.plugin.SimpleGLBuffer;
+import mirur.plugin.painterview.MirurLAF;
+import mirur.plugins.SimpleGLBuffer;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseBounds;
