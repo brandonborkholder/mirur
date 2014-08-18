@@ -6,8 +6,9 @@
       os="linux,macosx,win32"
       arch="x86,x86_64">
 
-   <description>
-      Debug arrays more easily with context. View charts and statistics on primitive arrays in real time.
+   <description url="http://mirur.io/">
+      Debug arrays more easily with context. View charts and statistics 
+on primitive arrays in real time.
    </description>
 
    <copyright>
@@ -511,6 +512,10 @@ The Fugue icon set is covered by the Creative Commons Attribution 3.0 license:
 
 http://creativecommons.org/licenses/by/3.0/
    </license>
+
+   <url>
+      <update label="Mirur Updates" url="http://mirur.io/update-site"/>
+   </url>
 
    <plugin
          id="mirur.mirur-ui"
