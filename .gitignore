@@ -21,7 +21,7 @@ nbproject/
 Thumbs.db
 
 # Ant
-build/
+#build/
 dist/
 
 # Matlab

@@ -1,12 +1,11 @@
--injars 'target/classes'
--outjars 'target/obfuscated-classes'
+-injars '../target/classes'
+-outjars '../target/obfuscated-classes'
 
--libraryjars lib
--libraryjars '../mirur-agent/bin'
+-libraryjars ../lib
+-libraryjars '../../mirur-agent/bin'
 -libraryjars '<java.home>/lib/rt.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.ui_3.105.0.v20130522-1122.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.swt_3.102.1.v20140206-1334.jar'
--libraryjars '<eclipse.home>/plugins/org.eclipse.swt.win32.win32.x86_64_3.102.1.v20140206-1358.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.jface_3.9.1.v20130725-1141.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.core.commands_3.6.100.v20130515-1857.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.ui.workbench_3.105.2.v20140211-1711.jar'
