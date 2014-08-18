@@ -1,0 +1,977 @@
+mirur.core.AbstractArray1dVisitor -> mirur.core.AbstractArray1dVisitor:
+    void visit(double[]) -> visit
+    void visit(long[]) -> visit
+    void visit(float[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+    void visit(int,double) -> visit
+    void visit(int,float) -> visit
+mirur.core.AbstractArrayElementVisitor -> mirur.core.AbstractArrayElementVisitor:
+    void visit(long) -> visit
+    void visit(float) -> visit
+    void visit(int) -> visit
+    void visit(short) -> visit
+    void visit(char) -> visit
+    void visit(byte) -> visit
+    void visit(boolean) -> visit
+mirur.core.AbstractArrayVisitor -> mirur.core.AbstractArrayVisitor:
+    void visit(double[]) -> visit
+    void visit(long[]) -> visit
+    void visit(float[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+    void visit(int,double[]) -> visit
+    void visit(int,long[]) -> visit
+    void visit(int,float[]) -> visit
+    void visit(int,int[]) -> visit
+    void visit(int,short[]) -> visit
+    void visit(int,char[]) -> visit
+    void visit(int,byte[]) -> visit
+    void visit(int,boolean[]) -> visit
+    void visit$4868c049(int,double) -> visit$4868c049
+    void visit(int,int,long) -> visit
+    void visit(int,int,float) -> visit
+    void visit(int,int,int) -> visit
+    void visit(int,int,short) -> visit
+    void visit(int,int,char) -> visit
+    void visit(int,int,byte) -> visit
+    void visit(int,int,boolean) -> visit
+mirur.core.Array1D -> mirur.core.Array1D:
+    int getSize() -> getSize
+mirur.core.Array1DImpl -> mirur.core.Array1DImpl:
+    java.lang.String name -> a
+    java.lang.Object data -> b
+    int size -> c
+    java.lang.String getSignature() -> getSignature
+    java.lang.Object getData() -> getData
+    java.lang.String getName() -> getName
+    int getNumDimensions() -> getNumDimensions
+    int getSize() -> getSize
+    java.lang.String toString() -> toString
+mirur.core.Array1dSizeVisitor -> mirur.core.Array1dSizeVisitor:
+    int size -> a
+    int getSize() -> getSize
+    void visit(double[]) -> visit
+    void visit(long[]) -> visit
+    void visit(float[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+mirur.core.Array1dVisitor -> mirur.core.Array1dVisitor:
+    void visit(double[]) -> visit
+    void visit(long[]) -> visit
+    void visit(float[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+mirur.core.Array2D -> mirur.core.Array2D:
+    boolean isJagged() -> isJagged
+    int getMaxSize(int) -> getMaxSize
+mirur.core.Array2DJagged -> mirur.core.Array2DJagged:
+    java.lang.String name -> a
+    java.lang.Object orig -> b
+    int size0 -> c
+    int minSize1 -> d
+    int maxSize1 -> e
+    java.lang.String getSignature() -> getSignature
+    boolean isJagged() -> isJagged
+    java.lang.Object getData() -> getData
+    java.lang.String getName() -> getName
+    int getNumDimensions() -> getNumDimensions
+    int getMaxSize(int) -> getMaxSize
+    java.lang.String toString() -> toString
+mirur.core.Array2DRectangular -> mirur.core.Array2DRectangular:
+    java.lang.String name -> a
+    java.lang.Object orig -> b
+    int size0 -> c
+    int size1 -> d
+    java.lang.String getSignature() -> getSignature
+    boolean isJagged() -> isJagged
+    java.lang.Object getData() -> getData
+    java.lang.String getName() -> getName
+    int getNumDimensions() -> getNumDimensions
+    int getMaxSize(int) -> getMaxSize
+    java.lang.String toString() -> toString
+mirur.core.Array2dVisitor -> mirur.core.Array2dVisitor:
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+mirur.core.ArrayEachElementVisitor -> mirur.core.ArrayEachElementVisitor:
+    mirur.core.ArrayElementVisitor visitor -> a
+    void visit$4868c049(int,double) -> visit$4868c049
+    void visit(int,int,long) -> visit
+    void visit(int,int,float) -> visit
+    void visit(int,int,int) -> visit
+    void visit(int,int,short) -> visit
+    void visit(int,int,char) -> visit
+    void visit(int,int,byte) -> visit
+    void visit(int,int,boolean) -> visit
+mirur.core.ArrayElementVisitor -> mirur.core.ArrayElementVisitor:
+    void visit(double) -> visit
+    void visit(long) -> visit
+    void visit(float) -> visit
+    void visit(int) -> visit
+    void visit(short) -> visit
+    void visit(char) -> visit
+    void visit(byte) -> visit
+    void visit(boolean) -> visit
+mirur.core.ArrayVisitor -> mirur.core.ArrayVisitor:
+    void visit$25e0e7e() -> visit$25e0e7e
+    void visit$25e2504() -> visit$25e2504
+    void visit$25e1600() -> visit$25e1600
+    void visit$25e2143() -> visit$25e2143
+    void visit$25e46cd() -> visit$25e46cd
+    void visit$25e0abd() -> visit$25e0abd
+    void visit$25e06fc() -> visit$25e06fc
+    void visit$25e6114() -> visit$25e6114
+    void visit$496e9609() -> visit$496e9609
+    void visit$496eac8f() -> visit$496eac8f
+    void visit$496e9d8b() -> visit$496e9d8b
+    void visit$496ea8ce() -> visit$496ea8ce
+    void visit$496ece58() -> visit$496ece58
+    void visit$496e9248() -> visit$496e9248
+    void visit$496e8e87() -> visit$496e8e87
+    void visit$496ee89f() -> visit$496ee89f
+mirur.core.ElementToStringVisitor -> mirur.core.ElementToStringVisitor:
+    java.lang.String text -> a
+    void visit(double) -> visit
+    void visit(long) -> visit
+    void visit(float) -> visit
+    void visit(int) -> visit
+    void visit(short) -> visit
+    void visit(char) -> visit
+    void visit(byte) -> visit
+    void visit(boolean) -> visit
+    java.lang.String getText() -> getText
+mirur.core.IsJaggedVisitor -> mirur.core.IsJaggedVisitor:
+    int minSize1 -> a
+    int maxSize1 -> b
+    boolean isJagged() -> isJagged
+    void visit(int,double[]) -> visit
+    void visit(int,long[]) -> visit
+    void visit(int,float[]) -> visit
+    void visit(int,int[]) -> visit
+    void visit(int,short[]) -> visit
+    void visit(int,char[]) -> visit
+    void visit(int,byte[]) -> visit
+    void visit(int,boolean[]) -> visit
+    void visit$4868c049(int,double) -> visit$4868c049
+    void visit(int,int,long) -> visit
+    void visit(int,int,float) -> visit
+    void visit(int,int,int) -> visit
+    void visit(int,int,short) -> visit
+    void visit(int,int,char) -> visit
+    void visit(int,int,byte) -> visit
+    void visit(int,int,boolean) -> visit
+mirur.core.IsValidArrayVisitor -> mirur.core.IsValidArrayVisitor:
+    boolean valid -> a
+    boolean isValid() -> isValid
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+    void visit(double[]) -> visit
+    void visit(long[]) -> visit
+    void visit(float[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+mirur.core.JaggedArraySizeVisitor -> mirur.core.JaggedArraySizeVisitor:
+    int size0 -> a
+    int maxSize1 -> b
+    int getSize0() -> getSize0
+    int getMinSize1() -> getMinSize1
+    int getMaxSize1() -> getMaxSize1
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+    void visit(int,double[]) -> visit
+    void visit(int,long[]) -> visit
+    void visit(int,float[]) -> visit
+    void visit(int,int[]) -> visit
+    void visit(int,short[]) -> visit
+    void visit(int,char[]) -> visit
+    void visit(int,byte[]) -> visit
+    void visit(int,boolean[]) -> visit
+    void visit$4868c049(int,double) -> visit$4868c049
+    void visit(int,int,long) -> visit
+    void visit(int,int,float) -> visit
+    void visit(int,int,int) -> visit
+    void visit(int,int,short) -> visit
+    void visit(int,int,char) -> visit
+    void visit(int,int,byte) -> visit
+    void visit(int,int,boolean) -> visit
+mirur.core.MinMaxValueVisitor -> mirur.core.MinMaxValueVisitor:
+    double min -> a
+    double max -> b
+    double getMin() -> getMin
+    double getMax() -> getMax
+    void visit(double) -> visit
+    void visit(long) -> visit
+    void visit(float) -> visit
+    void visit(int) -> visit
+    void visit(short) -> visit
+    void visit(char) -> visit
+    void visit(byte) -> visit
+    void visit(boolean) -> visit
+mirur.core.NonJaggedArraySizeVisitor -> mirur.core.NonJaggedArraySizeVisitor:
+    int size0 -> a
+    int size1 -> b
+    int getSize0() -> getSize0
+    int getSize1() -> getSize1
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+mirur.core.PrimitiveArray -> mirur.core.PrimitiveArray:
+    java.lang.String getName() -> getName
+    java.lang.String getSignature() -> getSignature
+    java.lang.Object getData() -> getData
+    int getNumDimensions() -> getNumDimensions
+mirur.core.PrimitiveTest -> mirur.core.PrimitiveTest:
+    java.io.PrintStream out -> a
+    org.eclipse.core.runtime.IProgressMonitor monitor -> b
+    java.lang.String taskName -> c
+    boolean isPrimitiveArray1d(java.lang.Class) -> isPrimitiveArray1d
+    boolean isPrimitiveArray2d(java.lang.Class) -> isPrimitiveArray2d
+    java.lang.Class getPrimitiveComponent(java.lang.Class) -> getPrimitiveComponent
+    boolean isPrimitiveName(java.lang.String) -> isPrimitiveName
+    void incr() -> a
+    void visit(double[]) -> visit
+    void visit(float[]) -> visit
+    void visit(long[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+mirur.core.SimpleArrayVisitor -> mirur.core.SimpleArrayVisitor:
+    void visit(int,int,long) -> visit
+    void visit(int,int,float) -> visit
+    void visit(int,int,int) -> visit
+    void visit(int,int,short) -> visit
+    void visit(int,int,char) -> visit
+    void visit(int,int,byte) -> visit
+    void visit(int,int,boolean) -> visit
+mirur.core.SingleElementVisitor -> mirur.core.SingleElementVisitor:
+    int I -> a
+    int J -> b
+    void visit(double[][]) -> visit
+    void visit(int,double[]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int,float[]) -> visit
+    void visit(long[][]) -> visit
+    void visit(int,long[]) -> visit
+    void visit(int[][]) -> visit
+    void visit(int,int[]) -> visit
+    void visit(short[][]) -> visit
+    void visit(int,short[]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(int,byte[]) -> visit
+    void visit(char[][]) -> visit
+    void visit(int,char[]) -> visit
+    void visit(boolean[][]) -> visit
+    void visit(int,boolean[]) -> visit
+mirur.core.VisitArray -> mirur.core.VisitArray:
+    java.nio.FloatBuffer buf -> a
+    int minSize1 -> b
+    float fill -> c
+    mirur.core.ArrayElementVisitor visit(java.lang.Object,mirur.core.ArrayElementVisitor,int) -> visit
+    mirur.core.ArrayElementVisitor visit(java.lang.Object,mirur.core.ArrayElementVisitor,int,int) -> visit
+    mirur.core.Array1dVisitor visit1d(java.lang.Object,mirur.core.Array1dVisitor) -> visit1d
+    mirur.core.Array2dVisitor visit2d(java.lang.Object,mirur.core.Array2dVisitor) -> visit2d
+    mirur.core.ArrayElementVisitor visit(java.lang.Object,mirur.core.ArrayElementVisitor) -> visit
+    void add(float) -> a
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+mirur.plugin.Activator -> mirur.plugin.Activator:
+    mirur.plugin.Activator plugin -> a
+    mirur.plugin.SelectionCache variableCache -> b
+    mirur.plugin.SelectionModel selectionModel -> c
+    mirur.plugin.Preferences preferences -> d
+    mirur.plugin.RemoteAgentDeployer agentDeployer -> e
+    mirur.plugin.StatisticsCollector statsCollector -> f
+    void start(org.osgi.framework.BundleContext) -> start
+    void stop(org.osgi.framework.BundleContext) -> stop
+    mirur.plugin.Activator getDefault() -> getDefault
+    org.eclipse.jface.resource.ImageDescriptor getImageDescriptor(java.lang.String) -> getImageDescriptor
+    mirur.plugin.SelectionCache getVariableCache() -> getVariableCache
+    mirur.plugin.SelectionModel getSelectionModel() -> getSelectionModel
+    mirur.plugin.Preferences getPreferences() -> getPreferences
+    mirur.plugin.RemoteAgentDeployer getAgentDeployer() -> getAgentDeployer
+    mirur.plugin.StatisticsCollector getStatistics() -> getStatistics
+    org.eclipse.swt.graphics.Image getCachedImage(java.lang.String) -> getCachedImage
+mirur.plugin.ArraySelectListener -> mirur.plugin.ArraySelectListener:
+    void arraySelected(mirur.core.PrimitiveArray) -> arraySelected
+mirur.plugin.CopyJDIArrayJob -> mirur.plugin.CopyJDIArrayJob:
+    org.eclipse.jdt.debug.core.IJavaVariable var -> a
+    org.eclipse.debug.core.model.IIndexedValue value -> b
+    org.eclipse.jdt.debug.core.IJavaStackFrame frame -> c
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+    java.lang.Object toPrimitiveArray1d(org.eclipse.debug.core.model.IValue) -> a
+mirur.plugin.Icons -> mirur.plugin.Icons:
+    long time -> a
+    java.lang.String text -> b
+mirur.plugin.InvokeRemoteMethodJob -> mirur.plugin.InvokeRemoteMethodJob:
+    org.eclipse.jdt.debug.core.IJavaVariable var -> a
+    org.eclipse.jdt.debug.core.IJavaStackFrame frame -> b
+    org.eclipse.jdt.debug.core.IJavaDebugTarget target -> c
+    org.eclipse.jdt.debug.core.IJavaThread thread -> d
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+    void invokeAgent(org.eclipse.jdt.debug.core.IJavaClassType) -> invokeAgent
+mirur.plugin.InvokeRemoteMethodJob$AgentInvokeRunnable -> mirur.plugin.InvokeRemoteMethodJob$AgentInvokeRunnable:
+    org.eclipse.jdt.debug.core.IJavaClassType agentType -> a
+    mirur.plugin.InvokeRemoteMethodJob this$0 -> b
+    void run() -> run
+mirur.plugin.MirurPreferencesPage -> mirur.plugin.MirurPreferencesPage:
+    void createFieldEditors() -> createFieldEditors
+    void init(org.eclipse.ui.IWorkbench) -> init
+mirur.plugin.PluginLogSupport -> mirur.plugin.PluginLogSupport:
+    java.util.logging.Level LEVEL -> a
+    void initializeLogger() -> initializeLogger
+mirur.plugin.PluginLogSupport$1 -> mirur.plugin.PluginLogSupport$1:
+    com.metsci.glimpse.util.logging.format.Formatter formatter -> a
+    org.eclipse.core.runtime.ILog rcpLogger -> b
+    void publish(java.util.logging.LogRecord) -> publish
+    void flush() -> flush
+    void close() -> close
+mirur.plugin.Preferences -> mirur.plugin.Preferences:
+    java.util.logging.Logger LOGGER -> a
+    org.eclipse.core.runtime.preferences.IEclipsePreferences prefNode -> b
+    java.util.List changeListeners -> c
+    void addChangeListener(java.lang.Runnable) -> addChangeListener
+    boolean doSyncWithVariablesView(java.lang.String) -> doSyncWithVariablesView
+    void setSyncWithVariablesView(java.lang.String,boolean) -> setSyncWithVariablesView
+    boolean doSubmitStatistics() -> doSubmitStatistics
+    void flush() -> flush
+    java.util.List access$0(mirur.plugin.Preferences) -> a
+mirur.plugin.Preferences$1 -> mirur.plugin.Preferences$1:
+    mirur.plugin.Preferences this$0 -> a
+    void preferenceChange(org.eclipse.core.runtime.preferences.IEclipsePreferences$PreferenceChangeEvent) -> preferenceChange
+mirur.plugin.PreferencesInitializer -> mirur.plugin.PreferencesInitializer:
+    void initializeDefaultPreferences() -> initializeDefaultPreferences
+mirur.plugin.ReceiveArrayJob -> mirur.plugin.ReceiveArrayJob:
+    java.util.logging.Logger LOGGER -> e
+    void invokeAgent(org.eclipse.jdt.debug.core.IJavaClassType) -> invokeAgent
+mirur.plugin.ReceiveArrayJob$IncomingConnectionTask -> mirur.plugin.ReceiveArrayJob$IncomingConnectionTask:
+    java.util.concurrent.CyclicBarrier barrier -> a
+    java.net.ServerSocket serverSocket -> b
+    java.lang.Object call() -> call
+mirur.plugin.RemoteAgentDeployer -> mirur.plugin.RemoteAgentDeployer:
+    java.util.logging.Logger LOGGER -> a
+    java.io.File agentClassesDir -> b
+    java.util.Map cache -> c
+    org.eclipse.jdt.debug.core.IJavaClassType install(org.eclipse.jdt.debug.core.IJavaDebugTarget,org.eclipse.jdt.debug.core.IJavaThread) -> install
+    void clear(org.eclipse.jdt.debug.core.IJavaDebugTarget) -> clear
+    org.eclipse.jdt.debug.core.IJavaClassType loadRemoteAgent(org.eclipse.jdt.debug.core.IJavaDebugTarget,org.eclipse.jdt.debug.core.IJavaThread) -> a
+    void writeClass(java.lang.String,java.io.File) -> a
+    java.io.File access$0(mirur.plugin.RemoteAgentDeployer) -> a
+    org.eclipse.jdt.debug.core.IJavaClassType access$1(mirur.plugin.RemoteAgentDeployer,org.eclipse.jdt.debug.core.IJavaDebugTarget,org.eclipse.jdt.debug.core.IJavaThread,java.io.File,java.lang.String) -> a
+mirur.plugin.RemoteAgentDeployer$LoadAgentClasses -> mirur.plugin.RemoteAgentDeployer$LoadAgentClasses:
+    org.eclipse.jdt.debug.core.IJavaDebugTarget target -> a
+    org.eclipse.jdt.debug.core.IJavaThread thread -> b
+    java.lang.String agentClassName -> c
+    mirur.plugin.RemoteAgentDeployer this$0 -> d
+    java.lang.Object call() -> call
+mirur.plugin.SelectListenerToggle -> mirur.plugin.SelectListenerToggle:
+    java.lang.String partID -> a
+    org.eclipse.ui.part.ViewPart part -> b
+    mirur.plugin.ArraySelectListener listener -> c
+    void propertyChange(org.eclipse.jface.util.PropertyChangeEvent) -> propertyChange
+    void partActivated(org.eclipse.ui.IWorkbenchPartReference) -> partActivated
+    void partDeactivated(org.eclipse.ui.IWorkbenchPartReference) -> partDeactivated
+    void partBroughtToTop(org.eclipse.ui.IWorkbenchPartReference) -> partBroughtToTop
+    void partClosed(org.eclipse.ui.IWorkbenchPartReference) -> partClosed
+    void partOpened(org.eclipse.ui.IWorkbenchPartReference) -> partOpened
+    void partHidden(org.eclipse.ui.IWorkbenchPartReference) -> partHidden
+    void partVisible(org.eclipse.ui.IWorkbenchPartReference) -> partVisible
+    void partInputChanged(org.eclipse.ui.IWorkbenchPartReference) -> partInputChanged
+    void add(boolean) -> a
+    void remove() -> a
+    void run() -> run
+    java.lang.String access$0(mirur.plugin.SelectListenerToggle) -> a
+mirur.plugin.SelectListenerToggle$1 -> mirur.plugin.SelectListenerToggle$1:
+    mirur.plugin.SelectListenerToggle this$0 -> a
+    void run() -> run
+mirur.plugin.SelectionCache -> mirur.plugin.SelectionCache:
+    java.util.Map cache -> a
+    void clear() -> clear
+    boolean contains(org.eclipse.jdt.debug.core.IJavaVariable,org.eclipse.jdt.debug.core.IJavaStackFrame) -> contains
+    mirur.core.PrimitiveArray getArray(org.eclipse.jdt.debug.core.IJavaVariable,org.eclipse.jdt.debug.core.IJavaStackFrame) -> getArray
+    void put(org.eclipse.jdt.debug.core.IJavaVariable,org.eclipse.jdt.debug.core.IJavaStackFrame,mirur.core.PrimitiveArray) -> put
+mirur.plugin.SelectionCache$Key -> mirur.plugin.SelectionCache$Key:
+    org.eclipse.jdt.debug.core.IJavaVariable var -> a
+    org.eclipse.jdt.debug.core.IJavaStackFrame frame -> b
+    int hashCode() -> hashCode
+    boolean equals(java.lang.Object) -> equals
+mirur.plugin.SelectionModel -> mirur.plugin.SelectionModel:
+    mirur.plugin.VariableSelectListener varListener -> a
+    boolean isVarListenerAttached -> b
+    java.util.List arrayListeners -> c
+    mirur.core.PrimitiveArray lastSelected -> d
+    void addArrayListener(org.eclipse.ui.IViewPart,mirur.plugin.ArraySelectListener) -> addArrayListener
+    void removeArrayListener(org.eclipse.ui.IViewPart,mirur.plugin.ArraySelectListener) -> removeArrayListener
+    void notifySelectedAsync(mirur.plugin.ArraySelectListener,mirur.core.PrimitiveArray) -> a
+    void select(mirur.core.PrimitiveArray) -> select
+    mirur.core.PrimitiveArray getActiveSelected() -> getActiveSelected
+mirur.plugin.SelectionModel$1 -> mirur.plugin.SelectionModel$1:
+    mirur.plugin.ArraySelectListener val$listener -> a
+    mirur.core.PrimitiveArray val$array -> b
+    void run() -> run
+mirur.plugin.StatisticsCollector -> mirur.plugin.StatisticsCollector:
+    java.util.logging.Logger LOGGER -> a
+    java.util.List log -> b
+    void log(java.lang.String) -> a
+    void send() -> b
+    void started() -> started
+    void transformedViaAgent(java.lang.String) -> transformedViaAgent
+    void receivedFromTarget(mirur.core.PrimitiveArray) -> receivedFromTarget
+    void selected(mirur.core.PrimitiveArray) -> selected
+    void shuttingDown() -> shuttingDown
+    java.util.logging.Logger access$0() -> a
+mirur.plugin.StatisticsCollector$StatsEntry -> mirur.plugin.StatisticsCollector$StatsEntry:
+mirur.plugin.StatisticsCollector$SubmitStatsJob -> mirur.plugin.StatisticsCollector$SubmitStatsJob:
+    java.util.List log -> a
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+    java.lang.String buildBody() -> a
+mirur.plugin.SubmitArrayToUIJob -> mirur.plugin.SubmitArrayToUIJob:
+    org.eclipse.jdt.debug.core.IJavaVariable var -> a
+    org.eclipse.jdt.debug.core.IJavaStackFrame frame -> b
+    java.lang.String name -> c
+    java.lang.Object arrayObject -> d
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+mirur.plugin.VariableSelectListener -> mirur.plugin.VariableSelectListener:
+    void install(org.eclipse.ui.IWorkbenchWindow) -> install
+    void uninstall(org.eclipse.ui.IWorkbenchWindow) -> uninstall
+    void update() -> a
+    java.lang.Object extract(org.eclipse.jface.viewers.ISelection,java.lang.Class) -> a
+    void selectionChanged(org.eclipse.ui.IWorkbenchPart,org.eclipse.jface.viewers.ISelection) -> selectionChanged
+    void debugContextChanged(org.eclipse.debug.ui.contexts.DebugContextEvent) -> debugContextChanged
+    void handleDebugEvents(org.eclipse.debug.core.DebugEvent[]) -> handleDebugEvents
+    void forceUpdateNotify() -> forceUpdateNotify
+mirur.plugin.VariableTransferException -> mirur.plugin.VariableTransferException:
+mirur.plugin.painterview.BugFixNewtCanvasSWT -> mirur.plugin.painterview.BugFixNewtCanvasSWT:
+    org.eclipse.swt.graphics.Rectangle getClientArea() -> getClientArea
+mirur.plugin.painterview.BugFixNewtSwtGlimpseCanvas -> mirur.plugin.painterview.BugFixNewtSwtGlimpseCanvas:
+    void init(org.eclipse.swt.widgets.Composite,javax.media.opengl.GLProfile,javax.media.opengl.GLContext,int) -> init
+mirur.plugin.painterview.GlimpseArrayView -> mirur.plugin.painterview.GlimpseArrayView:
+    mirur.plugin.painterview.ResetAxesAction resetAction -> a
+    mirur.plugin.painterview.ViewMenuAction viewMenuAction -> b
+    mirur.plugin.SelectListenerToggle selectListenerToggle -> c
+    com.metsci.glimpse.support.settings.LookAndFeel laf -> d
+    com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas canvas -> e
+    com.jogamp.opengl.util.AnimatorBase animator -> f
+    mirur.plugins.InvalidPlaceholderView invalidPlaceholder -> g
+    mirur.plugins.MirurView currentPlugin -> h
+    mirur.core.PrimitiveArray currentData -> i
+    mirur.plugins.DataPainter currentPainter -> j
+    void createPartControl(org.eclipse.swt.widgets.Composite) -> createPartControl
+    void setFocus() -> setFocus
+    void dispose() -> dispose
+    void arraySelected(mirur.core.PrimitiveArray) -> arraySelected
+    void refreshDataAndPainter() -> a
+    void access$0(mirur.plugin.painterview.GlimpseArrayView,mirur.plugins.MirurView) -> a
+    mirur.core.PrimitiveArray access$1(mirur.plugin.painterview.GlimpseArrayView) -> a
+    void access$2(mirur.plugin.painterview.GlimpseArrayView) -> b
+    mirur.plugins.DataPainter access$3(mirur.plugin.painterview.GlimpseArrayView) -> c
+mirur.plugin.painterview.GlimpseArrayView$1 -> mirur.plugin.painterview.GlimpseArrayView$1:
+    mirur.plugin.painterview.GlimpseArrayView this$0 -> a
+    void setPainter(mirur.plugins.MirurView) -> setPainter
+    mirur.core.PrimitiveArray getActiveData() -> getActiveData
+mirur.plugin.painterview.GlimpseArrayView$2 -> mirur.plugin.painterview.GlimpseArrayView$2:
+    mirur.plugin.painterview.GlimpseArrayView this$0 -> a
+    void run() -> run
+mirur.plugin.painterview.GlimpseArrayView$3 -> mirur.plugin.painterview.GlimpseArrayView$3:
+    mirur.plugin.painterview.GlimpseArrayView this$0 -> a
+    org.eclipse.swt.widgets.Menu getMenu(org.eclipse.swt.widgets.Menu) -> getMenu
+mirur.plugin.painterview.MirurLAF -> mirur.plugin.painterview.MirurLAF:
+mirur.plugin.painterview.RequestNewViewAction -> mirur.plugin.painterview.RequestNewViewAction:
+    java.util.logging.Logger LOGGER -> a
+    java.lang.String TEMPLATE -> b
+    void runWithEvent(org.eclipse.swt.widgets.Event) -> runWithEvent
+    java.util.logging.Logger access$0() -> a
+mirur.plugin.painterview.RequestNewViewAction$ScrollableDialog -> mirur.plugin.painterview.RequestNewViewAction$ScrollableDialog:
+    org.eclipse.swt.widgets.Text textArea -> a
+    java.lang.String scrollableText -> b
+    org.eclipse.swt.widgets.Control createDialogArea(org.eclipse.swt.widgets.Composite) -> createDialogArea
+    void createButtonsForButtonBar(org.eclipse.swt.widgets.Composite) -> createButtonsForButtonBar
+    void buttonPressed(int) -> buttonPressed
+    boolean isResizable() -> isResizable
+mirur.plugin.painterview.RequestNewViewAction$SubmitNewViewIdeaJob -> mirur.plugin.painterview.RequestNewViewAction$SubmitNewViewIdeaJob:
+    java.lang.String text -> a
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+mirur.plugin.painterview.ResetAxesAction -> mirur.plugin.painterview.ResetAxesAction:
+mirur.plugin.painterview.SelectViewAction -> mirur.plugin.painterview.SelectViewAction:
+    void dispose() -> dispose
+    void runWithEvent(org.eclipse.swt.widgets.Event) -> runWithEvent
+    org.eclipse.swt.widgets.Menu getMenu(org.eclipse.swt.widgets.Control) -> getMenu
+    org.eclipse.swt.widgets.Menu getMenu(org.eclipse.swt.widgets.Menu) -> getMenu
+    void setPainter(mirur.plugins.MirurView) -> setPainter
+    mirur.core.PrimitiveArray getActiveData() -> getActiveData
+    void access$0(mirur.plugin.painterview.SelectViewAction,mirur.plugins.MirurView) -> a
+mirur.plugin.painterview.SelectViewAction$1 -> mirur.plugin.painterview.SelectViewAction$1:
+    mirur.plugin.painterview.SelectViewAction this$0 -> a
+    mirur.plugins.MirurView val$plugin -> b
+    void run() -> run
+mirur.plugin.painterview.ViewMenuAction -> mirur.plugin.painterview.ViewMenuAction:
+    void runWithEvent(org.eclipse.swt.widgets.Event) -> runWithEvent
+    void dispose() -> dispose
+    org.eclipse.swt.widgets.Menu getMenu(org.eclipse.swt.widgets.Control) -> getMenu
+mirur.plugin.statsview.Array1dToCsvVisitor -> mirur.plugin.statsview.Array1dToCsvVisitor:
+    void visit(double[]) -> visit
+    void visit(float[]) -> visit
+    void visit(long[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+mirur.plugin.statsview.Array2dToCsvVisitor -> mirur.plugin.statsview.Array2dToCsvVisitor:
+    java.io.PrintStream out -> a
+    org.eclipse.core.runtime.IProgressMonitor monitor -> b
+    java.lang.String taskName -> c
+    void incr() -> a
+    void visit(double[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+    void visit(int,double[]) -> visit
+    void visit(int,float[]) -> visit
+    void visit(int,long[]) -> visit
+    void visit(int,int[]) -> visit
+    void visit(int,short[]) -> visit
+    void visit(int,char[]) -> visit
+    void visit(int,byte[]) -> visit
+    void visit(int,boolean[]) -> visit
+    void visit$4868c049(int,double) -> visit$4868c049
+    void visit(int,int,long) -> visit
+    void visit(int,int,float) -> visit
+    void visit(int,int,int) -> visit
+    void visit(int,int,short) -> visit
+    void visit(int,int,char) -> visit
+    void visit(int,int,byte) -> visit
+    void visit(int,int,boolean) -> visit
+mirur.plugin.statsview.ArrayStatisticVisitor -> mirur.plugin.statsview.ArrayStatisticVisitor:
+    java.lang.String getName() -> getName
+    java.lang.String getStatistic() -> getStatistic
+mirur.plugin.statsview.ArrayStatisticVisitor$AbstractStatisticVisitor -> mirur.plugin.statsview.ArrayStatisticVisitor$AbstractStatisticVisitor:
+    java.lang.String name -> b
+    boolean isValid -> a
+    java.lang.String getName() -> getName
+    java.lang.String getStatistic() -> getStatistic
+    void visit(double) -> visit
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$CountFalse -> mirur.plugin.statsview.ArrayStatisticVisitor$CountFalse:
+    int count -> a
+    void visit(boolean) -> visit
+    void visit(double) -> visit
+    java.lang.String getName() -> getName
+    java.lang.String getStatistic() -> getStatistic
+mirur.plugin.statsview.ArrayStatisticVisitor$CountNaN -> mirur.plugin.statsview.ArrayStatisticVisitor$CountNaN:
+    int count -> b
+    void visit(double) -> visit
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$CountNegInf -> mirur.plugin.statsview.ArrayStatisticVisitor$CountNegInf:
+    int count -> b
+    void visit(double) -> visit
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$CountNegative -> mirur.plugin.statsview.ArrayStatisticVisitor$CountNegative:
+    int count -> b
+    java.lang.String getValue() -> getValue
+    void visit0(double) -> visit0
+mirur.plugin.statsview.ArrayStatisticVisitor$CountPosInf -> mirur.plugin.statsview.ArrayStatisticVisitor$CountPosInf:
+    int count -> b
+    void visit(double) -> visit
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$CountPositive -> mirur.plugin.statsview.ArrayStatisticVisitor$CountPositive:
+    int count -> b
+    java.lang.String getValue() -> getValue
+    void visit0(double) -> visit0
+mirur.plugin.statsview.ArrayStatisticVisitor$CountTrue -> mirur.plugin.statsview.ArrayStatisticVisitor$CountTrue:
+    int count -> a
+    void visit(boolean) -> visit
+    void visit(double) -> visit
+    java.lang.String getName() -> getName
+    java.lang.String getStatistic() -> getStatistic
+mirur.plugin.statsview.ArrayStatisticVisitor$CountZero -> mirur.plugin.statsview.ArrayStatisticVisitor$CountZero:
+    int count -> b
+    java.lang.String getValue() -> getValue
+    void visit0(double) -> visit0
+mirur.plugin.statsview.ArrayStatisticVisitor$Max -> mirur.plugin.statsview.ArrayStatisticVisitor$Max:
+    double max -> b
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$Mean -> mirur.plugin.statsview.ArrayStatisticVisitor$Mean:
+    org.apache.commons.math3.stat.descriptive.moment.Mean mean -> b
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$Min -> mirur.plugin.statsview.ArrayStatisticVisitor$Min:
+    double min -> b
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$Sum -> mirur.plugin.statsview.ArrayStatisticVisitor$Sum:
+    double sum -> b
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatisticVisitor$SumLong -> mirur.plugin.statsview.ArrayStatisticVisitor$SumLong:
+    long sum -> a
+    java.lang.String getName() -> getName
+    java.lang.String getStatistic() -> getStatistic
+    void visit(long) -> visit
+    void visit(boolean) -> visit
+    void visit(double) -> visit
+    void visit(float) -> visit
+    void visit(int) -> visit
+    void visit(short) -> visit
+    void visit(char) -> visit
+    void visit(byte) -> visit
+mirur.plugin.statsview.ArrayStatisticVisitor$Variance -> mirur.plugin.statsview.ArrayStatisticVisitor$Variance:
+    org.apache.commons.math3.stat.descriptive.moment.Variance var -> b
+    void visit0(double) -> visit0
+    java.lang.String getValue() -> getValue
+mirur.plugin.statsview.ArrayStatsView -> mirur.plugin.statsview.ArrayStatsView:
+    mirur.plugin.SelectListenerToggle selectListenerToggle -> a
+    mirur.plugin.statsview.SaveArrayToFileAction saveArrayAction -> b
+    org.eclipse.ui.part.PageBook book -> c
+    mirur.plugin.statsview.StatisticsPage statsPage -> d
+    org.eclipse.ui.part.Page activePage -> e
+    void createPartControl(org.eclipse.swt.widgets.Composite) -> createPartControl
+    void setFocus() -> setFocus
+    void dispose() -> dispose
+    void arraySelected(mirur.core.PrimitiveArray) -> arraySelected
+mirur.plugin.statsview.SaveArrayToFileAction -> mirur.plugin.statsview.SaveArrayToFileAction:
+    void run() -> run
+mirur.plugin.statsview.SaveArrayToFileJob -> mirur.plugin.statsview.SaveArrayToFileJob:
+    mirur.core.PrimitiveArray array -> a
+    java.io.File dest -> b
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+mirur.plugin.statsview.StatisticComputeJob -> mirur.plugin.statsview.StatisticComputeJob:
+    mirur.core.PrimitiveArray array -> a
+    mirur.plugin.statsview.ArrayStatisticVisitor statistic -> b
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+    void finished(java.lang.String) -> finished
+mirur.plugin.statsview.StatisticsPage -> mirur.plugin.statsview.StatisticsPage:
+    org.eclipse.jface.viewers.TableViewer table -> a
+    void createControl(org.eclipse.swt.widgets.Composite) -> createControl
+    org.eclipse.swt.widgets.Control getControl() -> getControl
+    void setFocus() -> setFocus
+    void setInput(mirur.core.PrimitiveArray) -> setInput
+    void computeStats(mirur.core.PrimitiveArray,java.util.List) -> a
+    void updateTable(java.lang.String[][]) -> a
+    void access$0(mirur.plugin.statsview.StatisticsPage,java.lang.String[][]) -> a
+    org.eclipse.jface.viewers.TableViewer access$1(mirur.plugin.statsview.StatisticsPage) -> a
+mirur.plugin.statsview.StatisticsPage$1 -> mirur.plugin.statsview.StatisticsPage$1:
+    java.lang.String getText(java.lang.Object) -> getText
+mirur.plugin.statsview.StatisticsPage$2 -> mirur.plugin.statsview.StatisticsPage$2:
+    java.lang.String getText(java.lang.Object) -> getText
+mirur.plugin.statsview.StatisticsPage$3 -> mirur.plugin.statsview.StatisticsPage$3:
+    mirur.plugin.statsview.StatisticsPage this$0 -> a
+    java.lang.String[][] val$data -> b
+    void update(int,java.lang.String) -> update
+mirur.plugin.statsview.StatisticsPage$4 -> mirur.plugin.statsview.StatisticsPage$4:
+    mirur.plugin.statsview.StatisticsPage this$0 -> a
+    java.lang.String[][] val$data -> b
+    void run() -> run
+mirur.plugin.statsview.StatsComputeJob -> mirur.plugin.statsview.StatsComputeJob:
+    mirur.core.PrimitiveArray array -> a
+    java.util.List statistics -> b
+    org.eclipse.core.runtime.IStatus run(org.eclipse.core.runtime.IProgressMonitor) -> run
+    void update(int,java.lang.String) -> update
+mirur.plugin.statsview.StatsComputeJob$1 -> mirur.plugin.statsview.StatsComputeJob$1:
+    mirur.plugin.statsview.StatsComputeJob this$0 -> a
+    int val$index -> b
+    org.eclipse.core.runtime.IProgressMonitor val$monitor -> c
+    void finished(java.lang.String) -> finished
+mirur.plugins.Array1DPlot -> mirur.plugins.Array1DPlot:
+    mirur.plugins.ShaderWrapperPainter shaderWrapper -> a
+    void initializePainters() -> initializePainters
+    com.metsci.glimpse.painter.info.SimpleTextPainter createTitlePainter() -> createTitlePainter
+    void setShaders(mirur.plugins.InitializablePipeline) -> setShaders
+    void setTitlePainterData(mirur.core.Array1D) -> setTitlePainterData
+    void updateAxesBounds(mirur.core.Array1D) -> updateAxesBounds
+mirur.plugins.Array1DTitlePainter -> mirur.plugins.Array1DTitlePainter:
+    com.metsci.glimpse.axis.Axis2D srcAxis -> a
+    mirur.core.Array1D array -> b
+    int lastIndex -> c
+    void setArray(mirur.core.Array1D) -> setArray
+    void paintTo(com.metsci.glimpse.context.GlimpseContext) -> paintTo
+mirur.plugins.Array2DTitlePainter -> mirur.plugins.Array2DTitlePainter:
+    com.metsci.glimpse.axis.Axis2D srcAxis -> a
+    mirur.core.Array2D array -> b
+    int lastI -> c
+    int lastJ -> d
+    void setArray(mirur.core.Array2D) -> setArray
+    void paintTo(com.metsci.glimpse.context.GlimpseContext) -> paintTo
+mirur.plugins.DataPainter -> mirur.plugins.DataPainter:
+    com.metsci.glimpse.layout.GlimpseLayout layout -> a
+    java.util.List resets -> b
+    java.util.List actions -> c
+    com.metsci.glimpse.layout.GlimpseLayout getLayout() -> getLayout
+    void populateMenu(org.eclipse.swt.widgets.Menu) -> populateMenu
+    void resetAxes() -> resetAxes
+    void uninstall(com.metsci.glimpse.canvas.GlimpseCanvas) -> uninstall
+    void addAction(org.eclipse.jface.action.Action) -> addAction
+    void addAxis(com.metsci.glimpse.axis.Axis1D) -> addAxis
+    void addAxis(com.metsci.glimpse.axis.Axis2D) -> addAxis
+mirur.plugins.DataPainterImpl -> mirur.plugins.DataPainterImpl:
+    void addAction(org.eclipse.jface.action.Action) -> addAction
+    void addAxis(com.metsci.glimpse.axis.Axis1D) -> addAxis
+    void addAxis(com.metsci.glimpse.axis.Axis2D) -> addAxis
+    com.metsci.glimpse.layout.GlimpseLayout getLayout() -> getLayout
+    void populateMenu(org.eclipse.swt.widgets.Menu) -> populateMenu
+    void resetAxes() -> resetAxes
+    void uninstall(com.metsci.glimpse.canvas.GlimpseCanvas) -> uninstall
+mirur.plugins.DataPainterImpl$ResetAction -> mirur.plugins.DataPainterImpl$ResetAction:
+    void reset() -> reset
+    void validate() -> validate
+mirur.plugins.DataPainterImpl$ResetAction1d -> mirur.plugins.DataPainterImpl$ResetAction1d:
+    com.metsci.glimpse.axis.Axis1D axis -> a
+    double min -> b
+    double max -> c
+    void reset() -> reset
+    void validate() -> validate
+mirur.plugins.DataPainterImpl$ResetAction2d -> mirur.plugins.DataPainterImpl$ResetAction2d:
+    com.metsci.glimpse.axis.Axis2D axis -> a
+    mirur.plugins.DataPainterImpl$ResetAction1d x -> b
+    mirur.plugins.DataPainterImpl$ResetAction1d y -> c
+    void reset() -> reset
+    void validate() -> validate
+mirur.plugins.DataPainterImpl$ResetTagsAction -> mirur.plugins.DataPainterImpl$ResetTagsAction:
+    java.util.Map tags -> b
+    void reset() -> reset
+mirur.plugins.FisheyeAction -> mirur.plugins.FisheyeAction:
+mirur.plugins.FisheyePipeline -> mirur.plugins.FisheyePipeline:
+    mirur.plugins.FisheyeShader shader -> b
+    void initialize(com.metsci.glimpse.axis.Axis2D) -> initialize
+    void initialize(com.metsci.glimpse.axis.Axis1D) -> initialize
+mirur.plugins.FisheyeShader -> mirur.plugins.FisheyeShader:
+    com.metsci.glimpse.gl.shader.ShaderArg radius -> a
+    com.metsci.glimpse.gl.shader.ShaderArg center -> b
+    com.metsci.glimpse.gl.shader.ShaderArg factor -> c
+    void setRadius(float) -> setRadius
+    void setMousePosition(float) -> setMousePosition
+mirur.plugins.InitializablePipeline -> mirur.plugins.InitializablePipeline:
+    mirur.plugins.InitializablePipeline DEFAULT -> a
+    void initialize(com.metsci.glimpse.context.GlimpseContext) -> initialize
+    void initialize(com.metsci.glimpse.axis.Axis2D) -> initialize
+    void initialize(com.metsci.glimpse.axis.Axis1D) -> initialize
+mirur.plugins.InitializablePipeline$1 -> mirur.plugins.InitializablePipeline$1:
+    void initialize(com.metsci.glimpse.axis.Axis1D) -> initialize
+    void initialize(com.metsci.glimpse.axis.Axis2D) -> initialize
+mirur.plugins.InvalidPlaceholderLayout -> mirur.plugins.InvalidPlaceholderLayout:
+mirur.plugins.InvalidPlaceholderView -> mirur.plugins.InvalidPlaceholderView:
+    boolean supportsData(mirur.core.PrimitiveArray) -> supportsData
+    java.lang.String getName() -> getName
+    org.eclipse.jface.resource.ImageDescriptor getIcon() -> getIcon
+    mirur.plugins.DataPainter install(com.metsci.glimpse.canvas.GlimpseCanvas,mirur.core.PrimitiveArray) -> install
+mirur.plugins.MirurView -> mirur.plugins.MirurView:
+    boolean supportsData(mirur.core.PrimitiveArray) -> supportsData
+    java.lang.String getName() -> getName
+    org.eclipse.jface.resource.ImageDescriptor getIcon() -> getIcon
+    mirur.plugins.DataPainter install(com.metsci.glimpse.canvas.GlimpseCanvas,mirur.core.PrimitiveArray) -> install
+mirur.plugins.MirurViews -> mirur.plugins.MirurViews:
+    mirur.plugins.MirurViews manager -> a
+    java.util.Collection plugins -> b
+    java.util.Collection plugins() -> plugins
+mirur.plugins.ResetAxesTask -> mirur.plugins.ResetAxesTask:
+    com.metsci.glimpse.axis.Axis2D axis -> a
+    double minX -> b
+    double maxX -> c
+    double minY -> d
+    double maxY -> e
+    void run() -> run
+mirur.plugins.ShaderWrapperPainter -> mirur.plugins.ShaderWrapperPainter:
+    mirur.plugins.InitializablePipeline pipeline -> a
+    void setPipeline(mirur.plugins.InitializablePipeline) -> setPipeline
+    void prePaint(com.metsci.glimpse.painter.base.GlimpsePainter,com.metsci.glimpse.context.GlimpseContext) -> prePaint
+    void postPaint(com.metsci.glimpse.painter.base.GlimpsePainter,com.metsci.glimpse.context.GlimpseContext) -> postPaint
+mirur.plugins.SimpleGLBuffer -> mirur.plugins.SimpleGLBuffer:
+    java.util.logging.Logger LOGGER -> a
+    boolean bufferInitialized -> b
+    boolean dirty -> c
+    int[] bufferHandle -> d
+    java.nio.FloatBuffer buffer -> e
+    int numPoints -> f
+    java.nio.FloatBuffer getBuffer(int) -> getBuffer
+    void setDirty() -> setDirty
+    void prepareDraw(javax.media.opengl.GL2) -> prepareDraw
+    void draw(javax.media.opengl.GL2,int) -> draw
+mirur.plugins.SimplePlugin1D -> mirur.plugins.SimplePlugin1D:
+    java.lang.String name -> a
+    org.eclipse.jface.resource.ImageDescriptor icon -> b
+    boolean supportsData(mirur.core.PrimitiveArray) -> supportsData
+    java.lang.String getName() -> getName
+    org.eclipse.jface.resource.ImageDescriptor getIcon() -> getIcon
+    mirur.plugins.DataPainter install(com.metsci.glimpse.canvas.GlimpseCanvas,mirur.core.PrimitiveArray) -> install
+    void finalInstall(com.metsci.glimpse.canvas.GlimpseCanvas,mirur.plugins.DataPainter) -> finalInstall
+    com.metsci.glimpse.painter.base.GlimpseDataPainter2D createPainter(mirur.core.Array1D) -> createPainter
+mirur.plugins.SimplePlugin1D$1 -> mirur.plugins.SimplePlugin1D$1:
+    mirur.plugins.Array1DPlot val$plot -> a
+    void run() -> run
+mirur.plugins.SimplePlugin2D -> mirur.plugins.SimplePlugin2D:
+    java.lang.String name -> a
+    org.eclipse.jface.resource.ImageDescriptor icon -> b
+    boolean supportsData(mirur.core.PrimitiveArray) -> supportsData
+    java.lang.String getName() -> getName
+    org.eclipse.jface.resource.ImageDescriptor getIcon() -> getIcon
+mirur.plugins.bar1d.BarView -> mirur.plugins.bar1d.BarView:
+    com.metsci.glimpse.painter.base.GlimpseDataPainter2D createPainter(mirur.core.Array1D) -> createPainter
+mirur.plugins.bar1d.FillWithBarsVisitor -> mirur.plugins.bar1d.FillWithBarsVisitor:
+    java.nio.FloatBuffer buffer -> a
+    int requiredSpace(int) -> requiredSpace
+    void visit(int,double) -> visit
+    void visit(int,float) -> visit
+mirur.plugins.bar1d.VerticalBarPainter -> mirur.plugins.bar1d.VerticalBarPainter:
+    mirur.plugins.SimpleGLBuffer dataBuffer -> a
+    float[] color -> b
+    void setLookAndFeel(com.metsci.glimpse.support.settings.LookAndFeel) -> setLookAndFeel
+    void setData(mirur.core.Array1D) -> setData
+    void paintTo(javax.media.opengl.GL2,com.metsci.glimpse.context.GlimpseBounds,com.metsci.glimpse.axis.Axis2D) -> paintTo
+mirur.plugins.heatmap2d.GradientChooserAction -> mirur.plugins.heatmap2d.GradientChooserAction:
+    void addGradientOption(org.eclipse.swt.widgets.Menu,java.lang.String,com.metsci.glimpse.support.colormap.ColorGradient,org.eclipse.jface.resource.ImageDescriptor) -> a
+    void select(com.metsci.glimpse.support.colormap.ColorGradient) -> select
+    void dispose() -> dispose
+    org.eclipse.swt.widgets.Menu getMenu(org.eclipse.swt.widgets.Control) -> getMenu
+    org.eclipse.swt.widgets.Menu getMenu(org.eclipse.swt.widgets.Menu) -> getMenu
+mirur.plugins.heatmap2d.GradientChooserAction$1 -> mirur.plugins.heatmap2d.GradientChooserAction$1:
+    mirur.plugins.heatmap2d.GradientChooserAction this$0 -> a
+    com.metsci.glimpse.support.colormap.ColorGradient val$gradient -> b
+    void run() -> run
+mirur.plugins.heatmap2d.HeatmapView -> mirur.plugins.heatmap2d.HeatmapView:
+    mirur.plugins.DataPainter install(com.metsci.glimpse.canvas.GlimpseCanvas,mirur.core.PrimitiveArray) -> install
+mirur.plugins.heatmap2d.HeatmapView$1 -> mirur.plugins.heatmap2d.HeatmapView$1:
+    mirur.core.Array2D val$array -> a
+    com.metsci.glimpse.painter.info.SimpleTextPainter createTitlePainter() -> createTitlePainter
+    void initializePainters() -> initializePainters
+mirur.plugins.heatmap2d.HeatmapView$2 -> mirur.plugins.heatmap2d.HeatmapView$2:
+    com.metsci.glimpse.axis.tagged.Tag val$t1 -> a
+    com.metsci.glimpse.axis.tagged.Tag val$t2 -> b
+    void applyConstraint(com.metsci.glimpse.axis.tagged.TaggedAxis1D) -> applyConstraint
+mirur.plugins.heatmap2d.HeatmapView$3 -> mirur.plugins.heatmap2d.HeatmapView$3:
+    mirur.core.Array2D val$array -> a
+    void mutate(java.nio.FloatBuffer,int,int) -> mutate
+mirur.plugins.heatmap2d.HeatmapView$4 -> mirur.plugins.heatmap2d.HeatmapView$4:
+    com.metsci.glimpse.gl.texture.ColorTexture1D val$colors -> a
+    void select(com.metsci.glimpse.support.colormap.ColorGradient) -> select
+mirur.plugins.heatmap2d.JaggedToFloatBufferVisitor -> mirur.plugins.heatmap2d.JaggedToFloatBufferVisitor:
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+mirur.plugins.heatmap2d.ToFloatBufferVisitor -> mirur.plugins.heatmap2d.ToFloatBufferVisitor:
+    java.nio.FloatBuffer buf -> a
+    void add(float) -> a
+    void visit(double[][]) -> visit
+    void visit(long[][]) -> visit
+    void visit(float[][]) -> visit
+    void visit(int[][]) -> visit
+    void visit(short[][]) -> visit
+    void visit(char[][]) -> visit
+    void visit(byte[][]) -> visit
+    void visit(boolean[][]) -> visit
+mirur.plugins.histogram1d.HistogramBinTextPainter -> mirur.plugins.histogram1d.HistogramBinTextPainter:
+    com.metsci.glimpse.axis.Axis2D srcAxis -> a
+    mirur.plugins.histogram1d.HistogramPainter histPainter -> b
+    mirur.core.Array1D array -> c
+    double lastBin -> d
+    void setHistogramPainter(mirur.core.Array1D,mirur.plugins.histogram1d.HistogramPainter) -> setHistogramPainter
+    void paintTo(com.metsci.glimpse.context.GlimpseContext) -> paintTo
+mirur.plugins.histogram1d.HistogramPainter -> mirur.plugins.histogram1d.HistogramPainter:
+    it.unimi.dsi.fastutil.floats.Float2IntMap counts -> a
+    float[] borderColor -> b
+    void setLookAndFeel(com.metsci.glimpse.support.settings.LookAndFeel) -> setLookAndFeel
+    void setData(it.unimi.dsi.fastutil.floats.Float2IntMap,int,float) -> setData
+    int getCount(double) -> getCount
+    double getBin(double) -> getBin
+    void paintTo(javax.media.opengl.GL2,com.metsci.glimpse.context.GlimpseBounds,com.metsci.glimpse.axis.Axis2D) -> paintTo
+mirur.plugins.histogram1d.HistogramView -> mirur.plugins.histogram1d.HistogramView:
+    boolean supportsData(mirur.core.PrimitiveArray) -> supportsData
+    mirur.plugins.DataPainter install(com.metsci.glimpse.canvas.GlimpseCanvas,mirur.core.PrimitiveArray) -> install
+    mirur.plugins.histogram1d.HistogramPainter createPainter(mirur.core.Array1D) -> a
+    com.metsci.glimpse.painter.base.GlimpseDataPainter2D createPainter(mirur.core.Array1D) -> createPainter
+mirur.plugins.histogram1d.HistogramView$1 -> mirur.plugins.histogram1d.HistogramView$1:
+    mirur.core.Array1D val$array1d -> a
+    mirur.plugins.histogram1d.HistogramPainter val$painter -> b
+    com.metsci.glimpse.painter.info.SimpleTextPainter createTitlePainter() -> createTitlePainter
+    void setTitlePainterData(mirur.core.Array1D) -> setTitlePainterData
+    void updateAxesBounds(mirur.core.Array1D) -> updateAxesBounds
+mirur.plugins.histogram1d.ToFloatsVisitor -> mirur.plugins.histogram1d.ToFloatsVisitor:
+    float[] floats -> a
+    float[] getFloats() -> getFloats
+    void visit(double[]) -> visit
+    void visit(long[]) -> visit
+    void visit(float[]) -> visit
+    void visit(int[]) -> visit
+    void visit(short[]) -> visit
+    void visit(char[]) -> visit
+    void visit(byte[]) -> visit
+    void visit(boolean[]) -> visit
+mirur.plugins.line1d.FillWithLinesVisitor -> mirur.plugins.line1d.FillWithLinesVisitor:
+    java.nio.FloatBuffer buffer -> a
+    int requiredSpace(int) -> requiredSpace
+    void visit(int,double) -> visit
+    void visit(int,float) -> visit
+mirur.plugins.line1d.LinePainter -> mirur.plugins.line1d.LinePainter:
+    mirur.plugins.SimpleGLBuffer dataBuffer -> a
+    float[] color -> b
+    void setLookAndFeel(com.metsci.glimpse.support.settings.LookAndFeel) -> setLookAndFeel
+    void setData(mirur.core.Array1D) -> setData
+    void paintTo(javax.media.opengl.GL2,com.metsci.glimpse.context.GlimpseBounds,com.metsci.glimpse.axis.Axis2D) -> paintTo
+mirur.plugins.line1d.LineView -> mirur.plugins.line1d.LineView:
+    com.metsci.glimpse.painter.base.GlimpseDataPainter2D createPainter(mirur.core.Array1D) -> createPainter
