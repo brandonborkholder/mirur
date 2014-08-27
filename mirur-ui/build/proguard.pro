@@ -1,9 +1,40 @@
--injars '../target/classes'
--outjars '../target/obfuscated-classes'
+-injars '../lib/antlr-2.7.7.jar'
+-outjars '../lib/antlr-2.7.7-repackaged.jar'
+-injars '../lib/antlr-runtime-3.4.jar'
+-outjars '../lib/antlr-runtime-3.4-repackaged.jar'
+-injars '../lib/commons-lang3-3.3.2.jar'
+-outjars '../lib/commons-lang3-3.3.2-repackaged.jar'
+-injars '../lib/commons-math3-3.3.jar'
+-outjars '../lib/commons-math3-3.3-repackaged.jar'
+-injars '../lib/fastutil-6.5.12.jar'
+-outjars '../lib/fastutil-6.5.12-repackaged.jar'
+-injars '../lib/glimpse-core-2.1.2.jar'
+-outjars '../lib/glimpse-core-2.1.2-repackaged.jar'
+-injars '../lib/glimpse-extras-swt-2.1.2.jar'
+-outjars '../lib/glimpse-extras-swt-2.1.2-repackaged.jar'
+-injars '../lib/glimpse-util-2.1.2.jar'
+-outjars '../lib/glimpse-util-2.1.2-repackaged.jar'
+-injars '../lib/gluegen-rt-2.1.5-01.jar'
+-outjars '../lib/gluegen-rt-2.1.5-01-repackaged.jar'
+-injars '../lib/gluegen-rt-main-2.1.5-01.jar'
+-outjars '../lib/gluegen-rt-main-2.1.5-01-repackaged.jar'
+-injars '../lib/guava-15.0.jar'
+-outjars '../lib/guava-15.0-repackaged.jar'
+-injars '../lib/jogl-all-2.1.5-01.jar'
+-outjars '../lib/jogl-all-2.1.5-01-repackaged.jar'
+-injars '../lib/jogl-all-main-2.1.5-01.jar'
+-outjars '../lib/jogl-all-main-2.1.5-01-repackaged.jar'
+-injars '../lib/miglayout-core-4.2.jar'
+-outjars '../lib/miglayout-core-4.2-repackaged.jar'
+-injars '../lib/stringtemplate-3.2.1.jar'
+-outjars '../lib/stringtemplate-3.2.1-repackaged.jar'
 
--libraryjars ../lib
--libraryjars '../../mirur-agent/bin'
+-injars '../target/classes/'
+-outjars '../target/obfuscated-classes/'
+
 -libraryjars '<java.home>/lib/rt.jar'
+-libraryjars '../../mirur-agent/bin'
+-libraryjars ../lib/(org.eclipse.swt.*-4.3.jar;)
 -libraryjars '<eclipse.home>/plugins/org.eclipse.ui_3.105.0.v20130522-1122.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.swt_3.102.1.v20140206-1334.jar'
 -libraryjars '<eclipse.home>/plugins/org.eclipse.jface_3.9.1.v20130725-1141.jar'
@@ -33,10 +64,19 @@
 -libraryjars '<eclipse.home>/plugins/org.eclipse.jdt.compiler.tool_1.0.250.v20140316-1836.jar'
 
 -target 1.7
--printmapping mapping.log
 -verbose
 
--keep,allowoptimization class * {
+-dontwarn javax.annotation.**
+-dontwarn com.jogamp.plugin.**
+-dontwarn com.jogamp.openal.**
+
+-printmapping mapping.log
+
+-keep,allowshrinking class !mirur.** {
+  *;
+}
+
+-keep,allowoptimization class mirur.** {
    public <methods>;
    protected <methods>;
 }

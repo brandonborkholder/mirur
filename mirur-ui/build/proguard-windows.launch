@@ -5,7 +5,7 @@
 <mapAttribute key="org.eclipse.debug.core.environmentVariables">
 <mapEntry key="ECLIPSE_HOME" value="${eclipse_home}"/>
 <mapEntry key="JAVA_HOME" value="${ee_home:JavaSE-1.7}"/>
-<mapEntry key="PG_JAR" value="${file_prompt:Proguard JAR}"/>
+<mapEntry key="PG_JAR" value="${proguard_home}/lib/proguard.jar"/>
 </mapAttribute>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/mirur-ui/build/proguardrun.bat}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/mirur-ui/}"/>
