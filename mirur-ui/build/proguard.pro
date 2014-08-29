@@ -8,12 +8,6 @@
 -outjars '../lib/commons-math3-3.3-repackaged.jar'
 -injars '../lib/fastutil-6.5.12.jar'
 -outjars '../lib/fastutil-6.5.12-repackaged.jar'
--injars '../lib/glimpse-core-2.1.2.jar'
--outjars '../lib/glimpse-core-2.1.2-repackaged.jar'
--injars '../lib/glimpse-extras-swt-2.1.2.jar'
--outjars '../lib/glimpse-extras-swt-2.1.2-repackaged.jar'
--injars '../lib/glimpse-util-2.1.2.jar'
--outjars '../lib/glimpse-util-2.1.2-repackaged.jar'
 -injars '../lib/gluegen-rt-2.1.5-01.jar'
 -outjars '../lib/gluegen-rt-2.1.5-01-repackaged.jar'
 -injars '../lib/gluegen-rt-main-2.1.5-01.jar'
@@ -31,6 +25,14 @@
 
 -injars '../target/classes/'
 -outjars '../target/obfuscated-classes/'
+
+# something wrong with how it processes enums as part of a class in glimpse, f$*#s it up
+-injars '../lib/glimpse-core-2.1.2.jar'
+#-outjars '../lib/glimpse-core-2.1.2-repackaged.jar'
+-injars '../lib/glimpse-extras-swt-2.1.2.jar'
+#-outjars '../lib/glimpse-extras-swt-2.1.2-repackaged.jar'
+-injars '../lib/glimpse-util-2.1.2.jar'
+#-outjars '../lib/glimpse-util-2.1.2-repackaged.jar'
 
 -libraryjars '<java.home>/lib/rt.jar'
 -libraryjars '../../mirur-agent/bin'
@@ -72,11 +74,10 @@
 
 -printmapping mapping.log
 
--keep,allowshrinking class !mirur.** {
-  *;
-}
+-keepclassmembers class * { *; }
 
--keep,allowoptimization class mirur.** {
-   public <methods>;
-   protected <methods>;
-}
+-optimizations !class/unboxing/enum
+
+-keep,allowshrinking class !mirur.** { *; }
+
+-keep,allowoptimization class mirur.** { public <methods>; protected <methods>; }
