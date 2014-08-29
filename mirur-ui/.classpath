@@ -9,7 +9,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-math3-3.3.jar" sourcepath="lib/commons-math3-3.3-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/fastutil-6.5.12.jar" sourcepath="lib/fastutil-6.5.12-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/glimpse-core-2.1.2.jar" sourcepath="lib/glimpse-core-2.1.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/glimpse-core-examples-2.1.2.jar" sourcepath="lib/glimpse-core-examples-2.1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/glimpse-extras-swt-2.1.2.jar" sourcepath="lib/glimpse-extras-swt-2.1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/glimpse-util-2.1.2.jar" sourcepath="lib/glimpse-util-2.1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gluegen-rt-2.1.5-01.jar" sourcepath="lib/gluegen-rt-2.1.5-01-sources.jar"/>

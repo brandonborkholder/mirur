@@ -6,12 +6,8 @@ Bundle-Version: 0.4.0.qualifier
 Bundle-Activator: mirur.plugin.Activator
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- org.eclipse.debug.core;bundle-version="3.7.1",
  org.eclipse.debug.ui;bundle-version="3.7.102",
  org.eclipse.jdt.debug;bundle-version="3.7.1",
- org.eclipse.ui.workbench.texteditor;bundle-version="3.7.0",
- org.eclipse.jdt.debug.ui;bundle-version="3.6.1",
- org.eclipse.jdt.core;bundle-version="3.7.3",
  mirur.jdk-agent;bundle-version="0.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
@@ -20,7 +16,6 @@ Bundle-ClassPath: lib/antlr-2.7.7.jar,
  lib/commons-math3-3.3.jar,
  lib/fastutil-6.5.12.jar,
  lib/glimpse-core-2.1.2.jar,
- lib/glimpse-core-examples-2.1.2.jar,
  lib/glimpse-extras-swt-2.1.2.jar,
  lib/glimpse-util-2.1.2.jar,
  lib/gluegen-rt-2.1.5-01.jar,
