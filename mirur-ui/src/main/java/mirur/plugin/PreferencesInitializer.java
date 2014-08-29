@@ -9,6 +9,5 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
     public void initializeDefaultPreferences() {
         IEclipsePreferences node = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
         node.putBoolean(Preferences.PREF_SUBMIT_STATISTICS, true);
-        System.out.println("hi");
     }
 }
