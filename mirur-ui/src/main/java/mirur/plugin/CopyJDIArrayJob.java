@@ -1,5 +1,8 @@
 package mirur.plugin;
 
+import static mirur.plugin.Activator.getSelectionModel;
+import mirur.core.PrimitiveTest;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -21,12 +24,13 @@ public class CopyJDIArrayJob extends Job {
     private final IJavaStackFrame frame;
 
     public CopyJDIArrayJob(IJavaVariable var, IIndexedValue value, IJavaStackFrame frame) {
-        super("Copying " + var.toString());
+        super("Copy JDI Array");
         this.var = var;
         this.frame = frame;
         this.value = value;
 
-        setPriority(Job.SHORT);
+        setPriority(SHORT);
+        setSystem(true);
     }
 
     @Override
@@ -34,49 +38,32 @@ public class CopyJDIArrayJob extends Job {
         try {
             Object arrayObject = toPrimitiveArray(var.getName(), value);
             new SubmitArrayToUIJob(var.getName(), var, frame, arrayObject).schedule();
-        } catch (DebugException ex) {
-            Activator.getSelectionModel().select(null);
-            throw new VariableTransferException(ex);
-        }
 
-        return Status.OK_STATUS;
+            return Status.OK_STATUS;
+        } catch (DebugException ex) {
+            IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error copying array via JDI", ex);
+            PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
+            getSelectionModel().select(null);
+            return status;
+        }
     }
 
     private Object toPrimitiveArray(String name, IIndexedValue value) throws DebugException {
         if (!(value instanceof IJavaArray)) {
+            // TODO handle this case
             return null;
         }
 
-        Object arrayObject;
-
         IJavaArray val = (IJavaArray) value;
         IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
-        switch (componentType.getName()) {
-        case "int":
-        case "float":
-        case "boolean":
-        case "double":
-        case "char":
-        case "long":
-        case "short":
-        case "byte": {
+
+        Object arrayObject;
+        if (PrimitiveTest.isPrimitiveName(componentType.getName())) {
             arrayObject = toPrimitiveArray1d(value);
-            break;
-        }
-
-        case "int[]":
-        case "float[]":
-        case "boolean[]":
-        case "double[]":
-        case "char[]":
-        case "long[]":
-        case "short[]":
-        case "byte[]": {
+        } else if ((componentType instanceof IJavaArrayType)
+                && PrimitiveTest.isPrimitiveName(((IJavaArrayType) componentType).getComponentType().getName())) {
             arrayObject = toPrimitiveArray2d(value);
-            break;
-        }
-
-        default:
+        } else {
             arrayObject = null;
         }
 

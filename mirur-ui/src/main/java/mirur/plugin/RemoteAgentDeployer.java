@@ -40,6 +40,9 @@ public class RemoteAgentDeployer {
     private Map<IJavaDebugTarget, IJavaClassType> cache = Collections.synchronizedMap(new WeakHashMap<IJavaDebugTarget, IJavaClassType>());
 
     public IJavaClassType install(IJavaDebugTarget target, IJavaThread thread) throws VariableTransferException, DebugException {
+        // mark as attempted
+        cache.put(target, null);
+
         if (!isValidJVMVersion(target.getVersion())) {
             throw new VariableTransferException(VariableTransferException.ERR_Invalid_Jvm_Version);
         }
@@ -54,15 +57,26 @@ public class RemoteAgentDeployer {
             }
         }
 
-        IJavaClassType agentType = cache.get(target);
-
-        // only load the agent once per jvm and then cache the class
-        if (agentType == null) {
-            agentType = loadRemoteAgent(target, thread);
-            cache.put(target, agentType);
-        }
+        IJavaClassType agentType = loadRemoteAgent(target, thread);
+        cache.put(target, agentType);
 
         return agentType;
+    }
+
+    public IJavaClassType getAgentClass(IJavaDebugTarget target) {
+        return cache.get(target);
+    }
+
+    public boolean isAgentInstallAttempted(IJavaDebugTarget target) {
+        return cache.containsKey(target);
+    }
+
+    public boolean isAgentInstallFailed(IJavaDebugTarget target) {
+        return cache.get(target) == null;
+    }
+
+    public boolean isAgentInstalled(IJavaDebugTarget target) {
+        return cache.get(target) != null;
     }
 
     public void clear(IJavaDebugTarget target) {
@@ -78,7 +92,7 @@ public class RemoteAgentDeployer {
         } catch (InterruptedException ex) {
             throw new VariableTransferException(ex);
         } catch (ExecutionException ex) {
-            throw new VariableTransferException(ex.getCause());
+            throw new VariableTransferException(VariableTransferException.ERR_Exception_in_Agent_Install, ex.getCause());
         }
     }
 
@@ -138,6 +152,10 @@ public class RemoteAgentDeployer {
 
         // java.net.URLClassLoader
         IJavaType[] types = target.getJavaTypes(URLClassLoader.class.getName());
+        if (types == null) {
+            // possible in Android
+            throw new VariableTransferException(VariableTransferException.ERR_URLClassLoader_Not_Found);
+        }
         IJavaClassType classloaderType = (IJavaClassType) types[0];
 
         // java.lang.Class

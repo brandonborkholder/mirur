@@ -1,6 +1,7 @@
 package mirur.plugin;
 
 import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
+import static mirur.plugin.Activator.getStatistics;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -11,20 +12,46 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.debug.core.IJavaClassType;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
-public class ReceiveArrayJob extends InvokeRemoteMethodJob {
+public class ReceiveArrayJob extends Job {
     private static final Logger LOGGER = Logger.getLogger(ReceiveArrayJob.class.getName());
 
-    public ReceiveArrayJob(String name, IJavaVariable var, IJavaStackFrame frame) {
-        super("Receiving Array", var, frame);
+    private final IJavaVariable var;
+    private final IJavaStackFrame frame;
+    private final IJavaClassType agentType;
+
+    public ReceiveArrayJob(IJavaVariable var, IJavaStackFrame frame, IJavaClassType agentType) {
+        super("Receiving array from agent");
+        this.var = var;
+        this.frame = frame;
+        this.agentType = agentType;
+
+        setPriority(SHORT);
+        setSystem(true);
     }
 
     @Override
-    protected void invokeAgent(IJavaClassType agentType) throws Exception {
+    protected IStatus run(IProgressMonitor monitor) {
+        try {
+            invokeAgent(agentType);
+            return Status.OK_STATUS;
+        } catch (Exception ex) {
+            Activator.getSelectionModel().select(null);
+            return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unexpected exception transfering array data from agent", ex);
+        }
+    }
+
+    private void invokeAgent(IJavaClassType agentType) throws Exception {
         ServerSocket serverSocket = new ServerSocket();
         serverSocket.bind(null);
         int port = serverSocket.getLocalPort();
@@ -41,14 +68,15 @@ public class ReceiveArrayJob extends InvokeRemoteMethodJob {
         // TODO I really don't like this method of waiting until the socket is listening
         barrier.await();
 
+        IJavaDebugTarget target = (IJavaDebugTarget) frame.getDebugTarget();
         IJavaValue portValue = target.newValue(port);
         IJavaValue value = (IJavaValue) var.getValue();
         IJavaValue[] args = new IJavaValue[] { value, portValue };
-        agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;I)V", args, thread);
+        agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;I)V", args, (IJavaThread) frame.getThread());
         logFine(LOGGER, "Called MirurAgent.sendAsArray(Object, int) successfully");
 
         Object arrayObject = socketTask.get();
-        Activator.getStatistics().transformedViaAgent(var.getGenericSignature());
+        getStatistics().transformedViaAgent(var.getGenericSignature());
 
         new SubmitArrayToUIJob(var.getName(), var, frame, arrayObject).schedule();
     }
