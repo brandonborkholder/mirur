@@ -1,7 +1,7 @@
 package mirur.plugin;
 
+import static mirur.core.PrimitiveTest.isPrimitiveName;
 import static mirur.plugin.Activator.getSelectionModel;
-import mirur.core.PrimitiveTest;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -10,24 +10,20 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IIndexedValue;
 import org.eclipse.debug.core.model.IValue;
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaArray;
-import org.eclipse.jdt.debug.core.IJavaArrayType;
 import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
-import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class CopyJDIArrayJob extends Job {
-    private final IJavaVariable var;
-    private final IIndexedValue value;
+    private final IVariable var;
     private final IJavaStackFrame frame;
 
-    public CopyJDIArrayJob(IJavaVariable var, IIndexedValue value, IJavaStackFrame frame) {
+    public CopyJDIArrayJob(IVariable var, IJavaStackFrame frame) {
         super("Copy JDI Array");
         this.var = var;
         this.frame = frame;
-        this.value = value;
 
         setPriority(SHORT);
         setSystem(true);
@@ -36,7 +32,12 @@ public class CopyJDIArrayJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
         try {
-            Object arrayObject = toPrimitiveArray(var.getName(), value);
+            IValue value = var.getValue();
+            Object arrayObject = null;
+            if (value instanceof IIndexedValue) {
+                arrayObject = toPrimitiveArray(var.getName(), (IIndexedValue) value);
+            }
+
             new SubmitArrayToUIJob(var.getName(), var, frame, arrayObject).schedule();
 
             return Status.OK_STATUS;
@@ -49,93 +50,98 @@ public class CopyJDIArrayJob extends Job {
     }
 
     private Object toPrimitiveArray(String name, IIndexedValue value) throws DebugException {
-        if (!(value instanceof IJavaArray)) {
-            // TODO handle this case
-            return null;
-        }
+        Object arrayObject = null;
 
-        IJavaArray val = (IJavaArray) value;
-        IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
+        String refTypeName = value.getReferenceTypeName();
+        String primitiveName = refTypeName.substring(0, refTypeName.indexOf('['));
 
-        Object arrayObject;
-        if (PrimitiveTest.isPrimitiveName(componentType.getName())) {
-            arrayObject = toPrimitiveArray1d(value);
-        } else if ((componentType instanceof IJavaArrayType)
-                && PrimitiveTest.isPrimitiveName(((IJavaArrayType) componentType).getComponentType().getName())) {
-            arrayObject = toPrimitiveArray2d(value);
-        } else {
-            arrayObject = null;
+        boolean isPrimitive = isPrimitiveName(primitiveName);
+        boolean is1d = refTypeName.equals(primitiveName + "[]");
+        boolean is2d = refTypeName.equals(primitiveName + "[][]");
+
+        if (isPrimitive) {
+            if (value instanceof IJavaArray) {
+                if (is1d) {
+                    arrayObject = toPrimitiveArray1d(primitiveName, (IJavaArray) value);
+                } else if (is2d) {
+                    arrayObject = toPrimitiveArray2d(primitiveName, (IJavaArray) value);
+                }
+            } else {
+                if (is1d) {
+                    arrayObject = toPrimitiveArray1d(primitiveName, value);
+                } else if (is2d) {
+                    arrayObject = toPrimitiveArray2d(primitiveName, value);
+                }
+            }
         }
 
         return arrayObject;
     }
 
-    private Object toPrimitiveArray2d(IValue value) throws DebugException {
-        IJavaArray val = (IJavaArray) value;
-        int len = val.getLength();
+    private Object toPrimitiveArray2d(String primitiveName, IJavaArray value) throws DebugException {
+        int len = value.getLength();
 
-        IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
-        switch (componentType.getName()) {
-        case "int[]": {
+        switch (primitiveName) {
+        case "int": {
             int[][] v = new int[len][];
             for (int i = 0; i < len; i++) {
-                int[] w = (int[]) toPrimitiveArray1d(val.getValue(i));
+                int[] w = (int[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "float[]": {
+        case "float": {
             float[][] v = new float[len][];
             for (int i = 0; i < len; i++) {
-                float[] w = (float[]) toPrimitiveArray1d(val.getValue(i));
+                float[] w = (float[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "double[]": {
+        case "double": {
             double[][] v = new double[len][];
             for (int i = 0; i < len; i++) {
-                double[] w = (double[]) toPrimitiveArray1d(val.getValue(i));
+                double[] w = (double[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "long[]": {
+        case "long": {
             long[][] v = new long[len][];
             for (int i = 0; i < len; i++) {
-                long[] w = (long[]) toPrimitiveArray1d(val.getValue(i));
+                long[] w = (long[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "short[]": {
+        case "short": {
             short[][] v = new short[len][];
             for (int i = 0; i < len; i++) {
-                short[] w = (short[]) toPrimitiveArray1d(val.getValue(i));
+                short[] w = (short[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "char[]": {
+        case "char": {
             char[][] v = new char[len][];
             for (int i = 0; i < len; i++) {
-                char[] w = (char[]) toPrimitiveArray1d(val.getValue(i));
+                char[] w = (char[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "byte[]": {
+        case "byte": {
             byte[][] v = new byte[len][];
             for (int i = 0; i < len; i++) {
-                byte[] w = (byte[]) toPrimitiveArray1d(val.getValue(i));
+                byte[] w = (byte[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
         }
-        case "boolean[]": {
+        case "boolean": {
             boolean[][] v = new boolean[len][];
             for (int i = 0; i < len; i++) {
-                boolean[] w = (boolean[]) toPrimitiveArray1d(val.getValue(i));
+                boolean[] w = (boolean[]) toPrimitiveArray1d(primitiveName, (IJavaArray) value.getValue(i));
                 v[i] = w;
             }
             return v;
@@ -146,13 +152,11 @@ public class CopyJDIArrayJob extends Job {
         }
     }
 
-    private Object toPrimitiveArray1d(IValue value) throws DebugException {
-        IJavaArray val = (IJavaArray) value;
-        int len = val.getLength();
-        IJavaValue[] all = val.getValues();
+    private Object toPrimitiveArray1d(String primitiveName, IJavaArray value) throws DebugException {
+        int len = value.getLength();
+        IJavaValue[] all = value.getValues();
 
-        IJavaType componentType = ((IJavaArrayType) val.getJavaType()).getComponentType();
-        switch (componentType.getName()) {
+        switch (primitiveName) {
         case "int": {
             int[] v = new int[len];
             for (int i = 0; i < len; i++) {
@@ -206,6 +210,156 @@ public class CopyJDIArrayJob extends Job {
             boolean[] v = new boolean[len];
             for (int i = 0; i < len; i++) {
                 v[i] = ((IJavaPrimitiveValue) all[i]).getBooleanValue();
+            }
+            return v;
+        }
+
+        default:
+            // array of some other type
+            return null;
+        }
+    }
+
+    private Object toPrimitiveArray2d(String primitiveName, IIndexedValue value) throws DebugException {
+        int len = value.getSize();
+        int offset = value.getInitialOffset();
+
+        switch (primitiveName) {
+        case "int": {
+            int[][] v = new int[len][];
+            for (int i = 0; i < len; i++) {
+                int[] w = (int[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "float": {
+            float[][] v = new float[len][];
+            for (int i = 0; i < len; i++) {
+                float[] w = (float[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "double": {
+            double[][] v = new double[len][];
+            for (int i = 0; i < len; i++) {
+                double[] w = (double[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "long": {
+            long[][] v = new long[len][];
+            for (int i = 0; i < len; i++) {
+                long[] w = (long[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "short": {
+            short[][] v = new short[len][];
+            for (int i = 0; i < len; i++) {
+                short[] w = (short[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "char": {
+            char[][] v = new char[len][];
+            for (int i = 0; i < len; i++) {
+                char[] w = (char[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "byte": {
+            byte[][] v = new byte[len][];
+            for (int i = 0; i < len; i++) {
+                byte[] w = (byte[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+        case "boolean": {
+            boolean[][] v = new boolean[len][];
+            for (int i = 0; i < len; i++) {
+                boolean[] w = (boolean[]) toPrimitiveArray1d(primitiveName, (IIndexedValue) value.getVariable(offset + i).getValue());
+                v[i] = w;
+            }
+            return v;
+        }
+
+        default:
+            return null;
+        }
+    }
+
+    private Object toPrimitiveArray1d(String primitiveName, IIndexedValue value) throws DebugException {
+        if (value instanceof IJavaArray) {
+            // faster this way
+            return toPrimitiveArray1d(primitiveName, (IJavaArray) value);
+        }
+
+        int len = value.getSize();
+        int offset = value.getInitialOffset();
+
+        IVariable[] vars = value.getVariables(offset, len);
+
+        switch (primitiveName) {
+        case "int": {
+            int[] v = new int[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getIntValue();
+            }
+            return v;
+        }
+        case "float": {
+            float[] v = new float[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getFloatValue();
+            }
+            return v;
+        }
+        case "double": {
+            double[] v = new double[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getDoubleValue();
+            }
+            return v;
+        }
+        case "short": {
+            short[] v = new short[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getShortValue();
+            }
+            return v;
+        }
+        case "long": {
+            long[] v = new long[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getLongValue();
+            }
+            return v;
+        }
+        case "byte": {
+            byte[] v = new byte[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getByteValue();
+            }
+            return v;
+        }
+        case "char": {
+            char[] v = new char[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getCharValue();
+            }
+            return v;
+        }
+        case "boolean": {
+            boolean[] v = new boolean[len];
+            for (int i = 0; i < len; i++) {
+                v[i] = ((IJavaPrimitiveValue) vars[i].getValue()).getBooleanValue();
             }
             return v;
         }

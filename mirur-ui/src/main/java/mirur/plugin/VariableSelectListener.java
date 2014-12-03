@@ -8,6 +8,8 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.debug.internal.ui.views.variables.IndexedVariablePartition;
 import org.eclipse.debug.ui.AbstractDebugView;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
@@ -26,6 +28,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+@SuppressWarnings("restriction")
 public class VariableSelectListener implements ISelectionListener, INullSelectionListener, IDebugEventSetListener, IDebugContextListener {
     private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
 
@@ -55,11 +58,11 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         ISelection contextSelection = service.getActiveContext();
         IJavaStackFrame frame = extract(contextSelection, IJavaStackFrame.class);
 
-        IJavaVariable variable = null;
+        IVariable variable = null;
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
         if (view instanceof AbstractDebugView) {
             ISelection varSelection = ((AbstractDebugView) view).getViewer().getSelection();
-            variable = extract(varSelection, IJavaVariable.class);
+            variable = extract(varSelection, IVariable.class);
         }
 
         // check a bunch of pre-conditions
@@ -91,12 +94,13 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         return null;
     }
 
-    private boolean isValidRefType(IJavaVariable var) {
+    private boolean isValidRefType(IVariable var) {
         /*
          * The thing can't be plotted if it's a primitive or void
          */
         try {
-            return var.getJavaType() instanceof IJavaReferenceType;
+            return (var instanceof IJavaVariable && ((IJavaVariable) var).getJavaType() instanceof IJavaReferenceType)
+                    || (var instanceof IndexedVariablePartition);
         } catch (DebugException ex) {
             return false;
         }

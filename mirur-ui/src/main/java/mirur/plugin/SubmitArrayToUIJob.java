@@ -18,23 +18,23 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class SubmitArrayToUIJob extends Job {
-    private final IJavaVariable var;
+    private final IVariable var;
     private final IJavaStackFrame frame;
     private final String name;
     private final Object arrayObject;
 
-    public SubmitArrayToUIJob(String name, IJavaVariable var, IJavaStackFrame frame, Object arrayObject) {
+    public SubmitArrayToUIJob(String name, IVariable var, IJavaStackFrame frame, Object arrayObject) {
         super("Filtering and selecting " + name);
         this.var = var;
         this.name = name;
         this.frame = frame;
         this.arrayObject = arrayObject;
 
-        setPriority(SHORT);
+        setPriority(INTERACTIVE);
         setSystem(true);
     }
 

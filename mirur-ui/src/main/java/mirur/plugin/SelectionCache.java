@@ -5,8 +5,8 @@ import java.util.Map;
 
 import mirur.core.PrimitiveArray;
 
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
  * We want to cache a variable that we've already transfered. But a variable is only cacheable as long as it's not
@@ -23,23 +23,23 @@ public class SelectionCache {
         cache.clear();
     }
 
-    public boolean contains(IJavaVariable variable, IJavaStackFrame frame) {
+    public boolean contains(IVariable variable, IJavaStackFrame frame) {
         return cache.containsKey(new Key(variable, frame));
     }
 
-    public PrimitiveArray getArray(IJavaVariable variable, IJavaStackFrame frame) {
+    public PrimitiveArray getArray(IVariable variable, IJavaStackFrame frame) {
         return cache.get(new Key(variable, frame));
     }
 
-    public void put(IJavaVariable variable, IJavaStackFrame frame, PrimitiveArray array) {
+    public void put(IVariable variable, IJavaStackFrame frame, PrimitiveArray array) {
         cache.put(new Key(variable, frame), array);
     }
 
     private static class Key {
-        final IJavaVariable var;
+        final IVariable var;
         final IJavaStackFrame frame;
 
-        Key(IJavaVariable var, IJavaStackFrame frame) {
+        Key(IVariable var, IJavaStackFrame frame) {
             this.var = var;
             this.frame = frame;
         }
