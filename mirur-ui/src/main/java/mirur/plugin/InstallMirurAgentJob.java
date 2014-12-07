@@ -32,7 +32,7 @@ public class InstallMirurAgentJob extends Job {
             getAgentDeployer().install(target, thread);
             return Status.OK_STATUS;
         } catch (VariableTransferException | DebugException ex) {
-            IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error installing agent", ex);
+            IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Error installing agent", ex);
             PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
             return status;
         }

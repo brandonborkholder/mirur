@@ -34,7 +34,7 @@ public class SelectStrategyJob extends Job {
 
             return Status.OK_STATUS;
         } catch (DebugException | InterruptedException ex) {
-            IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Exception in selecting variable transfer strategy", ex);
+            IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Exception in selecting variable transfer strategy", ex);
             PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
             getSelectionModel().select(null);
             return status;

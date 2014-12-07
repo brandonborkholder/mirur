@@ -42,7 +42,7 @@ public class CopyJDIArrayJob extends Job {
 
             return Status.OK_STATUS;
         } catch (DebugException ex) {
-            IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error copying array via JDI", ex);
+            IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Error copying array via JDI", ex);
             PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
             getSelectionModel().select(null);
             return status;

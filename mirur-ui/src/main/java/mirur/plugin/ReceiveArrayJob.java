@@ -47,7 +47,7 @@ public class ReceiveArrayJob extends Job {
             return Status.OK_STATUS;
         } catch (Exception ex) {
             Activator.getSelectionModel().select(null);
-            return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unexpected exception transfering array data from agent", ex);
+            return new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Unexpected exception transfering array data from agent", ex);
         }
     }
 
