@@ -30,8 +30,8 @@ public class Array2DTitlePainter extends SimpleTextPainter {
 
         double selectedX = srcAxis.getAxisX().getSelectionCenter();
         double selectedY = srcAxis.getAxisY().getSelectionCenter();
-        int i = (int) Math.round(selectedX);
-        int j = (int) Math.round(selectedY);
+        int i = (int) Math.floor(selectedX);
+        int j = (int) Math.floor(selectedY);
         if (i != lastI || j != lastJ) {
             String text = format(i, j);
             lastI = i;
