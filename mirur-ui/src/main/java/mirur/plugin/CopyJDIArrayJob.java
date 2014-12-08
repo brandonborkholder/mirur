@@ -17,11 +17,13 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 public class CopyJDIArrayJob extends Job {
+    private final String name;
     private final IVariable var;
     private final IJavaStackFrame frame;
 
-    public CopyJDIArrayJob(IVariable var, IJavaStackFrame frame) {
+    public CopyJDIArrayJob(String name, IVariable var, IJavaStackFrame frame) {
         super("Copy JDI Array");
+        this.name = name;
         this.var = var;
         this.frame = frame;
 
@@ -38,7 +40,7 @@ public class CopyJDIArrayJob extends Job {
                 arrayObject = toPrimitiveArray(var.getName(), (IIndexedValue) value);
             }
 
-            new SubmitArrayToUIJob(var.getName(), var, frame, arrayObject).schedule();
+            new SubmitArrayToUIJob(name, var, frame, arrayObject).schedule();
 
             return Status.OK_STATUS;
         } catch (DebugException ex) {

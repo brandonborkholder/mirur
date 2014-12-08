@@ -1,7 +1,12 @@
 package mirur.plugin;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.plugin.Activator.getSelectionModel;
 import static mirur.plugin.Activator.getVariableCache;
+
+import java.util.Arrays;
+import java.util.logging.Logger;
+
 import mirur.core.PrimitiveArray;
 
 import org.eclipse.debug.core.DebugEvent;
@@ -19,8 +24,11 @@ import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaVariable;
+import org.eclipse.jdt.internal.debug.core.model.JDIArrayEntryVariable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.ui.INullSelectionListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewPart;
@@ -28,8 +36,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.metsci.glimpse.util.StringUtils;
+
 @SuppressWarnings("restriction")
 public class VariableSelectListener implements ISelectionListener, INullSelectionListener, IDebugEventSetListener, IDebugContextListener {
+    private static final Logger LOGGER = Logger.getLogger(VariableSelectListener.class.getName());
+
     private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
 
     public void install(IWorkbenchWindow window) {
@@ -60,9 +72,19 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
 
         IVariable variable = null;
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
+        String name = "Mirur Object";
         if (view instanceof AbstractDebugView) {
             ISelection varSelection = ((AbstractDebugView) view).getViewer().getSelection();
             variable = extract(varSelection, IVariable.class);
+
+            if (variable != null && varSelection instanceof ITreeSelection) {
+                TreePath[] paths = ((ITreeSelection) varSelection).getPathsFor(variable);
+                try {
+                    name = getVariableName(paths[0]);
+                } catch (DebugException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                    logWarning(LOGGER, "Could not get name for %s", ex, varSelection);
+                }
+            }
         }
 
         // check a bunch of pre-conditions
@@ -77,7 +99,7 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
                 PrimitiveArray array = getVariableCache().getArray(variable, frame);
                 getSelectionModel().select(array);
             } else {
-                new SelectStrategyJob(variable, frame).schedule();
+                new SelectStrategyJob(name, variable, frame).schedule();
             }
         }
     }
@@ -92,6 +114,38 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         }
 
         return null;
+    }
+
+    private String getVariableName(TreePath path) throws DebugException, NoSuchFieldException, SecurityException,
+            IllegalArgumentException, IllegalAccessException {
+
+        String[] parts = new String[path.getSegmentCount()];
+        Arrays.fill(parts, "");
+        for (int i = path.getSegmentCount() - 1; i >= 0; i--) {
+            IVariable var = (IVariable) path.getSegment(i);
+            parts[i] = var.getName();
+
+            if (var instanceof IJavaVariable && !(var instanceof JDIArrayEntryVariable)) {
+                break;
+            }
+        }
+
+        for (int i = 0; i < path.getSegmentCount(); i++) {
+            IVariable var = (IVariable) path.getSegment(i);
+
+            /*
+             * Collapse when multiple partitions are expanded or a
+             * partition is expanded into an entry.
+             */
+            if (var instanceof IndexedVariablePartition &&
+                    i < path.getSegmentCount() - 1 &&
+                    (path.getSegment(i + 1) instanceof IndexedVariablePartition ||
+                            path.getSegment(i + 1) instanceof JDIArrayEntryVariable)) {
+                parts[i] = "";
+            }
+        }
+
+        return StringUtils.join("", parts);
     }
 
     private boolean isValidRefType(IVariable var) {

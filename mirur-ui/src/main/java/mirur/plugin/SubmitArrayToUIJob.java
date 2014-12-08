@@ -22,15 +22,15 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 public class SubmitArrayToUIJob extends Job {
+    private final String name;
     private final IVariable var;
     private final IJavaStackFrame frame;
-    private final String name;
     private final Object arrayObject;
 
     public SubmitArrayToUIJob(String name, IVariable var, IJavaStackFrame frame, Object arrayObject) {
-        super("Filtering and selecting " + name);
-        this.var = var;
+        super("Sending Mirur Array Data to UI");
         this.name = name;
+        this.var = var;
         this.frame = frame;
         this.arrayObject = arrayObject;
 

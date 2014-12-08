@@ -15,11 +15,13 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class SelectStrategyJob extends Job {
+    private final String name;
     private final IVariable var;
     private final IJavaStackFrame frame;
 
-    public SelectStrategyJob(IVariable var, IJavaStackFrame frame) {
+    public SelectStrategyJob(String name, IVariable var, IJavaStackFrame frame) {
         super("Select Variable Transfer Strategy");
+        this.name = name;
         this.var = var;
         this.frame = frame;
 
@@ -56,12 +58,12 @@ public class SelectStrategyJob extends Job {
 
             if (getAgentDeployer().isAgentInstalled(target)) {
                 IJavaClassType agentType = getAgentDeployer().getAgentClass(target);
-                new ReceiveArrayJob(jvar, frame, agentType).schedule();
+                new ReceiveArrayJob(name, jvar, frame, agentType).schedule();
             } else {
-                new CopyJDIArrayJob(var, frame).schedule();
+                new CopyJDIArrayJob(name, var, frame).schedule();
             }
         } else {
-            new CopyJDIArrayJob(var, frame).schedule();
+            new CopyJDIArrayJob(name, var, frame).schedule();
         }
     }
 }

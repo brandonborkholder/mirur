@@ -26,12 +26,14 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
 public class ReceiveArrayJob extends Job {
     private static final Logger LOGGER = Logger.getLogger(ReceiveArrayJob.class.getName());
 
+    private final String name;
     private final IJavaVariable var;
     private final IJavaStackFrame frame;
     private final IJavaClassType agentType;
 
-    public ReceiveArrayJob(IJavaVariable var, IJavaStackFrame frame, IJavaClassType agentType) {
+    public ReceiveArrayJob(String name, IJavaVariable var, IJavaStackFrame frame, IJavaClassType agentType) {
         super("Receiving array from agent");
+        this.name = name;
         this.var = var;
         this.frame = frame;
         this.agentType = agentType;
@@ -78,7 +80,7 @@ public class ReceiveArrayJob extends Job {
         Object arrayObject = socketTask.get();
         getStatistics().transformedViaAgent(var.getGenericSignature());
 
-        new SubmitArrayToUIJob(var.getName(), var, frame, arrayObject).schedule();
+        new SubmitArrayToUIJob(name, var, frame, arrayObject).schedule();
     }
 
     private class IncomingConnectionTask implements Callable<Object> {
