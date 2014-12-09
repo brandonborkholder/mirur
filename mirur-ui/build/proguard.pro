@@ -64,6 +64,7 @@
 -dontwarn javax.annotation.**
 -dontwarn com.jogamp.plugin.**
 -dontwarn com.jogamp.openal.**
+-dontwarn com.metsci.glimpse.**
 
 -printmapping mapping.log
 
