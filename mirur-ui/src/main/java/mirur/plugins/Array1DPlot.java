@@ -1,5 +1,6 @@
 package mirur.plugins;
 
+import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
@@ -28,6 +29,7 @@ public class Array1DPlot extends SimplePlot2D {
         super.initializePainters();
 
         getCrosshairPainter().showSelectionBox(false);
+        getCrosshairPainter().setCursorColor(getRed());
         titlePainter.setHorizontalPosition(HorizontalPosition.Left);
     }
 
@@ -56,10 +58,11 @@ public class Array1DPlot extends SimplePlot2D {
             max++;
         }
 
+        double paddingY = (max - min) * 0.02;
         getAxisX().setMin(0);
         getAxisX().setMax(array.getSize());
-        getAxisY().setMin(min);
-        getAxisY().setMax(max);
+        getAxisY().setMin(min - paddingY);
+        getAxisY().setMax(max + paddingY);
     }
 
     protected void setData(Array1D array) {
