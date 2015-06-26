@@ -1,5 +1,7 @@
 package mirur.plugin.statsview;
 
+import static java.lang.Double.isInfinite;
+import static java.lang.Double.isNaN;
 import mirur.core.AbstractArrayElementVisitor;
 import mirur.core.ArrayElementVisitor;
 
@@ -18,6 +20,10 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
             isValid = false;
         }
 
+        static boolean isFinite(double v) {
+            return !(isNaN(v) || isInfinite(v));
+        }
+
         @Override
         public String getName() {
             return name;
@@ -32,17 +38,26 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
             }
         }
 
-        @Override
-        public void visit(double v) {
-            if (!Double.isNaN(v)) {
-                visit0(v);
-                isValid = true;
-            }
+        protected abstract String getValue();
+    }
+
+    public static class Size extends AbstractStatisticVisitor {
+        int count = 0;
+
+        public Size() {
+            super("size");
         }
 
-        protected abstract void visit0(double v);
+        @Override
+        public void visit(double v) {
+            isValid = true;
+            count++;
+        }
 
-        protected abstract String getValue();
+        @Override
+        protected String getValue() {
+            return String.valueOf(count);
+        }
     }
 
     public static class Sum extends AbstractStatisticVisitor {
@@ -53,8 +68,11 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         }
 
         @Override
-        protected void visit0(double v) {
-            sum += v;
+        public void visit(double v) {
+            if (isFinite(v)) {
+                sum += v;
+                isValid = true;
+            }
         }
 
         @Override
@@ -71,8 +89,11 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         }
 
         @Override
-        protected void visit0(double v) {
-            mean.increment(v);
+        public void visit(double v) {
+            if (isFinite(v)) {
+                mean.increment(v);
+                isValid = true;
+            }
         }
 
         @Override
@@ -89,8 +110,11 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         }
 
         @Override
-        protected void visit0(double v) {
-            var.increment(v);
+        public void visit(double v) {
+            if (isFinite(v)) {
+                var.increment(v);
+                isValid = true;
+            }
         }
 
         @Override
@@ -101,41 +125,61 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
     public static class Max extends AbstractStatisticVisitor {
         double max = Double.NEGATIVE_INFINITY;
+        double finiteMax = Double.NEGATIVE_INFINITY;
 
         public Max() {
             super("max");
         }
 
         @Override
-        protected void visit0(double v) {
+        public void visit(double v) {
+            if (isFinite(v) && finiteMax < v) {
+                finiteMax = v;
+            }
+
             if (max < v) {
                 max = v;
+                isValid = true;
             }
         }
 
         @Override
         protected String getValue() {
-            return String.valueOf(max);
+            if (max == finiteMax) {
+                return String.valueOf(max);
+            } else {
+                return String.valueOf(max) + " (finite max is " + String.valueOf(finiteMax) + ")";
+            }
         }
     }
 
     public static class Min extends AbstractStatisticVisitor {
         double min = Double.POSITIVE_INFINITY;
+        double finiteMin = Double.POSITIVE_INFINITY;
 
         public Min() {
             super("min");
         }
 
         @Override
-        protected void visit0(double v) {
+        public void visit(double v) {
+            if (isFinite(v) && v < finiteMin) {
+                finiteMin = v;
+            }
+
             if (v < min) {
                 min = v;
+                isValid = true;
             }
         }
 
         @Override
         protected String getValue() {
-            return String.valueOf(min);
+            if (min == finiteMin) {
+                return String.valueOf(min);
+            } else {
+                return String.valueOf(min) + " (finite min is " + String.valueOf(finiteMin) + ")";
+            }
         }
     }
 
@@ -148,15 +192,10 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public void visit(double v) {
-            visit0(v);
-            isValid = true;
-        }
-
-        @Override
-        protected void visit0(double v) {
-            if (Double.isNaN(v)) {
+            if (isNaN(v)) {
                 count++;
             }
+            isValid = true;
         }
 
         @Override
@@ -174,15 +213,10 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public void visit(double v) {
-            visit0(v);
-            isValid = true;
-        }
-
-        @Override
-        protected void visit0(double v) {
             if (v == Double.POSITIVE_INFINITY) {
                 count++;
             }
+            isValid = true;
         }
 
         @Override
@@ -200,15 +234,10 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public void visit(double v) {
-            visit0(v);
-            isValid = true;
-        }
-
-        @Override
-        protected void visit0(double v) {
             if (v == Double.NEGATIVE_INFINITY) {
                 count++;
             }
+            isValid = true;
         }
 
         @Override
@@ -230,10 +259,11 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         }
 
         @Override
-        protected void visit0(double v) {
+        public void visit(double v) {
             if (v > 0) {
                 count++;
             }
+            isValid = true;
         }
     }
 
@@ -250,10 +280,11 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         }
 
         @Override
-        protected void visit0(double v) {
+        public void visit(double v) {
             if (v < 0) {
                 count++;
             }
+            isValid = true;
         }
     }
 
@@ -270,10 +301,11 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         }
 
         @Override
-        protected void visit0(double v) {
+        public void visit(double v) {
             if (v == 0) {
                 count++;
             }
+            isValid = true;
         }
     }
 
@@ -330,7 +362,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public String getName() {
-            return "count of false";
+            return "sum";
         }
 
         @Override

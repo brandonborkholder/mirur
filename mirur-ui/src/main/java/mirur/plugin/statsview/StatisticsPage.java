@@ -106,6 +106,7 @@ public class StatisticsPage extends Page {
         switch (primitive) {
         case "double":
         case "float":
+            stats.add(new ArrayStatisticVisitor.Size());
             stats.add(new ArrayStatisticVisitor.Min());
             stats.add(new ArrayStatisticVisitor.Max());
             stats.add(new ArrayStatisticVisitor.Sum());
@@ -124,6 +125,7 @@ public class StatisticsPage extends Page {
         case "short":
         case "byte":
         case "char":
+            stats.add(new ArrayStatisticVisitor.Size());
             stats.add(new ArrayStatisticVisitor.Min());
             stats.add(new ArrayStatisticVisitor.Max());
             stats.add(new ArrayStatisticVisitor.SumLong());
@@ -135,6 +137,7 @@ public class StatisticsPage extends Page {
             break;
 
         case "boolean":
+            stats.add(new ArrayStatisticVisitor.Size());
             stats.add(new ArrayStatisticVisitor.CountTrue());
             stats.add(new ArrayStatisticVisitor.CountFalse());
             break;
