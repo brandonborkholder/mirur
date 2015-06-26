@@ -21,8 +21,6 @@
 <link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
 <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="wp-includes/wlwmanifest.xml" /> 
 <meta name="generator" content="WordPress 4.0.5" />
-<link rel='canonical' href='index.html?p=60' />
-<link rel='shortlink' href='index.html?p=60' />
 
 		<script type="text/javascript"> document.createElement("video");document.createElement("audio");document.createElement("track"); </script>
 			<!--[if lt IE 9]>
@@ -159,7 +157,7 @@ Use Mirur to analyze your algorithm for correctness.  See how the datastructures
 </div><!-- #page-wrapper -->
 
 
-<a href="index.html?p=60#" id="scroll-to-top"></a><script type='text/javascript' src='http://vjs.zencdn.net/4.5/video.js'></script>
+<a href="#" id="scroll-to-top"></a><script type='text/javascript' src='http://vjs.zencdn.net/4.5/video.js'></script>
 <script type='text/javascript' src='wp-content/plugins/videojs-html5-video-player-for-wordpress/videojs/vjs.youtube.js'></script>
 <script type="text/javascript" id="slb_context">/* <![CDATA[ */if ( !!window.jQuery ) {(function($){$(document).ready(function(){if ( !!window.SLB ) { {$.extend(SLB, {"context":["public","user_guest"]});} }})})(jQuery);}/* ]]> */</script>
 
