@@ -1,18 +1,26 @@
 package mirur.plugins.line1d;
 
-import java.nio.FloatBuffer;
+import javax.media.opengl.GL;
 
 import mirur.core.AbstractArray1dVisitor;
+import mirur.plugins.SimpleVBO;
 
 public class FillWithLinesVisitor extends AbstractArray1dVisitor {
-    private final FloatBuffer buffer;
+    private final SimpleVBO vbo;
 
-    public FillWithLinesVisitor(FloatBuffer buffer) {
-        this.buffer = buffer;
+    public FillWithLinesVisitor(SimpleVBO vbo) {
+        this.vbo = vbo;
     }
 
-    public static final int requiredSpace(int numValues) {
-        return numValues * 2;
+    @Override
+    protected void start(int size) {
+        vbo.allocate(size * 2);
+        vbo.begin(GL.GL_LINE_STRIP);
+    }
+
+    @Override
+    protected void stop() {
+        vbo.end();
     }
 
     @Override
@@ -22,7 +30,6 @@ public class FillWithLinesVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, float v) {
-        buffer.put(i);
-        buffer.put(v);
+        vbo.add(i, v);
     }
 }

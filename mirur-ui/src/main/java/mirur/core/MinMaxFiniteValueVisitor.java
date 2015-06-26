@@ -1,9 +1,11 @@
 package mirur.core;
 
+import static java.lang.Double.isInfinite;
+import static java.lang.Double.isNaN;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class MinMaxValueVisitor implements ArrayElementVisitor {
+public class MinMaxFiniteValueVisitor implements ArrayElementVisitor {
     private double min = Double.POSITIVE_INFINITY;
     private double max = Double.NEGATIVE_INFINITY;
 
@@ -17,6 +19,10 @@ public class MinMaxValueVisitor implements ArrayElementVisitor {
 
     @Override
     public void visit(double v) {
+        if (isNaN(v) || isInfinite(v)) {
+            return;
+        }
+
         min = min(min, v);
         max = max(max, v);
     }

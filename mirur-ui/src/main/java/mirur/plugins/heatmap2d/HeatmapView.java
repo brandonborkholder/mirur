@@ -3,7 +3,7 @@ package mirur.plugins.heatmap2d;
 import java.nio.FloatBuffer;
 
 import mirur.core.Array2D;
-import mirur.core.MinMaxValueVisitor;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.PrimitiveArray;
 import mirur.core.VisitArray;
 import mirur.plugins.Array2DTitlePainter;
@@ -110,7 +110,7 @@ public class HeatmapView extends SimplePlugin2D {
         plot.getAxisY().setMin(0);
         plot.getAxisY().setMax(dim1);
 
-        MinMaxValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxValueVisitor());
+        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
         double minZ = minMaxVisitor.getMin();
         double maxZ = minMaxVisitor.getMax();
         if (minZ == maxZ) {

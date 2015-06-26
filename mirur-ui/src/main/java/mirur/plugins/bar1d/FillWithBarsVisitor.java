@@ -1,18 +1,26 @@
 package mirur.plugins.bar1d;
 
-import java.nio.FloatBuffer;
+import javax.media.opengl.GL;
 
 import mirur.core.AbstractArray1dVisitor;
+import mirur.plugins.SimpleVBO;
 
 public class FillWithBarsVisitor extends AbstractArray1dVisitor {
-    private final FloatBuffer buffer;
+    private final SimpleVBO vbo;
 
-    public FillWithBarsVisitor(FloatBuffer buffer) {
-        this.buffer = buffer;
+    public FillWithBarsVisitor(SimpleVBO vbo) {
+        this.vbo = vbo;
     }
 
-    public static final int requiredSpace(int numValues) {
-        return numValues * 8;
+    @Override
+    protected void start(int size) {
+        vbo.allocate(size * 8);
+        vbo.begin(GL.GL_TRIANGLE_STRIP);
+    }
+
+    @Override
+    protected void stop() {
+        vbo.end();
     }
 
     @Override
@@ -22,13 +30,9 @@ public class FillWithBarsVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, float v) {
-        buffer.put(i - 0.5f);
-        buffer.put(v);
-        buffer.put(i - 0.5f);
-        buffer.put(0);
-        buffer.put(i + 0.5f);
-        buffer.put(v);
-        buffer.put(i + 0.5f);
-        buffer.put(0);
+        vbo.add(i - 0.5f, v);
+        vbo.add(i - 0.5f, 0);
+        vbo.add(i + 0.5f, v);
+        vbo.add(i + 0.5f, 0);
     }
 }

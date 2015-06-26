@@ -1,7 +1,7 @@
 package mirur.plugins;
 
 import mirur.core.Array1D;
-import mirur.core.MinMaxValueVisitor;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
 
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
@@ -48,7 +48,7 @@ public class Array1DPlot extends SimplePlot2D {
     }
 
     protected void updateAxesBounds(Array1D array) {
-        MinMaxValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxValueVisitor());
+        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
         double min = minMaxVisitor.getMin();
         double max = minMaxVisitor.getMax();
 

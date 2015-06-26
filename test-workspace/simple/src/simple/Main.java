@@ -24,12 +24,12 @@ public class Main {
         }
 
         List<String> strList = new ArrayList<>();
-        for (int i = 0; i < 50; i++){
+        for (int i = 0; i < 50; i++) {
             strList.add(String.valueOf(v()));
         }
 
         List<Double> dblList = new ArrayList<>();
-        for (int i = 0; i < 50; i++){
+        for (int i = 0; i < 50; i++) {
             dblList.add(v());
         }
 
@@ -44,7 +44,7 @@ public class Main {
 
         float[][] jaggedSurface = new float[100][];
         for (int i = 0; i < jaggedSurface.length; i++) {
-            int len = (int) (v() * 100);
+            int len = (int) (Math.random() * 100);
             jaggedSurface[i] = new float[len];
             for (int j = 0; j < len; j++) {
                 jaggedSurface[i][j] = (float) v();
@@ -55,6 +55,14 @@ public class Main {
     }
 
     static double v() {
-        return Math.random();
+        if (Math.random() < 0.01) {
+            return Double.NaN;
+        } else if (Math.random() < 0.01) {
+            return Double.POSITIVE_INFINITY;
+        } else if (Math.random() < 0.01) {
+            return Double.NEGATIVE_INFINITY;
+        } else {
+            return Math.random();
+        }
     }
 }
