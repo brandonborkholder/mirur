@@ -30,7 +30,7 @@ public class HistogramBinTextPainter extends SimpleTextPainter {
         double selected = srcAxis.getAxisX().getSelectionCenter();
         double bin = histPainter.getBin(selected);
         if (bin != lastBin) {
-            int count = histPainter.getCount(selected);
+            int count = histPainter.getCount(bin);
             String text = format(bin, histPainter.getBinSize(), count);
             setText(text);
 

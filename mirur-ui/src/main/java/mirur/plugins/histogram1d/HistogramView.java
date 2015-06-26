@@ -1,6 +1,7 @@
 package mirur.plugins.histogram1d;
 
 import mirur.core.Array1D;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.PrimitiveArray;
 import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
@@ -62,8 +63,9 @@ public class HistogramView extends SimplePlugin1D {
     @Override
     protected HistogramPainter createPainter(Array1D array) {
         HistogramPainter painter = new HistogramPainter();
-        float[] asFloats = VisitArray.visit1d(array.getData(), new ToFloatsVisitor()).getFloats();
-        painter.setData(asFloats);
+        MinMaxFiniteValueVisitor minmax = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
+        HistogramVisitor hist = VisitArray.visit1d(array.getData(), new HistogramVisitor(minmax.getMin(), minmax.getMax()));
+        painter.setData(hist.getCounts(), (float) minmax.getMin(), hist.getBinWidth());
         return painter;
     }
 }

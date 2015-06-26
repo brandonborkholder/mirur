@@ -24,15 +24,13 @@ public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramP
         borderColor = laf.getColor(MirurLAF.DATA_BORDER_COLOR);
     }
 
-    @Override
-    public void setData(Float2IntMap counts, int totalCount, float binSize) {
-        this.counts = null;
-        super.setData(counts, totalCount, binSize);
+    public void setData(Float2IntMap counts, float binStart, float binSize) {
+        this.binStart = binStart;
         this.counts = counts;
+        setData(counts, binSize);
     }
 
-    public int getCount(double value) {
-        double binValue = getBin(value);
+    public int getCount(double binValue) {
         if (getMinX() <= binValue && binValue <= getMaxX()) {
             return counts.get((float) binValue);
         } else {
