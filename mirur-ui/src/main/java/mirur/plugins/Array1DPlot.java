@@ -5,6 +5,7 @@ import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
 
+import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
@@ -58,11 +59,19 @@ public class Array1DPlot extends SimplePlot2D {
             max++;
         }
 
-        double paddingY = (max - min) * 0.02;
         getAxisX().setMin(0);
         getAxisX().setMax(array.getSize());
-        getAxisY().setMin(min - paddingY);
-        getAxisY().setMax(max + paddingY);
+        padAxis(getAxisX());
+
+        getAxisY().setMin(min);
+        getAxisY().setMax(max);
+    }
+
+    protected void padAxis(Axis1D axis) {
+        double padding = (axis.getMax() - axis.getMin()) * 0.02;
+        axis.setMin(axis.getMin() - padding);
+        axis.setMax(axis.getMax() + padding);
+        axis.validate();
     }
 
     protected void setData(Array1D array) {

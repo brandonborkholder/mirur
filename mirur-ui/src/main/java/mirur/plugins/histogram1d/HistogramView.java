@@ -48,10 +48,10 @@ public class HistogramView extends SimplePlugin1D {
                 painter.autoAdjustAxisBounds(axis);
                 // TODO bug fix, should be fixed in next Glimpse
                 axis.getAxisX().setMax(axis.getAxisX().getMax() + painter.getBinSize());
+
+                padAxis(getAxisX());
             }
         };
-
-        plot.setAxisSizeX(40);
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
