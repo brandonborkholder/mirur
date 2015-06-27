@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>mirur.jogl-parent</artifactId>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>jogl-parent</name>
 
@@ -33,19 +34,6 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.1</version>
                 <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>unpack</id>
                         <phase>process-resources</phase>
