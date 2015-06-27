@@ -9,9 +9,13 @@
     </parent>
 
     <artifactId>mirur.jogl-parent</artifactId>
-    <version>0.1.0</version>
+    <version>0.5.0</version>
     <packaging>pom</packaging>
     <name>jogl-parent</name>
+
+    <properties>
+        <jogl.version>2.2.0</jogl.version>
+    </properties>
 
     <build>
         <plugins>

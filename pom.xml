@@ -9,7 +9,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jogl.version>2.1.5-01</jogl.version>
         <tycho.version>0.22.0</tycho.version>
     </properties>
 

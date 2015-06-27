@@ -82,7 +82,8 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
     }
 
     public static class Mean extends AbstractStatisticVisitor {
-        org.apache.commons.math3.stat.descriptive.moment.Mean mean = new org.apache.commons.math3.stat.descriptive.moment.Mean();
+        double sum;
+        int n;
 
         public Mean() {
             super("mean");
@@ -91,19 +92,22 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         public void visit(double v) {
             if (isFinite(v)) {
-                mean.increment(v);
+                n++;
+                sum += v;
                 isValid = true;
             }
         }
 
         @Override
         protected String getValue() {
-            return String.valueOf(mean.getResult());
+            return String.valueOf(sum / n);
         }
     }
 
     public static class Variance extends AbstractStatisticVisitor {
-        org.apache.commons.math3.stat.descriptive.moment.Variance var = new org.apache.commons.math3.stat.descriptive.moment.Variance();
+        int n;
+        double sum;
+        double sumSq;
 
         public Variance() {
             super("variance");
@@ -112,14 +116,17 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         public void visit(double v) {
             if (isFinite(v)) {
-                var.increment(v);
+                n++;
+                sum += v;
+                sumSq += v * v;
                 isValid = true;
             }
         }
 
         @Override
         protected String getValue() {
-            return String.valueOf(var.getResult());
+            double result = (sumSq - (sum * sum) / n) / n;
+            return String.valueOf(result);
         }
     }
 
