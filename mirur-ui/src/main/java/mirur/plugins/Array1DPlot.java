@@ -61,10 +61,10 @@ public class Array1DPlot extends SimplePlot2D {
 
         getAxisX().setMin(0);
         getAxisX().setMax(array.getSize());
-        padAxis(getAxisX());
 
         getAxisY().setMin(min);
         getAxisY().setMax(max);
+        padAxis(getAxisY());
     }
 
     protected void padAxis(Axis1D axis) {

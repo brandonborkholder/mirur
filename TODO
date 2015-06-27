@@ -1,5 +1,1 @@
 fix exception handling
-add anonymous statistics logging
-export data to file
-compile with Java 1.5 to be more portable
-fix handling of Inf and NaN in plots

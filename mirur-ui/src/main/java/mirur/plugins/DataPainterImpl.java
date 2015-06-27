@@ -70,7 +70,7 @@ public class DataPainterImpl implements DataPainter {
     @Override
     public void uninstall(GlimpseCanvas canvas) {
         canvas.removeLayout(layout);
-        // TODO need to dispose the layout
+        layout.dispose(canvas.getGlimpseContext());
     }
 
     private interface ResetAction {
