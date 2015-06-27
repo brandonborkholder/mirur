@@ -2,85 +2,21 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>mirur.mirur-ui</groupId>
-    <artifactId>mirur-jogl-win64</artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <parent>
+        <groupId>mirur</groupId>
+        <artifactId>mirur.jogl-parent</artifactId>
+        <version>0.5.0.qualifier</version>
+        <relativePath>../mirur-jogl-parent</relativePath>
+    </parent>
 
+    <artifactId>mirur.jogl-win64</artifactId>
+    <packaging>eclipse-plugin</packaging>
     <name>jogl-win64-fragment</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <rcp.os.filter>win32</rcp.os.filter>
+        <rcp.ws.filter>win32</rcp.ws.filter>
+        <rcp.arch.filter>x86_64</rcp.arch.filter>
+        <jogl.classifier>natives-windows-amd64</jogl.classifier>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.jogamp.jogl</groupId>
-                                    <artifactId>jogl-all</artifactId>
-                                    <version>2.1.5-01</version>
-                                    <classifier>natives-windows-amd64</classifier>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.jogamp.gluegen</groupId>
-                                    <artifactId>gluegen-rt</artifactId>
-                                    <version>2.1.5-01</version>
-                                    <classifier>natives-windows-amd64</classifier>
-                                </artifactItem>
-                            </artifactItems>
-                            <includes>*.so,*.dll,*.jnilib</includes>
-                            <outputDirectory>${basedir}</outputDirectory>
-                            <overwriteReleases>true</overwriteReleases>
-                            <overwriteSnapshots>true</overwriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${basedir}</directory>
-                            <includes>
-                                <include>*.jar</include>
-                                <include>*.dll</include>
-                                <include>*.so</include>
-                                <include>*.jnilib</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
