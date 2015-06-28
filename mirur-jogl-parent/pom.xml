@@ -5,11 +5,11 @@
     <parent>
         <groupId>mirur</groupId>
         <artifactId>mirur-parent</artifactId>
-        <version>0.5.0.qualifier</version>
+        <version>0.6.0.qualifier</version>
     </parent>
 
     <artifactId>mirur.jogl-parent</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <packaging>pom</packaging>
     <name>jogl-parent</name>
 

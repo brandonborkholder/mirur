@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: mirur-jogl-osx
 Bundle-SymbolicName: mirur.jogl-osx;singleton:=true
-Bundle-Version: 0.5.0
-Fragment-Host: mirur.mirur-ui;bundle-version="0.5.0"
+Bundle-Version: 0.6.0
+Fragment-Host: mirur.mirur-ui;bundle-version="0.6.0"
 Eclipse-PlatformFilter: (osgi.os=macosx)
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

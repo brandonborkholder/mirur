@@ -2,7 +2,7 @@
 <feature
       id="mirur.feature"
       label="Mirur"
-      version="0.5.0.qualifier"
+      version="0.6.0.qualifier"
       os="linux,macosx,win32"
       arch="x86,x86_64">
 
@@ -12,11 +12,11 @@ on primitive arrays in real time.
    </description>
 
    <copyright>
-      Copyright (c) 2014 Brandon Borkholder, all rights reserved
+      Copyright (c) 2015 Brandon Borkholder, all rights reserved
    </copyright>
 
    <license url="">
-      Mirur is Copyright (c) 2014, Brandon Borkholder, All rights reserved
+      Mirur is Copyright (c) 2015, Brandon Borkholder, All rights reserved
 
 -----------------------------------------------------------------------------
 
@@ -515,6 +515,7 @@ http://creativecommons.org/licenses/by/3.0/
 
    <url>
       <update label="Mirur Updates" url="http://mirur.io/update-site"/>
+      <discovery label="Drawing framework used for visualization" url="http://glimpse.metsci.com"/>
    </url>
 
    <plugin
