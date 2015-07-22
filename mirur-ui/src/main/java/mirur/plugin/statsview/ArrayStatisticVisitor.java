@@ -93,7 +93,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.valueOf(sum);
+            return String.format("%f", sum);
         }
     }
 
@@ -116,7 +116,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.valueOf(sum / n);
+            return String.format("%f", sum / n);
         }
     }
 
@@ -142,7 +142,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         protected String getValue() {
             double result = (sumSq - (sum * sum) / n) / n;
-            return String.valueOf(result);
+            return String.format("%f", result);
         }
     }
 
@@ -169,9 +169,9 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         protected String getValue() {
             if (max == finiteMax) {
-                return String.valueOf(max);
+                return String.format("%f", max);
             } else {
-                return String.valueOf(max) + " (finite max is " + String.valueOf(finiteMax) + ")";
+                return String.format("%f", max) + " (finite max is " + String.format("%f", finiteMax) + ")";
             }
         }
     }
@@ -199,9 +199,9 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         protected String getValue() {
             if (min == finiteMin) {
-                return String.valueOf(min);
+                return String.format("%f", min);
             } else {
-                return String.valueOf(min) + " (finite min is " + String.valueOf(finiteMin) + ")";
+                return String.format("%f", min) + " (finite min is " + String.format("%f", finiteMin) + ")";
             }
         }
     }
