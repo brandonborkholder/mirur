@@ -18,7 +18,7 @@
    <bundle id="mirur.jogl-win64" version="0.6.0">
       <category name="mirur.category"/>
    </bundle>
-   <category-def name="mirur.category" label="Mirur Debugging Tool">
+   <category-def name="JavaTools" label="Java Tools">
       <description>
          Mirur debugging tool
       </description>
