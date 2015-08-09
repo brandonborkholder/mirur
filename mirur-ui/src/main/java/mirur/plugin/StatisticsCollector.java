@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import mirur.core.PrimitiveArray;
+import mirur.plugins.MirurView;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -85,6 +86,12 @@ public class StatisticsCollector {
     public void selected(PrimitiveArray array) {
         if (array != null) {
             log("Selected " + array);
+        }
+    }
+
+    public void selected(MirurView view) {
+        if (view != null) {
+            log("Selected view " + view.getName());
         }
     }
 

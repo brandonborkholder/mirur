@@ -31,6 +31,7 @@ public class Activator extends AbstractUIPlugin {
     private static VariableSelectionCache variableCache;
 
     private static VariableSelectionModel varSelectionModel;
+    private static ViewSelectionModel viewSelectionModel;
 
     private static Preferences preferences;
 
@@ -51,8 +52,10 @@ public class Activator extends AbstractUIPlugin {
         agentDeployer = new RemoteAgentDeployer();
         variableCache = new VariableSelectionCache();
         varSelectionModel = new VariableSelectionModel();
+        viewSelectionModel = new ViewSelectionModel();
 
         statsCollector.started();
+        varSelectionModel.addArrayListener(null, viewSelectionModel);
     }
 
     @Override
@@ -78,6 +81,10 @@ public class Activator extends AbstractUIPlugin {
 
     public static VariableSelectionModel getVariableSelectionModel() {
         return varSelectionModel;
+    }
+
+    public static ViewSelectionModel getViewSelectionModel() {
+        return viewSelectionModel;
     }
 
     public static Preferences getPreferences() {

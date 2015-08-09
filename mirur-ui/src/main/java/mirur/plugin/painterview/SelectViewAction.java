@@ -16,6 +16,8 @@
  */
 package mirur.plugin.painterview;
 
+import static mirur.plugin.Activator.getVariableSelectionModel;
+import static mirur.plugin.Activator.getViewSelectionModel;
 import mirur.core.PrimitiveArray;
 import mirur.plugin.Activator;
 import mirur.plugin.Icons;
@@ -24,6 +26,7 @@ import mirur.plugins.MirurViews;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Point;
@@ -33,7 +36,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolItem;
 
-public abstract class SelectViewAction extends Action implements IMenuCreator {
+public class SelectViewAction extends Action implements IMenuCreator {
     public SelectViewAction() {
         setId(SelectViewAction.class.getName());
         setMenuCreator(this);
@@ -65,22 +68,24 @@ public abstract class SelectViewAction extends Action implements IMenuCreator {
     public Menu getMenu(Control parent) {
         Menu menu = new Menu(parent);
 
-        PrimitiveArray data = getActiveData();
+        PrimitiveArray data = getVariableSelectionModel().getActiveSelected();
 
-        for (final MirurView plugin : MirurViews.plugins()) {
-            Action action = new Action(plugin.getName(), plugin.getIcon()) {
-                @Override
-                public void run() {
-                    select(plugin);
+        if (data == null) {
+            new ActionContributionItem(new NoVariableSelected()).fill(menu, -1);
+        } else {
+            MirurView selected = getViewSelectionModel().getActiveSelected();
+
+            for (MirurView plugin : MirurViews.plugins()) {
+                if (plugin.supportsData(data)) {
+                    Action action = new ViewRadioButton(plugin);
+                    action.setChecked(plugin.equals(selected));
+                    ActionContributionItem item = new ActionContributionItem(action);
+                    item.fill(menu, -1);
                 }
-            };
-            action.setEnabled(data == null || plugin.supportsData(data));
-            ActionContributionItem item = new ActionContributionItem(action);
-            item.fill(menu, -1);
+            }
         }
 
         new Separator().fill(menu, -1);
-
         ActionContributionItem item = new ActionContributionItem(new RequestNewViewAction());
         item.fill(menu, -1);
 
@@ -92,11 +97,25 @@ public abstract class SelectViewAction extends Action implements IMenuCreator {
         throw new UnsupportedOperationException();
     }
 
-    private void select(MirurView plugin) {
-        setPainter(plugin);
+    private static final class NoVariableSelected extends Action {
+        public NoVariableSelected() {
+            super("No painter available");
+            setEnabled(false);
+        }
     }
 
-    protected abstract void setPainter(MirurView painter);
+    private static final class ViewRadioButton extends Action {
+        final MirurView view;
 
-    protected abstract PrimitiveArray getActiveData();
+        public ViewRadioButton(MirurView view) {
+            super(view.getName(), IAction.AS_RADIO_BUTTON);
+            this.view = view;
+            setImageDescriptor(view.getIcon());
+        }
+
+        @Override
+        public void run() {
+            getViewSelectionModel().select(view);
+        }
+    }
 }

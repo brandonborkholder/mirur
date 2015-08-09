@@ -49,7 +49,7 @@ public class VariableSelectionModel {
         arrayListeners.add(listener);
         notifySelectedAsync(listener, lastSelected);
 
-        if (!isVarListenerAttached && !arrayListeners.isEmpty()) {
+        if (!isVarListenerAttached && !arrayListeners.isEmpty() && part != null) {
             varListener.install(part.getSite().getWorkbenchWindow());
             isVarListenerAttached = true;
             varListener.forceUpdateNotify();
@@ -68,7 +68,7 @@ public class VariableSelectionModel {
         arrayListeners.remove(listener);
         listener.arraySelected(null);
 
-        if (isVarListenerAttached && arrayListeners.isEmpty()) {
+        if (isVarListenerAttached && arrayListeners.isEmpty() && part != null) {
             varListener.uninstall(part.getSite().getWorkbenchWindow());
             isVarListenerAttached = false;
         }
@@ -83,12 +83,12 @@ public class VariableSelectionModel {
         });
     }
 
-    public void select(PrimitiveArray selected) {
+    public synchronized void select(PrimitiveArray selected) {
         if (lastSelected == selected) {
             return;
-        } else {
-            lastSelected = selected;
         }
+
+        lastSelected = selected;
 
         Activator.getStatistics().selected(selected);
 

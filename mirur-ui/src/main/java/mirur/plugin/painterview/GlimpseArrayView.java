@@ -16,11 +16,14 @@
  */
 package mirur.plugin.painterview;
 
+import static mirur.plugin.Activator.getViewSelectionModel;
+
 import javax.media.opengl.GLProfile;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugin.ArraySelectListener;
 import mirur.plugin.SelectListenerToggle;
+import mirur.plugin.ViewSelectListener;
 import mirur.plugins.DataPainter;
 import mirur.plugins.InvalidPlaceholderView;
 import mirur.plugins.MirurView;
@@ -37,7 +40,7 @@ import com.metsci.glimpse.gl.GLCapabilityEventListener;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
-public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
+public class GlimpseArrayView extends ViewPart implements ArraySelectListener, ViewSelectListener {
     private static final String ID = "mirur.views.Painter";
 
     private ResetAxesAction resetAction;
@@ -50,7 +53,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
     private InvalidPlaceholderView invalidPlaceholder;
 
-    private MirurView currentPlugin;
+    private MirurView currentView;
     private PrimitiveArray currentData;
     private DataPainter currentPainter;
 
@@ -63,17 +66,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         animator.start();
 
         IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-        tbm.add(new SelectViewAction() {
-            @Override
-            protected void setPainter(MirurView painter) {
-                updatePainter(painter);
-            }
-
-            @Override
-            protected PrimitiveArray getActiveData() {
-                return currentData;
-            }
-        });
+        tbm.add(new SelectViewAction());
         resetAction = new ResetAxesAction() {
             @Override
             public void run() {
@@ -100,6 +93,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
 
         invalidPlaceholder = new InvalidPlaceholderView();
 
+        getViewSelectionModel().addArrayListener(this);
         refreshDataAndPainter();
     }
 
@@ -121,8 +115,9 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
         refreshDataAndPainter();
     }
 
-    private void updatePainter(MirurView plugin) {
-        currentPlugin = plugin;
+    @Override
+    public void viewSelected(MirurView view) {
+        currentView = view;
         refreshDataAndPainter();
     }
 
@@ -141,8 +136,8 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener {
             currentPainter.uninstall(canvas);
         }
 
-        if (currentData != null && currentPlugin != null && currentPlugin.supportsData(currentData)) {
-            currentPainter = currentPlugin.install(canvas, currentData);
+        if (currentData != null && currentView != null && currentView.supportsData(currentData)) {
+            currentPainter = currentView.install(canvas, currentData);
             resetAction.setEnabled(true);
             viewMenuAction.setEnabled(true);
             canvas.setLookAndFeel(laf);
