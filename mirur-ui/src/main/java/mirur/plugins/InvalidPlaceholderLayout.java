@@ -30,8 +30,8 @@ public class InvalidPlaceholderLayout extends GlimpseLayout {
 
         SimpleTextPainter textPainter = new SimpleTextPainter();
         textPainter.setColor(GlimpseColor.getRed());
-        textPainter.setFont(18, true);
-        textPainter.setText("no valid data or painter selected");
+        textPainter.setFont(16, true, true);
+        textPainter.setText("no supported variable selected");
         textPainter.setHorizontalPosition(HorizontalPosition.Center);
         textPainter.setVerticalPosition(VerticalPosition.Center);
         addPainter(textPainter);
