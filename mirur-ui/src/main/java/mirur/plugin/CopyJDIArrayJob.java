@@ -17,7 +17,7 @@
 package mirur.plugin;
 
 import static mirur.core.PrimitiveTest.isPrimitiveName;
-import static mirur.plugin.Activator.getSelectionModel;
+import static mirur.plugin.Activator.getVariableSelectionModel;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -62,7 +62,7 @@ public class CopyJDIArrayJob extends Job {
         } catch (DebugException ex) {
             IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Error copying array via JDI", ex);
             PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
-            getSelectionModel().select(null);
+            getVariableSelectionModel().select(null);
             return status;
         }
     }

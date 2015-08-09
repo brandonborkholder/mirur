@@ -20,7 +20,7 @@ import static mirur.core.PrimitiveTest.isPrimitiveArray1d;
 import static mirur.core.PrimitiveTest.isPrimitiveArray2d;
 import static mirur.core.VisitArray.visit1d;
 import static mirur.core.VisitArray.visit2d;
-import static mirur.plugin.Activator.getSelectionModel;
+import static mirur.plugin.Activator.getVariableSelectionModel;
 import static mirur.plugin.Activator.getStatistics;
 import static mirur.plugin.Activator.getVariableCache;
 import mirur.core.Array1DImpl;
@@ -79,7 +79,7 @@ public class SubmitArrayToUIJob extends Job {
         }
 
         getVariableCache().put(var, frame, array);
-        getSelectionModel().select(array);
+        getVariableSelectionModel().select(array);
 
         return Status.OK_STATUS;
     }

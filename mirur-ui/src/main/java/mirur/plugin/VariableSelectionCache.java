@@ -28,10 +28,10 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
  * We want to cache a variable that we've already transfered. But a variable is only cacheable as long as it's not
  * modified. So we cache the variable and stack frame. When the thread resumes, then the cache needs to be cleared.
  */
-public class SelectionCache {
+public class VariableSelectionCache {
     private Map<Key, PrimitiveArray> cache;
 
-    public SelectionCache() {
+    public VariableSelectionCache() {
         cache = new HashMap<>();
     }
 

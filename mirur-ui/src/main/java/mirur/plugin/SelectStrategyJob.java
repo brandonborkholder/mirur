@@ -17,7 +17,7 @@
 package mirur.plugin;
 
 import static mirur.plugin.Activator.getAgentDeployer;
-import static mirur.plugin.Activator.getSelectionModel;
+import static mirur.plugin.Activator.getVariableSelectionModel;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -54,7 +54,7 @@ public class SelectStrategyJob extends Job {
         } catch (DebugException | InterruptedException ex) {
             IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Exception in selecting variable transfer strategy", ex);
             PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
-            getSelectionModel().select(null);
+            getVariableSelectionModel().select(null);
             return status;
         }
     }

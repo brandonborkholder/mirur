@@ -110,12 +110,12 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
 
     private void add(boolean force) {
         if (isChecked() || force) {
-            Activator.getSelectionModel().addArrayListener(part, listener);
+            Activator.getVariableSelectionModel().addArrayListener(part, listener);
         }
     }
 
     private void remove() {
-        Activator.getSelectionModel().removeArrayListener(part, listener);
+        Activator.getVariableSelectionModel().removeArrayListener(part, listener);
     }
 
     @Override

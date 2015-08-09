@@ -28,9 +28,9 @@ public class Activator extends AbstractUIPlugin {
 
     private static Activator plugin;
 
-    private static SelectionCache variableCache;
+    private static VariableSelectionCache variableCache;
 
-    private static SelectionModel selectionModel;
+    private static VariableSelectionModel varSelectionModel;
 
     private static Preferences preferences;
 
@@ -49,8 +49,8 @@ public class Activator extends AbstractUIPlugin {
 
         statsCollector = new StatisticsCollector();
         agentDeployer = new RemoteAgentDeployer();
-        variableCache = new SelectionCache();
-        selectionModel = new SelectionModel();
+        variableCache = new VariableSelectionCache();
+        varSelectionModel = new VariableSelectionModel();
 
         statsCollector.started();
     }
@@ -72,12 +72,12 @@ public class Activator extends AbstractUIPlugin {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
 
-    public static SelectionCache getVariableCache() {
+    public static VariableSelectionCache getVariableCache() {
         return variableCache;
     }
 
-    public static SelectionModel getSelectionModel() {
-        return selectionModel;
+    public static VariableSelectionModel getVariableSelectionModel() {
+        return varSelectionModel;
     }
 
     public static Preferences getPreferences() {

@@ -39,7 +39,7 @@ public class SaveArrayToFileAction extends Action {
 
     @Override
     public void run() {
-        PrimitiveArray array = Activator.getSelectionModel().getActiveSelected();
+        PrimitiveArray array = Activator.getVariableSelectionModel().getActiveSelected();
         if (array == null) {
             return;
         }

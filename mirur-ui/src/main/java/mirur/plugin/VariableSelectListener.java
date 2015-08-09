@@ -17,7 +17,7 @@
 package mirur.plugin;
 
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
-import static mirur.plugin.Activator.getSelectionModel;
+import static mirur.plugin.Activator.getVariableSelectionModel;
 import static mirur.plugin.Activator.getVariableCache;
 
 import java.util.Arrays;
@@ -109,11 +109,11 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
                 !(frame.getDebugTarget() instanceof IJavaDebugTarget) ||
                 !frame.getThread().isSuspended() ||
                 !isValidRefType(variable)) {
-            getSelectionModel().select(null);
+            getVariableSelectionModel().select(null);
         } else {
             if (getVariableCache().contains(variable, frame)) {
                 PrimitiveArray array = getVariableCache().getArray(variable, frame);
-                getSelectionModel().select(array);
+                getVariableSelectionModel().select(array);
             } else {
                 new SelectStrategyJob(name, variable, frame).schedule();
             }
