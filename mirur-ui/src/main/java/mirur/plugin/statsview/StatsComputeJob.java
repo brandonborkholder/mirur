@@ -61,8 +61,7 @@ public abstract class StatsComputeJob extends Job {
                 job.join();
             }
         } catch (InterruptedException ex) {
-            // TODO how to handle this
-            throw new RuntimeException(ex);
+            // ignore
         }
 
         monitor.done();

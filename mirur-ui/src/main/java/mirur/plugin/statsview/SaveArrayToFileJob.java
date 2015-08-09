@@ -16,9 +16,12 @@
  */
 package mirur.plugin.statsview;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.logging.Logger;
 
 import mirur.core.Array1D;
 import mirur.core.Array2D;
@@ -33,6 +36,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 public class SaveArrayToFileJob extends Job {
+    private static final Logger LOGGER = Logger.getLogger(SaveArrayToFileJob.class.getName());
+
     private final PrimitiveArray array;
     private final File dest;
 
@@ -59,6 +64,7 @@ public class SaveArrayToFileJob extends Job {
             monitor.done();
             out.close();
         } catch (IOException ex) {
+            logWarning(LOGGER, "Failed to write array to file", ex);
             return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Failed to write " + array.getName() + " to file " + dest, ex);
         } catch (OperationCanceledException ex) {
             return Status.CANCEL_STATUS;

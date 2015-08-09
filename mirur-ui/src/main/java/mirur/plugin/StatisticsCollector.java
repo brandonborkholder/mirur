@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -73,6 +75,18 @@ public class StatisticsCollector {
 
     public void started() {
         // nothing useful to send here
+    }
+
+    public void logWarning(String message, Throwable ex) {
+        String text = message;
+        if (ex != null) {
+            StringWriter w = new StringWriter();
+            ex.printStackTrace(new PrintWriter(w, true));
+            text += w.toString();
+            text.replace("\n", "\\n").replace("\f", "\\f").replace("\r", "\\r");
+        }
+
+        log("warning " + text);
     }
 
     public void transformedViaAgent(String originalObjectSignature) {

@@ -16,7 +16,10 @@
  */
 package mirur.plugin;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.plugin.Activator.getAgentDeployer;
+
+import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -28,6 +31,8 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 
 public class InstallMirurAgentJob extends Job {
+    private static final Logger LOGGER = Logger.getLogger(InstallMirurAgentJob.class.getName());
+
     private final IJavaStackFrame frame;
 
     public InstallMirurAgentJob(IJavaStackFrame frame) {
@@ -48,8 +53,8 @@ public class InstallMirurAgentJob extends Job {
             getAgentDeployer().install(target, thread);
             return Status.OK_STATUS;
         } catch (VariableTransferException | DebugException ex) {
+            logWarning(LOGGER, "Error installing agent", ex);
             IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Error installing agent", ex);
-            PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
             return status;
         }
     }

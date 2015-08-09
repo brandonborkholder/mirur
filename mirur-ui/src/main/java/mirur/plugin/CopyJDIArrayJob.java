@@ -16,8 +16,11 @@
  */
 package mirur.plugin;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.core.PrimitiveTest.isPrimitiveName;
 import static mirur.plugin.Activator.getVariableSelectionModel;
+
+import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -33,6 +36,8 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 public class CopyJDIArrayJob extends Job {
+    private static final Logger LOGGER = Logger.getLogger(CopyJDIArrayJob.class.getName());
+
     private final String name;
     private final IVariable var;
     private final IJavaStackFrame frame;
@@ -60,8 +65,8 @@ public class CopyJDIArrayJob extends Job {
 
             return Status.OK_STATUS;
         } catch (DebugException ex) {
+            logWarning(LOGGER, "Error copying array via JDI", ex);
             IStatus status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Error copying array via JDI", ex);
-            PluginLogSupport.error(getClass(), status.getMessage(), status.getException());
             getVariableSelectionModel().select(null);
             return status;
         }

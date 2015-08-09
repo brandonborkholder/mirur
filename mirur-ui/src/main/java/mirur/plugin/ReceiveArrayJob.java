@@ -17,6 +17,7 @@
 package mirur.plugin;
 
 import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.plugin.Activator.getStatistics;
 
 import java.io.InputStream;
@@ -64,6 +65,7 @@ public class ReceiveArrayJob extends Job {
             invokeAgent(agentType);
             return Status.OK_STATUS;
         } catch (Exception ex) {
+            logWarning(LOGGER, "Unexpected exception transfering array data from agent", ex);
             Activator.getVariableSelectionModel().select(null);
             return new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Unexpected exception transfering array data from agent", ex);
         }
