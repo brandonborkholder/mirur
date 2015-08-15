@@ -19,7 +19,7 @@ package mirur.plugin;
 import java.util.HashMap;
 import java.util.Map;
 
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -29,7 +29,7 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
  * modified. So we cache the variable and stack frame. When the thread resumes, then the cache needs to be cleared.
  */
 public class VariableSelectionCache {
-    private Map<Key, PrimitiveArray> cache;
+    private Map<Key, VariableObject> cache;
 
     public VariableSelectionCache() {
         cache = new HashMap<>();
@@ -43,12 +43,12 @@ public class VariableSelectionCache {
         return cache.containsKey(new Key(variable, frame));
     }
 
-    public PrimitiveArray getArray(IVariable variable, IJavaStackFrame frame) {
+    public VariableObject getArray(IVariable variable, IJavaStackFrame frame) {
         return cache.get(new Key(variable, frame));
     }
 
-    public void put(IVariable variable, IJavaStackFrame frame, PrimitiveArray array) {
-        cache.put(new Key(variable, frame), array);
+    public void put(IVariable variable, IJavaStackFrame frame, VariableObject obj) {
+        cache.put(new Key(variable, frame), obj);
     }
 
     private static class Key {

@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 import mirur.plugins.MirurView;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -93,13 +93,13 @@ public class StatisticsCollector {
         log("agent transformed " + originalObjectSignature);
     }
 
-    public void receivedFromTarget(PrimitiveArray array) {
-        log("received " + array);
+    public void receivedFromTarget(VariableObject obj) {
+        log("received " + obj);
     }
 
-    public void selected(PrimitiveArray array) {
-        if (array != null) {
-            log("Selected " + array);
+    public void selected(VariableObject obj) {
+        if (obj != null) {
+            log("Selected " + obj);
         }
     }
 

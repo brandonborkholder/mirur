@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 import mirur.plugins.MirurView;
 import mirur.plugins.MirurViews;
 
 import org.eclipse.swt.widgets.Display;
 
-public class ViewSelectionModel implements ArraySelectListener {
+public class ViewSelectionModel implements VarObjectSelectListener {
     private Deque<MirurView> lastSelectedQ;
 
     private List<ViewSelectListener> viewListeners;
@@ -94,14 +94,14 @@ public class ViewSelectionModel implements ArraySelectListener {
     }
 
     @Override
-    public synchronized void arraySelected(PrimitiveArray array) {
-        if (array == null) {
+    public synchronized void variableSelected(VariableObject obj) {
+        if (obj == null) {
             return;
         }
 
         // find the last used view for this kind of data
         for (MirurView view : lastSelectedQ) {
-            if (view.supportsData(array)) {
+            if (view.supportsData(obj)) {
                 select(view);
                 break;
             }

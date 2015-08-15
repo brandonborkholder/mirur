@@ -19,7 +19,7 @@ package mirur.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
@@ -28,8 +28,8 @@ public class VariableSelectionModel {
     private VariableSelectListener varListener;
     private boolean isVarListenerAttached;
 
-    private List<ArraySelectListener> arrayListeners;
-    private PrimitiveArray lastSelected;
+    private List<VarObjectSelectListener> arrayListeners;
+    private VariableObject lastSelected;
 
     public VariableSelectionModel() {
         varListener = new VariableSelectListener();
@@ -37,7 +37,7 @@ public class VariableSelectionModel {
         arrayListeners = new ArrayList<>();
     }
 
-    public synchronized void addArrayListener(IViewPart part, ArraySelectListener listener) {
+    public synchronized void addArrayListener(IViewPart part, VarObjectSelectListener listener) {
         if (listener == null) {
             throw new NullPointerException("listener cannot be null");
         }
@@ -56,7 +56,7 @@ public class VariableSelectionModel {
         }
     }
 
-    public synchronized void removeArrayListener(IViewPart part, ArraySelectListener listener) {
+    public synchronized void removeArrayListener(IViewPart part, VarObjectSelectListener listener) {
         if (listener == null) {
             throw new NullPointerException("listener cannot be null");
         }
@@ -66,7 +66,7 @@ public class VariableSelectionModel {
         }
 
         arrayListeners.remove(listener);
-        listener.arraySelected(null);
+        listener.variableSelected(null);
 
         if (isVarListenerAttached && arrayListeners.isEmpty() && part != null) {
             varListener.uninstall(part.getSite().getWorkbenchWindow());
@@ -74,16 +74,16 @@ public class VariableSelectionModel {
         }
     }
 
-    private void notifySelectedAsync(final ArraySelectListener listener, final PrimitiveArray array) {
+    private void notifySelectedAsync(final VarObjectSelectListener listener, final VariableObject obj) {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
-                listener.arraySelected(array);
+                listener.variableSelected(obj);
             }
         });
     }
 
-    public synchronized void select(PrimitiveArray selected) {
+    public synchronized void select(VariableObject selected) {
         if (lastSelected == selected) {
             return;
         }
@@ -92,12 +92,12 @@ public class VariableSelectionModel {
 
         Activator.getStatistics().selected(selected);
 
-        for (ArraySelectListener l : arrayListeners) {
+        for (VarObjectSelectListener l : arrayListeners) {
             notifySelectedAsync(l, selected);
         }
     }
 
-    public PrimitiveArray getActiveSelected() {
+    public VariableObject getActiveSelected() {
         return lastSelected;
     }
 }

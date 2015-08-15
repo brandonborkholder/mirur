@@ -16,12 +16,6 @@
  */
 package mirur.core;
 
-public interface PrimitiveArray {
-    String getName();
-
-    String getSignature();
-
-    Object getData();
-
+public interface PrimitiveArray extends VariableObject {
     int getNumDimensions();
 }

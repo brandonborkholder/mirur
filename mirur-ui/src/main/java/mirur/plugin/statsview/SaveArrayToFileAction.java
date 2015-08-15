@@ -19,6 +19,7 @@ package mirur.plugin.statsview;
 import java.io.File;
 
 import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 import mirur.plugin.Activator;
 
 import org.eclipse.jface.action.Action;
@@ -39,7 +40,8 @@ public class SaveArrayToFileAction extends Action {
 
     @Override
     public void run() {
-        PrimitiveArray array = Activator.getVariableSelectionModel().getActiveSelected();
+        VariableObject obj = Activator.getVariableSelectionModel().getActiveSelected();
+        PrimitiveArray array = obj instanceof PrimitiveArray ? (PrimitiveArray) obj : null;
         if (array == null) {
             return;
         }

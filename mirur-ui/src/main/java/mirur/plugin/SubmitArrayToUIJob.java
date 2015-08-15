@@ -20,15 +20,15 @@ import static mirur.core.PrimitiveTest.isPrimitiveArray1d;
 import static mirur.core.PrimitiveTest.isPrimitiveArray2d;
 import static mirur.core.VisitArray.visit1d;
 import static mirur.core.VisitArray.visit2d;
-import static mirur.plugin.Activator.getVariableSelectionModel;
 import static mirur.plugin.Activator.getStatistics;
 import static mirur.plugin.Activator.getVariableCache;
+import static mirur.plugin.Activator.getVariableSelectionModel;
 import mirur.core.Array1DImpl;
 import mirur.core.Array2DJagged;
 import mirur.core.Array2DRectangular;
 import mirur.core.IsJaggedVisitor;
 import mirur.core.IsValidArrayVisitor;
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -41,14 +41,14 @@ public class SubmitArrayToUIJob extends Job {
     private final String name;
     private final IVariable var;
     private final IJavaStackFrame frame;
-    private final Object arrayObject;
+    private final Object object;
 
-    public SubmitArrayToUIJob(String name, IVariable var, IJavaStackFrame frame, Object arrayObject) {
-        super("Sending Mirur Array Data to UI");
+    public SubmitArrayToUIJob(String name, IVariable var, IJavaStackFrame frame, Object object) {
+        super("Sending Mirur Data to UI");
         this.name = name;
         this.var = var;
         this.frame = frame;
-        this.arrayObject = arrayObject;
+        this.object = object;
 
         setPriority(INTERACTIVE);
         setSystem(true);
@@ -56,30 +56,32 @@ public class SubmitArrayToUIJob extends Job {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-        PrimitiveArray array = null;
+        VariableObject varObject = null;
 
-        if (arrayObject == null) {
+        if (object == null) {
             // leave null
-        } else if (isPrimitiveArray1d(arrayObject.getClass())) {
-            if (visit1d(arrayObject, new IsValidArrayVisitor()).isValid()) {
-                array = new Array1DImpl(name, arrayObject);
+        } else if (object instanceof VariableObject) {
+            varObject = (VariableObject) object;
+        } else if (isPrimitiveArray1d(object.getClass())) {
+            if (visit1d(object, new IsValidArrayVisitor()).isValid()) {
+                varObject = new Array1DImpl(name, object);
             }
-        } else if (isPrimitiveArray2d(arrayObject.getClass())) {
-            if (visit2d(arrayObject, new IsValidArrayVisitor()).isValid()) {
-                if (visit2d(arrayObject, new IsJaggedVisitor()).isJagged()) {
-                    array = new Array2DJagged(name, arrayObject);
+        } else if (isPrimitiveArray2d(object.getClass())) {
+            if (visit2d(object, new IsValidArrayVisitor()).isValid()) {
+                if (visit2d(object, new IsJaggedVisitor()).isJagged()) {
+                    varObject = new Array2DJagged(name, object);
                 } else {
-                    array = new Array2DRectangular(name, arrayObject);
+                    varObject = new Array2DRectangular(name, object);
                 }
             }
         }
 
-        if (array != null) {
-            getStatistics().receivedFromTarget(array);
+        if (varObject != null) {
+            getStatistics().receivedFromTarget(varObject);
         }
 
-        getVariableCache().put(var, frame, array);
-        getVariableSelectionModel().select(array);
+        getVariableCache().put(var, frame, varObject);
+        getVariableSelectionModel().select(varObject);
 
         return Status.OK_STATUS;
     }

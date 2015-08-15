@@ -14,20 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Mirur.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mirur.plugins;
+package mirur.plugin;
 
 import mirur.core.VariableObject;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-
-public interface MirurView {
-    boolean supportsData(VariableObject obj);
-
-    String getName();
-
-    ImageDescriptor getIcon();
-
-    DataPainter install(GlimpseCanvas canvas, VariableObject obj);
+public interface VarObjectSelectListener {
+    void variableSelected(VariableObject array);
 }

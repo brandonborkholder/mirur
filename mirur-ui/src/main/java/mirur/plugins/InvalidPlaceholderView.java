@@ -16,7 +16,7 @@
  */
 package mirur.plugins;
 
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Menu;
@@ -26,7 +26,7 @@ import com.metsci.glimpse.layout.GlimpseLayout;
 
 public class InvalidPlaceholderView implements MirurView {
     @Override
-    public boolean supportsData(PrimitiveArray array) {
+    public boolean supportsData(VariableObject obj) {
         return true;
     }
 
@@ -41,7 +41,7 @@ public class InvalidPlaceholderView implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
+    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
         final InvalidPlaceholderLayout layout = new InvalidPlaceholderLayout();
         canvas.addLayout(layout);
 

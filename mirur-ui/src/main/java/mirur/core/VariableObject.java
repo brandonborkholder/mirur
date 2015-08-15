@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Mirur.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mirur.plugin;
+package mirur.core;
 
-import mirur.core.PrimitiveArray;
+public interface VariableObject {
+    String getName();
 
-public interface ArraySelectListener {
-    void arraySelected(PrimitiveArray array);
+    String getSignature();
+
+    Object getData();
 }

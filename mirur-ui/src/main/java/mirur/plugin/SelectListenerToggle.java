@@ -33,9 +33,9 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
 
     private final String partID;
     private final ViewPart part;
-    private final ArraySelectListener listener;
+    private final VarObjectSelectListener listener;
 
-    public SelectListenerToggle(String partID, ViewPart part, ArraySelectListener listener) {
+    public SelectListenerToggle(String partID, ViewPart part, VarObjectSelectListener listener) {
         super("Sync Viewer", IAction.AS_CHECK_BOX);
         setId(SelectListenerToggle.class.getName());
         setText("Sync Viewer");

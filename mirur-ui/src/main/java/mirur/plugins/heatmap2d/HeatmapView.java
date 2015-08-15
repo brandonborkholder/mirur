@@ -20,7 +20,7 @@ import java.nio.FloatBuffer;
 
 import mirur.core.Array2D;
 import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 import mirur.core.VisitArray;
 import mirur.plugins.Array2DTitlePainter;
 import mirur.plugins.DataPainter;
@@ -52,8 +52,8 @@ public class HeatmapView extends SimplePlugin2D {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array0) {
-        final Array2D array = (Array2D) array0;
+    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+        final Array2D array = (Array2D) obj;
 
         TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
             @Override

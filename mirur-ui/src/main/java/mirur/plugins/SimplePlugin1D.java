@@ -17,7 +17,7 @@
 package mirur.plugins;
 
 import mirur.core.Array1D;
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -35,17 +35,19 @@ public abstract class SimplePlugin1D implements MirurView {
     }
 
     @Override
-    public boolean supportsData(PrimitiveArray array) {
-        Class<?> clazz = array.getData().getClass();
-        return array instanceof Array1D &&
-                (int[].class.equals(clazz) ||
-                 long[].class.equals(clazz) ||
-                 float[].class.equals(clazz) ||
-                 double[].class.equals(clazz) ||
-                 char[].class.equals(clazz) ||
-                 short[].class.equals(clazz) ||
-                 boolean[].class.equals(clazz));
-
+    public boolean supportsData(VariableObject obj) {
+        if (obj instanceof Array1D) {
+            Class<?> clazz = ((Array1D) obj).getData().getClass();
+            return int[].class.equals(clazz) ||
+                   long[].class.equals(clazz) ||
+                   float[].class.equals(clazz) ||
+                   double[].class.equals(clazz) ||
+                   char[].class.equals(clazz) ||
+                   short[].class.equals(clazz) ||
+                   boolean[].class.equals(clazz);
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -59,8 +61,8 @@ public abstract class SimplePlugin1D implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
-        Array1D array1d = (Array1D) array;
+    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+        Array1D array1d = (Array1D) obj;
         GlimpseDataPainter2D painter = createPainter(array1d);
         Array1DPlot plot = new Array1DPlot(painter, array1d);
 

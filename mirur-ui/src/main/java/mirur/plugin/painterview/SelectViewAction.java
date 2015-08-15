@@ -18,7 +18,7 @@ package mirur.plugin.painterview;
 
 import static mirur.plugin.Activator.getVariableSelectionModel;
 import static mirur.plugin.Activator.getViewSelectionModel;
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 import mirur.plugin.Activator;
 import mirur.plugin.Icons;
 import mirur.plugins.MirurView;
@@ -68,15 +68,15 @@ public class SelectViewAction extends Action implements IMenuCreator {
     public Menu getMenu(Control parent) {
         Menu menu = new Menu(parent);
 
-        PrimitiveArray data = getVariableSelectionModel().getActiveSelected();
+        VariableObject obj = getVariableSelectionModel().getActiveSelected();
 
-        if (data == null) {
+        if (obj == null) {
             new ActionContributionItem(new NoVariableSelected()).fill(menu, -1);
         } else {
             MirurView selected = getViewSelectionModel().getActiveSelected();
 
             for (MirurView plugin : MirurViews.plugins()) {
-                if (plugin.supportsData(data)) {
+                if (plugin.supportsData(obj)) {
                     Action action = new ViewRadioButton(plugin);
                     action.setChecked(plugin.equals(selected));
                     ActionContributionItem item = new ActionContributionItem(action);

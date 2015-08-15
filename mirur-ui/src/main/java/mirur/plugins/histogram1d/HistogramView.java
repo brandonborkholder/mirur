@@ -18,7 +18,7 @@ package mirur.plugins.histogram1d;
 
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
 import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
 import mirur.plugins.DataPainter;
@@ -36,14 +36,14 @@ public class HistogramView extends SimplePlugin1D {
     }
 
     @Override
-    public boolean supportsData(PrimitiveArray array) {
-        Class<?> clazz = array.getData().getClass();
-        return super.supportsData(array) && !(boolean[].class.equals(clazz));
+    public boolean supportsData(VariableObject obj) {
+        return super.supportsData(obj) &&
+               !boolean[].class.equals(((Array1D) obj).getData().getClass());
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
-        final Array1D array1d = (Array1D) array;
+    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+        final Array1D array1d = (Array1D) obj;
         final HistogramPainter painter = createPainter(array1d);
         Array1DPlot plot = new Array1DPlot(painter, array1d) {
             @Override

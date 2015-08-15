@@ -20,9 +20,9 @@ import static mirur.plugin.Activator.getViewSelectionModel;
 
 import javax.media.opengl.GLProfile;
 
-import mirur.core.PrimitiveArray;
-import mirur.plugin.ArraySelectListener;
+import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;
+import mirur.plugin.VarObjectSelectListener;
 import mirur.plugin.ViewSelectListener;
 import mirur.plugins.DataPainter;
 import mirur.plugins.InvalidPlaceholderView;
@@ -40,7 +40,7 @@ import com.metsci.glimpse.gl.GLCapabilityEventListener;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
-public class GlimpseArrayView extends ViewPart implements ArraySelectListener, ViewSelectListener {
+public class GlimpseArrayView extends ViewPart implements VarObjectSelectListener, ViewSelectListener {
     private static final String ID = "mirur.views.Painter";
 
     private ResetAxesAction resetAction;
@@ -54,7 +54,7 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener, V
     private InvalidPlaceholderView invalidPlaceholder;
 
     private MirurView currentView;
-    private PrimitiveArray currentData;
+    private VariableObject currentData;
     private DataPainter currentPainter;
 
     @Override
@@ -110,8 +110,8 @@ public class GlimpseArrayView extends ViewPart implements ArraySelectListener, V
     }
 
     @Override
-    public void arraySelected(PrimitiveArray array) {
-        currentData = array;
+    public void variableSelected(VariableObject obj) {
+        currentData = obj;
         refreshDataAndPainter();
     }
 

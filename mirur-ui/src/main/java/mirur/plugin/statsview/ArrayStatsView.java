@@ -17,8 +17,9 @@
 package mirur.plugin.statsview;
 
 import mirur.core.PrimitiveArray;
-import mirur.plugin.ArraySelectListener;
+import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;
+import mirur.plugin.VarObjectSelectListener;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -28,7 +29,7 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 
-public class ArrayStatsView extends ViewPart implements ArraySelectListener {
+public class ArrayStatsView extends ViewPart implements VarObjectSelectListener {
     public static final String ID = "mirur.views.Statistics";
 
     private SelectListenerToggle selectListenerToggle;
@@ -85,9 +86,10 @@ public class ArrayStatsView extends ViewPart implements ArraySelectListener {
     }
 
     @Override
-    public void arraySelected(PrimitiveArray array) {
-        statsPage.setInput(array);
+    public void variableSelected(VariableObject obj) {
+        PrimitiveArray array = obj instanceof PrimitiveArray ? (PrimitiveArray) obj : null;
 
+        statsPage.setInput(array);
         saveArrayAction.setEnabled(array != null && (array.getNumDimensions() == 1 || array.getNumDimensions() == 2));
     }
 }
