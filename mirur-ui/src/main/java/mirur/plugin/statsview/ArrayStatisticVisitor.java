@@ -61,7 +61,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         int count = 0;
 
         public Size() {
-            super("size");
+            super("count");
         }
 
         @Override
