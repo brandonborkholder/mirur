@@ -18,6 +18,8 @@ package mirur.plugin.statsview;
 
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
+import static mirur.plugin.statsview.ArrayStatisticVisitor.AbstractStatisticVisitor.INT_FMT;
+import static mirur.plugin.statsview.ArrayStatisticVisitor.AbstractStatisticVisitor.SIZE_FMT;
 import mirur.core.AbstractArrayElementVisitor;
 import mirur.core.ArrayElementVisitor;
 
@@ -27,6 +29,10 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
     String getStatistic();
 
     abstract class AbstractStatisticVisitor extends AbstractArrayElementVisitor implements ArrayStatisticVisitor {
+        public static final String SIZE_FMT = "%,d";
+        public static final String INT_FMT = "%d";
+        public static final String DEC_FMT = "%f";
+
         private final String name;
 
         protected boolean isValid;
@@ -72,7 +78,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.valueOf(count);
+            return String.format(SIZE_FMT, count);
         }
     }
 
@@ -93,7 +99,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.format("%f", sum);
+            return String.format(DEC_FMT, sum);
         }
     }
 
@@ -116,7 +122,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.format("%f", sum / n);
+            return String.format(DEC_FMT, sum / n);
         }
     }
 
@@ -142,7 +148,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         protected String getValue() {
             double result = (sumSq - (sum * sum) / n) / n;
-            return String.format("%f", result);
+            return String.format(DEC_FMT, result);
         }
     }
 
@@ -169,9 +175,9 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         protected String getValue() {
             if (max == finiteMax) {
-                return String.format("%f", max);
+                return String.format(DEC_FMT, max);
             } else {
-                return String.format("%f", max) + " (finite max is " + String.format("%f", finiteMax) + ")";
+                return String.format(DEC_FMT + " (finite max is " + DEC_FMT + ")", max, finiteMax);
             }
         }
     }
@@ -199,9 +205,9 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         protected String getValue() {
             if (min == finiteMin) {
-                return String.format("%f", min);
+                return String.format(DEC_FMT, min);
             } else {
-                return String.format("%f", min) + " (finite min is " + String.format("%f", finiteMin) + ")";
+                return String.format(DEC_FMT + " (finite min is " + DEC_FMT + ")", min, finiteMin);
             }
         }
     }
@@ -223,7 +229,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.valueOf(count);
+            return String.format(SIZE_FMT, count);
         }
     }
 
@@ -244,7 +250,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.valueOf(count);
+            return String.format(SIZE_FMT, count);
         }
     }
 
@@ -265,7 +271,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return String.valueOf(count);
+            return String.format(SIZE_FMT, count);
         }
     }
 
@@ -278,7 +284,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return Integer.toString(count);
+            return String.format(SIZE_FMT, count);
         }
 
         @Override
@@ -299,7 +305,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return Integer.toString(count);
+            return String.format(SIZE_FMT, count);
         }
 
         @Override
@@ -320,7 +326,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         protected String getValue() {
-            return Integer.toString(count);
+            return String.format(SIZE_FMT, count);
         }
 
         @Override
@@ -352,7 +358,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public String getStatistic() {
-            return String.valueOf(count);
+            return String.format(SIZE_FMT, count);
         }
     }
 
@@ -376,7 +382,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public String getStatistic() {
-            return String.valueOf(count);
+            return String.format(SIZE_FMT, count);
         }
     }
 
@@ -390,7 +396,7 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
 
         @Override
         public String getStatistic() {
-            return String.valueOf(sum);
+            return String.format(INT_FMT, sum);
         }
 
         @Override
