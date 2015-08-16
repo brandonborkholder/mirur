@@ -21,13 +21,14 @@ import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.plugin.Activator.getStatistics;
 
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
+
+import mirur.core.MirurAgentCoder;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -117,9 +118,8 @@ public class ReceiveArrayJob extends Job {
                 Socket sock = serverSocket.accept();
 
                 InputStream in = sock.getInputStream();
-                ObjectInputStream objIn = new ObjectInputStream(in);
-                Object value = objIn.readObject();
-                objIn.close();
+                Object value = new MirurAgentCoder().decode(in);
+                in.close();
 
                 return value;
             } finally {

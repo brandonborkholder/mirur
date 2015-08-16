@@ -1,7 +1,6 @@
 package mirur.core;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -9,7 +8,12 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class MirurAgent {
-    private static final Object INVALID = null;
+    public static final String[] AGENT_CLASSES = new String[] {
+        MirurAgent.class.getName(),
+        MirurAgentCoder.class.getName(),
+    };
+
+    public static final Object INVALID = new Object();
 
     private int guessedSize;
     private double[] array;
@@ -23,12 +27,11 @@ public class MirurAgent {
     public static void sendAsArray(Object object, int port) throws IOException {
         Socket socket = new Socket(InetAddress.getByName(null), port);
         OutputStream out = socket.getOutputStream();
-        ObjectOutputStream objOut = new ObjectOutputStream(out);
 
         Object array = toArray(object);
-        objOut.writeObject(array);
+        new MirurAgentCoder().encode(array, out);
 
-        objOut.close();
+        out.close();
         socket.close();
     }
 

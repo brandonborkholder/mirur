@@ -112,15 +112,11 @@ public class RemoteAgentDeployer {
         }
     }
 
-    private String[] getAgentClasses() {
-        return new String[] { MirurAgent.class.getName() };
-    }
-
     private File explodeAgentClasses() throws IOException {
         File tmpClasspathDir = Files.createTempDirectory("miruragent").toFile();
         logFine(LOGGER, "Writing agent class files to %s", tmpClasspathDir);
 
-        for (String className : getAgentClasses()) {
+        for (String className : MirurAgent.AGENT_CLASSES) {
             String asFile = className.replace('.', '/').concat(".class");
             File classFile = new File(tmpClasspathDir, asFile);
             File classFileParent = classFile.getParentFile();
