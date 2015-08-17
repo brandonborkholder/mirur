@@ -43,6 +43,7 @@ public abstract class SimplePlugin1D implements MirurView {
                    float[].class.equals(clazz) ||
                    double[].class.equals(clazz) ||
                    char[].class.equals(clazz) ||
+                   byte[].class.equals(clazz) ||
                    short[].class.equals(clazz) ||
                    boolean[].class.equals(clazz);
         } else {

@@ -80,7 +80,6 @@ public class ViewSelectionModel implements VarObjectSelectListener {
 
         lastSelectedQ.remove(selected);
         lastSelectedQ.push(selected);
-        System.out.println(lastSelectedQ);
 
         Activator.getStatistics().selected(selected);
 
