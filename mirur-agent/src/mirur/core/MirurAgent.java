@@ -1,5 +1,7 @@
 package mirur.core;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -28,8 +30,12 @@ public class MirurAgent {
         Socket socket = new Socket(InetAddress.getByName(null), port);
         OutputStream out = socket.getOutputStream();
 
-        Object array = toArray(object);
-        new MirurAgentCoder().encode(array, out);
+        try {
+            Object transformed = toArray(object);
+            new MirurAgentCoder().encode(transformed, out);
+        } catch (Exception ex) {
+            new MirurAgentCoder().exception(object, ex, out);
+        }
 
         out.close();
         socket.close();
@@ -71,6 +77,21 @@ public class MirurAgent {
             }
 
             return helper.toArray();
+        } else if (value instanceof Image) {
+            Image img = (Image) value;
+            int width = img.getWidth(null);
+            int height = img.getHeight(null);
+            if (width <= 0 || height <= 0) {
+                return INVALID;
+            }
+
+            BufferedImage bufImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            boolean success = bufImg.getGraphics().drawImage(img, 0, 0, null);
+            if (success) {
+                return bufImg;
+            } else {
+                return INVALID;
+            }
         }
 
         return INVALID;

@@ -1,5 +1,11 @@
 package simple;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +56,18 @@ public class Main {
                 jaggedSurface[i][j] = (float) v();
             }
         }
+
+        Path2D.Float line = new Path2D.Float();
+        line.moveTo(1, 50);
+        line.lineTo(90, 90);
+        BasicStroke stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D g2d = (Graphics2D) img.getGraphics();
+		g2d.setColor(Color.blue);
+        g2d.fillRect(20, 20, 50, 80);
+        g2d.setColor(Color.red);
+        g2d.setStroke(stroke);
+        g2d.draw(line);
 
         System.out.println("Debug here");
     }

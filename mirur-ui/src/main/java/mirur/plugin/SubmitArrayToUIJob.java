@@ -29,6 +29,7 @@ import mirur.core.Array2DRectangular;
 import mirur.core.IsJaggedVisitor;
 import mirur.core.IsValidArrayVisitor;
 import mirur.core.VariableObject;
+import mirur.core.VariableObjectImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -74,6 +75,8 @@ public class SubmitArrayToUIJob extends Job {
                     varObject = new Array2DRectangular(name, object);
                 }
             }
+        } else {
+            varObject = new VariableObjectImpl(name, object);
         }
 
         if (varObject != null) {
