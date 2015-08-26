@@ -1,1 +1,2 @@
 fix exception handling
+add an is-sorted check to the StatsView, also a count of unsorted values
