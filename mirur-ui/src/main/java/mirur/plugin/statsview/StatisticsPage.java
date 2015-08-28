@@ -123,6 +123,7 @@ public class StatisticsPage extends Page {
         case "double":
         case "float":
             stats.add(new ArrayStatisticVisitor.Size());
+            stats.add(new ArrayStatisticVisitor.IsSorted());
             stats.add(new ArrayStatisticVisitor.Min());
             stats.add(new ArrayStatisticVisitor.Max());
             stats.add(new ArrayStatisticVisitor.Sum());
@@ -142,6 +143,7 @@ public class StatisticsPage extends Page {
         case "byte":
         case "char":
             stats.add(new ArrayStatisticVisitor.Size());
+            stats.add(new ArrayStatisticVisitor.IsSorted());
             stats.add(new ArrayStatisticVisitor.Min());
             stats.add(new ArrayStatisticVisitor.Max());
             stats.add(new ArrayStatisticVisitor.SumLong());

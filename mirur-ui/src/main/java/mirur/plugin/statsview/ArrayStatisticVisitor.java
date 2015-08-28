@@ -18,6 +18,7 @@ package mirur.plugin.statsview;
 
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
+import static java.lang.String.format;
 import static mirur.plugin.statsview.ArrayStatisticVisitor.AbstractStatisticVisitor.INT_FMT;
 import static mirur.plugin.statsview.ArrayStatisticVisitor.AbstractStatisticVisitor.SIZE_FMT;
 import mirur.core.AbstractArrayElementVisitor;
@@ -437,6 +438,50 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         @Override
         public void visit(byte v) {
             visit((long) v);
+        }
+    }
+
+    public static class IsSorted extends AbstractStatisticVisitor {
+        int numSortedAsc = 0;
+        int numSortedDesc = 0;
+        int numEqual = 0;
+        double lastV = Double.NaN;
+        int n = 0;
+
+        public IsSorted() {
+            super("sorted");
+        }
+
+        @Override
+        public void visit(double v) {
+            isValid = true;
+
+            if (v < lastV) {
+                numSortedAsc++;
+            } else if (v > lastV) {
+                numSortedDesc++;
+            } else {
+                numEqual++;
+            }
+
+            lastV = v;
+            n++;
+        }
+
+        @Override
+        protected String getValue() {
+            /*
+             * Because we start with NaN, these will always be one ahead.
+             */
+            numEqual--;
+
+            if (numSortedAsc + numEqual == n - 1) {
+                return "sorted ASCENDING";
+            } else if (numSortedDesc + numEqual == n - 1) {
+                return "sorted DESCENDING";
+            } else {
+                return format("unsorted (%d <, %d >, %d =)", numSortedAsc, numSortedDesc, numEqual);
+            }
         }
     }
 }
