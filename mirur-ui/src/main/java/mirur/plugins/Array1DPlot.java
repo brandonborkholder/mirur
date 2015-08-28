@@ -75,8 +75,9 @@ public class Array1DPlot extends SimplePlot2D {
             max++;
         }
 
-        getAxisX().setMin(0);
-        getAxisX().setMax(array.getSize());
+        // since we center on the "array" index
+        getAxisX().setMin(-0.5);
+        getAxisX().setMax(array.getSize() - 0.5);
 
         getAxisY().setMin(min);
         getAxisY().setMax(max);
