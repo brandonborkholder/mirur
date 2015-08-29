@@ -29,12 +29,18 @@ public class Array1DTitlePainter extends SimpleTextPainter {
     private Array1D array;
     private int lastIndex;
 
+    private int[] indexMap;
+
     public Array1DTitlePainter(Axis2D srcAxis) {
         this.srcAxis = srcAxis;
     }
 
     public void setArray(Array1D array) {
         this.array = array;
+    }
+
+    public void setIndexMap(int[] map) {
+        indexMap = map;
     }
 
     @Override
@@ -55,11 +61,16 @@ public class Array1DTitlePainter extends SimpleTextPainter {
     }
 
     private String format(int index) {
-        String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), index).getText();
+        int reportedIndex = index;
+        if (indexMap != null && 0 <= index && index < indexMap.length) {
+            reportedIndex = indexMap[index];
+        }
+
+        String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), reportedIndex).getText();
         if (value == null) {
             return String.format("%s[%d] %s", array.getData().getClass().getComponentType(), array.getSize(), array.getName());
         } else {
-            return String.format("%s[%d] = %s", array.getName(), index, value);
+            return String.format("%s[%d] = %s", array.getName(), reportedIndex, value);
         }
     }
 }

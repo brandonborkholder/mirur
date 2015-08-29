@@ -24,6 +24,8 @@ import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 public class LineView extends SimplePlugin1D {
     public LineView() {
         super("Line", null);
+        addFisheyeAction = true;
+        addSortAction = true;
     }
 
     @Override

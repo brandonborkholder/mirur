@@ -26,6 +26,9 @@ import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 
 public abstract class SimplePlugin1D implements MirurView {
+    protected boolean addFisheyeAction = false;
+    protected boolean addSortAction = false;
+
     private final String name;
     private final ImageDescriptor icon;
 
@@ -68,7 +71,14 @@ public abstract class SimplePlugin1D implements MirurView {
         Array1DPlot plot = new Array1DPlot(painter, array1d);
 
         DataPainterImpl result = new DataPainterImpl(plot);
-        result.addAction(getFisheyeAction(plot));
+
+        if (addFisheyeAction) {
+            result.addAction(getFisheyeAction(plot));
+        }
+        if (addSortAction) {
+            result.addAction(getSortAction(plot, array1d));
+        }
+
         result.addAxis(plot.getAxis());
 
         finalInstall(canvas, result);
@@ -88,6 +98,16 @@ public abstract class SimplePlugin1D implements MirurView {
                 } else {
                     plot.setShaders(InitializablePipeline.DEFAULT);
                 }
+            }
+        };
+    }
+
+    protected Action getSortAction(final Array1DPlot plot, Array1D array) {
+        return new SortAction(array) {
+            @Override
+            protected void swapPainter(Array1D arrayToPaint, int[] indexMap) {
+                GlimpseDataPainter2D newPainter = createPainter(arrayToPaint);
+                plot.swapPainter(newPainter, indexMap);
             }
         };
     }

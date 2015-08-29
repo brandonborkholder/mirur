@@ -23,6 +23,7 @@ import mirur.core.VisitArray;
 
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.painter.base.GlimpsePainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
@@ -30,15 +31,28 @@ import com.metsci.glimpse.plot.SimplePlot2D;
 
 public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;
+    private GlimpsePainter dataPainter;
 
     public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array) {
         setAxisSizeX(25);
         setTitleHeight(30);
 
-        setData(array);
+        updateAxesBounds(array);
+        setTitlePainterData(array);
 
         shaderWrapper = new ShaderWrapperPainter();
         addPainter(dataPainter, shaderWrapper, DATA_LAYER);
+        this.dataPainter = dataPainter;
+    }
+
+    public void swapPainter(GlimpseDataPainter2D dataPainter, int[] indexMap) {
+        removePainter(this.dataPainter);
+        this.dataPainter = dataPainter;
+
+        addPainter(dataPainter, shaderWrapper, DATA_LAYER);
+        if (titlePainter instanceof Array1DTitlePainter) {
+            ((Array1DTitlePainter) titlePainter).setIndexMap(indexMap);
+        }
     }
 
     @Override
@@ -89,10 +103,5 @@ public class Array1DPlot extends SimplePlot2D {
         axis.setMin(axis.getMin() - padding);
         axis.setMax(axis.getMax() + padding);
         axis.validate();
-    }
-
-    protected void setData(Array1D array) {
-        updateAxesBounds(array);
-        setTitlePainterData(array);
     }
 }

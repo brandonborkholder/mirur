@@ -24,6 +24,8 @@ import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 public class BarView extends SimplePlugin1D {
     public BarView() {
         super("Bar", null);
+        addFisheyeAction = true;
+        addSortAction = true;
     }
 
     @Override
