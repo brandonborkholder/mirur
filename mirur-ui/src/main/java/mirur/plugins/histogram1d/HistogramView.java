@@ -23,6 +23,7 @@ import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
+import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimplePlugin1D;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
@@ -44,8 +45,8 @@ public class HistogramView extends SimplePlugin1D {
     @Override
     public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
         final Array1D array1d = (Array1D) array;
-        final HistogramPainter painter = createPainter(array1d);
-        Array1DPlot plot = new Array1DPlot(painter, array1d) {
+        final HistogramPainter painter = createPainter(array1d, DataUnitConverter.IDENTITY);
+        Array1DPlot plot = new Array1DPlot(painter, array1d, DataUnitConverter.IDENTITY) {
             @Override
             protected SimpleTextPainter createTitlePainter() {
                 SimpleTextPainter painter = new HistogramBinTextPainter(axis);
@@ -74,7 +75,7 @@ public class HistogramView extends SimplePlugin1D {
     }
 
     @Override
-    protected HistogramPainter createPainter(Array1D array) {
+    protected HistogramPainter createPainter(Array1D array, DataUnitConverter unitConverter) {
         HistogramPainter painter = new HistogramPainter();
         MinMaxFiniteValueVisitor minmax = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
         HistogramVisitor hist = VisitArray.visit1d(array.getData(), new HistogramVisitor(minmax.getMin(), minmax.getMax()));

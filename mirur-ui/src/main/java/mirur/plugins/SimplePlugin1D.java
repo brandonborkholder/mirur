@@ -17,7 +17,9 @@
 package mirur.plugins;
 
 import mirur.core.Array1D;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.PrimitiveArray;
+import mirur.core.VisitArray;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -61,8 +63,14 @@ public abstract class SimplePlugin1D implements MirurView {
     @Override
     public DataPainter install(GlimpseCanvas canvas, PrimitiveArray array) {
         Array1D array1d = (Array1D) array;
-        GlimpseDataPainter2D painter = createPainter(array1d);
-        Array1DPlot plot = new Array1DPlot(painter, array1d);
+
+        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
+        double min = minMaxVisitor.getMin();
+        double max = minMaxVisitor.getMax();
+        DataUnitConverter unitConverter = new DataUnitConverter(min, max);
+
+        GlimpseDataPainter2D painter = createPainter(array1d, unitConverter);
+        Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter);
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAction(getFisheyeAction(plot));
@@ -89,5 +97,5 @@ public abstract class SimplePlugin1D implements MirurView {
         };
     }
 
-    protected abstract GlimpseDataPainter2D createPainter(Array1D array);
+    protected abstract GlimpseDataPainter2D createPainter(Array1D array, DataUnitConverter unitConverter);
 }

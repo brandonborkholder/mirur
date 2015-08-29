@@ -30,10 +30,14 @@ import com.metsci.glimpse.plot.SimplePlot2D;
 
 public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;
+    private DataUnitConverter unitConverter;
 
-    public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array) {
+    public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array, DataUnitConverter unitConverter) {
         setAxisSizeX(25);
         setTitleHeight(30);
+
+        this.unitConverter = unitConverter;
+        getLabelHandlerY().setAxisUnitConverter(unitConverter);
 
         setData(array);
 
@@ -78,8 +82,8 @@ public class Array1DPlot extends SimplePlot2D {
         getAxisX().setMin(0);
         getAxisX().setMax(array.getSize());
 
-        getAxisY().setMin(min);
-        getAxisY().setMax(max);
+        getAxisY().setMin(unitConverter.fromAxisUnits(min));
+        getAxisY().setMax(unitConverter.fromAxisUnits(max));
         padAxis(getAxisY());
     }
 

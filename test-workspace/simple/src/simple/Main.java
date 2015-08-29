@@ -51,6 +51,11 @@ public class Main {
             }
         }
 
+        double[] beyondFloatPrecision = new double[500];
+        for (int i = 0; i < beyondFloatPrecision.length; i++) {
+            beyondFloatPrecision[i] = v() * 1e-9 + 100;
+        }
+
         System.out.println("Debug here");
     }
 

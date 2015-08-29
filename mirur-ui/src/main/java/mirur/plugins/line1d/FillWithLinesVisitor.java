@@ -19,13 +19,16 @@ package mirur.plugins.line1d;
 import javax.media.opengl.GL;
 
 import mirur.core.AbstractArray1dVisitor;
+import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimpleVBO;
 
 public class FillWithLinesVisitor extends AbstractArray1dVisitor {
     private final SimpleVBO vbo;
+    private final DataUnitConverter unitConverter;
 
-    public FillWithLinesVisitor(SimpleVBO vbo) {
+    public FillWithLinesVisitor(SimpleVBO vbo, DataUnitConverter unitConverter) {
         this.vbo = vbo;
+        this.unitConverter = unitConverter;
     }
 
     @Override
@@ -41,11 +44,11 @@ public class FillWithLinesVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, double v) {
-        visit(i, (float) v);
+        vbo.add(i, (float) unitConverter.fromAxisUnits(v));
     }
 
     @Override
     protected void visit(int i, float v) {
-        vbo.add(i, v);
+        vbo.add(i, (float) unitConverter.fromAxisUnits(v));
     }
 }

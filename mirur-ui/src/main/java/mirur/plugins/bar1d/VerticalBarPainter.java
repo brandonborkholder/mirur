@@ -24,6 +24,7 @@ import javax.media.opengl.GLContext;
 import mirur.core.Array1D;
 import mirur.core.VisitArray;
 import mirur.plugin.painterview.MirurLAF;
+import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimpleVBO;
 
 import com.metsci.glimpse.axis.Axis2D;
@@ -42,8 +43,8 @@ public class VerticalBarPainter extends GlimpseDataPainter2D {
         color = laf.getColor(MirurLAF.DATA_COLOR);
     }
 
-    public void setData(Array1D data) {
-        VisitArray.visit1d(data.getData(), new FillWithBarsVisitor(vbo));
+    public void setData(Array1D data, DataUnitConverter unitConverter) {
+        VisitArray.visit1d(data.getData(), new FillWithBarsVisitor(vbo, unitConverter));
     }
 
     @Override
