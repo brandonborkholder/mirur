@@ -3,9 +3,9 @@ package simple;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,13 +57,20 @@ public class Main {
             }
         }
 
+        FloatBuffer buffer = FloatBuffer.allocate(1000);
+        for (int i = 0; i < buffer.capacity(); i++) {
+            buffer.put((float) v() * 10);
+        }
+        buffer.position((int) (v() * buffer.capacity() / 2));
+        buffer.limit((int) (v() * buffer.capacity() / 2) + buffer.position());
+
         Path2D.Float line = new Path2D.Float();
         line.moveTo(1, 50);
         line.lineTo(90, 90);
         BasicStroke stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g2d = (Graphics2D) img.getGraphics();
-		g2d.setColor(Color.blue);
+        g2d.setColor(Color.blue);
         g2d.fillRect(20, 20, 50, 80);
         g2d.setColor(Color.red);
         g2d.setStroke(stroke);

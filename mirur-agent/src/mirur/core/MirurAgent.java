@@ -6,6 +6,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.nio.ShortBuffer;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -14,6 +22,8 @@ public class MirurAgent {
         MirurAgent.class.getName(),
         MirurAgentCoder.class.getName(),
     };
+
+    private static final long MAX_BYTES = 50 * 1024 * 1024;
 
     public static final Object INVALID = new Object();
 
@@ -49,7 +59,12 @@ public class MirurAgent {
         Class<?> clazz = value.getClass();
         if (isPrimitiveArray(clazz)) {
             // 1d array of primitives
-            return value;
+            long nBytes = getArray1dBytes(value);
+            if (nBytes >= 0 && nBytes <= MAX_BYTES) {
+                return value;
+            } else {
+                return INVALID;
+            }
         } else if (clazz.isArray() && isPrimitiveArray(clazz.getComponentType())) {
             // 2d array of primitives
             return value;
@@ -77,6 +92,14 @@ public class MirurAgent {
             }
 
             return helper.toArray();
+        } else if (value instanceof Buffer) {
+            Buffer buf = (Buffer) value;
+            long nBytes = getBufferBytes(buf);
+            if (nBytes >= 0 && nBytes <= MAX_BYTES) {
+                return buf;
+            } else {
+                return INVALID;
+            }
         } else if (value instanceof Image) {
             Image img = (Image) value;
             int width = img.getWidth(null);
@@ -130,6 +153,48 @@ public class MirurAgent {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private static long getBufferBytes(Buffer buf) {
+        if (buf instanceof DoubleBuffer) {
+            return buf.capacity() * 8L;
+        } else if (buf instanceof LongBuffer) {
+            return buf.capacity() * 8L;
+        } else if (buf instanceof FloatBuffer) {
+            return buf.capacity() * 4L;
+        } else if (buf instanceof IntBuffer) {
+            return buf.capacity() * 4L;
+        } else if (buf instanceof ShortBuffer) {
+            return buf.capacity() * 2L;
+        } else if (buf instanceof CharBuffer) {
+            return buf.capacity() * 2L;
+        } else if (buf instanceof ByteBuffer) {
+            return buf.capacity() * 1L;
+        } else {
+            return -1;
+        }
+    }
+
+    private static long getArray1dBytes(Object array) {
+        if (array instanceof boolean[]) {
+            return ((boolean[]) array).length * 1L;
+        } else if (array instanceof byte[]) {
+            return ((byte[]) array).length * 1L;
+        } else if (array instanceof char[]) {
+            return ((char[]) array).length * 2L;
+        } else if (array instanceof short[]) {
+            return ((short[]) array).length * 2L;
+        } else if (array instanceof float[]) {
+            return ((float[]) array).length * 4L;
+        } else if (array instanceof int[]) {
+            return ((int[]) array).length * 4L;
+        } else if (array instanceof long[]) {
+            return ((long[]) array).length * 8L;
+        } else if (array instanceof double[]) {
+            return ((double[]) array).length * 8L;
+        } else {
+            return -1;
         }
     }
 }

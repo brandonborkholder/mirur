@@ -23,22 +23,36 @@ import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
-import mirur.plugins.SimplePlugin1D;
+import mirur.plugins.MirurView;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 
-public class HistogramView extends SimplePlugin1D {
-    public HistogramView() {
-        super("Histogram", null);
+public class HistogramView implements MirurView {
+    @Override
+    public String getName() {
+        return "Histogram";
+    }
+
+    @Override
+    public ImageDescriptor getIcon() {
+        return null;
     }
 
     @Override
     public boolean supportsData(VariableObject obj) {
-        return super.supportsData(obj) &&
-               !boolean[].class.equals(((Array1D) obj).getData().getClass());
+        Class<?> clazz = obj.getData().getClass();
+        return int[].class.equals(clazz) ||
+                long[].class.equals(clazz) ||
+                float[].class.equals(clazz) ||
+                double[].class.equals(clazz) ||
+                char[].class.equals(clazz) ||
+                byte[].class.equals(clazz) ||
+                short[].class.equals(clazz);
     }
 
     @Override
@@ -68,12 +82,10 @@ public class HistogramView extends SimplePlugin1D {
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
-
-        finalInstall(canvas, result);
+        canvas.addLayout(plot);
         return result;
     }
 
-    @Override
     protected HistogramPainter createPainter(Array1D array) {
         HistogramPainter painter = new HistogramPainter();
         MinMaxFiniteValueVisitor minmax = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());

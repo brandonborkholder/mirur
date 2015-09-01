@@ -16,7 +16,18 @@
  */
 package mirur.plugins;
 
+import java.lang.reflect.Array;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.nio.ShortBuffer;
+
 import mirur.core.Array1D;
+import mirur.core.Array1DImpl;
 import mirur.core.VariableObject;
 
 import org.eclipse.jface.action.Action;
@@ -26,9 +37,6 @@ import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 
 public abstract class SimplePlugin1D implements MirurView {
-    protected boolean addFisheyeAction = false;
-    protected boolean addSortAction = false;
-
     private final String name;
     private final ImageDescriptor icon;
 
@@ -40,7 +48,7 @@ public abstract class SimplePlugin1D implements MirurView {
     @Override
     public boolean supportsData(VariableObject obj) {
         if (obj instanceof Array1D) {
-            Class<?> clazz = ((Array1D) obj).getData().getClass();
+            Class<?> clazz = obj.getData().getClass();
             return int[].class.equals(clazz) ||
                    long[].class.equals(clazz) ||
                    float[].class.equals(clazz) ||
@@ -49,6 +57,15 @@ public abstract class SimplePlugin1D implements MirurView {
                    byte[].class.equals(clazz) ||
                    short[].class.equals(clazz) ||
                    boolean[].class.equals(clazz);
+        } else if (obj instanceof Buffer) {
+            return ((Buffer) obj).hasArray() &&
+                   (obj instanceof ByteBuffer ||
+	                obj instanceof ShortBuffer ||
+	                obj instanceof CharBuffer ||
+	                obj instanceof IntBuffer ||
+	                obj instanceof FloatBuffer ||
+	                obj instanceof DoubleBuffer ||
+	                obj instanceof LongBuffer);
         } else {
             return false;
         }
@@ -66,27 +83,37 @@ public abstract class SimplePlugin1D implements MirurView {
 
     @Override
     public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
-        Array1D array1d = (Array1D) obj;
+        Array1D array1d;
+        if (obj instanceof Array1D) {
+            array1d = (Array1D) obj;
+        } else {
+            Buffer buf = (Buffer) obj.getData();
+            Object arrayObj = buf.array();
+            if (buf.arrayOffset() != 0) {
+                Object newArrayObj = Array.newInstance(arrayObj.getClass().getComponentType(), buf.capacity());
+                System.arraycopy(arrayObj, buf.arrayOffset(), newArrayObj, 0, buf.capacity());
+                arrayObj = newArrayObj;
+            }
+            array1d = new Array1DImpl(obj.getName(), arrayObj);
+        }
+
         GlimpseDataPainter2D painter = createPainter(array1d);
         Array1DPlot plot = new Array1DPlot(painter, array1d);
 
+        if (obj.getData() instanceof Buffer) {
+            Buffer buf = (Buffer) obj.getData();
+            plot.addMarkerPainter("position", buf.position());
+            plot.addMarkerPainter("limit", buf.limit());
+        }
+
         DataPainterImpl result = new DataPainterImpl(plot);
 
-        if (addFisheyeAction) {
-            result.addAction(getFisheyeAction(plot));
-        }
-        if (addSortAction) {
-            result.addAction(getSortAction(plot, array1d));
-        }
+        result.addAction(getFisheyeAction(plot));
+        result.addAction(getSortAction(plot, array1d));
 
         result.addAxis(plot.getAxis());
-
-        finalInstall(canvas, result);
+        canvas.addLayout(plot);
         return result;
-    }
-
-    protected void finalInstall(GlimpseCanvas canvas, DataPainter painter) {
-        canvas.addLayout(painter.getLayout());
     }
 
     protected Action getFisheyeAction(final Array1DPlot plot) {

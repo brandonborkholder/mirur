@@ -3,7 +3,6 @@ package mirur.plugins.image;
 import static com.jogamp.opengl.util.texture.TextureIO.newTexture;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static javax.media.opengl.GL.GL_BLEND;
-import static javax.media.opengl.GL.GL_LINEAR;
 import static javax.media.opengl.GL.GL_NEAREST;
 import static javax.media.opengl.GL.GL_ONE;
 import static javax.media.opengl.GL.GL_ONE_MINUS_SRC_ALPHA;
@@ -16,7 +15,6 @@ import static javax.media.opengl.GL2GL3.GL_QUADS;
 
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLProfile;

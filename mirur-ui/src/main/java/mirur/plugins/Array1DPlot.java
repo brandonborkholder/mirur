@@ -20,6 +20,7 @@ import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
+import mirur.plugins.line1d.MarkerPainter;
 
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
@@ -53,6 +54,11 @@ public class Array1DPlot extends SimplePlot2D {
         if (titlePainter instanceof Array1DTitlePainter) {
             ((Array1DTitlePainter) titlePainter).setIndexMap(indexMap);
         }
+    }
+
+    public void addMarkerPainter(String name, int position) {
+        MarkerPainter p = new MarkerPainter(name, position);
+        addPainter(p, FOREGROUND_LAYER - 1);
     }
 
     @Override
