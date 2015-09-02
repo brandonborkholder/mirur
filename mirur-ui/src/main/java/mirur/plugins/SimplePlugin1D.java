@@ -103,8 +103,8 @@ public abstract class SimplePlugin1D implements MirurView {
 
         if (obj.getData() instanceof Buffer) {
             Buffer buf = (Buffer) obj.getData();
-            plot.addMarkerPainter("position", buf.position());
-            plot.addMarkerPainter("limit", buf.limit());
+            plot.addMarker("position", buf.position());
+            plot.addMarker("limit", buf.limit());
         }
 
         DataPainterImpl result = new DataPainterImpl(plot);

@@ -56,9 +56,9 @@ public class Array1DPlot extends SimplePlot2D {
         }
     }
 
-    public void addMarkerPainter(String name, int position) {
+    public void addMarker(String name, int position) {
         MarkerPainter p = new MarkerPainter(name, position);
-        addPainter(p, FOREGROUND_LAYER - 1);
+        axisLayoutX.addPainter(p);
     }
 
     @Override
