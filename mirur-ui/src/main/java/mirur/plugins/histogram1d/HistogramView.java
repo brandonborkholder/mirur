@@ -23,6 +23,7 @@ import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
+import mirur.plugins.DataUnitConverter;
 import mirur.plugins.MirurView;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -59,7 +60,7 @@ public class HistogramView implements MirurView {
     public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
         final Array1D array1d = (Array1D) obj;
         final HistogramPainter painter = createPainter(array1d);
-        Array1DPlot plot = new Array1DPlot(painter, array1d) {
+        Array1DPlot plot = new Array1DPlot(painter, array1d, DataUnitConverter.IDENTITY) {
             @Override
             protected SimpleTextPainter createTitlePainter() {
                 SimpleTextPainter painter = new HistogramBinTextPainter(axis);

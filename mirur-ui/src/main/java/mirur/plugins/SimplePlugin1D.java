@@ -28,7 +28,10 @@ import java.nio.ShortBuffer;
 
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
+import mirur.core.VisitArray;
+import mirur.plugins.DataUnitConverter.LinearScaleConverter;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -98,8 +101,13 @@ public abstract class SimplePlugin1D implements MirurView {
             array1d = new Array1DImpl(obj.getName(), arrayObj);
         }
 
-        GlimpseDataPainter2D painter = createPainter(array1d);
-        Array1DPlot plot = new Array1DPlot(painter, array1d);
+        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array1d.getData(), new MinMaxFiniteValueVisitor());
+        double min = minMaxVisitor.getMin();
+        double max = minMaxVisitor.getMax();
+        DataUnitConverter unitConverter = new LinearScaleConverter(min, max);
+
+        GlimpseDataPainter2D painter = createPainter(array1d, unitConverter);
+        Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter);
 
         if (obj.getData() instanceof Buffer) {
             Buffer buf = (Buffer) obj.getData();
@@ -110,7 +118,7 @@ public abstract class SimplePlugin1D implements MirurView {
         DataPainterImpl result = new DataPainterImpl(plot);
 
         result.addAction(getFisheyeAction(plot));
-        result.addAction(getSortAction(plot, array1d));
+        result.addAction(getSortAction(plot, array1d, unitConverter));
 
         result.addAxis(plot.getAxis());
         canvas.addLayout(plot);
@@ -130,15 +138,15 @@ public abstract class SimplePlugin1D implements MirurView {
         };
     }
 
-    protected Action getSortAction(final Array1DPlot plot, Array1D array) {
+    protected Action getSortAction(final Array1DPlot plot, Array1D array, final DataUnitConverter unitConverter) {
         return new SortAction(array) {
             @Override
             protected void swapPainter(Array1D arrayToPaint, int[] indexMap) {
-                GlimpseDataPainter2D newPainter = createPainter(arrayToPaint);
+                GlimpseDataPainter2D newPainter = createPainter(arrayToPaint, unitConverter);
                 plot.swapPainter(newPainter, indexMap);
             }
         };
     }
 
-    protected abstract GlimpseDataPainter2D createPainter(Array1D array);
+    protected abstract GlimpseDataPainter2D createPainter(Array1D array, DataUnitConverter unitConverter);
 }

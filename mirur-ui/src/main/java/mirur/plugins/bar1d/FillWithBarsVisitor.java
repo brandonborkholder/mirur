@@ -19,13 +19,16 @@ package mirur.plugins.bar1d;
 import javax.media.opengl.GL;
 
 import mirur.core.AbstractArray1dVisitor;
+import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimpleVBO;
 
 public class FillWithBarsVisitor extends AbstractArray1dVisitor {
     private final SimpleVBO vbo;
+    private final DataUnitConverter unitConverter;
 
-    public FillWithBarsVisitor(SimpleVBO vbo) {
+    public FillWithBarsVisitor(SimpleVBO vbo, DataUnitConverter unitConverter) {
         this.vbo = vbo;
+        this.unitConverter = unitConverter;
     }
 
     @Override
@@ -41,14 +44,19 @@ public class FillWithBarsVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, double v) {
-        visit(i, (float) v);
+        float f = (float) unitConverter.data2painter(v);
+        vbo.add(i - 0.5f, f);
+        vbo.add(i - 0.5f, 0);
+        vbo.add(i + 0.5f, f);
+        vbo.add(i + 0.5f, 0);
     }
 
     @Override
     protected void visit(int i, float v) {
-        vbo.add(i - 0.5f, v);
+        float f = (float) unitConverter.data2painter(v);
+        vbo.add(i - 0.5f, f);
         vbo.add(i - 0.5f, 0);
-        vbo.add(i + 0.5f, v);
+        vbo.add(i + 0.5f, f);
         vbo.add(i + 0.5f, 0);
     }
 }
