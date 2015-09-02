@@ -46,9 +46,10 @@ public abstract class SimplePlugin1D implements MirurView {
     }
 
     @Override
-    public boolean supportsData(VariableObject obj) {
-        if (obj instanceof Array1D) {
-            Class<?> clazz = obj.getData().getClass();
+    public boolean supportsData(VariableObject var) {
+        Object obj = var.getData();
+        if (var instanceof Array1D) {
+            Class<?> clazz = obj.getClass();
             return int[].class.equals(clazz) ||
                    long[].class.equals(clazz) ||
                    float[].class.equals(clazz) ||

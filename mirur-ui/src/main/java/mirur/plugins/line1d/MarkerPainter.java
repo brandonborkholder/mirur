@@ -1,5 +1,6 @@
 package mirur.plugins.line1d;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -37,5 +38,10 @@ public class MarkerPainter extends GlimpseDataPainter2D {
 
         gl.glRasterPos2f(posX, posY);
         glut.glutBitmapString(font.getFont(), text);
+
+        gl.glBegin(GL.GL_LINE_STRIP);
+        gl.glVertex2f(position, (float) axis.getMinY());
+        gl.glVertex2f(position, (float) axis.getMaxY());
+        gl.glEnd();
     }
 }

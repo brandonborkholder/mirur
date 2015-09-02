@@ -23,4 +23,9 @@ public class VariableObjectImpl implements VariableObject {
     public Object getData() {
         return object;
     }
+
+    @Override
+    public String toString() {
+        return getSignature();
+    }
 }
