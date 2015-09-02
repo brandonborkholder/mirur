@@ -44,7 +44,7 @@ public class FillWithBarsVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, double v) {
-        float f = (float) unitConverter.fromAxisUnits(v);
+        float f = (float) unitConverter.data2painter(v);
         vbo.add(i - 0.5f, f);
         vbo.add(i - 0.5f, 0);
         vbo.add(i + 0.5f, f);
@@ -53,7 +53,7 @@ public class FillWithBarsVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, float v) {
-        float f = (float) unitConverter.fromAxisUnits(v);
+        float f = (float) unitConverter.data2painter(v);
         vbo.add(i - 0.5f, f);
         vbo.add(i - 0.5f, 0);
         vbo.add(i + 0.5f, f);

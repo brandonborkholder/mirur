@@ -20,6 +20,7 @@ import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.PrimitiveArray;
 import mirur.core.VisitArray;
+import mirur.plugins.DataUnitConverter.LinearScaleConverter;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -67,7 +68,7 @@ public abstract class SimplePlugin1D implements MirurView {
         MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
         double min = minMaxVisitor.getMin();
         double max = minMaxVisitor.getMax();
-        DataUnitConverter unitConverter = new DataUnitConverter(min, max);
+        DataUnitConverter unitConverter = new LinearScaleConverter(min, max);
 
         GlimpseDataPainter2D painter = createPainter(array1d, unitConverter);
         Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter);

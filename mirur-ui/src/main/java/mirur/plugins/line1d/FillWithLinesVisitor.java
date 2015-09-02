@@ -44,11 +44,11 @@ public class FillWithLinesVisitor extends AbstractArray1dVisitor {
 
     @Override
     protected void visit(int i, double v) {
-        vbo.add(i, (float) unitConverter.fromAxisUnits(v));
+        vbo.add(i, (float) unitConverter.data2painter(v));
     }
 
     @Override
     protected void visit(int i, float v) {
-        vbo.add(i, (float) unitConverter.fromAxisUnits(v));
+        vbo.add(i, (float) unitConverter.data2painter(v));
     }
 }

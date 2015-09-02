@@ -20,6 +20,7 @@ import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
+import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
@@ -37,7 +38,7 @@ public class Array1DPlot extends SimplePlot2D {
         setTitleHeight(30);
 
         this.unitConverter = unitConverter;
-        getLabelHandlerY().setAxisUnitConverter(unitConverter);
+        getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
 
         setData(array);
 
@@ -82,8 +83,8 @@ public class Array1DPlot extends SimplePlot2D {
         getAxisX().setMin(0);
         getAxisX().setMax(array.getSize());
 
-        getAxisY().setMin(unitConverter.fromAxisUnits(min));
-        getAxisY().setMax(unitConverter.fromAxisUnits(max));
+        getAxisY().setMin(unitConverter.data2painter(min));
+        getAxisY().setMax(unitConverter.data2painter(max));
         padAxis(getAxisY());
     }
 

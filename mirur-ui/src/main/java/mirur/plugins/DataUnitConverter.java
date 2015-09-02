@@ -2,24 +2,96 @@ package mirur.plugins;
 
 import com.metsci.glimpse.axis.painter.label.AxisUnitConverter;
 
-public class DataUnitConverter implements AxisUnitConverter {
-    public static final DataUnitConverter IDENTITY = new DataUnitConverter(1, 0);
+public interface DataUnitConverter {
+    final DataUnitConverter IDENTITY = new DataUnitConverter() {
+        @Override
+        public double data2painter(double value) {
+            return value;
+        };
 
-    public final double scale;
-    public final double translate;
+        @Override
+        public double painter2data(double value) {
+            return value;
+        };
+    };
 
-    public DataUnitConverter(double scale, double translate) {
-        this.scale = scale <= 0 ? 1 : scale;
-        this.translate = translate;
+    double data2painter(double value);
+
+    double painter2data(double value);
+
+    public static class DataAxisUnitConverter implements AxisUnitConverter {
+        final DataUnitConverter c;
+
+        public DataAxisUnitConverter(DataUnitConverter c) {
+            this.c = c;
+        }
+
+        @Override
+        public double toAxisUnits(double value) {
+            return c.painter2data(value);
+        }
+
+        @Override
+        public double fromAxisUnits(double value) {
+            return c.data2painter(value);
+        }
     }
 
-    @Override
-    public double fromAxisUnits(double value) {
-        return (value - translate) / scale;
+    public static class LinearScaleConverter implements DataUnitConverter {
+        public final double translate;
+        public final double scale;
+        private final double invScale;
+
+        public LinearScaleConverter(double min, double max) {
+            this.scale = max - min;
+            this.invScale = 1.0 / scale;
+            this.translate = min;
+        }
+
+        @Override
+        public double data2painter(double value) {
+            return (value - translate) * invScale;
+        }
+
+        @Override
+        public double painter2data(double value) {
+            return value * scale + translate;
+        }
     }
 
-    @Override
-    public double toAxisUnits(double value) {
-        return value * scale + translate;
+    public static class LogConverter implements DataUnitConverter {
+        @Override
+        public double data2painter(double value) {
+            return Math.log(value);
+        }
+
+        @Override
+        public double painter2data(double value) {
+            return Math.exp(value);
+        }
+    }
+
+    public static class ChainConverter implements DataUnitConverter {
+        final DataUnitConverter[] converters;
+
+        public ChainConverter(DataUnitConverter[] converters) {
+            this.converters = converters;
+        }
+
+        @Override
+        public double data2painter(double value) {
+            for (int i = 0; i < converters.length; i++) {
+                value = converters[i].data2painter(value);
+            }
+            return value;
+        }
+
+        @Override
+        public double painter2data(double value) {
+            for (int i = converters.length - 1; i >= 0; i--) {
+                value = converters[i].painter2data(value);
+            }
+            return value;
+        }
     }
 }
