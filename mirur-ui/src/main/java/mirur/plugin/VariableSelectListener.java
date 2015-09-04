@@ -42,9 +42,12 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDIArrayEntryVariable;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.INullSelectionListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewPart;
@@ -55,7 +58,8 @@ import org.eclipse.ui.PlatformUI;
 import com.metsci.glimpse.util.StringUtils;
 
 @SuppressWarnings("restriction")
-public class VariableSelectListener implements ISelectionListener, INullSelectionListener, IDebugEventSetListener, IDebugContextListener {
+public class VariableSelectListener implements ISelectionListener, ISelectionChangedListener, INullSelectionListener, IDebugEventSetListener,
+IDebugContextListener {
     private static final Logger LOGGER = Logger.getLogger(VariableSelectListener.class.getName());
 
     private static final String VARIABLE_VIEW_ID = "org.eclipse.debug.ui.VariableView";
@@ -66,7 +70,8 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         IDebugContextService service = DebugUITools.getDebugContextManager().getContextService(window);
         service.addDebugContextListener(this);
 
-        window.getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, this);
+        IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
+        ((AbstractDebugView) view).getViewer().addSelectionChangedListener(this);
     }
 
     public void uninstall(IWorkbenchWindow window) {
@@ -75,7 +80,8 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
         IDebugContextService service = DebugUITools.getDebugContextManager().getContextService(window);
         service.removeDebugContextListener(this);
 
-        window.getSelectionService().removePostSelectionListener(VARIABLE_VIEW_ID, this);
+        IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
+        ((AbstractDebugView) view).getViewer().removeSelectionChangedListener(this);
 
         getVariableCache().clear();
     }
@@ -150,8 +156,7 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
             IVariable var = (IVariable) path.getSegment(i);
 
             /*
-             * Collapse when multiple partitions are expanded or a
-             * partition is expanded into an entry.
+             * Collapse when multiple partitions are expanded or a partition is expanded into an entry.
              */
             if (var instanceof IndexedVariablePartition &&
                     i < path.getSegmentCount() - 1 &&
@@ -173,6 +178,19 @@ public class VariableSelectListener implements ISelectionListener, INullSelectio
                     || (var instanceof IndexedVariablePartition);
         } catch (DebugException ex) {
             return false;
+        }
+    }
+
+    @Override
+    public void selectionChanged(SelectionChangedEvent event) {
+        if (event.getSource() instanceof Viewer &&
+                ((Viewer) event.getSource()).getControl().isFocusControl()) {
+            /*
+             * Only update if the control actively made the selection change.
+             * If another view maximizes, the selection is lost for some reason
+             * through no fault of the original view.
+             */
+            update();
         }
     }
 

@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -89,17 +90,24 @@ public class ReceiveArrayJob extends Job {
         // TODO I really don't like this method of waiting until the socket is listening
         barrier.await();
 
+        FutureTask<Void> future = new FutureTask<>(new InvokeRemoteAgentTask(port));
+        IJavaThread javaThread = (IJavaThread) frame.getThread();
+        javaThread.queueRunnable(future);
+        future.get();
+
+        Object arrayObject = socketTask.get();
+        getStatistics().transformedViaAgent(var.getGenericSignature());
+
+        new SubmitArrayToUIJob(name, var, frame, arrayObject).schedule();
+    }
+
+    private void invokeRemoteAgent(int port) throws DebugException {
         IJavaDebugTarget target = (IJavaDebugTarget) frame.getDebugTarget();
         IJavaValue portValue = target.newValue(port);
         IJavaValue value = (IJavaValue) var.getValue();
         IJavaValue[] args = new IJavaValue[] { value, portValue };
         agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;I)V", args, (IJavaThread) frame.getThread());
         logFine(LOGGER, "Called MirurAgent.sendAsArray(Object, int) successfully");
-
-        Object arrayObject = socketTask.get();
-        getStatistics().transformedViaAgent(var.getGenericSignature());
-
-        new SubmitArrayToUIJob(name, var, frame, arrayObject).schedule();
     }
 
     private class IncomingConnectionTask implements Callable<Object> {
@@ -125,6 +133,20 @@ public class ReceiveArrayJob extends Job {
             } finally {
                 serverSocket.close();
             }
+        }
+    }
+
+    private class InvokeRemoteAgentTask implements Callable<Void> {
+        final int port;
+
+        InvokeRemoteAgentTask(int port) {
+            this.port = port;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            invokeRemoteAgent(port);
+            return null;
         }
     }
 }
