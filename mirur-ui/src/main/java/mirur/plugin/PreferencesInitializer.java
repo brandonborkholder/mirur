@@ -25,5 +25,6 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
     public void initializeDefaultPreferences() {
         IEclipsePreferences node = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
         node.putBoolean(Preferences.PREF_SUBMIT_STATISTICS, true);
+        node.putInt(Preferences.PREF_MAX_BYTES_TRANSFER, 50 * 1024 * 1024);
     }
 }

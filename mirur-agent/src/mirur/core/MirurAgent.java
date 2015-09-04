@@ -23,8 +23,6 @@ public class MirurAgent {
         MirurAgentCoder.class.getName(),
     };
 
-    private static final long MAX_BYTES = 50 * 1024 * 1024;
-
     public static final Object INVALID = new Object();
 
     private int guessedSize;
@@ -36,12 +34,12 @@ public class MirurAgent {
         return value != null;
     }
 
-    public static void sendAsArray(Object object, int port) throws IOException {
+    public static void sendAsArray(Object object, long maxBytes, int port) throws IOException {
         Socket socket = new Socket(InetAddress.getByName(null), port);
         OutputStream out = socket.getOutputStream();
 
         try {
-            Object transformed = toArray(object);
+            Object transformed = toArray(object, maxBytes);
             new MirurAgentCoder().encode(transformed, out);
         } catch (Exception ex) {
             new MirurAgentCoder().exception(object, ex, out);
@@ -51,7 +49,7 @@ public class MirurAgent {
         socket.close();
     }
 
-    public static Object toArray(Object value) {
+    public static Object toArray(Object value, long maxBytes) {
         if (value == null) {
             return null;
         }
@@ -60,7 +58,7 @@ public class MirurAgent {
         if (isPrimitiveArray(clazz)) {
             // 1d array of primitives
             long nBytes = getArray1dBytes(value);
-            if (nBytes <= MAX_BYTES) {
+            if (nBytes <= maxBytes) {
                 return value;
             } else {
                 return INVALID;
@@ -68,7 +66,7 @@ public class MirurAgent {
         } else if (clazz.isArray() && isPrimitiveArray(clazz.getComponentType())) {
             // 2d array of primitives
             long nBytes = getArray2dBytes(value);
-            if (nBytes <= MAX_BYTES) {
+            if (nBytes <= maxBytes) {
                 return value;
             } else {
                 return INVALID;
@@ -77,7 +75,7 @@ public class MirurAgent {
             // array of possibly primitive wrappers
             Object[] array = (Object[]) value;
 
-            if (MAX_BYTES < array.length * 8L) {
+            if (maxBytes < array.length * 8L) {
                 return INVALID;
             }
 
@@ -93,7 +91,7 @@ public class MirurAgent {
             // collection of possibly primitive wrappers
             Collection<?> c = (Collection<?>) value;
 
-            if (MAX_BYTES < c.size() * 8L) {
+            if (maxBytes < c.size() * 8L) {
                 return INVALID;
             }
 
@@ -109,7 +107,7 @@ public class MirurAgent {
         } else if (value instanceof Buffer) {
             Buffer buf = (Buffer) value;
             long nBytes = getBufferBytes(buf);
-            if (nBytes >= 0 && nBytes <= MAX_BYTES) {
+            if (nBytes >= 0 && nBytes <= maxBytes) {
                 return buf;
             } else {
                 return INVALID;

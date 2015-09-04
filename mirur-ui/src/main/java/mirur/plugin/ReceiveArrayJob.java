@@ -102,12 +102,15 @@ public class ReceiveArrayJob extends Job {
     }
 
     private void invokeRemoteAgent(int port) throws DebugException {
+        long maxBytes = Activator.getPreferences().getMaxBytesToTransfer();
+
         IJavaDebugTarget target = (IJavaDebugTarget) frame.getDebugTarget();
         IJavaValue portValue = target.newValue(port);
+        IJavaValue maxBytesValue = target.newValue(maxBytes);
         IJavaValue value = (IJavaValue) var.getValue();
-        IJavaValue[] args = new IJavaValue[] { value, portValue };
-        agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;I)V", args, (IJavaThread) frame.getThread());
-        logFine(LOGGER, "Called MirurAgent.sendAsArray(Object, int) successfully");
+        IJavaValue[] args = new IJavaValue[] { value, maxBytesValue, portValue };
+        agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;JI)V", args, (IJavaThread) frame.getThread());
+        logFine(LOGGER, "Called MirurAgent.sendAsArray(Object, long, int) successfully");
     }
 
     private class IncomingConnectionTask implements Callable<Object> {

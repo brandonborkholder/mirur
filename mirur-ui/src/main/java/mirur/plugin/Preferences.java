@@ -33,6 +33,7 @@ public class Preferences {
     private static final String PREFSUFFIX_SYNC_WITH_VARIABLES_VIEW = "toggle.variables.sync";
 
     public static final String PREF_SUBMIT_STATISTICS = "submit.statistics";
+    public static final String PREF_MAX_BYTES_TRANSFER = "max.bytes.transfer";
 
     private final IEclipsePreferences prefNode;
 
@@ -58,6 +59,14 @@ public class Preferences {
 
     public boolean doSyncWithVariablesView(String viewId) {
         return prefNode.getBoolean(viewId + "." + PREFSUFFIX_SYNC_WITH_VARIABLES_VIEW, true);
+    }
+
+    public int getMaxBytesToTransfer() {
+        return prefNode.getInt(PREF_MAX_BYTES_TRANSFER, 50 * 1024 * 1024);
+    }
+
+    public void setMaxBytesToTransfer(int maxBytes) {
+        prefNode.putInt(PREF_MAX_BYTES_TRANSFER, maxBytes);
     }
 
     public void setSyncWithVariablesView(String viewId, boolean newValue) {
