@@ -1,5 +1,8 @@
 package mirur.core;
 
+import java.awt.Shape;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,6 +43,7 @@ public class MirurAgentCoder {
     public static final short TYPE_OBJ_JAVA_SER = 2;
     public static final short TYPE_BUFFERED_IMAGE = 3;
     public static final short TYPE_BUFFER = 4;
+    public static final short TYPE_SHAPE = 5;
 
     public Object decode(InputStream in0) throws IOException, ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(in0);
@@ -75,6 +79,39 @@ public class MirurAgentCoder {
                 buf.position(position);
                 buf.limit(limit);
                 return buf;
+            }
+
+            case TYPE_SHAPE: {
+                Path2D path = new Path2D.Float(in.readInt());
+                int t = in.readInt();
+
+                while (t != Integer.MIN_VALUE) {
+                    switch (t) {
+                    case PathIterator.SEG_CLOSE:
+                        path.closePath();
+                        break;
+
+                    case PathIterator.SEG_MOVETO:
+                        path.moveTo(in.readDouble(), in.readDouble());
+                        break;
+
+                    case PathIterator.SEG_LINETO:
+                        path.lineTo(in.readDouble(), in.readDouble());
+                        break;
+
+                    case PathIterator.SEG_QUADTO:
+                        path.quadTo(in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble());
+                        break;
+
+                    case PathIterator.SEG_CUBICTO:
+                        path.curveTo(in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble());
+                        break;
+                    }
+
+                    t = in.readInt();
+                }
+
+                return path;
             }
 
             default:
@@ -114,6 +151,47 @@ public class MirurAgentCoder {
                 serialize(buf, out);
                 buf.position(oldPos);
                 buf.limit(oldLim);
+            } else if (obj instanceof Shape) {
+                out.writeShort(TYPE_SHAPE);
+
+                Shape s = (Shape) obj;
+                PathIterator itr = s.getPathIterator(null);
+                out.writeInt(itr.getWindingRule());
+
+                double[] coords = new double[6];
+                while (!itr.isDone()) {
+                    int type = itr.currentSegment(coords);
+                    itr.next();
+
+                    out.writeInt(type);
+                    switch (type) {
+                    case PathIterator.SEG_CLOSE:
+                        break;
+
+                    case PathIterator.SEG_LINETO:
+                    case PathIterator.SEG_MOVETO:
+                        out.writeDouble(coords[0]);
+                        out.writeDouble(coords[1]);
+                        break;
+
+                    case PathIterator.SEG_QUADTO:
+                        out.writeDouble(coords[0]);
+                        out.writeDouble(coords[1]);
+                        out.writeDouble(coords[2]);
+                        out.writeDouble(coords[3]);
+                        break;
+
+                    case PathIterator.SEG_CUBICTO:
+                        out.writeDouble(coords[0]);
+                        out.writeDouble(coords[1]);
+                        out.writeDouble(coords[2]);
+                        out.writeDouble(coords[3]);
+                        out.writeDouble(coords[4]);
+                        out.writeDouble(coords[5]);
+                        break;
+                    }
+                }
+                out.writeInt(Integer.MIN_VALUE);
             } else {
                 out.writeShort(TYPE_OBJ_JAVA_SER);
                 out.writeObject(obj);

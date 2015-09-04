@@ -26,6 +26,6 @@ public class VariableObjectImpl implements VariableObject {
 
     @Override
     public String toString() {
-        return getSignature();
+        return object.getClass().getName();
     }
 }

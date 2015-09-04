@@ -1,6 +1,7 @@
 package mirur.core;
 
 import java.awt.Image;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,6 +17,9 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.util.Collection;
 import java.util.Iterator;
+
+import javax.swing.Icon;
+import javax.swing.JLabel;
 
 public class MirurAgent {
     public static final String[] AGENT_CLASSES = new String[] {
@@ -127,6 +131,16 @@ public class MirurAgent {
             } else {
                 return INVALID;
             }
+        } else if (value instanceof Icon) {
+            Icon icon = (Icon) value;
+            int width = icon.getIconWidth();
+            int height = icon.getIconHeight();
+
+            BufferedImage bufImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            icon.paintIcon(new JLabel(), bufImg.getGraphics(), width, height);
+            return bufImg;
+        } else if (value instanceof Shape) {
+            return value;
         }
 
         return INVALID;
