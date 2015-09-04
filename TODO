@@ -1,3 +1,1 @@
-properly contend for Evaluation thread so Variables toString() doesn't show error message
-add a maximum array size to prevent hangs
 automatically disable .toString() in the Variables view for arrays

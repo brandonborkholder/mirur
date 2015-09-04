@@ -60,17 +60,26 @@ public class MirurAgent {
         if (isPrimitiveArray(clazz)) {
             // 1d array of primitives
             long nBytes = getArray1dBytes(value);
-            if (nBytes >= 0 && nBytes <= MAX_BYTES) {
+            if (nBytes <= MAX_BYTES) {
                 return value;
             } else {
                 return INVALID;
             }
         } else if (clazz.isArray() && isPrimitiveArray(clazz.getComponentType())) {
             // 2d array of primitives
-            return value;
+            long nBytes = getArray2dBytes(value);
+            if (nBytes <= MAX_BYTES) {
+                return value;
+            } else {
+                return INVALID;
+            }
         } else if (clazz.isArray() && !clazz.getComponentType().isPrimitive()) {
             // array of possibly primitive wrappers
             Object[] array = (Object[]) value;
+
+            if (MAX_BYTES < array.length * 8L) {
+                return INVALID;
+            }
 
             MirurAgent helper = new MirurAgent(array.length);
             for (int i = 0; i < array.length; i++) {
@@ -83,6 +92,11 @@ public class MirurAgent {
         } else if (value instanceof Collection<?>) {
             // collection of possibly primitive wrappers
             Collection<?> c = (Collection<?>) value;
+
+            if (MAX_BYTES < c.size() * 8L) {
+                return INVALID;
+            }
+
             Iterator<?> itr = c.iterator();
             MirurAgent helper = new MirurAgent(c.size());
             while (itr.hasNext()) {
@@ -194,7 +208,61 @@ public class MirurAgent {
         } else if (array instanceof double[]) {
             return ((double[]) array).length * 8L;
         } else {
-            return -1;
+            throw new AssertionError("Unexpected " + array.getClass().getName());
+        }
+    }
+
+    private static long getArray2dBytes(Object array) {
+        if (array instanceof boolean[][]) {
+            int sum = 0;
+            for (boolean[] a : (boolean[][]) array) {
+                sum += a.length;
+            }
+            return sum * 1L;
+        } else if (array instanceof byte[][]) {
+            int sum = 0;
+            for (byte[] a : (byte[][]) array) {
+                sum += a.length;
+            }
+            return sum * 1L;
+        } else if (array instanceof char[][]) {
+            int sum = 0;
+            for (char[] a : (char[][]) array) {
+                sum += a.length;
+            }
+            return sum * 2L;
+        } else if (array instanceof short[][]) {
+            int sum = 0;
+            for (short[] a : (short[][]) array) {
+                sum += a.length;
+            }
+            return sum * 2L;
+        } else if (array instanceof float[][]) {
+            int sum = 0;
+            for (float[] a : (float[][]) array) {
+                sum += a.length;
+            }
+            return sum * 4L;
+        } else if (array instanceof int[][]) {
+            int sum = 0;
+            for (int[] a : (int[][]) array) {
+                sum += a.length;
+            }
+            return sum * 4L;
+        } else if (array instanceof long[][]) {
+            int sum = 0;
+            for (long[] a : (long[][]) array) {
+                sum += a.length;
+            }
+            return sum * 8L;
+        } else if (array instanceof double[][]) {
+            int sum = 0;
+            for (double[] a : (double[][]) array) {
+                sum += a.length;
+            }
+            return sum * 8L;
+        } else {
+            throw new AssertionError("Unexpected " + array.getClass().getName());
         }
     }
 }
