@@ -59,7 +59,7 @@ public interface DataUnitConverter {
         private final double invScale;
 
         public LinearScaleConverter(double min, double max) {
-            this.scale = max - min;
+            this.scale = (max - min == 0) ? 1 : (max - min);
             this.invScale = 1.0 / scale;
             this.translate = min;
         }
