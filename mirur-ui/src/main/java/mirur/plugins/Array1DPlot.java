@@ -24,6 +24,7 @@ import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.line1d.MarkerPainter;
 
 import com.metsci.glimpse.axis.Axis1D;
+import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 import com.metsci.glimpse.painter.base.GlimpsePainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
@@ -38,10 +39,13 @@ public class Array1DPlot extends SimplePlot2D {
 
     public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array, DataUnitConverter unitConverter) {
         setAxisSizeX(25);
+        setAxisSizeY(65);
         setTitleHeight(30);
 
         this.unitConverter = unitConverter;
         getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
+
+        getLabelHandlerY().setTickSpacing(30);
 
         updateAxesBounds(array);
         setTitlePainterData(array);
@@ -73,6 +77,11 @@ public class Array1DPlot extends SimplePlot2D {
         getCrosshairPainter().showSelectionBox(false);
         getCrosshairPainter().setCursorColor(getRed());
         titlePainter.setHorizontalPosition(HorizontalPosition.Left);
+    }
+
+    @Override
+    protected GridAxisLabelHandler createLabelHandlerY() {
+        return new HdrAxisLabelHandler();
     }
 
     @Override
