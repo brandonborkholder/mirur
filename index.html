@@ -112,21 +112,102 @@
 	<div id="content" class="site-content" role="main">
 		<div class="entry-content">
 			<p>
-Mirur is an Eclipse plugin (<a title="http://mirur.io/update-site" href="update-site">http://mirur.io/update-site/</a>) to visualize your arrays the way they were meant to be.  No more using <tt>Arrays.toString()</tt>!
-The existing visual debugger in Eclipse does a .toString() on any object you select in the Variables view.  For large arrays, this might mean hanging your JVM.  Besides the fact that looking at a long list of values is generally useless to understand what's happening.
+Mirur is an Eclipse plugin (<a title="http://mirur.io/update-site" href="update-site">http://mirur.io/update-site/</a>) to visualize Java objects while debugging.  No more using <tt>Arrays.toString()</tt>!
+The existing visual debugger in Eclipse does a .toString() on any object you select in the Variables view.  For large arrays, this might mean hanging Eclipse.  Plus, looking at a long list of values is generally useless.
 </p>
 <p>
 <a href="images/mirur-example.jpg" data-slb-group="2" data-slb-active="1" data-slb-internal="0"><img class="aligncenter wp-image-12 size-full" src="images/mirur-example.jpg" alt="mirur-example" width="749" height="557" /></a>
 </p>
 <p>
-Watch a <a href="./demo.html" title="Mirur Demo">screencast</a>!
+Mirur uses OpenGL to create highly interactive plots &mdash; line and bar charts, histograms, 2-dimensional heatmaps, images, arbitrary shapes ...
 </p>
-<p>
-Mirur can visualize numerical arrays of any size. View 1-dimensional arrays using a line graph or a bar chart. View 2-dimensional data using a heatmap. Or even just view a histogram of all values in the array.
-</p>
-<p>
-Visualize anything that can be interpreted as a collection of numbers, including <tt>List&lt;Number&gt;</tt> or <tt>AtomicLong[]</tt>.
-</p>
+
+<div style="margin: 5em">
+    <div style="border-radius: 50%; width: 80px; height: 80px; background: #CCCCCC; margin-left: auto; margin-right: auto">
+        <img width="50" height="50" style="margin-top: 14px; margin-left: 14px" src="images/mirur-icon.png"></img>
+    </div>
+</div>
+
+<section id="arrays" style="overflow: auto; margin-bottom: 5em">
+    <a href="images/line_large.jpg">
+        <img style="float: right" class="size-full" src="images/line_thumb.jpg" alt="arrays"></img>
+    </a>
+    <div style="float: left; text-align: center; margin-top: 1em">
+        <span style="font-weight: bold; font-size: 2em">Numeric Arrays</span>
+        <ul style="margin-top: 2em; text-align: left">
+            <li>any native array, e.g. <tt>int[]</tt>, <tt>boolean[]</tt></li>
+            <li>arrays of <tt>Number</tt>, e.g. <tt>Double[]</tt>, <tt>Float[]</tt></li>
+            <li>arrays of <tt>AtomicLong</tt> and <tt>AtomicInteger</tt></li>
+            <li>even collections of <tt>Number</tt>, e.g. <tt>List&lt;Short&gt;</tt></li>
+            <li>sort in realtime, or get a histogram of values</li>
+        </ul>
+    </div>
+</section>
+
+<section id="images" style="overflow: auto; margin-bottom: 5em">
+    <a href="images/image_large.jpg">
+        <img style="float: left" class="size-full" src="images/image_thumb.jpg" alt="images"></img>
+    </a>
+    <div style="float: right; text-align: center; margin-top: 1em">
+        <span style="font-weight: bold; font-size: 2em">Images</span>
+        <ul style="margin-top: 2em; text-align: left">
+            <li><tt>java.awt.BufferedImage</tt></li>
+            <li>any <tt>java.awt.Image</tt></li>
+            <li>any <tt>javax.swing.Icon</tt></li>
+            <li>any <tt>java.awt.Shape</tt> (drawn with vector rendering)</li>
+        </ul>
+    </div>
+</section>
+
+<section id="buffers" style="overflow: auto; margin-bottom: 5em">
+    <a href="images/buffer_large.jpg">
+        <img style="float: right" class="size-full" src="images/buffer_thumb.jpg" alt="buffers"></img>
+    </a>
+    <div style="float: left; text-align: center; margin-top: 1em">
+        <span style="font-weight: bold; font-size: 2em">Buffers</span>
+        <ul style="margin-top: 2em; text-align: left">
+            <li><tt>java.nio.ByteBuffer</tt></li>
+            <li><tt>java.nio.IntBuffer</tt></li>
+            <li><tt>java.nio.FloatBuffer</tt></li>
+            <li><tt>java.nio.DoubleBuffer</tt></li>
+            <li>any <tt>java.nio.Buffer</tt></li>
+        </ul>
+    </div>
+</section>
+
+<section id="heatmaps" style="overflow: auto; margin-bottom: 5em">
+    <a href="images/heatmap_large.jpg">
+        <img style="float: left" class="size-full" src="images/heatmap_thumb.jpg" alt="images"></img>
+    </a>
+    <div style="float: right; text-align: center; margin-top: 1em">
+        <span style="font-weight: bold; font-size: 2em">Heatmaps</span>
+        <ul style="margin-top: 2em; text-align: left">
+            <li>2-dimensional primitive arrays</li>
+            <li><tt>short[][]</tt>, <tt>float[][]</tt>, ...</li>
+            <li>large (even up to 50MB) arrays transfered very quickly</li>
+        </ul>
+    </div>
+</section>
+
+<div style="margin: 5em">
+    <div style="border-radius: 50%; width: 80px; height: 80px; background: #CCCCCC; margin-left: auto; margin-right: auto">
+        <img width="50" height="50" style="margin-top: 14px; margin-left: 14px" src="images/mirur-icon.png"></img>
+    </div>
+</div>
+
+<section id="demo">
+    <p>
+    This is an example of an active debug session using Mirur.
+    </p>
+    <div style='max-width:553px; margin: auto;'>
+        <div class='video-wrapper' style='padding-bottom:62.9294755877%;'>
+            <video id="example_video_id_2053043912" class="video-js vjs-default-skin" width="553" height="348" poster="images/demo_cover.jpg" controls preload="none" data-setup='[]'>
+                <source src="images/demo.mp4" type='video/mp4' />
+            </video>
+        </div>
+    </div>
+</section>
+
 <p>
 <strong>Try it now in Eclipse 3.7+</strong><br />
 Install directly from <a title="http://mirur.io/update-site" href="update-site">http://mirur.io/update-site/</a> or from the Eclipse Marketplace <a href="https://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1863969" title="Drag and drop into a running Eclipse Indigo workspace to install Mirur"><img src="https://marketplace.eclipse.org/sites/all/modules/custom/marketplace/images/installbutton.png"/></a></p>
