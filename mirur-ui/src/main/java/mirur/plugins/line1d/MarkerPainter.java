@@ -55,7 +55,7 @@ public class MarkerPainter extends GlimpsePainter1D {
         gl.glLoadIdentity();
         gl.glOrtho(axis.getMin(), axis.getMax(), -0.5, bounds.getHeight() - 1 + 0.5f, -1, 1);
 
-        gl.glRasterPos2f(position + 10, bounds.getHeight() - font.getHeight() - 2);
+        gl.glRasterPos2f((float) (position + 10.0 / axis.getPixelsPerValue()), bounds.getHeight() - font.getHeight() - 2);
         glut.glutBitmapString(font.getFont(), text);
 
         gl.glBegin(GL.GL_LINE_STRIP);

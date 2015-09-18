@@ -65,8 +65,10 @@ public class MirurAgentCoder {
 
             case TYPE_BUFFERED_IMAGE: {
                 byte[] buf = new byte[in.readInt()];
-                in.read(buf);
-                System.out.println(buf.length);
+                int read = 0;
+                while (read < buf.length) {
+                    read += in.read(buf, read, buf.length - read);
+                }
                 return ImageIO.read(new ByteArrayInputStream(buf));
             }
 
