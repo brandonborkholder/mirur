@@ -2,7 +2,7 @@
 <feature
       id="mirur.feature"
       label="Mirur"
-      version="0.7.0.qualifier"
+      version="1.0.0.qualifier"
       os="linux,macosx,win32"
       arch="x86,x86_64">
 
@@ -16,7 +16,7 @@ on primitive arrays in real time. http://mirur.io
    </copyright>
 
    <license url="http://www.gnu.org/licenses/lgpl.txt">
-Mirur is Copyright (c) 2015, Brandon Borkholder
+      Mirur is Copyright (c) 2015, Brandon Borkholder
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as

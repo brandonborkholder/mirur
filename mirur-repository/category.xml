@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/mirur.feature_0.7.0.qualifier.jar" id="mirur.feature" version="0.7.0.qualifier" os="linux,macosx,win32" arch="x86,x86_64">
+   <feature url="features/mirur.feature_1.0.0.qualifier.jar" id="mirur.feature" version="1.0.0.qualifier" os="linux,macosx,win32" arch="x86,x86_64">
       <category name="mirur.category"/>
    </feature>
+   <!--
    <bundle id="mirur.jogl-linux32" version="0.6.0">
       <category name="mirur.category"/>
    </bundle>
@@ -18,6 +19,7 @@
    <bundle id="mirur.jogl-win64" version="0.6.0">
       <category name="mirur.category"/>
    </bundle>
+   -->
    <category-def name="mirur.category" label="Mirur Debugging Tool">
       <description>
          Mirur debugging tool

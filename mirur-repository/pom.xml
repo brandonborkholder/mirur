@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>mirur</groupId>
+        <artifactId>mirur-parent</artifactId>
+        <version>1.0.0.qualifier</version>
+    </parent>
+
+    <artifactId>mirur.repository</artifactId>
+    <packaging>eclipse-repository</packaging>
+    <name>mirur-repository</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho.extras</groupId>
+                <artifactId>tycho-p2-extras-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-to-update-site</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>mirror</goal>
+                        </goals>
+                        <configuration>
+                            <source>
+                                <repository>
+                                    <url>${project.build.directory}/repository</url>
+                                </repository>
+                            </source>
+                            <append>true</append>
+                            <compress>false</compress>
+                            <destination>${basedir}/../../mirur-update-site/update-site/</destination>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
