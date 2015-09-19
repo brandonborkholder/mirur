@@ -1,15 +1,9 @@
--injars '../lib/antlr-2.7.7.jar'
--outjars '../lib/antlr-2.7.7-repackaged.jar'
--injars '../lib/antlr-runtime-3.4.jar'
--outjars '../lib/antlr-runtime-3.4-repackaged.jar'
 -injars '../lib/commons-lang3-3.3.2.jar'
 -outjars '../lib/commons-lang3-3.3.2-repackaged.jar'
 -injars '../lib/fastutil-6.5.12.jar'
 -outjars '../lib/fastutil-6.5.12-repackaged.jar'
 -injars '../lib/guava-15.0.jar'
 -outjars '../lib/guava-15.0-repackaged.jar'
--injars '../lib/miglayout-core-4.2.jar'
--outjars '../lib/miglayout-core-4.2-repackaged.jar'
 -injars '../lib/stringtemplate-3.2.1.jar'
 -outjars '../lib/stringtemplate-3.2.1-repackaged.jar'
 -injars '../lib/glg2d-0.4-SNAPSHOT.jar'
@@ -20,6 +14,9 @@
 -libraryjars ../lib/(mirur.jdk-agent-*.jar;)
 
 # something wrong with how it processes enums as part of a class in glimpse, f$*#s it up
+-libraryjars '../lib/antlr-2.7.7.jar'
+-libraryjars '../lib/antlr-runtime-3.4.jar'
+-libraryjars '../lib/miglayout-core-4.2.jar'
 -libraryjars '../lib/glimpse-core-2.2.0.jar'
 -libraryjars '../lib/glimpse-extras-swt-2.2.0.jar'
 -libraryjars '../lib/glimpse-util-2.2.0.jar'
@@ -52,4 +49,3 @@
 -dontoptimize
 
 -keep class mirur.** { *; }
-

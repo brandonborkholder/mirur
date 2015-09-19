@@ -101,12 +101,9 @@
                         </goals>
                         <configuration>
                             <target>
-                                <move file="lib/antlr-2.7.7-repackaged.jar" tofile="lib/antlr-2.7.7.jar" overwrite="true" verbose="true" />
-                                <move file="lib/antlr-runtime-3.4-repackaged.jar" tofile="lib/antlr-runtime-3.4.jar" overwrite="true" verbose="true" />
                                 <move file="lib/commons-lang3-3.3.2-repackaged.jar" tofile="lib/commons-lang3-3.3.2.jar" overwrite="true" verbose="true" />
                                 <move file="lib/fastutil-6.5.12-repackaged.jar" tofile="lib/fastutil-6.5.12.jar" overwrite="true" verbose="true" />
                                 <move file="lib/guava-15.0-repackaged.jar" tofile="lib/guava-15.0.jar" overwrite="true" verbose="true" />
-                                <move file="lib/miglayout-core-4.2-repackaged.jar" tofile="lib/miglayout-core-4.2.jar" overwrite="true" verbose="true" />
                                 <move file="lib/stringtemplate-3.2.1-repackaged.jar" tofile="lib/stringtemplate-3.2.1.jar" overwrite="true" verbose="true" />
                                 <move file="lib/glg2d-0.4-SNAPSHOT-repackaged.jar" tofile="lib/glg2d-0.4-SNAPSHOT.jar" overwrite="true" verbose="true" />
                             </target>
