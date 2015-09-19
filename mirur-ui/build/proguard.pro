@@ -48,6 +48,8 @@
 -keepclassmembers class * { *; }
 
 -optimizations !class/unboxing/enum
+-dontobfuscate
+-dontoptimize
 
--keep,allowshrinking class ** { *; }
+-keep class mirur.** { *; }
 
