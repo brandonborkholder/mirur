@@ -8,7 +8,7 @@
 <link rel='stylesheet' id='videojs-css'  href='https://vjs.zencdn.net/4.5/video-js.css' type='text/css' media='all' />
 <link rel='stylesheet' id='vantage-style-css'  href='wp-content/themes/vantage/style.css' type='text/css' media='all' />
 <link rel='stylesheet' id='vantage-fontawesome-css'  href='wp-content/themes/vantage/fontawesome/css/font-awesome.css' type='text/css' media='all' />
-<link rel='stylesheet' id='slb_core-css'  href='wp-content/plugins/simple-lightbox/client/css/app.css' type='text/css' media='all' />
+<link rel="stylesheet" id=mag-popup-css' href='css/magnific-popup.css'>
 <script type='text/javascript' src='wp-includes/js/jquery/jquery.js'></script>
 <script type='text/javascript' src='wp-includes/js/jquery/jquery-migrate.min.js'></script>
 <script type='text/javascript' src='wp-content/themes/vantage/js/jquery.flexslider.min.js'></script>
@@ -116,7 +116,7 @@ Mirur is an Eclipse plugin (<a title="http://mirur.io/update-site" href="update-
 The existing visual debugger in Eclipse does a .toString() on any object you select in the Variables view.  For large arrays, this might mean hanging Eclipse.  Plus, looking at a long list of values is generally useless.
 </p>
 <p>
-<a href="images/mirur-example.jpg" data-slb-group="2" data-slb-active="1" data-slb-internal="0"><img class="aligncenter wp-image-12 size-full" src="images/mirur-example.jpg" alt="mirur-example" width="749" height="557" /></a>
+<img class="aligncenter wp-image-12 size-full" src="images/mirur-example.jpg" alt="mirur-example" width="749" height="557"></img>
 </p>
 <p>
 Mirur uses OpenGL to create highly interactive plots &mdash; line and bar charts, histograms, 2-dimensional heatmaps, images, arbitrary shapes ...
@@ -129,8 +129,8 @@ Mirur uses OpenGL to create highly interactive plots &mdash; line and bar charts
 </div>
 
 <section id="arrays" style="overflow: auto; margin-bottom: 5em">
-    <a href="images/line_large.jpg">
-        <img style="float: right" class="size-full" src="images/line_thumb.jpg" alt="arrays"></img>
+    <a class="image-link" href="images/line_large.jpg">
+        <img style="float: right" class="size-full" src="images/line_thumb.jpg" alt="arrays" width=500" height="250"></img>
     </a>
     <div style="float: left; text-align: center; margin-top: 1em">
         <span style="font-weight: bold; font-size: 2em">Numeric Arrays</span>
@@ -145,8 +145,8 @@ Mirur uses OpenGL to create highly interactive plots &mdash; line and bar charts
 </section>
 
 <section id="images" style="overflow: auto; margin-bottom: 5em">
-    <a href="images/image_large.jpg">
-        <img style="float: left" class="size-full" src="images/image_thumb.jpg" alt="images"></img>
+    <a class="image-link" href="images/image_large.jpg">
+        <img style="float: left" class="size-full" src="images/image_thumb.jpg" alt="images" width=500" height="250"></img>
     </a>
     <div style="float: right; text-align: center; margin-top: 1em">
         <span style="font-weight: bold; font-size: 2em">Images</span>
@@ -160,8 +160,8 @@ Mirur uses OpenGL to create highly interactive plots &mdash; line and bar charts
 </section>
 
 <section id="buffers" style="overflow: auto; margin-bottom: 5em">
-    <a href="images/buffer_large.jpg">
-        <img style="float: right" class="size-full" src="images/buffer_thumb.jpg" alt="buffers"></img>
+    <a class="image-link" href="images/buffer_large.jpg">
+        <img style="float: right" class="size-full" src="images/buffer_thumb.jpg" alt="buffers" width=500" height="250"></img>
     </a>
     <div style="float: left; text-align: center; margin-top: 1em">
         <span style="font-weight: bold; font-size: 2em">Buffers</span>
@@ -176,8 +176,8 @@ Mirur uses OpenGL to create highly interactive plots &mdash; line and bar charts
 </section>
 
 <section id="heatmaps" style="overflow: auto; margin-bottom: 5em">
-    <a href="images/heatmap_large.jpg">
-        <img style="float: left" class="size-full" src="images/heatmap_thumb.jpg" alt="images"></img>
+    <a class="image-link" href="images/heatmap_large.jpg">
+        <img style="float: left" class="size-full" src="images/heatmap_thumb.jpg" alt="images" width=500" height="250"></img>
     </a>
     <div style="float: right; text-align: center; margin-top: 1em">
         <span style="font-weight: bold; font-size: 2em">Heatmaps</span>
@@ -237,18 +237,11 @@ Install directly from <a title="http://mirur.io/update-site" href="update-site">
 <link rel='stylesheet' id='metaslider-public-css'  href='wp-content/plugins/ml-slider/assets/metaslider/public.css' type='text/css' media='all' />
 <script type='text/javascript' src='wp-includes/js/comment-reply.min.js'></script>
 <script type='text/javascript' src='wp-content/plugins/ml-slider/assets/sliders/flexslider/jquery.flexslider-min.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/client/js/prod/lib.core.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/client/js/prod/lib.view.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/themes/baseline/js/prod/client.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/themes/default/js/prod/client.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/template-tags/item/js/prod/tag.item.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/template-tags/ui/js/prod/tag.ui.js'></script>
-<script type='text/javascript' src='wp-content/plugins/simple-lightbox/content-handlers/image/js/prod/handler.image.js'></script>
-<script type="text/javascript" id="slb_footer">/* <![CDATA[ */if ( !!window.jQuery ) {(function($){$(document).ready(function(){if ( !!window.SLB && SLB.has_child('View.init') ) { SLB.View.init({"ui_autofit":true,"ui_animate":false,"slideshow_autostart":true,"slideshow_duration":"6","group_loop":true,"ui_overlay_opacity":"0.8","ui_title_default":false,"theme_default":"slb_default","ui_labels":{"loading":"Loading","close":"Close","nav_next":"Next","nav_prev":"Previous","slideshow_start":"Start slideshow","slideshow_stop":"Stop slideshow","group_status":"Item %current% of %total%"}}); }
-if ( !!window.SLB && SLB.has_child('View.assets') ) { {$.extend(SLB.View.assets, {"images\/mirur-example.jpg":{"id":12,"_entries":[],"type":"image","source":"images\/mirur-example.jpg","internal":true,"sizes":{"thumbnail":{"file":"mirur-example-150x150.jpg","width":150,"height":150,"mime-type":"image\/jpeg"},"medium":{"file":"mirur-example-300x223.jpg","width":300,"height":223,"mime-type":"image\/jpeg"},"post-thumbnail":{"file":"mirur-example-720x380.jpg","width":720,"height":380,"mime-type":"image\/jpeg"},"vantage-thumbnail-no-sidebar":{"file":"mirur-example-749x380.jpg","width":749,"height":380,"mime-type":"image\/jpeg"},"vantage-slide":{"file":"mirur-example-749x480.jpg","width":749,"height":480,"mime-type":"image\/jpeg"},"vantage-carousel":{"file":"mirur-example-272x182.jpg","width":272,"height":182,"mime-type":"image\/jpeg"},"vantage-grid-loop":{"file":"mirur-example-436x272.jpg","width":436,"height":272,"mime-type":"image\/jpeg"},"original":{"file":"2014\/08\/mirur-example.jpg","width":749,"height":557}},"image_meta":{"aperture":0,"credit":"","camera":"","caption":"","created_timestamp":0,"copyright":"","focal_length":0,"iso":0,"shutter_speed":0,"title":""},"description":"","title":"mirur-example","caption":""}});} }
-/* THM */
-if ( !!window.SLB && SLB.has_child('View.extend_theme') ) { SLB.View.extend_theme('slb_baseline',{"name":"Baseline","parent":"","styles":[{"handle":"base","uri":"wp-content\/plugins\/simple-lightbox\/themes\/baseline\/css\/style.css","deps":[]}],"layout_raw":"<div class=\"slb_container\"><div class=\"slb_content\">{{item.content}}<div class=\"slb_nav\"><span class=\"slb_prev\">{{ui.nav_prev}}<\/span><span class=\"slb_next\">{{ui.nav_next}}<\/span><\/div><div class=\"slb_controls\"><span class=\"slb_close\">{{ui.close}}<\/span><span class=\"slb_slideshow\">{{ui.slideshow_control}}<\/span><\/div><div class=\"slb_loading\">{{ui.loading}}<\/div><\/div><div class=\"slb_details\"><div class=\"inner\"><div class=\"slb_data\"><div class=\"slb_data_content\"><span class=\"slb_data_title\">{{item.title}}<\/span><span class=\"slb_group_status\">{{ui.group_status}}<\/span><div class=\"slb_data_desc\">{{item.description}}<\/div><\/div><\/div><div class=\"slb_nav\"><span class=\"slb_prev\">{{ui.nav_prev}}<\/span><span class=\"slb_next\">{{ui.nav_next}}<\/span><\/div><\/div><\/div><\/div>"}); }if ( !!window.SLB && SLB.has_child('View.extend_theme') ) { SLB.View.extend_theme('slb_default',{"name":"Default (Light)","parent":"slb_baseline","styles":[{"handle":"font","uri":"https:\/\/fonts.googleapis.com\/css?family=Yanone+Kaffeesatz","deps":[]},{"handle":"base","uri":"wp-content\/plugins\/simple-lightbox\/themes\/default\/css\/style.css","deps":[]}]}); }})})(jQuery);}/* ]]> */</script>
-<script type="text/javascript" id="slb_context">/* <![CDATA[ */if ( !!window.jQuery ) {(function($){$(document).ready(function(){if ( !!window.SLB ) { {$.extend(SLB, {"context":["public","user_guest"]});} }})})(jQuery);}/* ]]> */</script>
+<script type="text/javascript" src="js/jquery.magnific-popup.min.js"></script>
+<script type="text/javascript">
+    window.jQuery(document).ready(function() { window.jQuery('.image-link').magnificPopup({type:'image'}); });
+timer_metaslider_25();
+</script>
 
 </body>
 </html>
