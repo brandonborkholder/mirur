@@ -8,3 +8,5 @@ You can view anything that can be interpreted as a collection of numbers, includ
 
 ![Screenshot](../gh-pages/images/mirur-example.jpg)
 
+<a href="http://with-eclipse.github.io/" target="_blank">
+<img alt="with-Eclipse logo" src="http://with-eclipse.github.io/with-eclipse-0.jpg" /></a>
