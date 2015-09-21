@@ -17,6 +17,7 @@
 package mirur.plugins.histogram1d;
 
 import mirur.core.Array1D;
+import mirur.plugins.DataUnitConverter;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseContext;
@@ -27,13 +28,15 @@ public class HistogramBinTextPainter extends SimpleTextPainter {
     private HistogramPainter histPainter;
     private Array1D array;
     private double lastBin;
+    private DataUnitConverter unitConverter;
 
     public HistogramBinTextPainter(Axis2D srcAxis) {
         this.srcAxis = srcAxis;
     }
 
-    public void setHistogramPainter(Array1D array, HistogramPainter painter) {
+    public void setHistogramPainter(Array1D array, HistogramPainter painter, DataUnitConverter unitConverter) {
         this.array = array;
+        this.unitConverter = unitConverter;
         histPainter = painter;
     }
 
@@ -57,6 +60,8 @@ public class HistogramBinTextPainter extends SimpleTextPainter {
     }
 
     private String format(double bin, double binWidth, int count) {
-        return String.format("%s[%d] has %d values in [%g, %g)", array.getName(), array.getSize(), count, bin, bin + binWidth);
+        double binLo = unitConverter.painter2data(bin);
+        double binHi = unitConverter.painter2data(bin + binWidth);
+        return String.format("%s[%d] has %d values in [%s, %s)", array.getName(), array.getSize(), count, binLo, binHi);
     }
 }

@@ -23,16 +23,19 @@ import static java.lang.Math.sqrt;
 import it.unimi.dsi.fastutil.floats.Float2IntMap;
 import it.unimi.dsi.fastutil.floats.Float2IntOpenHashMap;
 import mirur.core.AbstractArray1dVisitor;
+import mirur.plugins.DataUnitConverter;
 
 public class HistogramVisitor extends AbstractArray1dVisitor {
     private final double min;
     private final double max;
     private double step;
     private Float2IntOpenHashMap counts;
+    private DataUnitConverter unitConverter;
 
-    public HistogramVisitor(double min, double max) {
-        this.min = min;
-        this.max = max;
+    public HistogramVisitor(double dataMin, double dataMax, DataUnitConverter unitConverter) {
+        this.min = unitConverter.data2painter(dataMin);
+        this.max = unitConverter.data2painter(dataMax);
+        this.unitConverter = unitConverter;
     }
 
     public float getBinWidth() {
@@ -59,6 +62,7 @@ public class HistogramVisitor extends AbstractArray1dVisitor {
         if (isInfinite(v) || isNaN(v)) {
             // nop
         } else {
+            v = unitConverter.data2painter(v);
             float k = (float) (floor((v - min) / step) * step + min);
             counts.addTo(k, 1);
         }
