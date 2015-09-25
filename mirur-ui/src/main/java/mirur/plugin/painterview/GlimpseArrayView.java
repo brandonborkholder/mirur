@@ -59,7 +59,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     @Override
     public void createPartControl(Composite parent) {
-        canvas = new NewtSwtGlimpseCanvas(parent, GLProfile.getGL2GL3(), SWT.DOUBLE_BUFFERED);
+        canvas = new NewtSwtGlimpseCanvas(parent, GLProfile.get(GLProfile.GL2), SWT.DOUBLE_BUFFERED);
         canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener());
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
