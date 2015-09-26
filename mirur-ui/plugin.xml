@@ -32,7 +32,8 @@
                id="mirur.views.Painter"
                ratio="0.5"
                relationship="right"
-               relative="org.eclipse.ui.views.ProblemView">
+               relative="org.eclipse.ui.views.ProblemView"
+               visible="true">
          </view>
       </perspectiveExtension>
    </extension>
@@ -43,8 +44,8 @@
          <view
                id="mirur.views.Statistics"
                ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.ProblemView">
+               relationship="stack"
+               relative="mirur.views.Painter">
          </view>
       </perspectiveExtension>
    </extension>
