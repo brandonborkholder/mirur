@@ -71,7 +71,12 @@ IDebugContextListener {
         service.addDebugContextListener(this);
 
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
-        ((AbstractDebugView) view).getViewer().addSelectionChangedListener(this);
+        if (view == null) {
+            // if the variables view isn't active
+            window.getSelectionService().addPostSelectionListener(VARIABLE_VIEW_ID, this);
+        } else {
+            ((AbstractDebugView) view).getViewer().addSelectionChangedListener(this);
+        }
     }
 
     public void uninstall(IWorkbenchWindow window) {
@@ -80,8 +85,11 @@ IDebugContextListener {
         IDebugContextService service = DebugUITools.getDebugContextManager().getContextService(window);
         service.removeDebugContextListener(this);
 
+        window.getSelectionService().removePostSelectionListener(VARIABLE_VIEW_ID, this);
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
-        ((AbstractDebugView) view).getViewer().removeSelectionChangedListener(this);
+        if (view != null) {
+            ((AbstractDebugView) view).getViewer().removeSelectionChangedListener(this);
+        }
 
         getVariableCache().clear();
     }
@@ -196,6 +204,12 @@ IDebugContextListener {
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+        // use the preferred selection service, which is ISelectionChangedListener
+        if (part instanceof AbstractDebugView) {
+            part.getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(VARIABLE_VIEW_ID, this);
+            ((AbstractDebugView) part).getViewer().addSelectionChangedListener(this);
+        }
+
         update();
     }
 
