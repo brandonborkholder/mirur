@@ -456,9 +456,9 @@ public interface ArrayStatisticVisitor extends ArrayElementVisitor {
         public void visit(double v) {
             isValid = true;
 
-            if (v < lastV) {
+            if (lastV < v) {
                 numSortedAsc++;
-            } else if (v > lastV) {
+            } else if (lastV > v) {
                 numSortedDesc++;
             } else {
                 numEqual++;
