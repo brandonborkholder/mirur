@@ -82,7 +82,7 @@
                         <configuration>
                             <obfuscate>false</obfuscate>
                             <includeDependency>false</includeDependency>
-                            <proguardInclude>${basedir}/build/proguard.pro</proguardInclude>
+                            <proguardInclude>${basedir}/src/main/proguard/proguard.conf</proguardInclude>
                         </configuration>
                     </execution>
                 </executions>
