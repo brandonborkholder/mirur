@@ -49,6 +49,10 @@ public class StatisticsCollector {
 
     private List<StatsEntry> log = new ArrayList<>();
 
+    public StatisticsCollector() {
+        log("Using plugin version " + Activator.getDefault().getBundle().getVersion());
+    }
+
     private void log(String text) {
         logFine(LOGGER, text);
 
