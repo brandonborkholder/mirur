@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
@@ -38,9 +39,9 @@ public class SelectStrategyJob extends Job {
 
     private final String name;
     private final IVariable var;
-    private final IJavaStackFrame frame;
+    private final IStackFrame frame;
 
-    public SelectStrategyJob(String name, IVariable var, IJavaStackFrame frame) {
+    public SelectStrategyJob(String name, IVariable var, IStackFrame frame) {
         super("Select Variable Transfer Strategy");
         this.name = name;
         this.var = var;
@@ -65,21 +66,21 @@ public class SelectStrategyJob extends Job {
     }
 
     private void execute() throws DebugException, InterruptedException {
-        IJavaDebugTarget target = (IJavaDebugTarget) frame.getDebugTarget();
-
-        if (var instanceof IJavaVariable) {
+        if (var instanceof IJavaVariable && frame instanceof IJavaStackFrame) {
+        	IJavaStackFrame javaFrame = (IJavaStackFrame) frame;
+			IJavaDebugTarget target = (IJavaDebugTarget) javaFrame.getDebugTarget();
             IJavaVariable jvar = (IJavaVariable) var;
 
             if (!getAgentDeployer().isAgentInstallAttempted(target)) {
                 // agent install not attempted yet
-                InstallMirurAgentJob installJob = new InstallMirurAgentJob(frame);
+                InstallMirurAgentJob installJob = new InstallMirurAgentJob((IJavaStackFrame) frame);
                 installJob.schedule();
                 installJob.join();
             }
 
             if (getAgentDeployer().isAgentInstalled(target)) {
                 IJavaClassType agentType = getAgentDeployer().getAgentClass(target);
-                new ReceiveArrayJob(name, jvar, frame, agentType).schedule();
+                new ReceiveArrayJob(name, jvar, (IJavaStackFrame) frame, agentType).schedule();
             } else {
                 new CopyJDIArrayJob(name, var, frame).schedule();
             }
