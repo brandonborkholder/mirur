@@ -66,9 +66,11 @@ public class SelectStrategyJob extends Job {
     }
 
     private void execute() throws DebugException, InterruptedException {
-        if (var instanceof IJavaVariable && frame instanceof IJavaStackFrame) {
-        	IJavaStackFrame javaFrame = (IJavaStackFrame) frame;
-			IJavaDebugTarget target = (IJavaDebugTarget) javaFrame.getDebugTarget();
+        if (ChromeDevToolsSupport.supports(var)) {
+            new ChromeDevToolsArrayJob(name, var, frame).schedule();
+        } else if (var instanceof IJavaVariable && frame instanceof IJavaStackFrame) {
+            IJavaStackFrame javaFrame = (IJavaStackFrame) frame;
+            IJavaDebugTarget target = (IJavaDebugTarget) javaFrame.getDebugTarget();
             IJavaVariable jvar = (IJavaVariable) var;
 
             if (!getAgentDeployer().isAgentInstallAttempted(target)) {
@@ -84,8 +86,6 @@ public class SelectStrategyJob extends Job {
             } else {
                 new CopyJDIArrayJob(name, var, frame).schedule();
             }
-        } else {
-            new CopyJDIArrayJob(name, var, frame).schedule();
         }
     }
 }

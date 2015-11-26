@@ -43,7 +43,7 @@ public class CopyJDIArrayJob extends Job {
     private final IStackFrame frame;
 
     public CopyJDIArrayJob(String name, IVariable var, IStackFrame frame) {
-        super("Copy Array");
+        super("Copy JDI Array");
         this.name = name;
         this.var = var;
         this.frame = frame;
@@ -76,10 +76,6 @@ public class CopyJDIArrayJob extends Job {
         Object arrayObject = null;
 
         String refTypeName = value.getReferenceTypeName();
-        IValue tmp = value.getVariable(0).getValue();
-		System.out.println(tmp);
-		System.out.println(tmp.getModelIdentifier());
-		System.out.println(tmp.getReferenceTypeName());
         String primitiveName = refTypeName.substring(0, refTypeName.indexOf('['));
 
         boolean isPrimitive = isPrimitiveName(primitiveName);
