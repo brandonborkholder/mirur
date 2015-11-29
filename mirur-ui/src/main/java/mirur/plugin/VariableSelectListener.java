@@ -23,12 +23,12 @@ import static mirur.plugin.Activator.getVariableSelectionModel;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import mirur.core.VariableObject;
-
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IIndexedValue;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.internal.ui.views.variables.IndexedVariablePartition;
 import org.eclipse.debug.ui.AbstractDebugView;
@@ -38,7 +38,6 @@ import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.debug.ui.contexts.IDebugContextService;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDIArrayEntryVariable;
 import org.eclipse.jface.viewers.ISelection;
@@ -56,6 +55,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.metsci.glimpse.util.StringUtils;
+
+import mirur.core.VariableObject;
 
 @SuppressWarnings("restriction")
 public class VariableSelectListener implements ISelectionListener, ISelectionChangedListener, INullSelectionListener, IDebugEventSetListener,
@@ -98,7 +99,7 @@ IDebugContextListener {
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         IDebugContextService service = DebugUITools.getDebugContextManager().getContextService(window);
         ISelection contextSelection = service.getActiveContext();
-        IJavaStackFrame frame = extract(contextSelection, IJavaStackFrame.class);
+        IStackFrame frame = extract(contextSelection, IStackFrame.class);
 
         IVariable variable = null;
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);
@@ -120,7 +121,6 @@ IDebugContextListener {
         // check a bunch of pre-conditions
         if (frame == null ||
                 variable == null ||
-                !(frame.getDebugTarget() instanceof IJavaDebugTarget) ||
                 !frame.getThread().isSuspended() ||
                 !isValidRefType(variable)) {
             getVariableSelectionModel().select(null);
@@ -183,7 +183,7 @@ IDebugContextListener {
          */
         try {
             return (var instanceof IJavaVariable && ((IJavaVariable) var).getJavaType() instanceof IJavaReferenceType)
-                    || (var instanceof IndexedVariablePartition);
+                    || (var instanceof IndexedVariablePartition) || (var.getValue() instanceof IIndexedValue);
         } catch (DebugException ex) {
             return false;
         }

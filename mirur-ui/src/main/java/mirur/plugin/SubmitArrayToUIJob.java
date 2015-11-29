@@ -23,6 +23,14 @@ import static mirur.core.VisitArray.visit2d;
 import static mirur.plugin.Activator.getStatistics;
 import static mirur.plugin.Activator.getVariableCache;
 import static mirur.plugin.Activator.getVariableSelectionModel;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.model.IStackFrame;
+import org.eclipse.debug.core.model.IVariable;
+
 import mirur.core.Array1DImpl;
 import mirur.core.Array2DJagged;
 import mirur.core.Array2DRectangular;
@@ -31,20 +39,13 @@ import mirur.core.IsValidArrayVisitor;
 import mirur.core.VariableObject;
 import mirur.core.VariableObjectImpl;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
-
 public class SubmitArrayToUIJob extends Job {
     private final String name;
     private final IVariable var;
-    private final IJavaStackFrame frame;
+    private final IStackFrame frame;
     private final Object object;
 
-    public SubmitArrayToUIJob(String name, IVariable var, IJavaStackFrame frame, Object object) {
+    public SubmitArrayToUIJob(String name, IVariable var, IStackFrame frame, Object object) {
         super("Sending Mirur Data to UI");
         this.name = name;
         this.var = var;

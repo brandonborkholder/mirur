@@ -28,11 +28,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IIndexedValue;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 public class CopyJDIArrayJob extends Job {
@@ -40,9 +40,9 @@ public class CopyJDIArrayJob extends Job {
 
     private final String name;
     private final IVariable var;
-    private final IJavaStackFrame frame;
+    private final IStackFrame frame;
 
-    public CopyJDIArrayJob(String name, IVariable var, IJavaStackFrame frame) {
+    public CopyJDIArrayJob(String name, IVariable var, IStackFrame frame) {
         super("Copy JDI Array");
         this.name = name;
         this.var = var;

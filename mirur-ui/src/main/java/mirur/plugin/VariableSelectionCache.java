@@ -19,10 +19,10 @@ package mirur.plugin;
 import java.util.HashMap;
 import java.util.Map;
 
-import mirur.core.VariableObject;
-
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
+
+import mirur.core.VariableObject;
 
 /**
  * We want to cache a variable that we've already transfered. But a variable is only cacheable as long as it's not
@@ -39,23 +39,23 @@ public class VariableSelectionCache {
         cache.clear();
     }
 
-    public boolean contains(IVariable variable, IJavaStackFrame frame) {
+    public boolean contains(IVariable variable, IStackFrame frame) {
         return cache.containsKey(new Key(variable, frame));
     }
 
-    public VariableObject getArray(IVariable variable, IJavaStackFrame frame) {
+    public VariableObject getArray(IVariable variable, IStackFrame frame) {
         return cache.get(new Key(variable, frame));
     }
 
-    public void put(IVariable variable, IJavaStackFrame frame, VariableObject obj) {
+    public void put(IVariable variable, IStackFrame frame, VariableObject obj) {
         cache.put(new Key(variable, frame), obj);
     }
 
     private static class Key {
         final IVariable var;
-        final IJavaStackFrame frame;
+        final IStackFrame frame;
 
-        Key(IVariable var, IJavaStackFrame frame) {
+        Key(IVariable var, IStackFrame frame) {
             this.var = var;
             this.frame = frame;
         }
