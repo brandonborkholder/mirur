@@ -78,18 +78,15 @@ public class ChromeDevToolsArrayJob extends Job {
         try {
             if (value.getReferenceTypeName().equals(Type.TYPE_ARRAY.name()) && value.getSize() > 0) {
                 double[] doubleValues = new double[value.getSize()];
-                int idx = 0;
 
                 for (int i = 0; i < value.getSize(); i++) {
                     Value v = (Value) value.getVariable(i).getValue();
                     JsValue jsValue = v.getJsValue();
                     if (jsValue.getType().equals(Type.TYPE_NUMBER)) {
-                        doubleValues[idx++] = Double.parseDouble(jsValue.getValueString());
+                        doubleValues[i] = Double.parseDouble(jsValue.getValueString());
+                    } else {
+                        doubleValues[i] = Double.NaN;
                     }
-                }
-
-                if (idx < doubleValues.length) {
-                    doubleValues = Arrays.copyOf(doubleValues, idx);
                 }
 
                 arrayObject = doubleValues;
