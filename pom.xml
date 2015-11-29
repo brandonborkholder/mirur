@@ -15,7 +15,12 @@
     <repositories>
         <repository>
             <id>eclipse-repo</id>
-            <url>http://download.eclipse.org/releases/indigo</url>
+            <url>http://download.eclipse.org/releases/indigo/</url>
+            <layout>p2</layout>
+        </repository>
+        <repository>
+            <id>nodeclipse-repo</id>
+            <url>http://www.nodeclipse.org/updates/</url>
             <layout>p2</layout>
         </repository>
     </repositories>

@@ -23,8 +23,6 @@ import static mirur.plugin.Activator.getVariableSelectionModel;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import org.chromium.debug.core.model.StackFrame;
-import org.chromium.debug.core.model.Variable;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -102,8 +100,6 @@ IDebugContextListener {
         IDebugContextService service = DebugUITools.getDebugContextManager().getContextService(window);
         ISelection contextSelection = service.getActiveContext();
         IStackFrame frame = extract(contextSelection, IStackFrame.class);
-        
-        StackFrame frame1 = extract(contextSelection, StackFrame.class);
 
         IVariable variable = null;
         IViewPart view = window.getActivePage().findView(VARIABLE_VIEW_ID);

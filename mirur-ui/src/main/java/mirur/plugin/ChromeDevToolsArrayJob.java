@@ -19,7 +19,6 @@ package mirur.plugin;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.plugin.Activator.getVariableSelectionModel;
 
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.chromium.debug.core.model.Value;
