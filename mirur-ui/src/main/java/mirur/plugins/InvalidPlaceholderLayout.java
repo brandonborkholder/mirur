@@ -16,24 +16,36 @@
  */
 package mirur.plugins;
 
+import static com.metsci.glimpse.painter.decoration.WatermarkPainter.bottomLeft;
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.painter.decoration.BackgroundPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
-import com.metsci.glimpse.support.color.GlimpseColor;
+import com.metsci.glimpse.painter.decoration.WatermarkPainter;
+
+import mirur.plugin.Icons;
 
 public class InvalidPlaceholderLayout extends GlimpseLayout {
+    private static final Logger LOGGER = Logger.getLogger(InvalidPlaceholderLayout.class.getName());
+
     public InvalidPlaceholderLayout() {
         BackgroundPainter backgroundPainter = new BackgroundPainter(true);
         addPainter(backgroundPainter);
 
-        SimpleTextPainter textPainter = new SimpleTextPainter();
-        textPainter.setColor(GlimpseColor.getRed());
-        textPainter.setFont(16, true, true);
-        textPainter.setText("no supported variable selected");
-        textPainter.setHorizontalPosition(HorizontalPosition.Center);
-        textPainter.setVerticalPosition(VerticalPosition.Center);
-        addPainter(textPainter);
+        try {
+            BufferedImage image = ImageIO.read(new File(Icons.MIRUR_LOGO_PATH));
+            WatermarkPainter logoPainter = new WatermarkPainter(image,
+                    bottomLeft.withMaxAreaFraction(1).withMaxWidthFraction(1).withMaxHeightFraction(1));
+            addPainter(logoPainter);
+        } catch (IOException ex) {
+            logWarning(LOGGER, "Failed to load logo image", ex);
+        }
     }
 }
