@@ -21,8 +21,8 @@ public class GenerateGradientIcons {
         writeGradientIcon(new File("icons/gradient_grey.gif"), ColorGradients.gray, size, size);
         writeGradientIcon(new File("icons/gradient_bone.gif"), ColorGradients.reverseBone, size, size);
         writeGradientIcon(new File("icons/gradient_jet.gif"), ColorGradients.jet, size, size);
-        writeGradientIcon(new File("icons/gradient_bathy.gif"), ColorGradients.bathymetry, size, size);
-        writeGradientIcon(new File("icons/gradient_topo.gif"), ColorGradients.topography, size, size);
+        writeGradientIcon(new File("icons/gradient_viridis.gif"), ColorGradients.viridis, size, size);
+        writeGradientIcon(new File("icons/gradient_spectral.gif"), ColorGradients.spectral, size, size);
     }
 
     static void writeGradientIcon(File file, ColorGradient gradient, int w, int h) throws IOException {

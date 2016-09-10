@@ -64,10 +64,10 @@ public abstract class GradientChooserAction extends Action implements IMenuCreat
     public Menu getMenu(Menu parent) {
         Menu menu = new Menu(parent);
         addGradientOption(menu, "jet", ColorGradients.jet, Activator.getImageDescriptor("icons/gradient_jet.gif"));
-        addGradientOption(menu, "bathymetry", ColorGradients.bathymetry, Activator.getImageDescriptor("icons/gradient_bathy.gif"));
+        addGradientOption(menu, "viridis", ColorGradients.viridis, Activator.getImageDescriptor("icons/gradient_viridis.gif"));
         addGradientOption(menu, "bone", ColorGradients.reverseBone, Activator.getImageDescriptor("icons/gradient_bone.gif"));
         addGradientOption(menu, "grey", ColorGradients.gray, Activator.getImageDescriptor("icons/gradient_grey.gif"));
-        addGradientOption(menu, "topography", ColorGradients.topography, Activator.getImageDescriptor("icons/gradient_topo.gif"));
+        addGradientOption(menu, "spectral", ColorGradients.spectral, Activator.getImageDescriptor("icons/gradient_spectral.gif"));
 
         return menu;
     }

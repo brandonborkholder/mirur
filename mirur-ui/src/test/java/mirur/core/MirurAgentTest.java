@@ -12,7 +12,7 @@ public class MirurAgentTest {
             test1.add(i);
         }
 
-        Object result = MirurAgent.toArray(test1);
+        Object result = MirurAgent.toArray(test1, Long.MAX_VALUE);
         if (result instanceof double[]) {
             System.out.println(Arrays.toString((double[]) result));
         }
@@ -22,7 +22,7 @@ public class MirurAgentTest {
             test2[i] = Math.random();
         }
 
-        result = MirurAgent.toArray(test2);
+        result = MirurAgent.toArray(test2, Long.MAX_VALUE);
         if (result instanceof double[]) {
             System.out.println(Arrays.toString((double[]) result));
         }
@@ -32,7 +32,7 @@ public class MirurAgentTest {
             test3[i] = new AtomicLong(i);
         }
 
-        result = MirurAgent.toArray(test3);
+        result = MirurAgent.toArray(test3, Long.MAX_VALUE);
         if (result instanceof double[]) {
             System.out.println(Arrays.toString((double[]) result));
         }
