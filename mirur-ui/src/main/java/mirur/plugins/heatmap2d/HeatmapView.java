@@ -17,6 +17,7 @@
 package mirur.plugins.heatmap2d;
 
 import java.nio.FloatBuffer;
+import java.util.Map;
 
 import mirur.core.Array2D;
 import mirur.core.MinMaxFiniteValueVisitor;
@@ -86,7 +87,7 @@ public class HeatmapView extends SimplePlugin2D {
 
         axisZ.addConstraint(new NamedConstraint("C1") {
             @Override
-            public void applyConstraint(TaggedAxis1D axis) {
+            public void applyConstraint(TaggedAxis1D axis, Map<String, Tag> previousTags) {
                 if (t1.getValue() > t2.getValue()) {
                     t1.setValue(t2.getValue());
                 }

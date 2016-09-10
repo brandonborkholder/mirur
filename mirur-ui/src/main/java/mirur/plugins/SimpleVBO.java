@@ -18,6 +18,7 @@ package mirur.plugins;
 
 import static com.metsci.glimpse.gl.util.GLErrorUtils.logGLError;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,6 @@ import java.util.logging.Logger;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.fixedfunc.GLPointerFunc;
-
-import com.jogamp.common.nio.Buffers;
 
 public class SimpleVBO {
     private static final Logger LOGGER = Logger.getLogger(SimpleVBO.class.getName());
@@ -52,7 +51,7 @@ public class SimpleVBO {
 
     public void allocate(int size) {
         if (buffer == null || size < buffer.capacity()) {
-            buffer = Buffers.newDirectFloatBuffer(size);
+            buffer = ByteBuffer.allocateDirect(4 * size).asFloatBuffer();
         }
 
         buffer.clear();
@@ -106,7 +105,7 @@ public class SimpleVBO {
 
             buffer.flip();
             int numFloats = buffer.limit();
-            gl.glBufferData(GL.GL_ARRAY_BUFFER, numFloats * Buffers.SIZEOF_FLOAT, buffer, GL.GL_STATIC_DRAW);
+            gl.glBufferData(GL.GL_ARRAY_BUFFER, numFloats * 4, buffer, GL.GL_STATIC_DRAW);
 
             logGLError(LOGGER, Level.WARNING, gl, "GL Error");
 

@@ -17,20 +17,22 @@
 package mirur.plugins;
 
 import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
-import mirur.core.Array1D;
-import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.VisitArray;
-import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
-import mirur.plugins.line1d.MarkerPainter;
 
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.axis.painter.label.HdrAxisLabelHandler;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 import com.metsci.glimpse.painter.base.GlimpsePainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.plot.SimplePlot2D;
+
+import mirur.core.Array1D;
+import mirur.core.MinMaxFiniteValueVisitor;
+import mirur.core.VisitArray;
+import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
+import mirur.plugins.line1d.MarkerPainter;
 
 public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;

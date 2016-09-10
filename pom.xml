@@ -115,7 +115,6 @@
                     </mapping>
                     <excludes>
                         <exclude>target/**</exclude>
-                        <exclude>src/main/java/mirur/plugins/HdrAxisLabelHandler.java</exclude>
                     </excludes>
                     <useDefaultExcludes>true</useDefaultExcludes>
                     <useDefaultMapping>true</useDefaultMapping>
