@@ -34,6 +34,7 @@
         <module>mirur-jogl-osx</module>
         <module>mirur-agent</module>
         <module>mirur-ui</module>
+        <module>mirur-test</module>
         <module>mirur-feature</module>
         <module>mirur-repository</module>
     </modules>
