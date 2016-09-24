@@ -25,10 +25,12 @@ import mirur.plugins.SimpleVBO;
 public class FillWithBarsVisitor extends AbstractArray1dVisitor {
     private final SimpleVBO vbo;
     private final DataUnitConverter unitConverter;
+    private float baseline;
 
     public FillWithBarsVisitor(SimpleVBO vbo, DataUnitConverter unitConverter) {
         this.vbo = vbo;
         this.unitConverter = unitConverter;
+        baseline = (float) unitConverter.data2painter(0);
     }
 
     @Override
@@ -46,17 +48,17 @@ public class FillWithBarsVisitor extends AbstractArray1dVisitor {
     protected void visit(int i, double v) {
         float f = (float) unitConverter.data2painter(v);
         vbo.add(i - 0.5f, f);
-        vbo.add(i - 0.5f, 0);
+        vbo.add(i - 0.5f, baseline);
         vbo.add(i + 0.5f, f);
-        vbo.add(i + 0.5f, 0);
+        vbo.add(i + 0.5f, baseline);
     }
 
     @Override
     protected void visit(int i, float v) {
         float f = (float) unitConverter.data2painter(v);
         vbo.add(i - 0.5f, f);
-        vbo.add(i - 0.5f, 0);
+        vbo.add(i - 0.5f, baseline);
         vbo.add(i + 0.5f, f);
-        vbo.add(i + 0.5f, 0);
+        vbo.add(i + 0.5f, baseline);
     }
 }
