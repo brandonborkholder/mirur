@@ -19,6 +19,7 @@ package mirur.plugins;
 import static com.metsci.glimpse.gl.util.GLErrorUtils.logGLError;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,6 @@ import java.util.logging.Logger;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.fixedfunc.GLPointerFunc;
 
 public class SimpleVBO {
     private static final Logger LOGGER = Logger.getLogger(SimpleVBO.class.getName());
@@ -51,7 +51,7 @@ public class SimpleVBO {
 
     public void allocate(int size) {
         if (buffer == null || size < buffer.capacity()) {
-            buffer = ByteBuffer.allocateDirect(4 * size).asFloatBuffer();
+            buffer = ByteBuffer.allocateDirect(4 * size).order(ByteOrder.nativeOrder()).asFloatBuffer();
         }
 
         buffer.clear();
@@ -114,7 +114,7 @@ public class SimpleVBO {
 
         gl.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferHandle);
         gl.glVertexPointer(2, GL.GL_FLOAT, 0, 0);
-        gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
     }
 
     private static class Marker {
