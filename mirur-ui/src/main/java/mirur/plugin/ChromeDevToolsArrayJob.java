@@ -21,9 +21,6 @@ import static mirur.plugin.Activator.getVariableSelectionModel;
 
 import java.util.logging.Logger;
 
-import org.chromium.debug.core.model.Value;
-import org.chromium.sdk.JsValue;
-import org.chromium.sdk.JsValue.Type;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -74,18 +71,19 @@ public class ChromeDevToolsArrayJob extends Job {
     private Object toPrimitiveArray(String name, IIndexedValue value) throws DebugException {
         Object arrayObject = null;
 
+        /*
+         * If something is an array of non-zero size, try converting values
+         * one-by-one into doubles until we hit something that's not a number.
+         * Then just abort the entire array.
+         */
+
         try {
-            if (value.getReferenceTypeName().equals(Type.TYPE_ARRAY.name()) && value.getSize() > 0) {
+            if (value.getReferenceTypeName().equals("TYPE_ARRAY") && value.getSize() > 0) {
                 double[] doubleValues = new double[value.getSize()];
 
                 for (int i = 0; i < value.getSize(); i++) {
-                    Value v = (Value) value.getVariable(i).getValue();
-                    JsValue jsValue = v.getJsValue();
-                    if (jsValue.getType().equals(Type.TYPE_NUMBER)) {
-                        doubleValues[i] = Double.parseDouble(jsValue.getValueString());
-                    } else {
-                        doubleValues[i] = Double.NaN;
-                    }
+                    IValue v = value.getVariable(i).getValue();
+                    doubleValues[i] = Double.parseDouble(v.getValueString());
                 }
 
                 arrayObject = doubleValues;
