@@ -17,6 +17,8 @@
 package mirur.plugins;
 
 import static com.metsci.glimpse.painter.decoration.WatermarkPainter.bottomLeft;
+import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
+import static com.metsci.glimpse.support.font.FontUtils.getDefaultBold;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 
 import java.awt.image.BufferedImage;
@@ -29,15 +31,19 @@ import javax.imageio.ImageIO;
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.painter.decoration.BackgroundPainter;
 import com.metsci.glimpse.painter.decoration.WatermarkPainter;
+import com.metsci.glimpse.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 
 import mirur.plugin.Icons;
 
 public class InvalidPlaceholderLayout extends GlimpseLayout {
     private static final Logger LOGGER = Logger.getLogger(InvalidPlaceholderLayout.class.getName());
 
+    protected SimpleTextPainter textPainter;
+
     public InvalidPlaceholderLayout() {
-        BackgroundPainter backgroundPainter = new BackgroundPainter(true);
-        addPainter(backgroundPainter);
+        addPainter(new BackgroundPainter(true));
 
         try (InputStream in = InvalidPlaceholderLayout.class.getClassLoader().getResourceAsStream(Icons.MIRUR_LOGO_PATH)) {
             BufferedImage image = ImageIO.read(in);
@@ -47,5 +53,13 @@ public class InvalidPlaceholderLayout extends GlimpseLayout {
         } catch (IOException ex) {
             logWarning(LOGGER, "Failed to load logo image", ex);
         }
+
+        textPainter = new SimpleTextPainter();
+        textPainter.setColor(getRed());
+        textPainter.setHorizontalPosition(HorizontalPosition.Center);
+        textPainter.setVerticalPosition(VerticalPosition.Center);
+        textPainter.setPaintBackground(false);
+        textPainter.setFont(getDefaultBold(12));
+        addPainter(textPainter);
     }
 }

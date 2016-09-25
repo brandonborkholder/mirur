@@ -16,13 +16,13 @@
  */
 package mirur.plugins;
 
-import mirur.core.VariableObject;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Menu;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.layout.GlimpseLayout;
+
+import mirur.core.VariableObject;
 
 public class InvalidPlaceholderView implements MirurView {
     private InvalidPlaceholderLayout layout;
@@ -49,6 +49,14 @@ public class InvalidPlaceholderView implements MirurView {
         }
 
         canvas.addLayout(layout);
+
+        if (obj == null) {
+            layout.textPainter.setText(null);
+        } else if (obj.getData() instanceof String) {
+            layout.textPainter.setText((String) obj.getData());
+        } else {
+            layout.textPainter.setText(null);
+        }
 
         return new DataPainter() {
             @Override

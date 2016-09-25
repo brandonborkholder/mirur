@@ -65,7 +65,7 @@ public class MirurAgent {
             if (nBytes <= maxBytes) {
                 return value;
             } else {
-                return INVALID;
+                return -nBytes;
             }
         } else if (clazz.isArray() && isPrimitiveArray(clazz.getComponentType())) {
             // 2d array of primitives
@@ -73,14 +73,14 @@ public class MirurAgent {
             if (nBytes <= maxBytes) {
                 return value;
             } else {
-                return INVALID;
+                return -nBytes;
             }
         } else if (clazz.isArray() && !clazz.getComponentType().isPrimitive()) {
             // array of possibly primitive wrappers
             Object[] array = (Object[]) value;
 
             if (maxBytes < array.length * 8L) {
-                return INVALID;
+                return -array.length * 8L;
             }
 
             MirurAgent helper = new MirurAgent(array.length);
@@ -96,7 +96,7 @@ public class MirurAgent {
             Collection<?> c = (Collection<?>) value;
 
             if (maxBytes < c.size() * 8L) {
-                return INVALID;
+                return -c.size() * 8L;
             }
 
             Iterator<?> itr = c.iterator();
@@ -114,7 +114,7 @@ public class MirurAgent {
             if (nBytes >= 0 && nBytes <= maxBytes) {
                 return buf;
             } else {
-                return INVALID;
+                return -nBytes;
             }
         } else if (value instanceof Image) {
             Image img = (Image) value;

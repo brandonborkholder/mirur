@@ -44,6 +44,7 @@ public class MirurAgentCoder {
     public static final short TYPE_BUFFERED_IMAGE = 3;
     public static final short TYPE_BUFFER = 4;
     public static final short TYPE_SHAPE = 5;
+    public static final short TYPE_TOO_LARGE = 6;
 
     public Object decode(InputStream in0) throws IOException, ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(in0);
@@ -59,6 +60,10 @@ public class MirurAgentCoder {
             case TYPE_NULL:
             case TYPE_INVALID:
                 return null;
+
+            case TYPE_TOO_LARGE:
+                long size = in.readLong();
+                return String.format("Object too large (%,d bytes). Increase max size in preferences.", size);
 
             case TYPE_OBJ_JAVA_SER:
                 return in.readObject();
@@ -130,6 +135,9 @@ public class MirurAgentCoder {
         try {
             if (MirurAgent.INVALID.equals(obj)) {
                 out.writeShort(TYPE_INVALID);
+            } else if (obj instanceof Long && ((Long) obj) < 0) {
+                out.writeShort(TYPE_TOO_LARGE);
+                out.writeLong(-(Long) obj);
             } else if (obj == null) {
                 out.writeShort(TYPE_NULL);
             } else if (obj instanceof BufferedImage) {
