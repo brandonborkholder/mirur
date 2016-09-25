@@ -25,6 +25,8 @@ import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.layout.GlimpseLayout;
 
 public class InvalidPlaceholderView implements MirurView {
+    private InvalidPlaceholderLayout layout;
+
     @Override
     public boolean supportsData(VariableObject obj) {
         return true;
@@ -42,7 +44,10 @@ public class InvalidPlaceholderView implements MirurView {
 
     @Override
     public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
-        final InvalidPlaceholderLayout layout = new InvalidPlaceholderLayout();
+        if (layout == null) {
+            layout = new InvalidPlaceholderLayout();
+        }
+
         canvas.addLayout(layout);
 
         return new DataPainter() {

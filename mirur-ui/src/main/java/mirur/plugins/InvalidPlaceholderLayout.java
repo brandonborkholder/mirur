@@ -20,8 +20,8 @@ import static com.metsci.glimpse.painter.decoration.WatermarkPainter.bottomLeft;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -39,10 +39,10 @@ public class InvalidPlaceholderLayout extends GlimpseLayout {
         BackgroundPainter backgroundPainter = new BackgroundPainter(true);
         addPainter(backgroundPainter);
 
-        try {
-            BufferedImage image = ImageIO.read(new File(Icons.MIRUR_LOGO_PATH));
+        try (InputStream in = InvalidPlaceholderLayout.class.getClassLoader().getResourceAsStream(Icons.MIRUR_LOGO_PATH)) {
+            BufferedImage image = ImageIO.read(in);
             WatermarkPainter logoPainter = new WatermarkPainter(image,
-                    bottomLeft.withMaxAreaFraction(1).withMaxWidthFraction(1).withMaxHeightFraction(1));
+                    bottomLeft.withMaxAreaFraction(1).withMaxWidthFraction(0.3).withMaxHeightFraction(0.2));
             addPainter(logoPainter);
         } catch (IOException ex) {
             logWarning(LOGGER, "Failed to load logo image", ex);
