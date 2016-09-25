@@ -18,6 +18,7 @@ package mirur.plugin.painterview;
 
 import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
 import static com.metsci.glimpse.support.color.GlimpseColor.getGray;
+import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
 import static com.metsci.glimpse.support.color.GlimpseColor.getWhite;
 
 import com.metsci.glimpse.swt.misc.SwtLookAndFeel;
@@ -32,5 +33,6 @@ public class MirurLAF extends SwtLookAndFeel {
 
         map.put(DATA_COLOR, getBlack());
         map.put(DATA_BORDER_COLOR, getGray());
+        map.put(CROSSHAIR_COLOR, getRed());
     }
 }

@@ -16,8 +16,6 @@
  */
 package mirur.plugins;
 
-import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
-
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.axis.painter.label.HdrAxisLabelHandler;
@@ -77,7 +75,6 @@ public class Array1DPlot extends SimplePlot2D {
         super.initializePainters();
 
         getCrosshairPainter().showSelectionBox(false);
-        getCrosshairPainter().setCursorColor(getRed());
         titlePainter.setHorizontalPosition(HorizontalPosition.Left);
     }
 
