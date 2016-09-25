@@ -20,14 +20,6 @@ import static mirur.plugin.Activator.getViewSelectionModel;
 
 import javax.media.opengl.GLProfile;
 
-import mirur.core.VariableObject;
-import mirur.plugin.SelectListenerToggle;
-import mirur.plugin.VarObjectSelectListener;
-import mirur.plugin.ViewSelectListener;
-import mirur.plugins.DataPainter;
-import mirur.plugins.InvalidPlaceholderView;
-import mirur.plugins.MirurView;
-
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -36,9 +28,16 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
-import com.metsci.glimpse.gl.GLCapabilityEventListener;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
+
+import mirur.core.VariableObject;
+import mirur.plugin.SelectListenerToggle;
+import mirur.plugin.VarObjectSelectListener;
+import mirur.plugin.ViewSelectListener;
+import mirur.plugins.DataPainter;
+import mirur.plugins.InvalidPlaceholderView;
+import mirur.plugins.MirurView;
 
 public class GlimpseArrayView extends ViewPart implements VarObjectSelectListener, ViewSelectListener {
     private static final String ID = "mirur.views.Painter";
@@ -60,7 +59,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     @Override
     public void createPartControl(Composite parent) {
         canvas = new NewtSwtGlimpseCanvas(parent, GLProfile.get(GLProfile.GL2), SWT.DOUBLE_BUFFERED);
-        canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener());
+        canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
