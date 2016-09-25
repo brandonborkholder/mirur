@@ -19,15 +19,6 @@ package mirur.plugins.heatmap2d;
 import java.nio.FloatBuffer;
 import java.util.Map;
 
-import mirur.core.Array2D;
-import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.VariableObject;
-import mirur.core.VisitArray;
-import mirur.plugins.Array2DTitlePainter;
-import mirur.plugins.DataPainter;
-import mirur.plugins.DataPainterImpl;
-import mirur.plugins.SimplePlugin2D;
-
 import com.metsci.glimpse.axis.tagged.NamedConstraint;
 import com.metsci.glimpse.axis.tagged.Tag;
 import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
@@ -46,6 +37,15 @@ import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.projection.Projection;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D.MutatorFloat2D;
+
+import mirur.core.Array2D;
+import mirur.core.MinMaxFiniteValueVisitor;
+import mirur.core.VariableObject;
+import mirur.core.VisitArray;
+import mirur.plugins.Array2DTitlePainter;
+import mirur.plugins.DataPainter;
+import mirur.plugins.DataPainterImpl;
+import mirur.plugins.SimplePlugin2D;
 
 public class HeatmapView extends SimplePlugin2D {
     public HeatmapView() {
@@ -67,6 +67,15 @@ public class HeatmapView extends SimplePlugin2D {
             }
 
             @Override
+            protected void updatePainterLayout() {
+                super.updatePainterLayout();
+
+                axisLayoutZ.setLayoutData(String.format("cell 2 0 1 3, growy, width %d!", axisThicknessZ));
+
+                invalidateLayout();
+            }
+
+            @Override
             protected void initializePainters() {
                 super.initializePainters();
 
@@ -76,6 +85,11 @@ public class HeatmapView extends SimplePlugin2D {
 
         plot.setAxisLabelX(array.getName() + "[]");
         plot.setAxisLabelY(array.getName() + "[][]");
+
+        plot.getAxisPainterX().setAxisLabelBufferSize(3);
+        plot.setTitleHeight(30);
+        plot.getLabelHandlerY().setTickSpacing(50);
+        plot.getLabelHandlerZ().setTickSpacing(50);
 
         plot.getCrosshairPainter().showSelectionBox(false);
 
@@ -134,8 +148,9 @@ public class HeatmapView extends SimplePlugin2D {
             maxZ++;
         }
 
-        plot.getAxisZ().setMin(minZ);
-        plot.getAxisZ().setMax(maxZ);
+        double padding = (maxZ - minZ) * 0.02;
+        plot.getAxisZ().setMin(minZ - padding);
+        plot.getAxisZ().setMax(maxZ + padding);
 
         t1.setValue(minZ);
         t2.setValue(maxZ);
