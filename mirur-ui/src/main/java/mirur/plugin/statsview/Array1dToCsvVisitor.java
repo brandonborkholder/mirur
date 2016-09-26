@@ -18,10 +18,10 @@ package mirur.plugin.statsview;
 
 import java.io.PrintStream;
 
-import mirur.core.Array1dVisitor;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+
+import mirur.core.Array1dVisitor;
 
 public class Array1dToCsvVisitor implements Array1dVisitor {
     private final PrintStream out;
@@ -45,7 +45,7 @@ public class Array1dToCsvVisitor implements Array1dVisitor {
     public void visit(double[] v) {
         monitor.beginTask(taskName, v.length);
         for (int i = 0; i < v.length; i++) {
-            out.print((int) v[i]);
+            out.printf("%.18g", v[i]);
             out.println();
             incr();
         }
@@ -55,7 +55,7 @@ public class Array1dToCsvVisitor implements Array1dVisitor {
     public void visit(float[] v) {
         monitor.beginTask(taskName, v.length);
         for (int i = 0; i < v.length; i++) {
-            out.print((int) v[i]);
+            out.printf("%.9g", v[i]);
             out.println();
             incr();
         }
@@ -65,7 +65,7 @@ public class Array1dToCsvVisitor implements Array1dVisitor {
     public void visit(long[] v) {
         monitor.beginTask(taskName, v.length);
         for (int i = 0; i < v.length; i++) {
-            out.print((int) v[i]);
+            out.print(v[i]);
             out.println();
             incr();
         }
@@ -96,7 +96,7 @@ public class Array1dToCsvVisitor implements Array1dVisitor {
         monitor.beginTask(taskName, v.length);
         for (int i = 0; i < v.length; i++) {
             // since we represent it as numeric all over, let's show as numbers
-            out.print((int) v[i]);
+            out.printf("%x", v[i]);
             out.println();
             incr();
         }
@@ -106,7 +106,7 @@ public class Array1dToCsvVisitor implements Array1dVisitor {
     public void visit(byte[] v) {
         monitor.beginTask(taskName, v.length);
         for (int i = 0; i < v.length; i++) {
-            out.print(v[i]);
+            out.printf("%x", v[i]);
             out.println();
             incr();
         }

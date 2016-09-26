@@ -35,6 +35,7 @@ import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;
 import mirur.plugin.VarObjectSelectListener;
 import mirur.plugin.ViewSelectListener;
+import mirur.plugin.statsview.SaveArrayToFileAction;
 import mirur.plugins.DataPainter;
 import mirur.plugins.InvalidPlaceholderView;
 import mirur.plugins.MirurView;
@@ -43,6 +44,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     private static final String ID = "mirur.views.Painter";
 
     private ResetAxesAction resetAction;
+    private SaveArrayToFileAction saveArrayAction;
     private ViewMenuAction viewMenuAction;
     private SelectListenerToggle selectListenerToggle;
 
@@ -82,10 +84,12 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
                 return parent;
             }
         };
+        saveArrayAction = new SaveArrayToFileAction();
         selectListenerToggle = new SelectListenerToggle(ID, this, this);
 
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
+        tbm.add(saveArrayAction);
         tbm.add(selectListenerToggle);
 
         getSite().getPage().addPartListener(selectListenerToggle);
@@ -111,6 +115,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     @Override
     public void variableSelected(VariableObject obj) {
         currentData = obj;
+        saveArrayAction.variableSelected(obj);
         refreshDataAndPainter();
     }
 

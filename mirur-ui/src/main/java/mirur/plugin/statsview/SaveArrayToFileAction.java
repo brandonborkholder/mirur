@@ -18,10 +18,6 @@ package mirur.plugin.statsview;
 
 import java.io.File;
 
-import mirur.core.PrimitiveArray;
-import mirur.core.VariableObject;
-import mirur.plugin.Activator;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
@@ -30,7 +26,14 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-public class SaveArrayToFileAction extends Action {
+import mirur.core.Array1D;
+import mirur.core.Array2D;
+import mirur.core.PrimitiveArray;
+import mirur.core.VariableObject;
+import mirur.plugin.Activator;
+import mirur.plugin.VarObjectSelectListener;
+
+public class SaveArrayToFileAction extends Action implements VarObjectSelectListener {
     public SaveArrayToFileAction() {
         super("Save Data", IAction.AS_PUSH_BUTTON);
         setId(SaveArrayToFileAction.class.getName());
@@ -53,5 +56,10 @@ public class SaveArrayToFileAction extends Action {
             File fileDest = new File(destination);
             new SaveArrayToFileJob(array, fileDest).schedule();
         }
+    }
+
+    @Override
+    public void variableSelected(VariableObject obj) {
+        setEnabled(obj != null && (obj instanceof Array1D || obj instanceof Array2D));
     }
 }

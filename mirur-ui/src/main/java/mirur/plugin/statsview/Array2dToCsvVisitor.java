@@ -18,10 +18,10 @@ package mirur.plugin.statsview;
 
 import java.io.PrintStream;
 
-import mirur.core.AbstractArrayVisitor;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+
+import mirur.core.AbstractArrayVisitor;
 
 public class Array2dToCsvVisitor extends AbstractArrayVisitor {
     private final PrintStream out;
@@ -151,7 +151,7 @@ public class Array2dToCsvVisitor extends AbstractArrayVisitor {
             out.print(",");
         }
 
-        out.print(v);
+        out.printf("%.18g", v);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class Array2dToCsvVisitor extends AbstractArrayVisitor {
             out.print(",");
         }
 
-        out.print(v);
+        out.printf("%.9g", v);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class Array2dToCsvVisitor extends AbstractArrayVisitor {
             out.print(",");
         }
 
-        out.print((int) v);
+        out.printf("%x", v);
     }
 
     @Override
@@ -205,7 +205,7 @@ public class Array2dToCsvVisitor extends AbstractArrayVisitor {
             out.print(",");
         }
 
-        out.print(v);
+        out.printf("%x", v);
     }
 
     @Override
@@ -214,6 +214,6 @@ public class Array2dToCsvVisitor extends AbstractArrayVisitor {
             out.print(",");
         }
 
-        out.print(v);
+        out.print(v ? 1 : 0);
     }
 }

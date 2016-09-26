@@ -18,22 +18,24 @@ package mirur.plugin.statsview;
 
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.Logger;
-
-import mirur.core.Array1D;
-import mirur.core.Array2D;
-import mirur.core.PrimitiveArray;
-import mirur.core.VisitArray;
-import mirur.plugin.Activator;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+
+import mirur.core.Array1D;
+import mirur.core.Array2D;
+import mirur.core.PrimitiveArray;
+import mirur.core.VisitArray;
+import mirur.plugin.Activator;
 
 public class SaveArrayToFileJob extends Job {
     private static final Logger LOGGER = Logger.getLogger(SaveArrayToFileJob.class.getName());
@@ -52,7 +54,7 @@ public class SaveArrayToFileJob extends Job {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-        try (PrintStream out = new PrintStream(dest)) {
+        try (PrintStream out = new PrintStream(new BufferedOutputStream(new FileOutputStream(dest)))) {
             if (array instanceof Array1D) {
                 VisitArray.visit1d(array.getData(), new Array1dToCsvVisitor(out, getName(), monitor));
             } else if (array instanceof Array2D) {

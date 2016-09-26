@@ -90,6 +90,6 @@ public class ArrayStatsView extends ViewPart implements VarObjectSelectListener 
         PrimitiveArray array = obj instanceof PrimitiveArray ? (PrimitiveArray) obj : null;
 
         statsPage.setInput(array);
-        saveArrayAction.setEnabled(array != null && (array.getNumDimensions() == 1 || array.getNumDimensions() == 2));
+        saveArrayAction.variableSelected(obj);
     }
 }
