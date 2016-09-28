@@ -16,20 +16,20 @@
  */
 package mirur.plugins;
 
-import mirur.core.Array1D;
-import mirur.core.ElementToStringVisitor;
-import mirur.core.VisitArray;
-
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseContext;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 
-public class Array1DTitlePainter extends SimpleTextPainter {
-    private final Axis2D srcAxis;
-    private Array1D array;
-    private int lastIndex;
+import mirur.core.Array1D;
+import mirur.core.ElementToStringVisitor;
+import mirur.core.VisitArray;
 
-    private int[] indexMap;
+public class Array1DTitlePainter extends SimpleTextPainter {
+    protected final Axis2D srcAxis;
+    protected Array1D array;
+    protected int lastIndex;
+
+    protected int[] indexMap;
 
     public Array1DTitlePainter(Axis2D srcAxis) {
         this.srcAxis = srcAxis;
@@ -50,27 +50,26 @@ public class Array1DTitlePainter extends SimpleTextPainter {
         }
 
         double selected = srcAxis.getAxisX().getSelectionCenter();
-        int idx = (int) Math.round(selected);
-        if (idx != lastIndex) {
-            text = format(idx);
-            lastIndex = idx;
+        int axisIdx = (int) Math.round(selected);
+        if (axisIdx != lastIndex) {
+            int arrayIdx = axisIdx;
+            if (indexMap != null && 0 <= axisIdx && axisIdx < indexMap.length) {
+                arrayIdx = indexMap[axisIdx];
+            }
+            text = format(arrayIdx);
+            lastIndex = axisIdx;
             setText(text);
         }
 
         super.paintTo(context);
     }
 
-    private String format(int index) {
-        int reportedIndex = index;
-        if (indexMap != null && 0 <= index && index < indexMap.length) {
-            reportedIndex = indexMap[index];
-        }
-
-        String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), reportedIndex).getText();
+    protected String format(int index) {
+        String value = VisitArray.visit(array.getData(), new ElementToStringVisitor(), index).getText();
         if (value == null) {
             return String.format("%s[%d] %s", array.getData().getClass().getComponentType(), array.getSize(), array.getName());
         } else {
-            return String.format("%s[%d] = %s", array.getName(), reportedIndex, value);
+            return String.format("%s[%d] = %s", array.getName(), index, value);
         }
     }
 }
