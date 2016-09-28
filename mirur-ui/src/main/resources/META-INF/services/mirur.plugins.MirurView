@@ -4,3 +4,4 @@ mirur.plugins.histogram1d.HistogramView
 mirur.plugins.heatmap2d.HeatmapView
 mirur.plugins.image.ImageView
 mirur.plugins.shape.ShapeView
+mirur.plugins.complex.ComplexView

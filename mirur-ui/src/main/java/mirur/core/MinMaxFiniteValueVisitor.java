@@ -33,19 +33,23 @@ public class MinMaxFiniteValueVisitor implements ArrayElementVisitor {
         return max;
     }
 
+    protected void visitFinite(double v) {
+        min = min(min, v);
+        max = max(max, v);
+    }
+
     @Override
     public void visit(double v) {
         if (isNaN(v) || isInfinite(v)) {
             return;
         }
 
-        min = min(min, v);
-        max = max(max, v);
+        visitFinite(v);
     }
 
     @Override
     public void visit(long v) {
-        visit((double) v);
+        visitFinite(v);
     }
 
     @Override
@@ -55,26 +59,26 @@ public class MinMaxFiniteValueVisitor implements ArrayElementVisitor {
 
     @Override
     public void visit(int v) {
-        visit((double) v);
+        visitFinite(v);
     }
 
     @Override
     public void visit(short v) {
-        visit((double) v);
+        visitFinite(v);
     }
 
     @Override
     public void visit(char v) {
-        visit((double) v);
+        visitFinite(v);
     }
 
     @Override
     public void visit(byte v) {
-        visit((double) v);
+        visitFinite(v);
     }
 
     @Override
     public void visit(boolean v) {
-        visit(v ? 1.0 : 0.0);
+        visitFinite(v ? 1.0 : 0.0);
     }
 }
