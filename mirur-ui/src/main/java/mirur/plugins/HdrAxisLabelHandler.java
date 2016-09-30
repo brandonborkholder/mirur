@@ -49,6 +49,36 @@ public class HdrAxisLabelHandler extends GridAxisLabelHandler {
     protected int orderDelta;
     protected double baseValue;
 
+    protected String prefix;
+    protected String suffix;
+
+    public HdrAxisLabelHandler() {
+        prefix = "";
+        suffix = "";
+    }
+
+    @Override
+    public void setAxisLabel(String label) {
+        super.setAxisLabel(label);
+
+        if (label == null || label.isEmpty()) {
+            prefix = "";
+        } else {
+            prefix = label + " ";
+        }
+    }
+
+    @Override
+    public void setAxisUnits(String milliUnits, String units, String kiloUnits) {
+        super.setAxisUnits(milliUnits, units, kiloUnits);
+
+        if (units == null || units.isEmpty()) {
+            suffix = " " + units;
+        } else {
+            suffix = "";
+        }
+    }
+
     @Override
     public String getAxisLabel(Axis1D axis) {
         double min = converter.toAxisUnits(axis.getMin());
@@ -66,7 +96,7 @@ public class HdrAxisLabelHandler extends GridAxisLabelHandler {
         orderAxis = (int) floor(orderAxis / 3.0) * 3;
         orderDelta = (int) ceil(orderDelta / 3.0) * 3;
 
-        String s = "";
+        String s = null;
         if (zoomedIn) {
             double e = pow(10, orderDelta + 1);
             baseValue = floor(min / e) * e;
@@ -85,8 +115,8 @@ public class HdrAxisLabelHandler extends GridAxisLabelHandler {
             s = format("x e%d", orderAxis);
         }
 
-        if (axisUnits.length() != 0) {
-            s = s + " " + axisUnits;
+        if (!prefix.isEmpty() || !suffix.isEmpty()) {
+            s = prefix + s + suffix;
         }
 
         return s;
