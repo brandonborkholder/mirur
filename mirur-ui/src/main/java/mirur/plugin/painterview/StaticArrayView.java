@@ -20,8 +20,8 @@ import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLContext;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -60,7 +60,9 @@ public class StaticArrayView extends ViewPart {
                 return parent;
             }
         });
-        getViewSite().getActionBars().getMenuManager().add(new Action("Rename View") {
+
+        IMenuManager mm = getViewSite().getActionBars().getMenuManager();
+        mm.add(new Action("Rename View") {
             @Override
             public void run() {
                 setPartName("TODO");

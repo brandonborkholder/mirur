@@ -16,6 +16,7 @@
  */
 package mirur.plugin.statsview;
 
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -56,7 +57,9 @@ public class ArrayStatsView extends ViewPart implements VarObjectSelectListener 
 
         IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
         tbm.add(saveArrayAction);
-        tbm.add(selectListenerToggle);
+
+        IMenuManager mm = getViewSite().getActionBars().getMenuManager();
+        mm.add(selectListenerToggle);
     }
 
     private void initPage(Page page) {

@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLProfile;
 
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -75,8 +76,6 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
         cachedPainters = Collections.synchronizedMap(new HashMap<Key, DataPainter>());
 
-        IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-        tbm.add(new SelectViewAction());
         resetAction = new ResetAxesAction() {
             @Override
             public void run() {
@@ -104,11 +103,15 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
             }
         };
 
+        IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
+        tbm.add(new SelectViewAction());
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
         tbm.add(saveArrayAction);
-        tbm.add(createStaticViewAction);
-        tbm.add(selectListenerToggle);
+
+        IMenuManager mm = getViewSite().getActionBars().getMenuManager();
+        mm.add(createStaticViewAction);
+        mm.add(selectListenerToggle);
 
         getSite().getPage().addPartListener(selectListenerToggle);
 

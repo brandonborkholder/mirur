@@ -13,7 +13,7 @@ import mirur.plugin.Icons;
 public abstract class CreateStaticViewAction extends Action {
     public CreateStaticViewAction() {
         setId(CreateStaticViewAction.class.getName());
-        setText("Pin");
+        setText("New Painter View");
         setToolTipText("Pin To New View");
         setImageDescriptor(Icons.getPin(true));
         setDisabledImageDescriptor(Icons.getPin(false));
