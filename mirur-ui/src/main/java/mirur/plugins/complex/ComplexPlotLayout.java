@@ -27,6 +27,9 @@ import com.metsci.glimpse.axis.painter.NumericAxisPainter;
 import com.metsci.glimpse.axis.painter.NumericTopXAxisPainter;
 import com.metsci.glimpse.axis.painter.label.AxisLabelHandler;
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.context.GlimpseBounds;
+import com.metsci.glimpse.event.mouse.GlimpseMouseAdapter;
+import com.metsci.glimpse.event.mouse.GlimpseMouseEvent;
 import com.metsci.glimpse.layout.GlimpseAxisLayout1D;
 import com.metsci.glimpse.layout.GlimpseAxisLayout2D;
 import com.metsci.glimpse.layout.GlimpseAxisLayoutX;
@@ -49,6 +52,8 @@ import mirur.plugins.HdrAxisLabelHandler;
 import mirur.plugins.line1d.LinePainter;
 
 public class ComplexPlotLayout extends Plot2D {
+    private SimpleTextPainter angleLabelPainter;
+    private SimpleTextPainter magnitudeLabelPainter;
     private Complex1DTitlePainter titlePainter1;
     private AngleMagnitude1DTitlePainter titlePainter2;
 
@@ -64,12 +69,18 @@ public class ComplexPlotLayout extends Plot2D {
     private GlimpseAxisLayout2D axisLayoutXY2;
     private AxisMouseListener mouseListenerXY2;
 
+    private boolean anglePlotOpen;
+    private boolean magnitudePlotOpen;
+
     public ComplexPlotLayout() {
         initialize();
 
         setAxisSizeX(25);
         setAxisSizeY(65);
         setTitleHeight(45);
+
+        toggleOpenPlot(true, true);
+        toggleOpenPlot(false, true);
     }
 
     @Override
@@ -111,10 +122,10 @@ public class ComplexPlotLayout extends Plot2D {
         painterTopX = createAxisPainterTopX();
         axisLayoutTopX.addPainter(painterTopX);
 
-        SimpleTextPainter labelPainter = createPlotLabelPainter(true);
-        axisLayoutTopX.addPainter(labelPainter, Plot2D.FOREGROUND_LAYER);
-        labelPainter = createPlotLabelPainter(false);
-        axisLayoutX.addPainter(labelPainter, Plot2D.FOREGROUND_LAYER);
+        angleLabelPainter = createPlotLabelPainter(true);
+        axisLayoutTopX.addPainter(angleLabelPainter, Plot2D.FOREGROUND_LAYER);
+        magnitudeLabelPainter = createPlotLabelPainter(false);
+        axisLayoutX.addPainter(magnitudeLabelPainter, Plot2D.FOREGROUND_LAYER);
 
         mouseListenerY2 = createAxisMouseListenerY();
         mouseListenerXY2 = createAxisMouseListenerXY();
@@ -151,6 +162,18 @@ public class ComplexPlotLayout extends Plot2D {
         return labelPainter;
     }
 
+    private void toggleOpenPlot(boolean angle, boolean open) {
+        if (angle) {
+            anglePlotOpen = open;
+            angleLabelPainter.setText("Angle " + (open ? "\u2014" : "+"));
+        } else {
+            magnitudePlotOpen = open;
+            magnitudeLabelPainter.setText("Magnitude " + (open ? "\u2014" : "+"));
+        }
+
+        updatePainterLayout();
+    }
+
     @Override
     protected void attachAxisMouseListeners() {
         super.attachAxisMouseListeners();
@@ -158,6 +181,25 @@ public class ComplexPlotLayout extends Plot2D {
         attachAxisMouseListener(axisLayoutY2, mouseListenerY2);
         attachAxisMouseListener(axisLayoutXY2, mouseListenerXY2);
         attachAxisMouseListener(axisLayoutTopX, mouseListenerX);
+
+        axisLayoutTopX.addGlimpseMouseListener(new GlimpseMouseAdapter() {
+            @Override
+            public void mouseReleased(GlimpseMouseEvent event) {
+                GlimpseBounds bounds = event.getTargetStack().getBounds();
+                if (bounds.getWidth() - 20 < event.getX() && bounds.getHeight() - 20 < event.getY()) {
+                    toggleOpenPlot(true, !anglePlotOpen);
+                }
+            }
+        });
+        axisLayoutX.addGlimpseMouseListener(new GlimpseMouseAdapter() {
+            @Override
+            public void mouseReleased(GlimpseMouseEvent event) {
+                GlimpseBounds bounds = event.getTargetStack().getBounds();
+                if (bounds.getWidth() - 20 < event.getX() && event.getY() < 20) {
+                    toggleOpenPlot(false, !magnitudePlotOpen);
+                }
+            }
+        });
     }
 
     @Override
@@ -171,6 +213,16 @@ public class ComplexPlotLayout extends Plot2D {
         axisLayoutY2.setLayoutData(String.format("cell 0 3 1 1, pushy, growy, width %d!", axisThicknessY));
         axisLayoutXY2.setLayoutData("cell 1 3 1 1, push, grow");
         axisLayoutX.setLayoutData(String.format("cell 1 4 1 1, pushx, growx, height %d!", axisThicknessX));
+
+        if (!anglePlotOpen) {
+            axisLayoutY.setLayoutData("width 0!, height 0!");
+            axisLayoutXY.setLayoutData("width 0!, height 0!");
+        }
+
+        if (!magnitudePlotOpen) {
+            axisLayoutY2.setLayoutData("width 0!, height 0!");
+            axisLayoutXY2.setLayoutData("width 0!, height 0!");
+        }
 
         invalidateLayout();
     }
