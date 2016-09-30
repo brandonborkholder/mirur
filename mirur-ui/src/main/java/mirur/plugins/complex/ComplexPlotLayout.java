@@ -44,12 +44,14 @@ import com.metsci.glimpse.plot.Plot2D;
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
-import mirur.plugins.Array1DTitlePainter;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.HdrAxisLabelHandler;
 import mirur.plugins.line1d.LinePainter;
 
 public class ComplexPlotLayout extends Plot2D {
+    private Complex1DTitlePainter titlePainter1;
+    private AngleMagnitude1DTitlePainter titlePainter2;
+
     private GlimpseAxisLayout1D axisLayoutTopX;
     private NumericAxisPainter painterTopX;
 
@@ -67,7 +69,7 @@ public class ComplexPlotLayout extends Plot2D {
 
         setAxisSizeX(25);
         setAxisSizeY(65);
-        setTitleHeight(30);
+        setTitleHeight(45);
     }
 
     @Override
@@ -81,6 +83,17 @@ public class ComplexPlotLayout extends Plot2D {
         super.initializePainters();
 
         removeLayout(axisLayoutZ);
+
+        titlePainter1 = new Complex1DTitlePainter(getAxisX());
+        titlePainter1.setHorizontalPosition(HorizontalPosition.Left);
+        titlePainter1.setVerticalPosition(VerticalPosition.Top);
+        titlePainter1.setVerticalPadding(0);
+        titlePainter2 = new AngleMagnitude1DTitlePainter(getAxisX());
+        titlePainter2.setHorizontalPosition(HorizontalPosition.Left);
+        titlePainter2.setVerticalPosition(VerticalPosition.Bottom);
+        titlePainter2.setVerticalPadding(5);
+        titleLayout.addPainter(titlePainter1);
+        titleLayout.addPainter(titlePainter2);
 
         axisLayoutTopX = new GlimpseAxisLayoutX(this, "AxisXTop");
         axisLayoutY2 = new GlimpseAxisLayoutY(this, "AxisY2");
@@ -176,20 +189,15 @@ public class ComplexPlotLayout extends Plot2D {
         return handler;
     }
 
-    @Override
-    protected SimpleTextPainter createTitlePainter() {
-        SimpleTextPainter painter = new Array1DTitlePainter(getAxis());
-        painter.setHorizontalPosition(HorizontalPosition.Left);
-        painter.setVerticalPosition(VerticalPosition.Center);
-        return painter;
-    }
-
-    public void setComplexData(Array1D magnitudes, Array1D angles) {
+    public void setComplexData(Array1D complex, Array1D magnitudes, Array1D angles) {
         getLayoutXY1().addPainter(new LinePainter(angles, DataUnitConverter.IDENTITY));
         updateAxesBounds(angles, axisXY);
 
         getLayoutXY2().addPainter(new LinePainter(magnitudes, DataUnitConverter.IDENTITY));
         updateAxesBounds(magnitudes, axisXY2);
+
+        titlePainter1.setArray(complex);
+        titlePainter2.setArrays(angles, magnitudes);
     }
 
     protected void updateAxesBounds(Array1D array, Axis2D axis) {

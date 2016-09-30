@@ -88,7 +88,7 @@ public class Array1DPlot extends SimplePlot2D {
 
     @Override
     protected SimpleTextPainter createTitlePainter() {
-        SimpleTextPainter painter = new Array1DTitlePainter(getAxis());
+        SimpleTextPainter painter = new Array1DTitlePainter(getAxisX());
         painter.setHorizontalPosition(HorizontalPosition.Left);
         painter.setVerticalPosition(VerticalPosition.Center);
         return painter;

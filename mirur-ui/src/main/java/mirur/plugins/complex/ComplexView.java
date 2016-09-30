@@ -19,14 +19,8 @@ public class ComplexView extends SimplePlugin2D {
     @Override
     public boolean supportsData(VariableObject obj) {
         if (obj instanceof Array2D) {
-            Class<?> clazz = ((Array2D) obj).getData().getClass();
+            // TODO support this
             return false;
-            // return int[][].class.equals(clazz) ||
-            // long[][].class.equals(clazz) ||
-            // float[][].class.equals(clazz) ||
-            // double[][].class.equals(clazz) ||
-            // char[][].class.equals(clazz) ||
-            // short[][].class.equals(clazz);
         } else if (obj instanceof Array1D) {
             Class<?> clazz = ((Array1D) obj).getData().getClass();
             return int[].class.equals(clazz) ||
@@ -46,7 +40,7 @@ public class ComplexView extends SimplePlugin2D {
             Array1D angles = toAngles((Array1D) obj);
             Array1D magnitudes = toMagnitudes((Array1D) obj);
             ComplexPlotLayout layout = new ComplexPlotLayout();
-            layout.setComplexData(magnitudes, angles);
+            layout.setComplexData((Array1D) obj, magnitudes, angles);
 
             DataPainterImpl result = new DataPainterImpl(layout);
             result.addAxis(layout.getAxisY1());

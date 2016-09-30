@@ -16,7 +16,7 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.Axis2D;
+import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.context.GlimpseContext;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 
@@ -25,13 +25,13 @@ import mirur.core.ElementToStringVisitor;
 import mirur.core.VisitArray;
 
 public class Array1DTitlePainter extends SimpleTextPainter {
-    protected final Axis2D srcAxis;
+    protected final Axis1D srcAxis;
     protected Array1D array;
     protected int lastIndex;
 
     protected int[] indexMap;
 
-    public Array1DTitlePainter(Axis2D srcAxis) {
+    public Array1DTitlePainter(Axis1D srcAxis) {
         this.srcAxis = srcAxis;
     }
 
@@ -49,7 +49,7 @@ public class Array1DTitlePainter extends SimpleTextPainter {
             return;
         }
 
-        double selected = srcAxis.getAxisX().getSelectionCenter();
+        double selected = srcAxis.getSelectionCenter();
         int axisIdx = (int) Math.round(selected);
         if (axisIdx != lastIndex) {
             int arrayIdx = axisIdx;
