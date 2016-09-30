@@ -16,9 +16,6 @@
  */
 package mirur.plugin.painterview;
 
-import mirur.plugin.Activator;
-import mirur.plugin.Icons;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.graphics.Point;
@@ -28,13 +25,16 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolItem;
 
+import mirur.plugin.Icons;
+
 public abstract class ViewMenuAction extends Action implements IMenuCreator {
     public ViewMenuAction() {
         setId(ViewMenuAction.class.getName());
         setMenuCreator(this);
         setText("Options");
         setToolTipText("Select Painter Options");
-        setImageDescriptor(Activator.getImageDescriptor(Icons.CONFIG_PATH));
+        setImageDescriptor(Icons.getConfig(true));
+        setDisabledImageDescriptor(Icons.getConfig(false));
     }
 
     @Override

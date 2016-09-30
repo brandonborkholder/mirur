@@ -18,11 +18,6 @@ package mirur.plugin.painterview;
 
 import static mirur.plugin.Activator.getVariableSelectionModel;
 import static mirur.plugin.Activator.getViewSelectionModel;
-import mirur.core.VariableObject;
-import mirur.plugin.Activator;
-import mirur.plugin.Icons;
-import mirur.plugins.MirurView;
-import mirur.plugins.MirurViews;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -36,13 +31,19 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolItem;
 
+import mirur.core.VariableObject;
+import mirur.plugin.Icons;
+import mirur.plugins.MirurView;
+import mirur.plugins.MirurViews;
+
 public class SelectViewAction extends Action implements IMenuCreator {
     public SelectViewAction() {
         setId(SelectViewAction.class.getName());
         setMenuCreator(this);
         setText("Painters");
         setToolTipText("Select Painter");
-        setImageDescriptor(Activator.getImageDescriptor(Icons.NEWVIEW_PATH));
+        setImageDescriptor(Icons.getNewPainter(true));
+        setDisabledImageDescriptor(Icons.getNewPainter(false));
     }
 
     @Override

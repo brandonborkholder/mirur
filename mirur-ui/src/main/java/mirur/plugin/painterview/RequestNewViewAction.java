@@ -124,7 +124,7 @@ public class RequestNewViewAction extends Action {
             textArea.setText(scrollableText);
 
             setMessage("Enter the details below to request a new view of your data");
-            setTitleImage(Activator.getCachedImage(Icons.MIRUR_64_PATH));
+            setTitleImage(Icons.getMirurLargeIcon());
             setTitle("Submit Idea for a New View");
 
             return composite;

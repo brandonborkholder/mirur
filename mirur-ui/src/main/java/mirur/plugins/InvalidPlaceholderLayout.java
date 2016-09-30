@@ -19,15 +19,9 @@ package mirur.plugins;
 import static com.metsci.glimpse.painter.decoration.WatermarkPainter.bottomLeft;
 import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
 import static com.metsci.glimpse.support.font.FontUtils.getDefaultBold;
-import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static java.lang.Math.max;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.painter.decoration.BackgroundPainter;
@@ -39,32 +33,26 @@ import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import mirur.plugin.Icons;
 
 public class InvalidPlaceholderLayout extends GlimpseLayout {
-    private static final Logger LOGGER = Logger.getLogger(InvalidPlaceholderLayout.class.getName());
-
     protected SimpleTextPainter textPainter;
 
     public InvalidPlaceholderLayout() {
         addPainter(new BackgroundPainter(true));
 
-        try (InputStream in = InvalidPlaceholderLayout.class.getClassLoader().getResourceAsStream(Icons.MIRUR_LOGO_PATH)) {
-            BufferedImage image = ImageIO.read(in);
-            final double[] minDimensions = { image.getWidth() * 0.4, image.getHeight() * 0.4 };
+        BufferedImage image = Icons.getMirurLogoImage();
+        final double[] minDimensions = { image.getWidth() * 0.4, image.getHeight() * 0.4 };
 
-            WatermarkPainter logoPainter = new WatermarkPainter(image,
-                    bottomLeft.withMaxAreaFraction(1).withMaxWidthFraction(0.3).withMaxHeightFraction(0.2)) {
-                @Override
-                protected double[] computeQuadGeometry(double wImage, double hImage, double wBounds, double hBounds) {
-                    double[] q = super.computeQuadGeometry(wImage, hImage, wBounds, hBounds);
-                    q[0] = max(q[0], minDimensions[0]);
-                    q[1] = max(q[1], minDimensions[1]);
+        WatermarkPainter logoPainter = new WatermarkPainter(image,
+                bottomLeft.withMaxAreaFraction(1).withMaxWidthFraction(0.3).withMaxHeightFraction(0.2)) {
+            @Override
+            protected double[] computeQuadGeometry(double wImage, double hImage, double wBounds, double hBounds) {
+                double[] q = super.computeQuadGeometry(wImage, hImage, wBounds, hBounds);
+                q[0] = max(q[0], minDimensions[0]);
+                q[1] = max(q[1], minDimensions[1]);
 
-                    return q;
-                }
-            };
-            addPainter(logoPainter);
-        } catch (IOException ex) {
-            logWarning(LOGGER, "Failed to load logo image", ex);
-        }
+                return q;
+            }
+        };
+        addPainter(logoPainter);
 
         textPainter = new SimpleTextPainter();
         textPainter.setColor(getRed());

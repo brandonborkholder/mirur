@@ -23,14 +23,13 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import mirur.core.Array1D;
 import mirur.core.Array2D;
 import mirur.core.PrimitiveArray;
 import mirur.core.VariableObject;
 import mirur.plugin.Activator;
+import mirur.plugin.Icons;
 import mirur.plugin.VarObjectSelectListener;
 
 public class SaveArrayToFileAction extends Action implements VarObjectSelectListener {
@@ -38,7 +37,8 @@ public class SaveArrayToFileAction extends Action implements VarObjectSelectList
         super("Save Data", IAction.AS_PUSH_BUTTON);
         setId(SaveArrayToFileAction.class.getName());
         setToolTipText("Save Array Values to File");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_SAVE_EDIT));
+        setImageDescriptor(Icons.getSaveAs(true));
+        setDisabledImageDescriptor(Icons.getSaveAs(false));
     }
 
     @Override

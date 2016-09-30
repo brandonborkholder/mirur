@@ -23,9 +23,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public class SelectListenerToggle extends Action implements IPartListener2, IPropertyChangeListener {
@@ -40,7 +38,8 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
         setId(SelectListenerToggle.class.getName());
         setText("Sync Viewer");
         setToolTipText("Sync with Variables Selection");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED));
+        setImageDescriptor(Icons.getSync(true));
+        setDisabledImageDescriptor(Icons.getSync(false));
 
         this.partID = partID;
         this.part = part;

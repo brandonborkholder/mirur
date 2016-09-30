@@ -16,8 +16,6 @@
  */
 package mirur.plugins.heatmap2d;
 
-import mirur.plugin.Activator;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
@@ -28,13 +26,16 @@ import org.eclipse.swt.widgets.Menu;
 import com.metsci.glimpse.support.colormap.ColorGradient;
 import com.metsci.glimpse.support.colormap.ColorGradients;
 
+import mirur.plugin.Icons;
+
 public abstract class GradientChooserAction extends Action implements IMenuCreator {
     public GradientChooserAction() {
         setId(GradientChooserAction.class.getName());
         setMenuCreator(this);
         setText("Color Gradient");
         setToolTipText("Select Color Gradient");
-        setImageDescriptor(Activator.getImageDescriptor("icons/gradient_jet.gif"));
+        setImageDescriptor(Icons.getGradient(true));
+        setDisabledImageDescriptor(Icons.getGradient(false));
     }
 
     private void addGradientOption(Menu menu, String name, final ColorGradient gradient, ImageDescriptor icon) {
@@ -63,11 +64,11 @@ public abstract class GradientChooserAction extends Action implements IMenuCreat
     @Override
     public Menu getMenu(Menu parent) {
         Menu menu = new Menu(parent);
-        addGradientOption(menu, "jet", ColorGradients.jet, Activator.getImageDescriptor("icons/gradient_jet.gif"));
-        addGradientOption(menu, "viridis", ColorGradients.viridis, Activator.getImageDescriptor("icons/gradient_viridis.gif"));
-        addGradientOption(menu, "bone", ColorGradients.reverseBone, Activator.getImageDescriptor("icons/gradient_bone.gif"));
-        addGradientOption(menu, "grey", ColorGradients.gray, Activator.getImageDescriptor("icons/gradient_grey.gif"));
-        addGradientOption(menu, "spectral", ColorGradients.spectral, Activator.getImageDescriptor("icons/gradient_spectral.gif"));
+        addGradientOption(menu, "jet", ColorGradients.jet, Icons.getGradient(ColorGradients.jet));
+        addGradientOption(menu, "viridis", ColorGradients.viridis, Icons.getGradient(ColorGradients.viridis));
+        addGradientOption(menu, "bone", ColorGradients.reverseBone, Icons.getGradient(ColorGradients.reverseBone));
+        addGradientOption(menu, "grey", ColorGradients.gray, Icons.getGradient(ColorGradients.gray));
+        addGradientOption(menu, "spectral", ColorGradients.spectral, Icons.getGradient(ColorGradients.spectral));
 
         return menu;
     }

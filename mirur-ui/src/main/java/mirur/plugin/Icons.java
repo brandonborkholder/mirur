@@ -16,13 +16,93 @@
  */
 package mirur.plugin;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
+
+import com.metsci.glimpse.support.colormap.ColorGradient;
+import com.metsci.glimpse.support.colormap.ColorGradients;
+
 public class Icons {
-    public static final String RESET_PATH = "icons/reset.gif";
-    public static final String UNDO_PATH = "icons/undo.gif";
-    public static final String NEWVIEW_PATH = "icons/new_view.gif";
-    public static final String CONFIG_PATH = "icons/config.gif";
-    public static final String REFRESH_PATH = "icons/refresh.gif";
-    public static final String MIRUR_PATH = "icons/mirur.gif";
-    public static final String MIRUR_64_PATH = "icons/mirur_64.gif";
-    public static final String MIRUR_LOGO_PATH = "icons/mirur-logo.png";
+    private static final Logger LOGGER = Logger.getLogger(Icons.class.getName());
+
+    private static final String NEWVIEW_PATH = "icons/new_view.gif";
+    private static final String CONFIG_PATH = "icons/config.gif";
+    private static final String MIRUR_64_PATH = "icons/mirur_64.gif";
+    private static final String MIRUR_LOGO_PATH = "icons/mirur-logo.png";
+
+    public static Image getMirurLargeIcon() {
+        return Activator.getCachedImage(MIRUR_64_PATH);
+    }
+
+    public static ImageDescriptor getNewPainter(boolean enabled) {
+        return Activator.getImageDescriptor(NEWVIEW_PATH);
+    }
+
+    public static ImageDescriptor getConfig(boolean enabled) {
+        return Activator.getImageDescriptor(CONFIG_PATH);
+    }
+
+    public static ImageDescriptor getGradient(boolean enabled) {
+        return Activator.getImageDescriptor("icons/gradient_jet.gif");
+    }
+
+    public static ImageDescriptor getGradient(ColorGradient grad) {
+        if (grad == ColorGradients.jet) {
+            return Activator.getImageDescriptor("icons/gradient_jet.gif");
+        } else if (grad == ColorGradients.viridis) {
+            return Activator.getImageDescriptor("icons/gradient_viridis.gif");
+        } else if (grad == ColorGradients.reverseBone) {
+            return Activator.getImageDescriptor("icons/gradient_bone.gif");
+        } else if (grad == ColorGradients.gray) {
+            return Activator.getImageDescriptor("icons/gradient_grey.gif");
+        } else if (grad == ColorGradients.spectral) {
+            return Activator.getImageDescriptor("icons/gradient_spectral.gif");
+        } else {
+            return getGradient(true);
+        }
+    }
+
+    public static ImageDescriptor getSaveAs(boolean enabled) {
+        if (enabled) {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_SAVEAS_EDIT);
+        } else {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_SAVEAS_EDIT_DISABLED);
+        }
+    }
+
+    public static ImageDescriptor getSync(boolean enabled) {
+        if (enabled) {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED);
+        } else {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED_DISABLED);
+        }
+    }
+
+    public static ImageDescriptor getUndo(boolean enabled) {
+        if (enabled) {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_UNDO);
+        } else {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_UNDO_DISABLED);
+        }
+    }
+
+    public static BufferedImage getMirurLogoImage() {
+        try (InputStream in = Icons.class.getClassLoader().getResourceAsStream(MIRUR_LOGO_PATH)) {
+            return ImageIO.read(in);
+        } catch (IOException ex) {
+            logWarning(LOGGER, "Failed to load logo image", ex);
+            return new BufferedImage(0, 0, BufferedImage.TYPE_4BYTE_ABGR);
+        }
+    }
 }
