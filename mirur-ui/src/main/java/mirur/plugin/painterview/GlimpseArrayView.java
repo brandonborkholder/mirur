@@ -18,6 +18,10 @@ package mirur.plugin.painterview;
 
 import static mirur.plugin.Activator.getViewSelectionModel;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.media.opengl.GLProfile;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -54,6 +58,8 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     private InvalidPlaceholderView invalidPlaceholder;
 
+    private Map<Key, DataPainter> cachedPainters;
+
     private MirurView currentView;
     private VariableObject currentData;
     private DataPainter currentPainter;
@@ -65,6 +71,8 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
+
+        cachedPainters = Collections.synchronizedMap(new HashMap<Key, DataPainter>());
 
         IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
         tbm.add(new SelectViewAction());
@@ -78,7 +86,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
             @Override
             public Menu getMenu(Menu parent) {
                 if (currentPainter != null) {
-                    currentPainter.populateMenu(parent);
+                    currentPainter.populateConfigMenu(parent);
                 }
 
                 return parent;
@@ -120,6 +128,17 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     }
 
     @Override
+    public void clearVariableCacheData() {
+        synchronized (cachedPainters) {
+            for (DataPainter p : cachedPainters.values()) {
+                p.dispose(canvas);
+            }
+
+            cachedPainters.clear();
+        }
+    }
+
+    @Override
     public void viewSelected(MirurView view) {
         currentView = view;
         refreshDataAndPainter();
@@ -132,24 +151,69 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     }
 
     private void refreshDataAndPainter() {
-        resetAction.setEnabled(false);
-        viewMenuAction.setEnabled(false);
-        animator.stop();
+        animator.pause();
 
         if (currentPainter != null) {
-            currentPainter.uninstall(canvas);
+            currentPainter.detach(canvas);
         }
 
         if (currentData != null && currentView != null && currentView.supportsData(currentData)) {
-            currentPainter = currentView.install(canvas, currentData);
+            currentPainter = getOrCreatePainter(currentData, currentView);
             resetAction.setEnabled(true);
             viewMenuAction.setEnabled(true);
-            canvas.setLookAndFeel(laf);
-            animator.start();
         } else {
-            currentPainter = invalidPlaceholder.install(canvas, currentData);
-            canvas.setLookAndFeel(laf);
-            canvas.paint();
+            currentPainter = invalidPlaceholder.create(canvas, currentData);
+            resetAction.setEnabled(false);
+            viewMenuAction.setEnabled(false);
+        }
+
+        currentPainter.attach(canvas);
+        canvas.setLookAndFeel(laf);
+        animator.resume();
+    }
+
+    private DataPainter getOrCreatePainter(VariableObject var, MirurView view) {
+        Key key = new Key(var, view);
+        DataPainter p = cachedPainters.get(key);
+
+        if (p == null) {
+            p = currentView.create(canvas, currentData);
+            cachedPainters.put(key, p);
+        }
+
+        return p;
+    }
+
+    private static class Key {
+        final VariableObject var;
+        final MirurView view;
+
+        Key(VariableObject var, MirurView view) {
+            this.var = var;
+            this.view = view;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((var == null) ? 0 : var.hashCode());
+            result = prime * result + ((view == null) ? 0 : view.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            } else if (obj == null) {
+                return false;
+            } else if (obj instanceof Key) {
+                Key other = (Key) obj;
+                return other.var.equals(var) && other.view.equals(view);
+            }
+
+            return true;
         }
     }
 }

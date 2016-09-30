@@ -66,7 +66,7 @@ public class DataPainterImpl implements DataPainter {
     }
 
     @Override
-    public void populateMenu(Menu parent) {
+    public void populateConfigMenu(Menu parent) {
         for (Action a : actions) {
             new ActionContributionItem(a).fill(parent, -1);
         }
@@ -84,8 +84,17 @@ public class DataPainterImpl implements DataPainter {
     }
 
     @Override
-    public void uninstall(GlimpseCanvas canvas) {
+    public void attach(GlimpseCanvas canvas) {
+        canvas.addLayout(layout);
+    }
+
+    @Override
+    public void detach(GlimpseCanvas canvas) {
         canvas.removeLayout(layout);
+    }
+
+    @Override
+    public void dispose(GlimpseCanvas canvas) {
         canvas.getGLContext().makeCurrent();
         layout.dispose(canvas.getGlimpseContext());
         canvas.getGLContext().release();

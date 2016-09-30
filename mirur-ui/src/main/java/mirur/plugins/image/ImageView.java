@@ -44,14 +44,12 @@ public class ImageView implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         BufferedImage img = (BufferedImage) obj.getData();
         ImagePlot plot = new ImagePlot(img);
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
-
-        canvas.addLayout(result.getLayout());
         return result;
     }
 }

@@ -44,15 +44,13 @@ public class ShapeView implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         Shape shape = (Shape) obj.getData();
 
         ShapePlot plot = new ShapePlot(shape);
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
-
-        canvas.addLayout(result.getLayout());
         return result;
     }
 }

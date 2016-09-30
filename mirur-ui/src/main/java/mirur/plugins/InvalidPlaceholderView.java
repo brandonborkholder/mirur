@@ -17,10 +17,8 @@
 package mirur.plugins;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Menu;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.layout.GlimpseLayout;
 
 import mirur.core.VariableObject;
 
@@ -43,12 +41,10 @@ public class InvalidPlaceholderView implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         if (layout == null) {
             layout = new InvalidPlaceholderLayout();
         }
-
-        canvas.addLayout(layout);
 
         if (obj == null) {
             layout.textPainter.setText(null);
@@ -58,23 +54,10 @@ public class InvalidPlaceholderView implements MirurView {
             layout.textPainter.setText(null);
         }
 
-        return new DataPainter() {
+        return new DataPainterImpl(layout) {
             @Override
-            public GlimpseLayout getLayout() {
-                return layout;
-            }
-
-            @Override
-            public void populateMenu(Menu parent) {
-            }
-
-            @Override
-            public void resetAxes() {
-            }
-
-            @Override
-            public void uninstall(GlimpseCanvas canvas) {
-                canvas.removeLayout(layout);
+            public void dispose(GlimpseCanvas canvas) {
+                // We're going to reuse this layout, so don't dispose
             }
         };
     }

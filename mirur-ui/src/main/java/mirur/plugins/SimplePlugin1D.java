@@ -86,7 +86,7 @@ public abstract class SimplePlugin1D implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         Array1D array1d;
         if (obj instanceof Array1D) {
             array1d = (Array1D) obj;
@@ -121,7 +121,6 @@ public abstract class SimplePlugin1D implements MirurView {
         result.addAction(getSortAction(plot, array1d, unitConverter));
 
         result.addAxis(plot.getAxis());
-        canvas.addLayout(plot);
         return result;
     }
 

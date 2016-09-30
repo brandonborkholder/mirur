@@ -19,5 +19,7 @@ package mirur.plugin;
 import mirur.core.VariableObject;
 
 public interface VarObjectSelectListener {
+    void clearVariableCacheData();
+
     void variableSelected(VariableObject array);
 }

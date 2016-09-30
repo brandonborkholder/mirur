@@ -19,10 +19,10 @@ package mirur.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import mirur.core.VariableObject;
-
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
+
+import mirur.core.VariableObject;
 
 public class VariableSelectionModel {
     private VariableSelectListener varListener;
@@ -99,5 +99,17 @@ public class VariableSelectionModel {
 
     public VariableObject getActiveSelected() {
         return lastSelected;
+    }
+
+    public void fireClearVariableCacheData() {
+        select(null);
+        for (final VarObjectSelectListener l : arrayListeners) {
+            Display.getDefault().asyncExec(new Runnable() {
+                @Override
+                public void run() {
+                    l.clearVariableCacheData();
+                }
+            });
+        }
     }
 }

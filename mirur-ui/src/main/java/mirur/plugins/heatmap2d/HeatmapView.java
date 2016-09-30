@@ -53,7 +53,7 @@ public class HeatmapView extends SimplePlugin2D {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         final Array2D array = (Array2D) obj;
 
         TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
@@ -155,7 +155,6 @@ public class HeatmapView extends SimplePlugin2D {
         t1.setValue(minZ);
         t2.setValue(maxZ);
 
-        canvas.addLayout(plot);
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
         result.addAxis(plot.getAxisZ());

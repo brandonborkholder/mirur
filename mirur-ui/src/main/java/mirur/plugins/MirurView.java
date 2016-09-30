@@ -29,5 +29,5 @@ public interface MirurView {
 
     ImageDescriptor getIcon();
 
-    DataPainter install(GlimpseCanvas canvas, VariableObject obj);
+    DataPainter create(GlimpseCanvas canvas, VariableObject obj);
 }

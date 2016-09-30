@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Display;
+
 import mirur.core.VariableObject;
 import mirur.plugins.MirurView;
 import mirur.plugins.MirurViews;
-
-import org.eclipse.swt.widgets.Display;
 
 public class ViewSelectionModel implements VarObjectSelectListener {
     private Deque<MirurView> lastSelectedQ;
@@ -105,5 +105,9 @@ public class ViewSelectionModel implements VarObjectSelectListener {
                 break;
             }
         }
+    }
+
+    @Override
+    public void clearVariableCacheData() {
     }
 }

@@ -24,9 +24,13 @@ import com.metsci.glimpse.layout.GlimpseLayout;
 public interface DataPainter {
     GlimpseLayout getLayout();
 
-    void populateMenu(Menu parent);
+    void populateConfigMenu(Menu parent);
 
     void resetAxes();
 
-    void uninstall(GlimpseCanvas canvas);
+    void attach(GlimpseCanvas canvas);
+
+    void detach(GlimpseCanvas canvas);
+
+    void dispose(GlimpseCanvas canvas);
 }

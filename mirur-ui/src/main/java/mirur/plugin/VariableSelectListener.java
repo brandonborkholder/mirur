@@ -92,6 +92,7 @@ IDebugContextListener {
             ((AbstractDebugView) view).getViewer().removeSelectionChangedListener(this);
         }
 
+        getVariableSelectionModel().fireClearVariableCacheData();
         getVariableCache().clear();
     }
 
@@ -228,7 +229,8 @@ IDebugContextListener {
             if ((kind == DebugEvent.RESUME && event.getDetail() == DebugEvent.EVALUATION_IMPLICIT) || kind == DebugEvent.SUSPEND) {
                 // probably generating a .toString on the variable
             } else {
-                Activator.getVariableCache().clear();
+                getVariableSelectionModel().fireClearVariableCacheData();
+                getVariableCache().clear();
                 if (kind == DebugEvent.TERMINATE && event.getSource() instanceof IJavaDebugTarget) {
                     Activator.getAgentDeployer().clear((IJavaDebugTarget) event.getSource());
                 }

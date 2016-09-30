@@ -62,4 +62,8 @@ public class SaveArrayToFileAction extends Action implements VarObjectSelectList
     public void variableSelected(VariableObject obj) {
         setEnabled(obj != null && (obj instanceof Array1D || obj instanceof Array2D));
     }
+
+    @Override
+    public void clearVariableCacheData() {
+    }
 }

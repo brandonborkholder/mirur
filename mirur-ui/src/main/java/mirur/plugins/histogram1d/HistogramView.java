@@ -60,7 +60,7 @@ public class HistogramView implements MirurView {
     }
 
     @Override
-    public DataPainter install(GlimpseCanvas canvas, VariableObject obj) {
+    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         final Array1D array1d = (Array1D) obj;
 
         MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array1d.getData(), new MinMaxFiniteValueVisitor());
@@ -97,7 +97,6 @@ public class HistogramView implements MirurView {
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
-        canvas.addLayout(plot);
         return result;
     }
 }
