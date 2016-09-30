@@ -16,14 +16,20 @@
  */
 package mirur.plugins.complex;
 
+import static com.metsci.glimpse.support.color.GlimpseColor.getGray;
+import static com.metsci.glimpse.support.color.GlimpseColor.getWhite;
+import static com.metsci.glimpse.support.font.FontUtils.getDefaultBold;
+
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.axis.listener.mouse.AxisMouseListener;
 import com.metsci.glimpse.axis.painter.NumericAxisPainter;
+import com.metsci.glimpse.axis.painter.NumericTopXAxisPainter;
 import com.metsci.glimpse.axis.painter.label.AxisLabelHandler;
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.layout.GlimpseAxisLayout1D;
 import com.metsci.glimpse.layout.GlimpseAxisLayout2D;
+import com.metsci.glimpse.layout.GlimpseAxisLayoutX;
 import com.metsci.glimpse.layout.GlimpseAxisLayoutY;
 import com.metsci.glimpse.layout.GlimpseLayout;
 import com.metsci.glimpse.painter.decoration.BackgroundPainter;
@@ -44,20 +50,24 @@ import mirur.plugins.HdrAxisLabelHandler;
 import mirur.plugins.line1d.LinePainter;
 
 public class ComplexPlotLayout extends Plot2D {
-    private Axis2D axisXY2;
+    private GlimpseAxisLayout1D axisLayoutTopX;
+    private NumericAxisPainter painterTopX;
+
     private GlimpseAxisLayout1D axisLayoutY2;
-    private GlimpseAxisLayout2D axisLayoutXY2;
     private AxisLabelHandler tickY2;
     private NumericAxisPainter painterY2;
     private AxisMouseListener mouseListenerY2;
+
+    private Axis2D axisXY2;
+    private GlimpseAxisLayout2D axisLayoutXY2;
     private AxisMouseListener mouseListenerXY2;
 
     public ComplexPlotLayout() {
+        initialize();
+
         setAxisSizeX(25);
         setAxisSizeY(65);
         setTitleHeight(30);
-
-        initialize();
     }
 
     @Override
@@ -72,9 +82,11 @@ public class ComplexPlotLayout extends Plot2D {
 
         removeLayout(axisLayoutZ);
 
+        axisLayoutTopX = new GlimpseAxisLayoutX(this, "AxisXTop");
         axisLayoutY2 = new GlimpseAxisLayoutY(this, "AxisY2");
         axisLayoutXY2 = new GlimpseAxisLayout2D(this, "Center2");
 
+        axisLayoutTopX.setAxis(getAxisX());
         axisLayoutY2.setAxis(getAxisY2());
         axisLayoutXY2.setAxis(axisXY2);
 
@@ -82,6 +94,14 @@ public class ComplexPlotLayout extends Plot2D {
 
         painterY2 = createAxisPainterY(tickY2);
         axisLayoutY2.addPainter(painterY2);
+
+        painterTopX = createAxisPainterTopX();
+        axisLayoutTopX.addPainter(painterTopX);
+
+        SimpleTextPainter labelPainter = createPlotLabelPainter(true);
+        axisLayoutTopX.addPainter(labelPainter, Plot2D.FOREGROUND_LAYER);
+        labelPainter = createPlotLabelPainter(false);
+        axisLayoutX.addPainter(labelPainter, Plot2D.FOREGROUND_LAYER);
 
         mouseListenerY2 = createAxisMouseListenerY();
         mouseListenerXY2 = createAxisMouseListenerXY();
@@ -101,10 +121,21 @@ public class ComplexPlotLayout extends Plot2D {
             layout.addPainter(crosshairPainter, Plot2D.FOREGROUND_LAYER);
         }
 
-        tickY.setAxisLabel("Angle");
-        tickY2.setAxisLabel("Magnitude");
-
         titlePainter.setHorizontalPosition(HorizontalPosition.Left);
+    }
+
+    protected SimpleTextPainter createPlotLabelPainter(boolean isAngle) {
+        SimpleTextPainter labelPainter = new SimpleTextPainter();
+        labelPainter.setBackgroundColor(getGray());
+        labelPainter.setColor(getWhite());
+        labelPainter.setFont(getDefaultBold(14));
+        labelPainter.setHorizontalPosition(HorizontalPosition.Right);
+        labelPainter.setVerticalPosition(isAngle ? VerticalPosition.Bottom : VerticalPosition.Top);
+        labelPainter.setPaintBackground(true);
+        labelPainter.setPaintBorder(false);
+        labelPainter.setText(isAngle ? "Angle" : "Magnitude");
+        labelPainter.setVerticalPadding(isAngle ? 3 : 0);
+        return labelPainter;
     }
 
     @Override
@@ -113,20 +144,29 @@ public class ComplexPlotLayout extends Plot2D {
 
         attachAxisMouseListener(axisLayoutY2, mouseListenerY2);
         attachAxisMouseListener(axisLayoutXY2, mouseListenerXY2);
+        attachAxisMouseListener(axisLayoutTopX, mouseListenerX);
     }
 
     @Override
     protected void updatePainterLayout() {
         super.updatePainterLayout();
 
-        titleLayout.setLayoutData(String.format("cell 0 0 2 1, pushx, growx, height %d!", titleSpacing));
-        axisLayoutY.setLayoutData(String.format("cell 0 1 1 1, pushy, growy, width %d!", axisThicknessY));
-        axisLayoutXY.setLayoutData("cell 1 1 1 1, push, grow");
-        axisLayoutY2.setLayoutData(String.format("cell 0 2 1 1, pushy, growy, width %d!", axisThicknessY));
-        axisLayoutXY2.setLayoutData("cell 1 2 1 1, push, grow");
-        axisLayoutX.setLayoutData(String.format("cell 1 3 1 1, pushx, growx, height %d!", axisThicknessX));
+        titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
+        axisLayoutTopX.setLayoutData(String.format("cell 1 1 1 1, pushx, growx, height %d!", axisThicknessX));
+        axisLayoutY.setLayoutData(String.format("cell 0 2 1 1, pushy, growy, width %d!", axisThicknessY));
+        axisLayoutXY.setLayoutData("cell 1 2 1 1, push, grow");
+        axisLayoutY2.setLayoutData(String.format("cell 0 3 1 1, pushy, growy, width %d!", axisThicknessY));
+        axisLayoutXY2.setLayoutData("cell 1 3 1 1, push, grow");
+        axisLayoutX.setLayoutData(String.format("cell 1 4 1 1, pushx, growx, height %d!", axisThicknessX));
 
         invalidateLayout();
+    }
+
+    protected NumericAxisPainter createAxisPainterTopX() {
+        NumericTopXAxisPainter painter = new NumericTopXAxisPainter(tickX);
+        painter.setTickLabelBufferSize(4);
+        painter.setTickBufferSize(0);
+        return painter;
     }
 
     @Override
