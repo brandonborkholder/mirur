@@ -97,6 +97,14 @@ public class Icons {
         }
     }
 
+    public static ImageDescriptor getPin(boolean enabled) {
+        if (enabled) {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD);
+        } else {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED);
+        }
+    }
+
     public static BufferedImage getMirurLogoImage() {
         try (InputStream in = Icons.class.getClassLoader().getResourceAsStream(MIRUR_LOGO_PATH)) {
             return ImageIO.read(in);

@@ -37,11 +37,13 @@ public class DataPainterImpl implements DataPainter {
     private final GlimpseLayout layout;
     private final List<ResetAction> resets;
     private final List<Action> actions;
+    private int attachedCount;
 
     public DataPainterImpl(GlimpseLayout layout) {
         this.layout = layout;
         resets = new ArrayList<>();
         actions = new ArrayList<>();
+        attachedCount = 0;
     }
 
     public void addAction(Action action) {
@@ -86,18 +88,22 @@ public class DataPainterImpl implements DataPainter {
     @Override
     public void attach(GlimpseCanvas canvas) {
         canvas.addLayout(layout);
+        attachedCount++;
     }
 
     @Override
     public void detach(GlimpseCanvas canvas) {
         canvas.removeLayout(layout);
+        attachedCount--;
     }
 
     @Override
     public void dispose(GlimpseCanvas canvas) {
-        canvas.getGLContext().makeCurrent();
-        layout.dispose(canvas.getGlimpseContext());
-        canvas.getGLContext().release();
+        if (attachedCount <= 0) {
+            canvas.getGLContext().makeCurrent();
+            layout.dispose(canvas.getGlimpseContext());
+            canvas.getGLContext().release();
+        }
     }
 
     private interface ResetAction {

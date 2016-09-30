@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLProfile;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -30,7 +31,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
-import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
@@ -51,10 +51,11 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     private SaveArrayToFileAction saveArrayAction;
     private ViewMenuAction viewMenuAction;
     private SelectListenerToggle selectListenerToggle;
+    private CreateStaticViewAction createStaticViewAction;
 
     private LookAndFeel laf;
     private NewtSwtGlimpseCanvas canvas;
-    private AnimatorBase animator;
+    private GLAnimatorControl animator;
 
     private InvalidPlaceholderView invalidPlaceholder;
 
@@ -79,7 +80,9 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         resetAction = new ResetAxesAction() {
             @Override
             public void run() {
-                resetAxes();
+                if (currentPainter != null) {
+                    currentPainter.resetAxes();
+                }
             }
         };
         viewMenuAction = new ViewMenuAction() {
@@ -94,10 +97,17 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         };
         saveArrayAction = new SaveArrayToFileAction();
         selectListenerToggle = new SelectListenerToggle(ID, this, this);
+        createStaticViewAction = new CreateStaticViewAction() {
+            @Override
+            protected void initializeView(StaticArrayView view) {
+                view.initializePainter(canvas.getGLContext(), currentData, currentPainter, laf);
+            }
+        };
 
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
         tbm.add(saveArrayAction);
+        tbm.add(createStaticViewAction);
         tbm.add(selectListenerToggle);
 
         getSite().getPage().addPartListener(selectListenerToggle);
@@ -117,6 +127,12 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     public void dispose() {
         getSite().getPage().removePartListener(selectListenerToggle);
         animator.stop();
+
+        if (currentPainter != null) {
+            currentPainter.detach(canvas);
+            currentPainter.dispose(canvas);
+        }
+
         super.dispose();
     }
 
@@ -144,12 +160,6 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         refreshDataAndPainter();
     }
 
-    private void resetAxes() {
-        if (currentPainter != null) {
-            currentPainter.resetAxes();
-        }
-    }
-
     private void refreshDataAndPainter() {
         animator.pause();
 
@@ -157,15 +167,17 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
             currentPainter.detach(canvas);
         }
 
+        boolean hasValidPainter = false;
         if (currentData != null && currentView != null && currentView.supportsData(currentData)) {
             currentPainter = getOrCreatePainter(currentData, currentView);
-            resetAction.setEnabled(true);
-            viewMenuAction.setEnabled(true);
+            hasValidPainter = true;
         } else {
             currentPainter = invalidPlaceholder.create(canvas, currentData);
-            resetAction.setEnabled(false);
-            viewMenuAction.setEnabled(false);
         }
+
+        resetAction.setEnabled(hasValidPainter);
+        viewMenuAction.setEnabled(hasValidPainter);
+        createStaticViewAction.setEnabled(hasValidPainter);
 
         currentPainter.attach(canvas);
         canvas.setLookAndFeel(laf);
