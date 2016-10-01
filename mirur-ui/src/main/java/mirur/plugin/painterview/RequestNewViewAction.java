@@ -16,22 +16,10 @@
  */
 package mirur.plugin.painterview;
 
-import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
-import static com.metsci.glimpse.util.logging.LoggerUtils.logInfo;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logSevere;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeJson;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.logging.Logger;
-
-import mirur.plugin.Activator;
-import mirur.plugin.Icons;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -46,6 +34,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import mirur.plugin.Activator;
+import mirur.plugin.Icons;
+import mirur.plugin.SubmitToMirurSupport;
 
 public class RequestNewViewAction extends Action {
     private static final Logger LOGGER = Logger.getLogger(RequestNewViewAction.class.getName());
@@ -156,7 +148,7 @@ public class RequestNewViewAction extends Action {
         private final String text;
 
         public SubmitNewViewIdeaJob(String text) {
-            super("Submitting New View Idea");
+            super("Submitting Feedback");
             this.text = text;
 
             setPriority(SHORT);
@@ -165,64 +157,16 @@ public class RequestNewViewAction extends Action {
 
         @Override
         protected IStatus run(IProgressMonitor monitor) {
-            String url = "https://api.emailyak.com/v1/1ujk9wvvcuz2m83/json/send/email/";
             try {
-                URLConnection connection = new URL(url).openConnection();
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json");
-
-                try (OutputStream output = connection.getOutputStream()) {
-                    logInfo(LOGGER, "Submitting request for %s", text);
-                    String postBody = buildBody();
-
-                    logFine(LOGGER, "Submitting email request %s", postBody);
-                    output.write(postBody.getBytes());
-                }
-
-                try (InputStream response = connection.getInputStream()) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(response));
-                    StringBuilder responseBody = new StringBuilder();
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        responseBody.append(line);
-                    }
-
-                    logFine(LOGGER, "Received response %s", responseBody);
-                }
+                new SubmitToMirurSupport().sendMirurRequest(text);
 
                 return Status.OK_STATUS;
             } catch (IOException ex) {
                 logSevere(LOGGER, "Error submitting feedback", ex);
                 // I don't log the error because it may have the URL with the
                 // api key in the exception
-                return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error submitting feedback");
+                return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error submitting feedback, please contact support@mirur.io");
             }
-        }
-
-        private String buildBody() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("{");
-            builder.append("\n");
-            builder.append("\"FromName\": ");
-            builder.append("\"mirur-plugin-request\",");
-            builder.append("\n");
-            builder.append("\"FromAddress\": ");
-            builder.append("\"mirur-request@mirur.simpleyak.com\",");
-            builder.append("\n");
-            builder.append("\"ToAddress\": ");
-            builder.append("\"plugin-dropbox@mirur.io\",");
-            builder.append("\n");
-            builder.append("\"TextBody\": ");
-            builder.append("\"");
-            builder.append(escapeJson(text));
-            builder.append("\",");
-            builder.append("\n");
-            builder.append("\"Subject\": ");
-            builder.append("\"mirur request new view\"");
-            builder.append("\n");
-            builder.append("}");
-
-            return builder.toString();
         }
     }
 }

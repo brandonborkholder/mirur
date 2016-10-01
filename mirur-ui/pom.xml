@@ -143,11 +143,6 @@
             <version>2.5.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.jogamp.glg2d</groupId>
             <artifactId>glg2d</artifactId>
             <version>0.4-SNAPSHOT</version>
