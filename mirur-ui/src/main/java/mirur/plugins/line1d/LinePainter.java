@@ -22,30 +22,30 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLContext;
 
+import com.metsci.glimpse.axis.Axis2D;
+import com.metsci.glimpse.context.GlimpseBounds;
+import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.support.settings.LookAndFeel;
+
 import mirur.core.Array1D;
 import mirur.core.VisitArray;
 import mirur.plugin.painterview.MirurLAF;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimpleVBO;
 
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
-import com.metsci.glimpse.support.settings.LookAndFeel;
-
 public class LinePainter extends GlimpseDataPainter2D {
     private SimpleVBO vbo = new SimpleVBO();
     private float[] color = getBlack();
+
+    public LinePainter(Array1D data, DataUnitConverter unitConverter) {
+        VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(vbo, unitConverter));
+    }
 
     @Override
     public void setLookAndFeel(LookAndFeel laf) {
         super.setLookAndFeel(laf);
 
         color = laf.getColor(MirurLAF.DATA_COLOR);
-    }
-
-    public void setData(Array1D data, DataUnitConverter unitConverter) {
-        VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(vbo, unitConverter));
     }
 
     @Override
