@@ -33,6 +33,7 @@ import com.metsci.glimpse.plot.TaggedColorAxisPlot2D;
 import com.metsci.glimpse.support.color.GlimpseColor;
 import com.metsci.glimpse.support.colormap.ColorGradient;
 import com.metsci.glimpse.support.colormap.ColorGradients;
+import com.metsci.glimpse.support.font.FontUtils;
 import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.projection.Projection;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
@@ -58,6 +59,18 @@ public class HeatmapView extends SimplePlugin2D {
         final Array2D array = (Array2D) obj;
 
         TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
+            @Override
+            protected void initialize() {
+                super.initialize();
+
+                setTitleHeight(30);
+                setBorderSize(5);
+                getAxisPainterX().setAxisLabelBufferSize(3);
+                getLabelHandlerY().setTickSpacing(50);
+                getLabelHandlerZ().setTickSpacing(50);
+                setTitleFont(FontUtils.getDefaultPlain(14));
+            }
+
             @Override
             protected SimpleTextPainter createTitlePainter() {
                 SimpleTextPainter painter = new Array2DTitlePainter(getAxis());
@@ -89,11 +102,6 @@ public class HeatmapView extends SimplePlugin2D {
 
         plot.setAxisLabelX(array.getName() + "[]");
         plot.setAxisLabelY(array.getName() + "[][]");
-
-        plot.getAxisPainterX().setAxisLabelBufferSize(3);
-        plot.setTitleHeight(30);
-        plot.getLabelHandlerY().setTickSpacing(50);
-        plot.getLabelHandlerZ().setTickSpacing(50);
 
         plot.getCrosshairPainter().showSelectionBox(false);
 

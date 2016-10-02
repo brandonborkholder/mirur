@@ -7,6 +7,7 @@ import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.plot.Plot2D;
 import com.metsci.glimpse.plot.SimplePlot2D;
+import com.metsci.glimpse.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.core.VariableObject;
@@ -56,8 +57,10 @@ public class XyScatterView extends SimplePlugin2D {
                 setTitleHeight(30);
                 setAxisSizeX(25);
                 setAxisSizeY(65);
+                setBorderSize(5);
                 getLabelHandlerX().setTickSpacing(40);
                 getLabelHandlerY().setTickSpacing(40);
+                setTitleFont(FontUtils.getDefaultPlain(14));
             }
 
             @Override

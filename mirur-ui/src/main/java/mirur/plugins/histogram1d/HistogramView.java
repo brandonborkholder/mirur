@@ -72,14 +72,6 @@ public class HistogramView implements MirurView {
 
         Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter) {
             @Override
-            protected void initialize() {
-                super.initialize();
-                setTitleHeight(30);
-                setAxisSizeX(25);
-                setAxisSizeY(65);
-            }
-
-            @Override
             protected SimpleTextPainter createTitlePainter() {
                 SimpleTextPainter painter = new HistogramBinTextPainter(axis);
                 painter.setHorizontalPosition(HorizontalPosition.Left);

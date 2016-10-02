@@ -23,6 +23,7 @@ import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.plot.SimplePlot2D;
+import com.metsci.glimpse.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
@@ -42,6 +43,8 @@ public class Array1DPlot extends SimplePlot2D {
 
         updateAxesBounds(array);
         setTitlePainterData(array);
+
+        setTitleFont(FontUtils.getDefaultPlain(14));
 
         shaderWrapper = new ShaderWrapperPainter();
         addPainter(dataPainter, shaderWrapper, DATA_LAYER);
@@ -78,6 +81,7 @@ public class Array1DPlot extends SimplePlot2D {
         setAxisSizeX(25);
         setAxisSizeY(65);
         setTitleHeight(30);
+        setBorderSize(5);
     }
 
     @Override

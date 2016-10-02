@@ -43,6 +43,7 @@ import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.plot.Plot2D;
+import com.metsci.glimpse.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
@@ -79,9 +80,12 @@ public class ComplexPlotLayout extends Plot2D {
         setAxisSizeX(25);
         setAxisSizeY(65);
         setTitleHeight(45);
+        setBorderSize(5);
 
         toggleOpenPlot(true, true);
         toggleOpenPlot(false, true);
+        titlePainter1.setFont(FontUtils.getDefaultPlain(14));
+        titlePainter2.setFont(FontUtils.getDefaultPlain(14));
     }
 
     @Override
