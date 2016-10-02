@@ -16,6 +16,12 @@
  */
 package mirur.plugins.histogram1d;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
+import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
+
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
@@ -28,14 +34,6 @@ import mirur.plugins.DataUnitConverter;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.DataUnitConverter.LinearScaleConverter;
 import mirur.plugins.MirurView;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-
-import com.metsci.glimpse.axis.painter.label.AxisUnitConverters;
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 
 public class HistogramView implements MirurView {
     @Override
@@ -74,10 +72,17 @@ public class HistogramView implements MirurView {
 
         Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter) {
             @Override
+            protected void initialize() {
+                super.initialize();
+                setTitleHeight(30);
+                setAxisSizeX(25);
+                setAxisSizeY(65);
+            }
+
+            @Override
             protected SimpleTextPainter createTitlePainter() {
                 SimpleTextPainter painter = new HistogramBinTextPainter(axis);
                 painter.setHorizontalPosition(HorizontalPosition.Left);
-                painter.setVerticalPosition(VerticalPosition.Center);
                 return painter;
             }
 
@@ -92,9 +97,8 @@ public class HistogramView implements MirurView {
                 AxisUtils.padAxis(getAxisY());
             }
         };
-        plot.getLabelHandlerY().setAxisUnitConverter(AxisUnitConverters.identity);
         plot.getLabelHandlerX().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
-        plot.getLabelHandlerX().setTickSpacing(30);
+        plot.getLabelHandlerX().setTickSpacing(40);
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());

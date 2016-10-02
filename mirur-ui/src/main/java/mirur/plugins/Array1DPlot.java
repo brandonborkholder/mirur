@@ -36,14 +36,9 @@ public class Array1DPlot extends SimplePlot2D {
     private DataUnitConverter unitConverter;
 
     public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array, DataUnitConverter unitConverter) {
-        setAxisSizeX(25);
-        setAxisSizeY(65);
-        setTitleHeight(30);
-
         this.unitConverter = unitConverter;
         getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
-
-        getLabelHandlerY().setTickSpacing(30);
+        getLabelHandlerY().setTickSpacing(40);
 
         updateAxesBounds(array);
         setTitlePainterData(array);
@@ -74,6 +69,24 @@ public class Array1DPlot extends SimplePlot2D {
 
         getCrosshairPainter().showSelectionBox(false);
         titlePainter.setHorizontalPosition(HorizontalPosition.Left);
+    }
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+
+        setAxisSizeX(25);
+        setAxisSizeY(65);
+        setTitleHeight(30);
+    }
+
+    @Override
+    protected void updatePainterLayout() {
+        super.updatePainterLayout();
+        getLayoutManager().setLayoutConstraints(
+                String.format("bottomtotop, gapx 0, gapy 0, insets %d %d %d %d", 0, outerBorder, outerBorder, outerBorder));
+        titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
+        invalidateLayout();
     }
 
     @Override

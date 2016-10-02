@@ -71,6 +71,9 @@ public class HeatmapView extends SimplePlugin2D {
             protected void updatePainterLayout() {
                 super.updatePainterLayout();
 
+                getLayoutManager().setLayoutConstraints(
+                        String.format("bottomtotop, gapx 0, gapy 0, insets %d %d %d %d", 0, outerBorder, outerBorder, outerBorder));
+                titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
                 axisLayoutZ.setLayoutData(String.format("cell 2 0 1 3, growy, width %d!", axisThicknessZ));
 
                 invalidateLayout();

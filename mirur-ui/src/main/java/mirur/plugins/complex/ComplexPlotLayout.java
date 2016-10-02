@@ -207,6 +207,9 @@ public class ComplexPlotLayout extends Plot2D {
     protected void updatePainterLayout() {
         super.updatePainterLayout();
 
+        getLayoutManager().setLayoutConstraints(
+                String.format("bottomtotop, gapx 0, gapy 0, insets %d %d %d %d", 0, outerBorder, outerBorder, outerBorder));
+
         titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
         axisLayoutTopX.setLayoutData(String.format("cell 1 1 1 1, pushx, growx, height %d!", axisThicknessX));
         axisLayoutY.setLayoutData(String.format("cell 0 2 1 1, pushy, growy, width %d!", axisThicknessY));
@@ -238,7 +241,7 @@ public class ComplexPlotLayout extends Plot2D {
     @Override
     protected GridAxisLabelHandler createLabelHandlerY() {
         GridAxisLabelHandler handler = new HdrAxisLabelHandler();
-        handler.setTickSpacing(30);
+        handler.setTickSpacing(40);
         return handler;
     }
 

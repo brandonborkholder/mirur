@@ -1,8 +1,10 @@
 package mirur.plugins.xyscatter;
 
+import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.axis.painter.label.HdrAxisLabelHandler;
 import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.plot.Plot2D;
 import com.metsci.glimpse.plot.SimplePlot2D;
 
@@ -46,13 +48,38 @@ public class XyScatterView extends SimplePlugin2D {
 
         SimplePlot2D plot = new SimplePlot2D() {
             @Override
-            protected SimpleTextPainter createTitlePainter() {
-                SimpleTextPainter p = super.createTitlePainter();
-                p.setHorizontalPosition(HorizontalPosition.Left);
-                return p;
+            protected void initialize() {
+                super.initialize();
+
+                titlePainter.setHorizontalPosition(HorizontalPosition.Left);
+                titlePainter.setVerticalPosition(VerticalPosition.Center);
+                setTitleHeight(30);
+                setAxisSizeX(25);
+                setAxisSizeY(65);
+                getLabelHandlerX().setTickSpacing(40);
+                getLabelHandlerY().setTickSpacing(40);
+            }
+
+            @Override
+            protected void updatePainterLayout() {
+                super.updatePainterLayout();
+                getLayoutManager().setLayoutConstraints(
+                        String.format("bottomtotop, gapx 0, gapy 0, insets %d %d %d %d", 0, outerBorder, outerBorder, outerBorder));
+                titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
+                invalidateLayout();
+            }
+
+            @Override
+            protected GridAxisLabelHandler createLabelHandlerX() {
+                return new HdrAxisLabelHandler();
+            }
+
+            @Override
+            protected GridAxisLabelHandler createLabelHandlerY() {
+                return new HdrAxisLabelHandler();
             }
         };
-        plot.setTitleHeight(30);
+
         plot.setTitle(String.format("%s %s[%d]", array.getSignature(), array.getName(), array.getSize()));
 
         XyArrayTooltipPainter tooltipPainter = new XyArrayTooltipPainter(plot.getAxis(), index, array);
