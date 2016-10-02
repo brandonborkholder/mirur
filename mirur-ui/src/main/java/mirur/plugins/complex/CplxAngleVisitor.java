@@ -1,13 +1,26 @@
 package mirur.plugins.complex;
 
-public class CplxAngleVisitor extends AbstractComplexVisitor {
-    @Override
-    protected double compute(double re, double im) {
-        return Math.atan2(im, re);
+import mirur.core.AbstractInterleavedVisitor;
+
+public class CplxAngleVisitor extends AbstractInterleavedVisitor {
+    private double dest[];
+
+    public double[] get() {
+        return dest;
     }
 
     @Override
-    protected float compute(float re, float im) {
-        return (float) Math.atan2(im, re);
+    protected void start(int length) {
+        dest = new double[length >> 1];
+    }
+
+    @Override
+    protected void visit(int i, double re, double im) {
+        dest[i >> 1] = Math.atan2(im, re);
+    }
+
+    @Override
+    protected void visit(int i, float re, float im) {
+        dest[i >> 1] = Math.atan2(im, re);
     }
 }

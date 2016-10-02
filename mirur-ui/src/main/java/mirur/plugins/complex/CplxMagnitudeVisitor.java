@@ -1,13 +1,26 @@
 package mirur.plugins.complex;
 
-public class CplxMagnitudeVisitor extends AbstractComplexVisitor {
-    @Override
-    protected double compute(double re, double im) {
-        return Math.hypot(re, im);
+import mirur.core.AbstractInterleavedVisitor;
+
+public class CplxMagnitudeVisitor extends AbstractInterleavedVisitor {
+    private double[] dest;
+
+    public double[] get() {
+        return dest;
     }
 
     @Override
-    protected float compute(float re, float im) {
-        return (float) Math.hypot(re, im);
+    protected void start(int length) {
+        dest = new double[length >> 1];
+    }
+
+    @Override
+    protected void visit(int i, double re, double im) {
+        dest[i >> 1] = Math.hypot(re, im);
+    }
+
+    @Override
+    protected void visit(int i, float re, float im) {
+        dest[i >> 1] = Math.hypot(re, im);
     }
 }
