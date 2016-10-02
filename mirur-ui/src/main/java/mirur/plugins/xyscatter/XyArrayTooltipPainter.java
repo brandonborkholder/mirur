@@ -55,9 +55,9 @@ public class XyArrayTooltipPainter extends TooltipPainter {
             lastSelectedY = selectedY;
             setLocationAxisCoords(selectedX, selectedY);
 
-            double pxX = 5.0 / srcAxis.getAxisX().getPixelsPerValue();
-            double pxY = 5.0 / srcAxis.getAxisY().getPixelsPerValue();
-            IntList indexes = index.getArrayIdx(selectedX, selectedY, pxX, pxY);
+            double selX = srcAxis.getAxisX().getSelectionSize() / 2;
+            double selY = srcAxis.getAxisY().getSelectionSize() / 2;
+            IntList indexes = index.getArrayIdx(selectedX, selectedY, selX, selY);
             String text = format(indexes);
             setText(text);
 

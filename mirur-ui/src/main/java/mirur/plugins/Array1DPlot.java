@@ -16,7 +16,6 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 import com.metsci.glimpse.painter.base.GlimpsePainter;
@@ -113,13 +112,7 @@ public class Array1DPlot extends SimplePlot2D {
 
         getAxisY().setMin(unitConverter.data2painter(min));
         getAxisY().setMax(unitConverter.data2painter(max));
-        padAxis(getAxisY());
-    }
-
-    protected void padAxis(Axis1D axis) {
-        double padding = (axis.getMax() - axis.getMin()) * 0.02;
-        axis.setMin(axis.getMin() - padding);
-        axis.setMax(axis.getMax() + padding);
-        axis.validate();
+        AxisUtils.padAxis(getAxisY());
+        getAxis().validate();
     }
 }

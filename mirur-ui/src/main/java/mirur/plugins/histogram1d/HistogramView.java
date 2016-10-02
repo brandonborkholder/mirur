@@ -21,6 +21,7 @@ import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
 import mirur.core.VisitArray;
 import mirur.plugins.Array1DPlot;
+import mirur.plugins.AxisUtils;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.DataUnitConverter;
@@ -88,7 +89,7 @@ public class HistogramView implements MirurView {
             @Override
             protected void updateAxesBounds(Array1D array) {
                 painter.autoAdjustAxisBounds(axis);
-                padAxis(getAxisY());
+                AxisUtils.padAxis(getAxisY());
             }
         };
         plot.getLabelHandlerY().setAxisUnitConverter(AxisUnitConverters.identity);

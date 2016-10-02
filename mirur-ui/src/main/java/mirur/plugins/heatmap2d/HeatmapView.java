@@ -43,6 +43,7 @@ import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
 import mirur.core.VisitArray;
 import mirur.plugins.Array2DTitlePainter;
+import mirur.plugins.AxisUtils;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.SimplePlugin2D;
@@ -140,6 +141,7 @@ public class HeatmapView extends SimplePlugin2D {
         plot.getAxisX().setMax(dim0);
         plot.getAxisY().setMin(0);
         plot.getAxisY().setMax(dim1);
+        plot.getAxis().validate();
 
         MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
         double minZ = minMaxVisitor.getMin();
@@ -148,12 +150,13 @@ public class HeatmapView extends SimplePlugin2D {
             maxZ++;
         }
 
-        double padding = (maxZ - minZ) * 0.02;
-        plot.getAxisZ().setMin(minZ - padding);
-        plot.getAxisZ().setMax(maxZ + padding);
+        plot.getAxisZ().setMin(minZ);
+        plot.getAxisZ().setMax(maxZ);
+        AxisUtils.padAxis(axisZ);
 
         t1.setValue(minZ);
         t2.setValue(maxZ);
+        axisZ.validate();
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());

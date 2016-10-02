@@ -47,6 +47,7 @@ import com.metsci.glimpse.plot.Plot2D;
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
+import mirur.plugins.AxisUtils;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.HdrAxisLabelHandler;
 import mirur.plugins.line1d.LinePainter;
@@ -267,13 +268,7 @@ public class ComplexPlotLayout extends Plot2D {
 
         axis.getAxisY().setMin(min);
         axis.getAxisY().setMax(max);
-        padAxis(axis.getAxisY());
-    }
-
-    protected void padAxis(Axis1D axis) {
-        double padding = (axis.getMax() - axis.getMin()) * 0.02;
-        axis.setMin(axis.getMin() - padding);
-        axis.setMax(axis.getMax() + padding);
+        AxisUtils.padAxis(axis.getAxisY());
         axis.validate();
     }
 
