@@ -44,6 +44,7 @@ public class StatisticsCollector {
     public StatisticsCollector() {
         log("Using Eclipse version " + System.getProperty("eclipse.buildId"));
         log("Using Mirur version " + Activator.getDefault().getBundle().getVersion());
+        log("Using Instance ID " + Activator.getPreferences().getAnonymousId());
     }
 
     private void log(String text) {

@@ -19,6 +19,7 @@ package mirur.plugin;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logSevere;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
@@ -32,6 +33,7 @@ public class Preferences {
 
     private static final String PREFSUFFIX_SYNC_WITH_VARIABLES_VIEW = "toggle.variables.sync";
 
+    public static final String ANONYMOUS_ID = "anonid";
     public static final String PREF_SUBMIT_STATISTICS = "submit.statistics";
     public static final String PREF_MAX_BYTES_TRANSFER = "max.bytes.transfer";
 
@@ -51,6 +53,8 @@ public class Preferences {
                 }
             }
         });
+
+        initializeIdIfEmpty();
     }
 
     public void addChangeListener(Runnable listener) {
@@ -79,6 +83,16 @@ public class Preferences {
 
     public void setSubmitStatistics(boolean newValue) {
         prefNode.putBoolean(PREF_SUBMIT_STATISTICS, newValue);
+    }
+
+    public String getAnonymousId() {
+        return prefNode.get(ANONYMOUS_ID, "unknown");
+    }
+
+    private void initializeIdIfEmpty() {
+        if (prefNode.get(ANONYMOUS_ID, null) == null) {
+            prefNode.put(ANONYMOUS_ID, UUID.randomUUID().toString());
+        }
     }
 
     public void flush() {
