@@ -38,6 +38,10 @@ public class HistogramVisitor extends AbstractArray1dVisitor {
         this.unitConverter = unitConverter;
     }
 
+    public float getMin() {
+        return (float) min;
+    }
+
     public float getBinWidth() {
         return (float) step;
     }

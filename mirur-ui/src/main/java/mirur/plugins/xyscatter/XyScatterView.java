@@ -16,6 +16,7 @@ import mirur.plugins.AxisUtils;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.DataUnitConverter;
+import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.SimplePlugin2D;
 
 public class XyScatterView extends SimplePlugin2D {
@@ -42,8 +43,9 @@ public class XyScatterView extends SimplePlugin2D {
     public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         Array1D array = (Array1D) obj;
 
-        DataUnitConverter xUnitConverter = DataUnitConverter.IDENTITY;
-        DataUnitConverter yUnitConverter = DataUnitConverter.IDENTITY;
+        XyToFloatPrecisionVisitor toFloatVisitor = VisitArray.visit1d(array.getData(), new XyToFloatPrecisionVisitor());
+        DataUnitConverter xUnitConverter = toFloatVisitor.getXUnitConverter();
+        DataUnitConverter yUnitConverter = toFloatVisitor.getYUnitConverter();
         XyPointIndex index = new XyPointIndex(xUnitConverter, yUnitConverter);
         VisitArray.visit1d(array.getData(), index);
 
@@ -55,7 +57,7 @@ public class XyScatterView extends SimplePlugin2D {
                 titlePainter.setHorizontalPosition(HorizontalPosition.Left);
                 titlePainter.setVerticalPosition(VerticalPosition.Center);
                 setTitleHeight(30);
-                setAxisSizeX(25);
+                setAxisSizeX(35);
                 setAxisSizeY(65);
                 setBorderSize(5);
                 getLabelHandlerX().setTickSpacing(40);
@@ -84,6 +86,8 @@ public class XyScatterView extends SimplePlugin2D {
         };
 
         plot.setTitle(String.format("%s %s[%d]", array.getSignature(), array.getName(), array.getSize()));
+        plot.getLabelHandlerX().setAxisUnitConverter(new DataAxisUnitConverter(xUnitConverter));
+        plot.getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(yUnitConverter));
 
         XyArrayTooltipPainter tooltipPainter = new XyArrayTooltipPainter(plot.getAxis(), index, array);
         plot.getLayoutCenter().addPainter(tooltipPainter, Plot2D.FOREGROUND_LAYER);
@@ -95,7 +99,7 @@ public class XyScatterView extends SimplePlugin2D {
         plot.getAxisX().addAxisListener(new FixedPixelSelectionSizeListener(10));
         plot.getAxisY().addAxisListener(new FixedPixelSelectionSizeListener(10));
 
-        VisitArray.visit1d(array.getData(), new UpdateXyAxesVisitor()).updateAxes(plot.getAxis());
+        VisitArray.visit1d(array.getData(), new UpdateXyAxesVisitor(xUnitConverter, yUnitConverter)).updateAxes(plot.getAxis());
         AxisUtils.padAxis2d(plot.getAxis());
         plot.getAxis().validate();
 

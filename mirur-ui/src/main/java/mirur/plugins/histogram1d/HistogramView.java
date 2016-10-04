@@ -18,6 +18,7 @@ package mirur.plugins.histogram1d;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
@@ -32,8 +33,9 @@ import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
-import mirur.plugins.DataUnitConverter.LinearScaleConverter;
+import mirur.plugins.HdrAxisLabelHandler;
 import mirur.plugins.MirurView;
+import mirur.plugins.ToFloatPrecisionVisitor;
 
 public class HistogramView implements MirurView {
     @Override
@@ -62,15 +64,26 @@ public class HistogramView implements MirurView {
     public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         final Array1D array1d = (Array1D) obj;
 
-        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array1d.getData(), new MinMaxFiniteValueVisitor());
-        final DataUnitConverter unitConverter = new LinearScaleConverter(minMaxVisitor.getMin(), minMaxVisitor.getMax());
+        MinMaxFiniteValueVisitor minMax = VisitArray.visit(array1d.getData(), new MinMaxFiniteValueVisitor());
+        final DataUnitConverter unitConverter = VisitArray.visit(array1d.getData(), new ToFloatPrecisionVisitor()).get();
 
+        HistogramVisitor hist = VisitArray.visit1d(array1d.getData(), new HistogramVisitor(minMax.getMin(), minMax.getMax(), unitConverter));
         final HistogramPainter painter = new HistogramPainter();
-        MinMaxFiniteValueVisitor minmax = VisitArray.visit(array1d.getData(), new MinMaxFiniteValueVisitor());
-        HistogramVisitor hist = VisitArray.visit1d(array1d.getData(), new HistogramVisitor(minmax.getMin(), minmax.getMax(), unitConverter));
-        painter.setData(hist.getCounts(), (float) minmax.getMin(), hist.getBinWidth());
+        painter.setData(hist.getCounts(), hist.getMin(), hist.getBinWidth());
 
-        Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter) {
+        Array1DPlot plot = new Array1DPlot(painter, array1d, DataUnitConverter.IDENTITY) {
+            {
+                painter.autoAdjustAxisBounds(axis);
+                AxisUtils.padAxis(getAxisX());
+                AxisUtils.padAxis(getAxisY());
+            }
+
+            @Override
+            protected void initialize() {
+                super.initialize();
+                setAxisSizeX(35);
+            }
+
             @Override
             protected SimpleTextPainter createTitlePainter() {
                 SimpleTextPainter painter = new HistogramBinTextPainter(axis);
@@ -84,9 +97,13 @@ public class HistogramView implements MirurView {
             }
 
             @Override
-            protected void updateAxesBounds(Array1D array) {
-                painter.autoAdjustAxisBounds(axis);
-                AxisUtils.padAxis(getAxisY());
+            protected GridAxisLabelHandler createLabelHandlerX() {
+                return new HdrAxisLabelHandler();
+            }
+
+            @Override
+            protected GridAxisLabelHandler createLabelHandlerY() {
+                return new GridAxisLabelHandler();
             }
         };
         plot.getLabelHandlerX().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));

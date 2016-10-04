@@ -7,14 +7,28 @@ import static java.lang.Math.min;
 import com.metsci.glimpse.axis.Axis2D;
 
 import mirur.core.AbstractInterleavedVisitor;
+import mirur.plugins.DataUnitConverter;
 
 public class UpdateXyAxesVisitor extends AbstractInterleavedVisitor {
+    private final DataUnitConverter xUnitConverter;
+    private final DataUnitConverter yUnitConverter;
+
     private double minX = Double.POSITIVE_INFINITY;
     private double maxX = Double.NEGATIVE_INFINITY;
     private double minY = Double.POSITIVE_INFINITY;
     private double maxY = Double.NEGATIVE_INFINITY;
 
+    public UpdateXyAxesVisitor(DataUnitConverter xUnitConverter, DataUnitConverter yUnitConverter) {
+        this.xUnitConverter = xUnitConverter;
+        this.yUnitConverter = yUnitConverter;
+    }
+
     public void updateAxes(Axis2D axis) {
+        double minX = xUnitConverter.data2painter(this.minX);
+        double maxX = xUnitConverter.data2painter(this.maxX);
+        double minY = yUnitConverter.data2painter(this.minY);
+        double maxY = yUnitConverter.data2painter(this.maxY);
+
         if (minX == maxX) {
             maxX++;
         }

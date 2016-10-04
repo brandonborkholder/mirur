@@ -25,7 +25,6 @@ import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.axis.listener.mouse.AxisMouseListener;
 import com.metsci.glimpse.axis.painter.NumericAxisPainter;
 import com.metsci.glimpse.axis.painter.NumericTopXAxisPainter;
-import com.metsci.glimpse.axis.painter.label.AxisLabelHandler;
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.context.GlimpseBounds;
 import com.metsci.glimpse.event.mouse.GlimpseMouseAdapter;
@@ -46,11 +45,12 @@ import com.metsci.glimpse.plot.Plot2D;
 import com.metsci.glimpse.support.font.FontUtils;
 
 import mirur.core.Array1D;
-import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
 import mirur.plugins.AxisUtils;
 import mirur.plugins.DataUnitConverter;
+import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.HdrAxisLabelHandler;
+import mirur.plugins.ToFloatPrecisionVisitor;
 import mirur.plugins.line1d.LinePainter;
 
 public class ComplexPlotLayout extends Plot2D {
@@ -63,7 +63,7 @@ public class ComplexPlotLayout extends Plot2D {
     private NumericAxisPainter painterTopX;
 
     private GlimpseAxisLayout1D axisLayoutY2;
-    private AxisLabelHandler tickY2;
+    private GridAxisLabelHandler tickY2;
     private NumericAxisPainter painterY2;
     private AxisMouseListener mouseListenerY2;
 
@@ -250,31 +250,25 @@ public class ComplexPlotLayout extends Plot2D {
     }
 
     public void setComplexData(Array1D complex, Array1D magnitudes, Array1D angles) {
-        getLayoutXY1().addPainter(new LinePainter(angles, DataUnitConverter.IDENTITY));
-        updateAxesBounds(angles, axisXY);
+        DataUnitConverter unitConverter = VisitArray.visit(angles.getData(), new ToFloatPrecisionVisitor()).get();
+        getLayoutXY1().addPainter(new LinePainter(angles, unitConverter));
+        updateAxesBounds(angles, axisXY, unitConverter);
+        getLabelHandlerY1().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
 
-        getLayoutXY2().addPainter(new LinePainter(magnitudes, DataUnitConverter.IDENTITY));
-        updateAxesBounds(magnitudes, axisXY2);
+        unitConverter = VisitArray.visit(magnitudes.getData(), new ToFloatPrecisionVisitor()).get();
+        getLayoutXY2().addPainter(new LinePainter(magnitudes, unitConverter));
+        updateAxesBounds(magnitudes, axisXY2, unitConverter);
+        getLabelHandlerY2().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
 
         titlePainter1.setArray(complex);
         titlePainter2.setArrays(angles, magnitudes);
     }
 
-    protected void updateAxesBounds(Array1D array, Axis2D axis) {
-        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
-        double min = minMaxVisitor.getMin();
-        double max = minMaxVisitor.getMax();
-
-        if (min == max) {
-            max++;
-        }
-
-        // since we center on the "array" index
+    protected void updateAxesBounds(Array1D array, Axis2D axis, DataUnitConverter unitConverter) {
         axis.getAxisX().setMin(-0.5);
         axis.getAxisX().setMax(array.getSize() - 0.5);
 
-        axis.getAxisY().setMin(min);
-        axis.getAxisY().setMax(max);
+        AxisUtils.adjustAxisToMinMax(array, axis.getAxisY(), unitConverter);
         AxisUtils.padAxis(axis.getAxisY());
         axis.validate();
     }
@@ -285,6 +279,14 @@ public class ComplexPlotLayout extends Plot2D {
 
     protected GlimpseAxisLayout2D getLayoutXY2() {
         return axisLayoutXY2;
+    }
+
+    protected GridAxisLabelHandler getLabelHandlerY1() {
+        return tickY;
+    }
+
+    protected GridAxisLabelHandler getLabelHandlerY2() {
+        return tickY2;
     }
 
     public Axis1D getAxisY1() {

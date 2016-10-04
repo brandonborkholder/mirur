@@ -26,22 +26,23 @@ import com.metsci.glimpse.plot.SimplePlot2D;
 import com.metsci.glimpse.support.font.FontUtils;
 
 import mirur.core.Array1D;
-import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.VisitArray;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.line1d.MarkerPainter;
 
 public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;
     private GlimpsePainter dataPainter;
-    private DataUnitConverter unitConverter;
 
     public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array, DataUnitConverter unitConverter) {
-        this.unitConverter = unitConverter;
         getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
         getLabelHandlerY().setTickSpacing(40);
 
-        updateAxesBounds(array);
+        // since we center on the "array" index
+        getAxisX().setMin(-0.5);
+        getAxisX().setMax(array.getSize() - 0.5);
+        AxisUtils.adjustAxisToMinMax(array, getAxisY(), unitConverter);
+        AxisUtils.padAxis(getAxisY());
+
         setTitlePainterData(array);
 
         setTitleFont(FontUtils.getDefaultPlain(14));
@@ -112,24 +113,5 @@ public class Array1DPlot extends SimplePlot2D {
 
     protected void setTitlePainterData(Array1D array) {
         ((Array1DTitlePainter) titlePainter).setArray(array);
-    }
-
-    protected void updateAxesBounds(Array1D array) {
-        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
-        double min = minMaxVisitor.getMin();
-        double max = minMaxVisitor.getMax();
-
-        if (min == max) {
-            max++;
-        }
-
-        // since we center on the "array" index
-        getAxisX().setMin(-0.5);
-        getAxisX().setMax(array.getSize() - 0.5);
-
-        getAxisY().setMin(unitConverter.data2painter(min));
-        getAxisY().setMax(unitConverter.data2painter(max));
-        AxisUtils.padAxis(getAxisY());
-        getAxis().validate();
     }
 }

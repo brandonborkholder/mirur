@@ -26,18 +26,16 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
-import mirur.core.Array1D;
-import mirur.core.Array1DImpl;
-import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.VariableObject;
-import mirur.core.VisitArray;
-import mirur.plugins.DataUnitConverter.LinearScaleConverter;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+
+import mirur.core.Array1D;
+import mirur.core.Array1DImpl;
+import mirur.core.VariableObject;
+import mirur.core.VisitArray;
 
 public abstract class SimplePlugin1D implements MirurView {
     private final String name;
@@ -101,10 +99,7 @@ public abstract class SimplePlugin1D implements MirurView {
             array1d = new Array1DImpl(obj.getName(), arrayObj);
         }
 
-        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array1d.getData(), new MinMaxFiniteValueVisitor());
-        double min = minMaxVisitor.getMin();
-        double max = minMaxVisitor.getMax();
-        DataUnitConverter unitConverter = new LinearScaleConverter(min, max);
+        DataUnitConverter unitConverter = VisitArray.visit(array1d.getData(), new ToFloatPrecisionVisitor()).get();
 
         GlimpseDataPainter2D painter = createPainter(array1d, unitConverter);
         Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter);

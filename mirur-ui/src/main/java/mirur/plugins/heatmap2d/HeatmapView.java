@@ -40,13 +40,13 @@ import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D.MutatorFloat2D;
 
 import mirur.core.Array2D;
-import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
 import mirur.core.VisitArray;
 import mirur.plugins.Array2DTitlePainter;
 import mirur.plugins.AxisUtils;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
+import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimplePlugin2D;
 
 public class HeatmapView extends SimplePlugin2D {
@@ -154,20 +154,11 @@ public class HeatmapView extends SimplePlugin2D {
         plot.getAxisY().setMax(dim1);
         plot.getAxis().validate();
 
-        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
-        double minZ = minMaxVisitor.getMin();
-        double maxZ = minMaxVisitor.getMax();
-        if (minZ == maxZ) {
-            maxZ++;
-        }
-
-        plot.getAxisZ().setMin(minZ);
-        plot.getAxisZ().setMax(maxZ);
+        DataUnitConverter unitConverter = DataUnitConverter.IDENTITY;
+        AxisUtils.adjustAxisToMinMax(array, plot.getAxisZ(), unitConverter);
+        t1.setValue(plot.getAxisZ().getMin());
+        t2.setValue(plot.getAxisZ().getMax());
         AxisUtils.padAxis(axisZ);
-
-        t1.setValue(minZ);
-        t2.setValue(maxZ);
-        axisZ.validate();
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());

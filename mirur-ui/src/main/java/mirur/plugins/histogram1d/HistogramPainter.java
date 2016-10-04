@@ -43,7 +43,7 @@ public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramP
     public void setData(Float2IntMap counts, float binStart, float binSize) {
         this.binStart = binStart;
         this.counts = counts;
-        setData(counts, binSize);
+        setData(counts, 1, binSize);
     }
 
     public int getCount(double binValue) {
