@@ -42,12 +42,6 @@ public class PluginLogSupport {
             return;
         }
 
-        Logger logger = Logger.getLogger("");
-
-        if (logger == null) {
-            return;
-        }
-
         Handler handler = new Handler() {
             final Formatter formatter = new TimestampingMethodNameLogFormatter();
             final ILog rcpLogger = Activator.getDefault().getLog();
@@ -84,7 +78,13 @@ public class PluginLogSupport {
             }
         };
 
-        handler.setLevel(LEVEL);
-        logger.addHandler(handler);
+        for (Logger logger : new Logger[] { Logger.getLogger("mirur"), Logger.getLogger("com.metsci.glimpse") }) {
+            if (logger == null) {
+                continue;
+            }
+
+            handler.setLevel(LEVEL);
+            logger.addHandler(handler);
+        }
     }
 }
