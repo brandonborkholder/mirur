@@ -4,6 +4,8 @@ import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -47,7 +49,7 @@ public class MirurAgentCoder {
     public static final short TYPE_TOO_LARGE = 6;
 
     public Object decode(InputStream in0) throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(in0);
+        ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(in0));
         try {
             short type = in.readShort();
 
@@ -130,7 +132,7 @@ public class MirurAgentCoder {
     }
 
     public void encode(Object obj, OutputStream out0) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(out0);
+        ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(out0));
 
         try {
             if (MirurAgent.INVALID.equals(obj)) {
@@ -143,7 +145,7 @@ public class MirurAgentCoder {
             } else if (obj instanceof BufferedImage) {
                 out.writeShort(TYPE_BUFFERED_IMAGE);
                 ByteArrayOutputStream o = new ByteArrayOutputStream();
-                ImageIO.write((BufferedImage) obj, "png", o);
+                ImageIO.write((BufferedImage) obj, "bmp", o);
                 o.close();
                 out.writeInt(o.size());
                 out.write(o.toByteArray());
