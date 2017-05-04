@@ -18,6 +18,7 @@ package mirur.plugins.heatmap2d;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Control;
@@ -29,47 +30,53 @@ import com.metsci.glimpse.support.colormap.ColorGradients;
 import mirur.plugin.Icons;
 
 public abstract class GradientChooserAction extends Action implements IMenuCreator {
-    public GradientChooserAction() {
-        setId(GradientChooserAction.class.getName());
-        setMenuCreator(this);
-        setText("Color Gradient");
-        setToolTipText("Select Color Gradient");
-        setImageDescriptor(Icons.getGradient(true));
-        setDisabledImageDescriptor(Icons.getGradient(false));
-    }
+	private ColorGradient cur;
 
-    private void addGradientOption(Menu menu, String name, final ColorGradient gradient, ImageDescriptor icon) {
-        Action action = new Action(name, icon) {
-            @Override
-            public void run() {
-                select(gradient);
-            }
-        };
+	public GradientChooserAction() {
+		super("Color Gradient", IAction.AS_RADIO_BUTTON);
+		setId(GradientChooserAction.class.getName());
+		setMenuCreator(this);
+		setToolTipText("Select Color Gradient");
+		setImageDescriptor(Icons.getGradient(true));
+		setDisabledImageDescriptor(Icons.getGradient(false));
 
-        ActionContributionItem item = new ActionContributionItem(action);
-        item.fill(menu, -1);
-    }
+		cur = ColorGradients.jet;
+	}
 
-    protected abstract void select(ColorGradient gradient);
+	private void addGradientOption(Menu menu, String name, final ColorGradient gradient, ImageDescriptor icon) {
+		Action action = new Action(name, icon) {
+			@Override
+			public void run() {
+				cur = gradient;
+				select(gradient);
+			}
+		};
 
-    @Override
-    public void dispose() {
-    }
+		action.setChecked(gradient == cur);
+		ActionContributionItem item = new ActionContributionItem(action);
+		item.fill(menu, -1);
+	}
 
-    @Override
-    public Menu getMenu(Control parent) {
-        throw new UnsupportedOperationException();
-    }
+	protected abstract void select(ColorGradient gradient);
 
-    @Override
-    public Menu getMenu(Menu parent) {
-        Menu menu = new Menu(parent);
-        addGradientOption(menu, "jet", ColorGradients.jet, Icons.getGradient(ColorGradients.jet));
-        addGradientOption(menu, "viridis", ColorGradients.viridis, Icons.getGradient(ColorGradients.viridis));
-        addGradientOption(menu, "bone", ColorGradients.reverseBone, Icons.getGradient(ColorGradients.reverseBone));
-        addGradientOption(menu, "grey", ColorGradients.gray, Icons.getGradient(ColorGradients.gray));
-        addGradientOption(menu, "spectral", ColorGradients.spectral, Icons.getGradient(ColorGradients.spectral));
+	@Override
+	public void dispose() {
+	}
 
-        return menu;
-    }
+	@Override
+	public Menu getMenu(Control parent) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Menu getMenu(Menu parent) {
+		Menu menu = new Menu(parent);
+		addGradientOption(menu, "jet", ColorGradients.jet, Icons.getGradient(ColorGradients.jet));
+		addGradientOption(menu, "viridis", ColorGradients.viridis, Icons.getGradient(ColorGradients.viridis));
+		addGradientOption(menu, "bone", ColorGradients.reverseBone, Icons.getGradient(ColorGradients.reverseBone));
+		addGradientOption(menu, "grey", ColorGradients.gray, Icons.getGradient(ColorGradients.gray));
+		addGradientOption(menu, "spectral", ColorGradients.spectral, Icons.getGradient(ColorGradients.spectral));
+
+		return menu;
+	}
 }

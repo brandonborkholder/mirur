@@ -34,149 +34,152 @@ import com.metsci.glimpse.canvas.GlimpseCanvas;
 import com.metsci.glimpse.layout.GlimpseLayout;
 
 public class DataPainterImpl implements DataPainter {
-    private final GlimpseLayout layout;
-    private final List<ResetAction> resets;
-    private final List<Action> actions;
-    private int attachedCount;
+	private final GlimpseLayout layout;
+	private final List<ResetAction> resets;
+	private final List<Action> actions;
+	private int attachedCount;
 
-    public DataPainterImpl(GlimpseLayout layout) {
-        this.layout = layout;
-        resets = new ArrayList<>();
-        actions = new ArrayList<>();
-        attachedCount = 0;
-    }
+	public DataPainterImpl(GlimpseLayout layout) {
+		this.layout = layout;
+		resets = new ArrayList<>();
+		actions = new ArrayList<>();
+		attachedCount = 0;
+	}
 
-    public void addAction(Action action) {
-        actions.add(action);
-    }
+	public void addAction(Action action) {
+		actions.add(action);
+		if (action instanceof ResetAction) {
+			resets.add((ResetAction) action);
+		}
+	}
 
-    public void addAxis(Axis1D axis) {
-        if (axis instanceof TaggedAxis1D) {
-            resets.add(new ResetTagsAction((TaggedAxis1D) axis));
-        } else {
-            resets.add(new ResetAction1d(axis));
-        }
-    }
+	public void addAxis(Axis1D axis) {
+		if (axis instanceof TaggedAxis1D) {
+			resets.add(new ResetTagsAction((TaggedAxis1D) axis));
+		} else {
+			resets.add(new ResetAction1d(axis));
+		}
+	}
 
-    public void addAxis(Axis2D axis) {
-        resets.add(new ResetAction2d(axis));
-    }
+	public void addAxis(Axis2D axis) {
+		resets.add(new ResetAction2d(axis));
+	}
 
-    @Override
-    public GlimpseLayout getLayout() {
-        return layout;
-    }
+	@Override
+	public GlimpseLayout getLayout() {
+		return layout;
+	}
 
-    @Override
-    public void populateConfigMenu(Menu parent) {
-        for (Action a : actions) {
-            new ActionContributionItem(a).fill(parent, -1);
-        }
-    }
+	@Override
+	public void populateConfigMenu(Menu parent) {
+		for (Action a : actions) {
+			new ActionContributionItem(a).fill(parent, -1);
+		}
+	}
 
-    @Override
-    public void resetAxes() {
-        for (ResetAction a : resets) {
-            a.reset();
-        }
+	@Override
+	public void resetAxes() {
+		for (ResetAction a : resets) {
+			a.reset();
+		}
 
-        for (ResetAction a : resets) {
-            a.validate();
-        }
-    }
+		for (ResetAction a : resets) {
+			a.validate();
+		}
+	}
 
-    @Override
-    public void attach(GlimpseCanvas canvas) {
-        canvas.addLayout(layout);
-        attachedCount++;
-    }
+	@Override
+	public void attach(GlimpseCanvas canvas) {
+		canvas.addLayout(layout);
+		attachedCount++;
+	}
 
-    @Override
-    public void detach(GlimpseCanvas canvas) {
-        canvas.removeLayout(layout);
-        attachedCount--;
-    }
+	@Override
+	public void detach(GlimpseCanvas canvas) {
+		canvas.removeLayout(layout);
+		attachedCount--;
+	}
 
-    @Override
-    public void dispose(GlimpseCanvas canvas) {
-        if (attachedCount <= 0) {
-            canvas.getGLContext().makeCurrent();
-            layout.dispose(canvas.getGlimpseContext());
-            canvas.getGLContext().release();
-        }
-    }
+	@Override
+	public void dispose(GlimpseCanvas canvas) {
+		if (attachedCount <= 0) {
+			canvas.getGLContext().makeCurrent();
+			layout.dispose(canvas.getGlimpseContext());
+			canvas.getGLContext().release();
+		}
+	}
 
-    private interface ResetAction {
-        void reset();
+	public interface ResetAction {
+		void reset();
 
-        void validate();
-    }
+		void validate();
+	}
 
-    private static class ResetAction1d implements ResetAction {
-        final Axis1D axis;
-        final double min;
-        final double max;
+	private static class ResetAction1d implements ResetAction {
+		final Axis1D axis;
+		final double min;
+		final double max;
 
-        ResetAction1d(Axis1D axis) {
-            this.axis = axis;
-            this.min = axis.getMin();
-            this.max = axis.getMax();
-        }
+		ResetAction1d(Axis1D axis) {
+			this.axis = axis;
+			this.min = axis.getMin();
+			this.max = axis.getMax();
+		}
 
-        @Override
-        public void reset() {
-            axis.setMin(min);
-            axis.setMax(max);
-        }
+		@Override
+		public void reset() {
+			axis.setMin(min);
+			axis.setMax(max);
+		}
 
-        @Override
-        public void validate() {
-            axis.validate();
-        }
-    }
+		@Override
+		public void validate() {
+			axis.validate();
+		}
+	}
 
-    private static class ResetTagsAction extends ResetAction1d {
-        final Map<String, Double> tags;
+	private static class ResetTagsAction extends ResetAction1d {
+		final Map<String, Double> tags;
 
-        public ResetTagsAction(TaggedAxis1D axis) {
-            super(axis);
-            tags = new TreeMap<>();
-            for (Tag t : axis.getSortedTags()) {
-                tags.put(t.getName(), t.getValue());
-            }
-        }
+		public ResetTagsAction(TaggedAxis1D axis) {
+			super(axis);
+			tags = new TreeMap<>();
+			for (Tag t : axis.getSortedTags()) {
+				tags.put(t.getName(), t.getValue());
+			}
+		}
 
-        @Override
-        public void reset() {
-            super.reset();
+		@Override
+		public void reset() {
+			super.reset();
 
-            TaggedAxis1D axis = (TaggedAxis1D) this.axis;
-            for (Entry<String, Double> e : tags.entrySet()) {
-                axis.getTag(e.getKey()).setValue(e.getValue());
-            }
-        }
-    }
+			TaggedAxis1D axis = (TaggedAxis1D) this.axis;
+			for (Entry<String, Double> e : tags.entrySet()) {
+				axis.getTag(e.getKey()).setValue(e.getValue());
+			}
+		}
+	}
 
-    private static class ResetAction2d implements ResetAction {
-        final Axis2D axis;
-        final ResetAction1d x;
-        final ResetAction1d y;
+	private static class ResetAction2d implements ResetAction {
+		final Axis2D axis;
+		final ResetAction1d x;
+		final ResetAction1d y;
 
-        ResetAction2d(Axis2D axis) {
-            this.axis = axis;
-            x = new ResetAction1d(axis.getAxisX());
-            y = new ResetAction1d(axis.getAxisY());
-        }
+		ResetAction2d(Axis2D axis) {
+			this.axis = axis;
+			x = new ResetAction1d(axis.getAxisX());
+			y = new ResetAction1d(axis.getAxisY());
+		}
 
-        @Override
-        public void reset() {
-            x.reset();
-            y.reset();
-        }
+		@Override
+		public void reset() {
+			x.reset();
+			y.reset();
+		}
 
-        @Override
-        public void validate() {
-            axis.validate();
-        }
-    }
+		@Override
+		public void validate() {
+			axis.validate();
+		}
+	}
 }

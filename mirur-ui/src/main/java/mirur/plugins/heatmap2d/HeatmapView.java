@@ -50,125 +50,160 @@ import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimplePlugin2D;
 
 public class HeatmapView extends SimplePlugin2D {
-    public HeatmapView() {
-        super("Heatmap", null);
-    }
+	public HeatmapView() {
+		super("Heatmap", null);
+	}
 
-    @Override
-    public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
-        final Array2D array = (Array2D) obj;
+	@Override
+	public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
+		final Array2D array = (Array2D) obj;
 
-        TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
-            @Override
-            protected void initialize() {
-                super.initialize();
+		TaggedColorAxisPlot2D plot = new TaggedColorAxisPlot2D() {
+			@Override
+			protected void initialize() {
+				super.initialize();
 
-                setTitleHeight(30);
-                setBorderSize(5);
-                getAxisPainterX().setAxisLabelBufferSize(3);
-                getLabelHandlerY().setTickSpacing(50);
-                getLabelHandlerZ().setTickSpacing(50);
-                setTitleFont(FontUtils.getDefaultPlain(14));
-            }
+				setTitleHeight(30);
+				setBorderSize(5);
+				getAxisPainterX().setAxisLabelBufferSize(3);
+				getLabelHandlerY().setTickSpacing(50);
+				getLabelHandlerZ().setTickSpacing(50);
+				setTitleFont(FontUtils.getDefaultPlain(14));
+			}
 
-            @Override
-            protected SimpleTextPainter createTitlePainter() {
-                SimpleTextPainter painter = new Array2DTitlePainter(getAxis());
-                painter.setHorizontalPosition(HorizontalPosition.Left);
-                painter.setVerticalPosition(VerticalPosition.Center);
-                painter.setColor(GlimpseColor.getBlack());
-                return painter;
-            }
+			@Override
+			protected SimpleTextPainter createTitlePainter() {
+				SimpleTextPainter painter = new Array2DTitlePainter(getAxis());
+				painter.setHorizontalPosition(HorizontalPosition.Left);
+				painter.setVerticalPosition(VerticalPosition.Center);
+				painter.setColor(GlimpseColor.getBlack());
+				return painter;
+			}
 
-            @Override
-            protected void updatePainterLayout() {
-                super.updatePainterLayout();
+			@Override
+			protected void updatePainterLayout() {
+				super.updatePainterLayout();
 
-                getLayoutManager().setLayoutConstraints(
-                        String.format("bottomtotop, gapx 0, gapy 0, insets %d %d %d %d", 0, outerBorder, outerBorder, outerBorder));
-                titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
-                axisLayoutZ.setLayoutData(String.format("cell 2 0 1 3, growy, width %d!", axisThicknessZ));
+				getLayoutManager().setLayoutConstraints(String.format("bottomtotop, gapx 0, gapy 0, insets %d %d %d %d",
+						0, outerBorder, outerBorder, outerBorder));
+				titleLayout.setLayoutData(String.format("cell 0 0 2 1, growx, height %d!", titleSpacing));
+				axisLayoutZ.setLayoutData(String.format("cell 2 0 1 3, growy, width %d!", axisThicknessZ));
 
-                invalidateLayout();
-            }
+				invalidateLayout();
+			}
 
-            @Override
-            protected void initializePainters() {
-                super.initializePainters();
+			@Override
+			protected void initializePainters() {
+				super.initializePainters();
 
-                ((Array2DTitlePainter) titlePainter).setArray(array);
-            }
-        };
+				((Array2DTitlePainter) titlePainter).setArray(array);
+			}
+		};
 
-        plot.setAxisLabelX(array.getName() + "[]");
-        plot.setAxisLabelY(array.getName() + "[][]");
+		plot.setAxisLabelX(array.getName() + "[]");
+		plot.setAxisLabelY(array.getName() + "[][]");
 
-        plot.getCrosshairPainter().showSelectionBox(false);
+		plot.getCrosshairPainter().showSelectionBox(false);
 
-        TaggedAxis1D axisZ = plot.getAxisZ();
-        TaggedHeatMapPainter painter = new TaggedHeatMapPainter(axisZ);
+		final TaggedAxis1D axisZ = plot.getAxisZ();
+		TaggedHeatMapPainter painter = new TaggedHeatMapPainter(axisZ);
 
-        final Tag t1 = axisZ.addTag("T1", 0.0).setAttribute(Tag.TEX_COORD_ATTR, 0.0f);
-        final Tag t2 = axisZ.addTag("T2", 0.0).setAttribute(Tag.TEX_COORD_ATTR, 1.0f);
+		final Tag t1 = axisZ.addTag("T1", 0.0).setAttribute(Tag.TEX_COORD_ATTR, 0.0f);
+		final Tag t2 = axisZ.addTag("T2", 0.0).setAttribute(Tag.TEX_COORD_ATTR, 1.0f);
 
-        axisZ.addConstraint(new NamedConstraint("C1") {
-            @Override
-            public void applyConstraint(TaggedAxis1D axis, Map<String, Tag> previousTags) {
-                if (t1.getValue() > t2.getValue()) {
-                    t1.setValue(t2.getValue());
-                }
-            }
-        });
+		axisZ.addConstraint(new NamedConstraint("C1") {
+			@Override
+			public void applyConstraint(TaggedAxis1D axis, Map<String, Tag> previousTags) {
+				if (t1.getValue() > t2.getValue()) {
+					t1.setValue(t2.getValue());
+				}
+			}
+		});
 
-        final ColorTexture1D colors = new ColorTexture1D(1024);
-        colors.setColorGradient(ColorGradients.jet);
+		final ColorTexture1D colors = new ColorTexture1D(1024);
+		colors.setColorGradient(ColorGradients.jet);
 
-        int dim0 = array.getMaxSize(0);
-        int dim1 = array.getMaxSize(1);
+		int dim0 = array.getMaxSize(0);
+		int dim1 = array.getMaxSize(1);
 
-        FloatTextureProjected2D texture = new FloatTextureProjected2D(dim0, dim1);
+		final FloatTextureProjected2D texture = new FloatTextureProjected2D(dim0, dim1);
 
-        Projection projection = new FlatProjection(0, dim0, 0, dim1);
-        texture.setProjection(projection);
-        texture.mutate(new MutatorFloat2D() {
-            @Override
-            public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
-                data.clear();
-                if (array.isJagged()) {
-                    VisitArray.visit2d(array.getData(), new JaggedToFloatBufferVisitor(data, dataSizeY, Float.NaN));
-                } else {
-                    VisitArray.visit2d(array.getData(), new ToFloatBufferVisitor(data));
-                }
-            }
-        });
+		Projection projection = new FlatProjection(0, dim0, 0, dim1);
+		texture.setProjection(projection);
+		texture.mutate(new MutatorFloat2D() {
+			@Override
+			public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
+				data.clear();
+				if (array.isJagged()) {
+					VisitArray.visit2d(array.getData(), new JaggedToFloatBufferVisitor(data, dataSizeY, Float.NaN));
+				} else {
+					VisitArray.visit2d(array.getData(), new ToFloatBufferVisitor(data));
+				}
+			}
+		});
 
-        painter.setData(texture);
-        painter.setColorScale(colors);
+		painter.setData(texture);
+		painter.setColorScale(colors);
 
-        plot.addPainter(painter, Plot2D.DATA_LAYER);
-        plot.setColorScale(painter.getColorScale());
+		plot.addPainter(painter, Plot2D.DATA_LAYER);
+		plot.setColorScale(painter.getColorScale());
 
-        plot.getAxisX().setMin(0);
-        plot.getAxisX().setMax(dim0);
-        plot.getAxisY().setMin(0);
-        plot.getAxisY().setMax(dim1);
-        plot.getAxis().validate();
+		plot.getAxisX().setMin(0);
+		plot.getAxisX().setMax(dim0);
+		plot.getAxisY().setMin(0);
+		plot.getAxisY().setMax(dim1);
+		plot.getAxis().validate();
 
-        DataUnitConverter unitConverter = DataUnitConverter.IDENTITY;
-        AxisUtils.adjustAxisToMinMax(array, plot.getAxisZ(), unitConverter);
-        t1.setValue(plot.getAxisZ().getMin());
-        t2.setValue(plot.getAxisZ().getMax());
-        AxisUtils.padAxis(axisZ);
+		DataUnitConverter unitConverter = DataUnitConverter.IDENTITY;
+		AxisUtils.adjustAxisToMinMax(array, plot.getAxisZ(), unitConverter);
+		t1.setValue(axisZ.getMin());
+		t2.setValue(axisZ.getMax());
+		AxisUtils.padAxis(axisZ);
 
-        DataPainterImpl result = new DataPainterImpl(plot);
-        result.addAxis(plot.getAxis());
-        result.addAxis(plot.getAxisZ());
-        result.addAction(new GradientChooserAction() {
-            @Override
-            protected void select(ColorGradient gradient) {
-                colors.setColorGradient(gradient);
-            }
-        });
-        return result;
-    }
+		DataPainterImpl result = new DataPainterImpl(plot);
+		result.addAxis(plot.getAxis());
+		result.addAxis(plot.getAxisZ());
+		result.addAction(new GradientChooserAction() {
+			@Override
+			protected void select(ColorGradient gradient) {
+				colors.setColorGradient(gradient);
+			}
+		});
+		result.addAction(new LogOption() {
+			@Override
+			protected void select(final ScaleOperator old, final ScaleOperator op) {
+				texture.mutate(new MutatorFloat2D() {
+					@Override
+					public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
+						data.clear();
+						if (array.isJagged()) {
+							VisitArray.visit2d(array.getData(), new JaggedToFloatBufferVisitor(data, dataSizeY, Float.NaN));
+						} else {
+							VisitArray.visit2d(array.getData(), new ToFloatBufferVisitor(data));
+						}
+
+						data.flip();
+						op.operate(data);
+
+						double v = axisZ.getMin();
+						v = op.operate(old.unoperate(v));
+						axisZ.setMin(v);
+						v = axisZ.getMax();
+						v = op.operate(old.unoperate(v));
+						axisZ.setMax(v);
+						v = t1.getValue();
+						v = op.operate(old.unoperate(v));
+						t1.setValue(v);
+						v = t2.getValue();
+						v = op.operate(old.unoperate(v));
+						t2.setValue(v);
+
+						axisZ.validateTags();
+						axisZ.validate();
+					}
+				});
+			}
+		});
+		return result;
+	}
 }
