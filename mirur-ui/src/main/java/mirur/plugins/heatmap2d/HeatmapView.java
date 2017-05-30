@@ -16,6 +16,8 @@
  */
 package mirur.plugins.heatmap2d;
 
+import static java.lang.Double.isFinite;
+
 import java.nio.FloatBuffer;
 import java.util.Map;
 
@@ -169,9 +171,9 @@ public class HeatmapView extends SimplePlugin2D {
 				colors.setColorGradient(gradient);
 			}
 		});
-		result.addAction(new LogOption() {
+		result.addAction(new ScaleChooserAction() {
 			@Override
-			protected void select(final ScaleOperator old, final ScaleOperator op) {
+			protected void select(final ScaleOperator old, final ScaleOperator op, final boolean updateAxes) {
 				texture.mutate(new MutatorFloat2D() {
 					@Override
 					public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
@@ -185,23 +187,37 @@ public class HeatmapView extends SimplePlugin2D {
 						data.flip();
 						op.operate(data);
 
-						double v = axisZ.getMin();
-						v = op.operate(old.unoperate(v));
-						axisZ.setMin(v);
-						v = axisZ.getMax();
-						v = op.operate(old.unoperate(v));
-						axisZ.setMax(v);
-						v = t1.getValue();
-						v = op.operate(old.unoperate(v));
-						t1.setValue(v);
-						v = t2.getValue();
-						v = op.operate(old.unoperate(v));
-						t2.setValue(v);
+						if (updateAxes) {
+							double min = axisZ.getMin();
+							min = op.operate(old.unoperate(min));
+							double max = axisZ.getMax();
+							max = op.operate(old.unoperate(max));
 
-						axisZ.validateTags();
-						axisZ.validate();
+							if (!isFinite(min) && !isFinite(max)) {
+								min = -1;
+								max = 1;
+							} else if (!isFinite(max)) {
+								max = min + 1;
+							} else if (!isFinite(min)) {
+								min = max - 1;
+							}
+							axisZ.setMin(min);
+							axisZ.setMax(max);
+
+							double v = t1.getValue();
+							v = op.operate(old.unoperate(v));
+							v = isFinite(v) ? v : min;
+							t1.setValue(v);
+							v = t2.getValue();
+							v = op.operate(old.unoperate(v));
+							v = isFinite(v) ? v : max;
+							t2.setValue(v);
+						}
 					}
 				});
+
+				axisZ.validateTags();
+				axisZ.validate();
 			}
 		});
 		return result;

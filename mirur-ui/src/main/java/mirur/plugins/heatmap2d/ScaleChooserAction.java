@@ -25,12 +25,12 @@ import org.eclipse.swt.widgets.Menu;
 
 import mirur.plugins.DataPainterImpl.ResetAction;
 
-public abstract class LogOption extends Action implements IMenuCreator, ResetAction {
+public abstract class ScaleChooserAction extends Action implements IMenuCreator, ResetAction {
 	private ScaleOperator cur;
 
-	public LogOption() {
-		super("Color Axis Scale", IAction.AS_RADIO_BUTTON);
-		setId(LogOption.class.getName());
+	public ScaleChooserAction() {
+		super("Color Axis Scale");
+		setId(ScaleChooserAction.class.getName());
 		setMenuCreator(this);
 		setToolTipText("Select Color Axis Scale");
 
@@ -38,11 +38,13 @@ public abstract class LogOption extends Action implements IMenuCreator, ResetAct
 	}
 
 	private void addScaleOption(Menu menu, String name, final ScaleOperator op) {
-		Action action = new Action(name) {
+		Action action = new Action(name, IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
-				select(cur, op);
-				cur = op;
+				if (isChecked()) {
+					select(cur, op, true);
+					cur = op;
+				}
 			}
 		};
 
@@ -50,10 +52,10 @@ public abstract class LogOption extends Action implements IMenuCreator, ResetAct
 		ActionContributionItem item = new ActionContributionItem(action);
 		item.fill(menu, -1);
 	}
-	
+
 	@Override
 	public void reset() {
-		select(cur, ScaleOperator.NORMAL);
+		select(cur, ScaleOperator.NORMAL, false);
 		cur = ScaleOperator.NORMAL;
 	}
 
@@ -62,7 +64,7 @@ public abstract class LogOption extends Action implements IMenuCreator, ResetAct
 		// nop
 	}
 
-	protected abstract void select(ScaleOperator old, ScaleOperator op);
+	protected abstract void select(ScaleOperator old, ScaleOperator op, boolean updateAxes);
 
 	@Override
 	public void dispose() {

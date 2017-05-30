@@ -28,12 +28,13 @@ import com.metsci.glimpse.support.colormap.ColorGradient;
 import com.metsci.glimpse.support.colormap.ColorGradients;
 
 import mirur.plugin.Icons;
+import mirur.plugins.DataPainterImpl.ResetAction;
 
-public abstract class GradientChooserAction extends Action implements IMenuCreator {
+public abstract class GradientChooserAction extends Action implements IMenuCreator, ResetAction {
 	private ColorGradient cur;
 
 	public GradientChooserAction() {
-		super("Color Gradient", IAction.AS_RADIO_BUTTON);
+		super("Color Gradient");
 		setId(GradientChooserAction.class.getName());
 		setMenuCreator(this);
 		setToolTipText("Select Color Gradient");
@@ -44,20 +45,33 @@ public abstract class GradientChooserAction extends Action implements IMenuCreat
 	}
 
 	private void addGradientOption(Menu menu, String name, final ColorGradient gradient, ImageDescriptor icon) {
-		Action action = new Action(name, icon) {
+		Action action = new Action(name, IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
-				cur = gradient;
-				select(gradient);
+				if (isChecked()) {
+					cur = gradient;
+					select(gradient);
+				}
 			}
 		};
-
+		action.setImageDescriptor(icon);
 		action.setChecked(gradient == cur);
 		ActionContributionItem item = new ActionContributionItem(action);
 		item.fill(menu, -1);
 	}
 
 	protected abstract void select(ColorGradient gradient);
+
+	@Override
+	public void reset() {
+		cur = ColorGradients.jet;
+		select(cur);
+	}
+
+	@Override
+	public void validate() {
+		// nop
+	}
 
 	@Override
 	public void dispose() {

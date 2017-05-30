@@ -158,6 +158,13 @@ public class DataPainterImpl implements DataPainter {
 				axis.getTag(e.getKey()).setValue(e.getValue());
 			}
 		}
+
+		@Override
+		public void validate() {
+			super.validate();
+			TaggedAxis1D axis = (TaggedAxis1D) this.axis;
+			axis.validateTags();
+		}
 	}
 
 	private static class ResetAction2d implements ResetAction {
@@ -180,6 +187,8 @@ public class DataPainterImpl implements DataPainter {
 		@Override
 		public void validate() {
 			axis.validate();
+			axis.getAxisX().validate();
+			axis.getAxisY().validate();
 		}
 	}
 }
