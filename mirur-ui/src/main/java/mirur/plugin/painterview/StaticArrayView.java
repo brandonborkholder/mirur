@@ -72,14 +72,17 @@ public class StaticArrayView extends ViewPart {
 
     @Override
     public void setFocus() {
-        canvas.getCanvas().setFocus();
+        if (canvas != null) {
+            canvas.getCanvas().setFocus();
+        }
     }
 
     @Override
     public void dispose() {
-        animator.stop();
-        currentPainter.detach(canvas);
-        currentPainter.dispose(canvas);
+        if (canvas != null) {
+            animator.stop();
+            currentPainter.detach(canvas);
+        }
 
         super.dispose();
     }

@@ -38,9 +38,12 @@ public abstract class CreateStaticViewAction extends Action {
     @Override
     public void run() {
         try {
+            String uuid = UUID.randomUUID().toString();
             IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                    .showView(StaticArrayView.ID, UUID.randomUUID().toString(), IWorkbenchPage.VIEW_ACTIVATE);
+                    .showView(StaticArrayView.ID, uuid, IWorkbenchPage.VIEW_CREATE);
             initializeView((StaticArrayView) view);
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                    .showView(StaticArrayView.ID, uuid, IWorkbenchPage.VIEW_ACTIVATE);
         } catch (PartInitException ex) {
             throw new RuntimeException(ex);
         }
