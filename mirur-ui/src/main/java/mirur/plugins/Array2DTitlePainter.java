@@ -16,17 +16,22 @@
  */
 package mirur.plugins;
 
+import com.metsci.glimpse.axis.Axis2D;
+import com.metsci.glimpse.context.GlimpseContext;
+import com.metsci.glimpse.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.support.projection.InvertibleProjection;
+
 import mirur.core.Array2D;
 import mirur.core.ElementToStringVisitor;
 import mirur.core.VisitArray;
 
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-
 public class Array2DTitlePainter extends SimpleTextPainter {
     private final Axis2D srcAxis;
     private Array2D array;
+    private int dim1;
+    private int dim2;
+    private InvertibleProjection projection;
+
     private int lastI;
     private int lastJ;
 
@@ -36,6 +41,12 @@ public class Array2DTitlePainter extends SimpleTextPainter {
 
     public void setArray(Array2D array) {
         this.array = array;
+        dim1 = array.getMaxSize(0);
+        dim2 = array.getMaxSize(1);
+    }
+
+    public void setProjection(InvertibleProjection projection) {
+        this.projection = projection;
     }
 
     @Override
@@ -46,8 +57,9 @@ public class Array2DTitlePainter extends SimpleTextPainter {
 
         double selectedX = srcAxis.getAxisX().getSelectionCenter();
         double selectedY = srcAxis.getAxisY().getSelectionCenter();
-        int i = (int) Math.floor(selectedX);
-        int j = (int) Math.floor(selectedY);
+        int i = (int) Math.floor(projection.getTextureFractionX(selectedX, selectedY) * dim1);
+        int j = (int) Math.floor(projection.getTextureFractionY(selectedX, selectedY) * dim2);
+
         if (i != lastI || j != lastJ) {
             String text = format(i, j);
             lastI = i;

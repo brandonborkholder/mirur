@@ -23,12 +23,7 @@ import java.nio.FloatBuffer;
 import com.metsci.glimpse.axis.tagged.Tag;
 import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
 import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.gl.texture.ColorTexture1D;
 import com.metsci.glimpse.support.colormap.ColorGradient;
-import com.metsci.glimpse.support.colormap.ColorGradients;
-import com.metsci.glimpse.support.projection.FlatProjection;
-import com.metsci.glimpse.support.projection.Projection;
-import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D.MutatorFloat2D;
 
 import mirur.core.Array2D;
@@ -49,19 +44,9 @@ public class HeatmapView extends SimplePlugin2D {
     public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         final Array2D array = (Array2D) obj;
 
-        HeatmapArrayPlot plot = new HeatmapArrayPlot(array);
+        final HeatmapArrayPlot plot = new HeatmapArrayPlot(array);
 
-        final ColorTexture1D colors = new ColorTexture1D(1024);
-        colors.setColorGradient(ColorGradients.jet);
-
-        int dim0 = array.getMaxSize(0);
-        int dim1 = array.getMaxSize(1);
-
-        final FloatTextureProjected2D texture = new FloatTextureProjected2D(dim0, dim1);
-
-        Projection projection = new FlatProjection(0, dim0, 0, dim1);
-        texture.setProjection(projection);
-        texture.mutate(new MutatorFloat2D() {
+        plot.getTexture().mutate(new MutatorFloat2D() {
             @Override
             public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
                 data.clear();
@@ -73,18 +58,9 @@ public class HeatmapView extends SimplePlugin2D {
             }
         });
 
-        plot.setData(texture);
-        plot.setColorScale(colors);
-
         final Tag t1 = plot.getTag1();
         final Tag t2 = plot.getTag2();
         final TaggedAxis1D axisZ = plot.getAxisZ();
-
-        plot.getAxisX().setMin(0);
-        plot.getAxisX().setMax(dim0);
-        plot.getAxisY().setMin(0);
-        plot.getAxisY().setMax(dim1);
-        plot.getAxis().validate();
 
         DataUnitConverter unitConverter = DataUnitConverter.IDENTITY;
         AxisUtils.adjustAxisToMinMax(array, plot.getAxisZ(), unitConverter);
@@ -95,16 +71,22 @@ public class HeatmapView extends SimplePlugin2D {
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
         result.addAxis(plot.getAxisZ());
+        result.addAction(new ToggleTransposeAction() {
+            @Override
+            public void run() {
+                plot.setTranpose(isChecked());
+            }
+        });
         result.addAction(new GradientChooserAction() {
             @Override
             protected void select(ColorGradient gradient) {
-                colors.setColorGradient(gradient);
+                plot.setColorGradient(gradient);
             }
         });
         result.addAction(new ScaleChooserAction() {
             @Override
             protected void select(final ScaleOperator old, final ScaleOperator op, final boolean updateAxes) {
-                texture.mutate(new MutatorFloat2D() {
+                plot.getTexture().mutate(new MutatorFloat2D() {
                     @Override
                     public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
                         data.clear();

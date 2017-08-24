@@ -12,7 +12,10 @@ import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.painter.texture.TaggedHeatMapPainter;
 import com.metsci.glimpse.plot.TaggedColorAxisPlot2D;
 import com.metsci.glimpse.support.color.GlimpseColor;
+import com.metsci.glimpse.support.colormap.ColorGradient;
+import com.metsci.glimpse.support.colormap.ColorGradients;
 import com.metsci.glimpse.support.font.FontUtils;
+import com.metsci.glimpse.support.projection.FlatProjection;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
 
 import mirur.core.Array2D;
@@ -21,14 +24,59 @@ import mirur.plugins.Array2DTitlePainter;
 public final class HeatmapArrayPlot extends TaggedColorAxisPlot2D {
     private final Array2D array;
     private TaggedHeatMapPainter heatmapPainter;
+    private FloatTextureProjected2D texture;
+
+    private final int dim1;
+    private final int dim2;
 
     public HeatmapArrayPlot(Array2D array) {
         this.array = array;
 
-        setAxisLabelX(array.getName() + "[]");
-        setAxisLabelY(array.getName() + "[][]");
+        dim1 = array.getMaxSize(0);
+        dim2 = array.getMaxSize(1);
 
-        initialize();
+        texture = new FloatTextureProjected2D(dim1, dim2);
+        heatmapPainter.setData(texture);
+
+        ((Array2DTitlePainter) titlePainter).setArray(array);
+
+        ColorTexture1D colors = new ColorTexture1D(1024);
+        setColorScale(colors);
+        setColorGradient(ColorGradients.jet);
+
+        setTranpose(false);
+    }
+
+    public void setTranpose(boolean transpose) {
+        if (transpose) {
+            FlatProjection projection = new FlatProjection(0, dim1, 0, dim2);
+            texture.setProjection(projection);
+            ((Array2DTitlePainter) titlePainter).setProjection(projection);
+
+            setAxisLabelX(array.getName() + "[]");
+            setAxisLabelY(array.getName() + "[][]");
+            getAxisX().setMin(0);
+            getAxisX().setMax(dim1);
+            getAxisY().setMin(0);
+            getAxisY().setMax(dim2);
+            getAxis().validate();
+        } else {
+            FlippedFlatProjection projection = new FlippedFlatProjection(0, dim1, 0, dim2);
+            texture.setProjection(projection);
+            ((Array2DTitlePainter) titlePainter).setProjection(projection);
+
+            setAxisLabelX(array.getName() + "[][]");
+            setAxisLabelY(array.getName() + "[]");
+            getAxisX().setMin(0);
+            getAxisX().setMax(dim2);
+            getAxisY().setMin(0);
+            getAxisY().setMax(dim1);
+            getAxis().validate();
+        }
+    }
+
+    public void setColorGradient(ColorGradient colorGrad) {
+        heatmapPainter.getColorScale().setColorGradient(colorGrad);
     }
 
     @Override
@@ -94,8 +142,6 @@ public final class HeatmapArrayPlot extends TaggedColorAxisPlot2D {
 
         heatmapPainter = new TaggedHeatMapPainter(getAxisZ());
         addPainter(heatmapPainter, DATA_LAYER);
-
-        ((Array2DTitlePainter) titlePainter).setArray(array);
     }
 
     public Tag getTag1() {
@@ -106,7 +152,7 @@ public final class HeatmapArrayPlot extends TaggedColorAxisPlot2D {
         return getAxisZ().getTag("T2");
     }
 
-    public void setData(FloatTextureProjected2D texture) {
-        heatmapPainter.setData(texture);
+    public FloatTextureProjected2D getTexture() {
+        return texture;
     }
 }
