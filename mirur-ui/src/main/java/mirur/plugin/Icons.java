@@ -53,6 +53,10 @@ public class Icons {
         return Activator.getImageDescriptor(CONFIG_PATH);
     }
 
+    public static ImageDescriptor getRotate(boolean enabled) {
+        return Activator.getImageDescriptor("icons/rotate.gif");
+    }
+
     public static ImageDescriptor getGradient(boolean enabled) {
         return Activator.getImageDescriptor("icons/gradient_jet.gif");
     }

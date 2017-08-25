@@ -19,6 +19,7 @@ package mirur.plugins.heatmap2d;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 
+import mirur.plugin.Icons;
 import mirur.plugins.DataPainterImpl.ResetAction;
 
 public abstract class ToggleTransposeAction extends Action implements ResetAction {
@@ -26,6 +27,8 @@ public abstract class ToggleTransposeAction extends Action implements ResetActio
         super("Transpose", IAction.AS_CHECK_BOX);
         setId(ToggleTransposeAction.class.getName());
         setToolTipText("Transpose");
+        setImageDescriptor(Icons.getRotate(true));
+        setDisabledImageDescriptor(Icons.getRotate(false));
     }
 
     @Override
