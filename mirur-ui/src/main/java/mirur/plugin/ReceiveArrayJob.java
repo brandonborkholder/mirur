@@ -109,8 +109,8 @@ public class ReceiveArrayJob extends Job {
         IJavaValue maxBytesValue = target.newValue(maxBytes);
         IJavaValue value = (IJavaValue) var.getValue();
         IJavaValue[] args = new IJavaValue[] { value, maxBytesValue, portValue };
-        agentType.sendMessage("streamObject", "(Ljava/lang/Object;JI)V", args, (IJavaThread) frame.getThread());
-        logFine(LOGGER, "Called MirurAgent.streamObject(Object, long, int) successfully");
+        agentType.sendMessage("streamObjectAsync", "(Ljava/lang/Object;JI)V", args, (IJavaThread) frame.getThread());
+        logFine(LOGGER, "Called MirurAgent.streamObjectAsync(Object, long, int) successfully");
     }
 
     private class IncomingConnectionTask implements Callable<Object> {

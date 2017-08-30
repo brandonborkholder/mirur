@@ -30,11 +30,35 @@ import java.util.Iterator;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
-public class MirurAgent {
+public class MirurAgent implements Runnable {
     public static final String[] AGENT_CLASSES = new String[] {
             MirurAgent.class.getName(),
             MirurAgentCoder.class.getName(),
     };
+
+    private final Object object;
+    private final long maxBytes;
+    private final int port;
+
+    public MirurAgent(Object object, long maxBytes, int port) {
+        this.object = object;
+        this.maxBytes = maxBytes;
+        this.port = port;
+    }
+
+    public void run() {
+        try {
+            streamObject(object, maxBytes, port);
+        } catch (IOException ex) {
+            // can't do anything with this
+        }
+    }
+
+    public static void streamObjectAsync(Object object, long maxBytes, int port) {
+        Thread t = new Thread(new MirurAgent(object, maxBytes, port), "mirur-agent");
+        t.setDaemon(true);
+        t.start();
+    }
 
     public static void streamObject(Object object, long maxBytes, int port) throws IOException {
         Socket socket = new Socket(InetAddress.getByName(null), port);
