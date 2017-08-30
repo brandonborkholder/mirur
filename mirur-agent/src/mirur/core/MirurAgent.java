@@ -1,10 +1,19 @@
 package mirur.core;
 
+import static mirur.core.MirurAgentCoder.addTentativeValue;
+import static mirur.core.MirurAgentCoder.encode;
+import static mirur.core.MirurAgentCoder.exception;
+import static mirur.core.MirurAgentCoder.failTentativeArray;
+import static mirur.core.MirurAgentCoder.invalid;
+import static mirur.core.MirurAgentCoder.startTentativeArray;
+import static mirur.core.MirurAgentCoder.tooLarge;
+
 import java.awt.Image;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.Buffer;
@@ -23,114 +32,122 @@ import javax.swing.JLabel;
 
 public class MirurAgent {
     public static final String[] AGENT_CLASSES = new String[] {
-        MirurAgent.class.getName(),
-        MirurAgentCoder.class.getName(),
+            MirurAgent.class.getName(),
+            MirurAgentCoder.class.getName(),
     };
 
-    public static final Object INVALID = new Object();
-
-    private int guessedSize;
-    private double[] array;
-    private int index;
-
-    public static Object test(Object value) {
-        System.out.println("Testing with " + value);
-        return value != null;
-    }
-
-    public static void sendAsArray(Object object, long maxBytes, int port) throws IOException {
+    public static void streamObject(Object object, long maxBytes, int port) throws IOException {
         Socket socket = new Socket(InetAddress.getByName(null), port);
-        OutputStream out = socket.getOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 
         try {
-            Object transformed = toArray(object, maxBytes);
-            new MirurAgentCoder().encode(transformed, out);
+            if (object == null) {
+                encode(null, out);
+            } else {
+                stream(out, object, maxBytes);
+            }
         } catch (Exception ex) {
-            new MirurAgentCoder().exception(object, ex, out);
+            exception(object, ex, out);
         }
 
         out.close();
         socket.close();
     }
 
-    public static Object toArray(Object value, long maxBytes) {
-        if (value == null) {
-            return null;
-        }
-
+    public static void stream(ObjectOutputStream out, Object value, long maxBytes) throws IOException {
         Class<?> clazz = value.getClass();
         if (isPrimitiveArray(clazz)) {
             // 1d array of primitives
             long nBytes = getArray1dBytes(value);
             if (nBytes <= maxBytes) {
-                return value;
+                encode(value, out);
             } else {
-                return -nBytes;
+                tooLarge(nBytes, out);
             }
         } else if (clazz.isArray() && isPrimitiveArray(clazz.getComponentType())) {
             // 2d array of primitives
             long nBytes = getArray2dBytes(value);
             if (nBytes <= maxBytes) {
-                return value;
+                encode(value, out);
             } else {
-                return -nBytes;
+                tooLarge(nBytes, out);
             }
         } else if (clazz.isArray() && !clazz.getComponentType().isPrimitive()) {
             // array of possibly primitive wrappers
             Object[] array = (Object[]) value;
 
-            if (maxBytes < array.length * 8L) {
-                return -array.length * 8L;
-            }
+            if (array.length == 0) {
+                encode(null, out);
+            } else if (maxBytes < array.length * 8L) {
+                tooLarge(array.length * 8L, out);
+            } else if (array[0] instanceof Number) {
+                startTentativeArray(array.length, out);
 
-            MirurAgent helper = new MirurAgent(array.length);
-            for (int i = 0; i < array.length; i++) {
-                if (!helper.tryAdd(array[i])) {
-                    return INVALID;
+                for (int i = 0; i < array.length; i++) {
+                    if (array[i] instanceof Number) {
+                        addTentativeValue(((Number) array[i]).doubleValue(), out);
+                    } else {
+                        failTentativeArray(out);
+                        break;
+                    }
                 }
+            } else {
+                invalid(array.getClass().toString(), out);
             }
-
-            return helper.toArray();
         } else if (value instanceof Collection<?>) {
             // collection of possibly primitive wrappers
             Collection<?> c = (Collection<?>) value;
 
-            if (maxBytes < c.size() * 8L) {
-                return -c.size() * 8L;
-            }
+            if (c.isEmpty()) {
+                encode(null, out);
+            } else if (maxBytes < c.size() * 8L) {
+                tooLarge(c.size() * 8L, out);
+            } else if (c.iterator().next() instanceof Number) {
+                startTentativeArray(c.size(), out);
 
-            Iterator<?> itr = c.iterator();
-            MirurAgent helper = new MirurAgent(c.size());
-            while (itr.hasNext()) {
-                if (!helper.tryAdd(itr.next())) {
-                    return INVALID;
+                Iterator<?> itr = c.iterator();
+                while (itr.hasNext()) {
+                    Object test = itr.next();
+                    if (test instanceof Number) {
+                        addTentativeValue(((Number) test).doubleValue(), out);
+                    } else {
+                        failTentativeArray(out);
+                        break;
+                    }
                 }
+            } else {
+                invalid(c.getClass().toString(), out);
             }
-
-            return helper.toArray();
         } else if (value instanceof Buffer) {
             Buffer buf = (Buffer) value;
             long nBytes = getBufferBytes(buf);
             if (nBytes >= 0 && nBytes <= maxBytes) {
-                return buf;
+                encode(buf, out);
             } else {
-                return -nBytes;
+                tooLarge(nBytes, out);
             }
         } else if (value instanceof Image) {
             Image img = (Image) value;
             int width = img.getWidth(null);
             int height = img.getHeight(null);
             if (width <= 0 || height <= 0) {
-                return INVALID;
+                invalid(img.getClass().toString(), out);
+                return;
             }
 
-            BufferedImage bufImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            boolean success = bufImg.getGraphics().drawImage(img, 0, 0, null);
-            if (success) {
-                return bufImg;
+            BufferedImage bufImg;
+            if (img instanceof BufferedImage) {
+                bufImg = (BufferedImage) img;
             } else {
-                return INVALID;
+                bufImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                boolean success = bufImg.getGraphics().drawImage(img, 0, 0, null);
+                if (!success) {
+                    invalid(img.getClass().toString(), out);
+                    return;
+                }
             }
+
+            encode(bufImg, out);
         } else if (value instanceof Icon) {
             Icon icon = (Icon) value;
             int width = icon.getIconWidth();
@@ -138,48 +155,16 @@ public class MirurAgent {
 
             BufferedImage bufImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             icon.paintIcon(new JLabel(), bufImg.getGraphics(), width, height);
-            return bufImg;
+            encode(bufImg, out);
         } else if (value instanceof Shape) {
-            return value;
+            encode(value, out);
+        } else {
+            invalid(value.getClass().toString(), out);
         }
-
-        return INVALID;
     }
 
     private static boolean isPrimitiveArray(Class<?> clazz) {
         return clazz.isArray() && clazz.getComponentType().isPrimitive();
-    }
-
-    private MirurAgent(int guessSize) {
-        guessedSize = guessSize;
-        index = 0;
-        // don't allocate until we are able to add a valid number
-        array = null;
-    }
-
-    private Object toArray() {
-        if (index == 0 || array == null) {
-            return INVALID;
-        } else if (index == array.length - 1) {
-            return array;
-        } else {
-            double[] copy = new double[index];
-            System.arraycopy(array, 0, copy, 0, index);
-            return copy;
-        }
-    }
-
-    private boolean tryAdd(Object value) {
-        if (value instanceof Number) {
-            if (array == null) {
-                array = new double[guessedSize];
-            }
-
-            array[index++] = ((Number) value).doubleValue();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private static long getBufferBytes(Buffer buf) {
@@ -226,49 +211,49 @@ public class MirurAgent {
 
     private static long getArray2dBytes(Object array) {
         if (array instanceof boolean[][]) {
-            int sum = 0;
+            long sum = 0;
             for (boolean[] a : (boolean[][]) array) {
                 sum += a.length;
             }
             return sum * 1L;
         } else if (array instanceof byte[][]) {
-            int sum = 0;
+            long sum = 0;
             for (byte[] a : (byte[][]) array) {
                 sum += a.length;
             }
             return sum * 1L;
         } else if (array instanceof char[][]) {
-            int sum = 0;
+            long sum = 0;
             for (char[] a : (char[][]) array) {
                 sum += a.length;
             }
             return sum * 2L;
         } else if (array instanceof short[][]) {
-            int sum = 0;
+            long sum = 0;
             for (short[] a : (short[][]) array) {
                 sum += a.length;
             }
             return sum * 2L;
         } else if (array instanceof float[][]) {
-            int sum = 0;
+            long sum = 0;
             for (float[] a : (float[][]) array) {
                 sum += a.length;
             }
             return sum * 4L;
         } else if (array instanceof int[][]) {
-            int sum = 0;
+            long sum = 0;
             for (int[] a : (int[][]) array) {
                 sum += a.length;
             }
             return sum * 4L;
         } else if (array instanceof long[][]) {
-            int sum = 0;
+            long sum = 0;
             for (long[] a : (long[][]) array) {
                 sum += a.length;
             }
             return sum * 8L;
         } else if (array instanceof double[][]) {
-            int sum = 0;
+            long sum = 0;
             for (double[] a : (double[][]) array) {
                 sum += a.length;
             }

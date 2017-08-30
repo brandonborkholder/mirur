@@ -18,17 +18,17 @@ package mirur.plugin;
 
 import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
+import static mirur.core.MirurAgentCoder.decode;
 import static mirur.plugin.Activator.getStatistics;
 
-import java.io.InputStream;
+import java.io.BufferedInputStream;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
-
-import mirur.core.MirurAgentCoder;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -109,8 +109,8 @@ public class ReceiveArrayJob extends Job {
         IJavaValue maxBytesValue = target.newValue(maxBytes);
         IJavaValue value = (IJavaValue) var.getValue();
         IJavaValue[] args = new IJavaValue[] { value, maxBytesValue, portValue };
-        agentType.sendMessage("sendAsArray", "(Ljava/lang/Object;JI)V", args, (IJavaThread) frame.getThread());
-        logFine(LOGGER, "Called MirurAgent.sendAsArray(Object, long, int) successfully");
+        agentType.sendMessage("streamObject", "(Ljava/lang/Object;JI)V", args, (IJavaThread) frame.getThread());
+        logFine(LOGGER, "Called MirurAgent.streamObject(Object, long, int) successfully");
     }
 
     private class IncomingConnectionTask implements Callable<Object> {
@@ -128,8 +128,8 @@ public class ReceiveArrayJob extends Job {
                 barrier.await();
                 Socket sock = serverSocket.accept();
 
-                InputStream in = sock.getInputStream();
-                Object value = new MirurAgentCoder().decode(in);
+                ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(sock.getInputStream()));
+                Object value = decode(in);
                 in.close();
 
                 return value;

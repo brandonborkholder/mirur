@@ -4,16 +4,11 @@ import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.Buffer;
@@ -47,173 +42,185 @@ public class MirurAgentCoder {
     public static final short TYPE_BUFFER = 4;
     public static final short TYPE_SHAPE = 5;
     public static final short TYPE_TOO_LARGE = 6;
+    public static final short TYPE_TENTATIVE_ARRAY = 7;
 
-    public Object decode(InputStream in0) throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(in0));
-        try {
-            short type = in.readShort();
+    public static Object decode(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        short type = in.readShort();
 
-            switch (type) {
-            case TYPE_EXCEPTION:
-                String ex = in.readUTF();
-                LOGGER.warning("Mirur Agent had exception: " + ex);
-                return null;
+        switch (type) {
+        case TYPE_EXCEPTION:
+            String ex = in.readUTF();
+            LOGGER.warning("Mirur Agent had exception: " + ex);
+            return null;
 
-            case TYPE_NULL:
-            case TYPE_INVALID:
-                return null;
+        case TYPE_NULL:
+            return null;
 
-            case TYPE_TOO_LARGE:
-                long size = in.readLong();
-                return String.format("Object too large (%,d bytes). Increase max size in preferences.", size);
+        case TYPE_INVALID:
+            String typeStr = in.readUTF();
+            LOGGER.warning("Mirur Agent could not transform: " + typeStr);
+            return null;
 
-            case TYPE_OBJ_JAVA_SER:
-                return in.readObject();
+        case TYPE_TOO_LARGE:
+            long size = in.readLong();
+            return String.format("Object too large (%,d bytes). Increase max size in preferences.", size);
 
-            case TYPE_BUFFERED_IMAGE: {
-                byte[] buf = new byte[in.readInt()];
-                int read = 0;
-                while (read < buf.length) {
-                    read += in.read(buf, read, buf.length - read);
+        case TYPE_OBJ_JAVA_SER:
+            return in.readObject();
+
+        case TYPE_BUFFERED_IMAGE: {
+            byte[] buf = new byte[in.readInt()];
+            int read = 0;
+            while (read < buf.length) {
+                read += in.read(buf, read, buf.length - read);
+            }
+            return ImageIO.read(new ByteArrayInputStream(buf));
+        }
+
+        case TYPE_BUFFER: {
+            int capacity = in.readInt();
+            int position = in.readInt();
+            int limit = in.readInt();
+
+            Buffer buf = deserializeBuffer(capacity, in);
+            buf.position(position);
+            buf.limit(limit);
+            return buf;
+        }
+
+        case TYPE_SHAPE: {
+            Path2D path = new Path2D.Float(in.readInt());
+            int t = in.readInt();
+
+            while (t != Integer.MIN_VALUE) {
+                switch (t) {
+                case PathIterator.SEG_CLOSE:
+                    path.closePath();
+                    break;
+
+                case PathIterator.SEG_MOVETO:
+                    path.moveTo(in.readDouble(), in.readDouble());
+                    break;
+
+                case PathIterator.SEG_LINETO:
+                    path.lineTo(in.readDouble(), in.readDouble());
+                    break;
+
+                case PathIterator.SEG_QUADTO:
+                    path.quadTo(in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble());
+                    break;
+
+                case PathIterator.SEG_CUBICTO:
+                    path.curveTo(in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble());
+                    break;
                 }
-                return ImageIO.read(new ByteArrayInputStream(buf));
+
+                t = in.readInt();
             }
 
-            case TYPE_BUFFER: {
-                int capacity = in.readInt();
-                int position = in.readInt();
-                int limit = in.readInt();
+            return path;
+        }
 
-                Buffer buf = deserializeBuffer(capacity, in);
-                buf.position(position);
-                buf.limit(limit);
-                return buf;
-            }
-
-            case TYPE_SHAPE: {
-                Path2D path = new Path2D.Float(in.readInt());
-                int t = in.readInt();
-
-                while (t != Integer.MIN_VALUE) {
-                    switch (t) {
-                    case PathIterator.SEG_CLOSE:
-                        path.closePath();
-                        break;
-
-                    case PathIterator.SEG_MOVETO:
-                        path.moveTo(in.readDouble(), in.readDouble());
-                        break;
-
-                    case PathIterator.SEG_LINETO:
-                        path.lineTo(in.readDouble(), in.readDouble());
-                        break;
-
-                    case PathIterator.SEG_QUADTO:
-                        path.quadTo(in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble());
-                        break;
-
-                    case PathIterator.SEG_CUBICTO:
-                        path.curveTo(in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble(), in.readDouble());
-                        break;
-                    }
-
-                    t = in.readInt();
+        case TYPE_TENTATIVE_ARRAY: {
+            double[] array = new double[in.readInt()];
+            for (int i = 0; i < array.length; i++) {
+                if (in.readByte() == TYPE_TENTATIVE_ARRAY) {
+                    array[i] = in.readDouble();
+                } else {
+                    return null;
                 }
-
-                return path;
             }
 
-            default:
-                throw new IOException("Unknown type flag: " + type);
-            }
-        } finally {
-            in.close();
+            return array;
+        }
+
+        default:
+            throw new IOException("Unknown type flag: " + type);
         }
     }
 
-    public void encode(Object obj, OutputStream out0) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(out0));
+    public static void tooLarge(long bytes, ObjectOutputStream out) throws IOException {
+        out.writeShort(TYPE_TOO_LARGE);
+        out.writeLong(bytes);
+    }
 
-        try {
-            if (MirurAgent.INVALID.equals(obj)) {
-                out.writeShort(TYPE_INVALID);
-            } else if (obj instanceof Long && ((Long) obj) < 0) {
-                out.writeShort(TYPE_TOO_LARGE);
-                out.writeLong(-(Long) obj);
-            } else if (obj == null) {
-                out.writeShort(TYPE_NULL);
-            } else if (obj instanceof BufferedImage) {
-                out.writeShort(TYPE_BUFFERED_IMAGE);
-                ByteArrayOutputStream o = new ByteArrayOutputStream();
-                ImageIO.write((BufferedImage) obj, "bmp", o);
-                o.close();
-                out.writeInt(o.size());
-                out.write(o.toByteArray());
-            } else if (obj instanceof Buffer) {
-                out.writeShort(TYPE_BUFFER);
-                Buffer buf = (Buffer) obj;
-                out.writeInt(buf.capacity());
-                out.writeInt(buf.position());
-                out.writeInt(buf.limit());
+    public static void invalid(String type, ObjectOutputStream out) throws IOException {
+        out.writeShort(TYPE_INVALID);
+        out.writeUTF(type);
+    }
 
-                int oldPos = buf.position();
-                int oldLim = buf.limit();
-                buf.limit(buf.capacity());
-                buf.position(0);
-                serialize(buf, out);
-                buf.position(oldPos);
-                buf.limit(oldLim);
-            } else if (obj instanceof Shape) {
-                out.writeShort(TYPE_SHAPE);
+    public static void encode(Object obj, ObjectOutputStream out) throws IOException {
+        if (obj == null) {
+            out.writeShort(TYPE_NULL);
+        } else if (obj instanceof BufferedImage) {
+            out.writeShort(TYPE_BUFFERED_IMAGE);
+            ByteArrayOutputStream o = new ByteArrayOutputStream();
+            ImageIO.write((BufferedImage) obj, "bmp", o);
+            o.close();
+            out.writeInt(o.size());
+            out.write(o.toByteArray());
+        } else if (obj instanceof Buffer) {
+            out.writeShort(TYPE_BUFFER);
+            Buffer buf = (Buffer) obj;
+            out.writeInt(buf.capacity());
+            out.writeInt(buf.position());
+            out.writeInt(buf.limit());
 
-                Shape s = (Shape) obj;
-                PathIterator itr = s.getPathIterator(null);
-                out.writeInt(itr.getWindingRule());
+            int oldPos = buf.position();
+            int oldLim = buf.limit();
+            buf.limit(buf.capacity());
+            buf.position(0);
+            serialize(buf, out);
+            buf.position(oldPos);
+            buf.limit(oldLim);
+        } else if (obj instanceof Shape) {
+            out.writeShort(TYPE_SHAPE);
 
-                double[] coords = new double[6];
-                while (!itr.isDone()) {
-                    int type = itr.currentSegment(coords);
-                    itr.next();
+            Shape s = (Shape) obj;
+            PathIterator itr = s.getPathIterator(null);
+            out.writeInt(itr.getWindingRule());
 
-                    out.writeInt(type);
-                    switch (type) {
-                    case PathIterator.SEG_CLOSE:
-                        break;
+            double[] coords = new double[6];
+            while (!itr.isDone()) {
+                int type = itr.currentSegment(coords);
+                itr.next();
 
-                    case PathIterator.SEG_LINETO:
-                    case PathIterator.SEG_MOVETO:
-                        out.writeDouble(coords[0]);
-                        out.writeDouble(coords[1]);
-                        break;
+                out.writeInt(type);
+                switch (type) {
+                case PathIterator.SEG_CLOSE:
+                    break;
 
-                    case PathIterator.SEG_QUADTO:
-                        out.writeDouble(coords[0]);
-                        out.writeDouble(coords[1]);
-                        out.writeDouble(coords[2]);
-                        out.writeDouble(coords[3]);
-                        break;
+                case PathIterator.SEG_LINETO:
+                case PathIterator.SEG_MOVETO:
+                    out.writeDouble(coords[0]);
+                    out.writeDouble(coords[1]);
+                    break;
 
-                    case PathIterator.SEG_CUBICTO:
-                        out.writeDouble(coords[0]);
-                        out.writeDouble(coords[1]);
-                        out.writeDouble(coords[2]);
-                        out.writeDouble(coords[3]);
-                        out.writeDouble(coords[4]);
-                        out.writeDouble(coords[5]);
-                        break;
-                    }
+                case PathIterator.SEG_QUADTO:
+                    out.writeDouble(coords[0]);
+                    out.writeDouble(coords[1]);
+                    out.writeDouble(coords[2]);
+                    out.writeDouble(coords[3]);
+                    break;
+
+                case PathIterator.SEG_CUBICTO:
+                    out.writeDouble(coords[0]);
+                    out.writeDouble(coords[1]);
+                    out.writeDouble(coords[2]);
+                    out.writeDouble(coords[3]);
+                    out.writeDouble(coords[4]);
+                    out.writeDouble(coords[5]);
+                    break;
                 }
-                out.writeInt(Integer.MIN_VALUE);
-            } else {
-                out.writeShort(TYPE_OBJ_JAVA_SER);
-                out.writeObject(obj);
             }
-        } finally {
-            out.close();
+            out.writeInt(Integer.MIN_VALUE);
+        } else {
+            out.writeShort(TYPE_OBJ_JAVA_SER);
+            out.writeObject(obj);
         }
     }
 
-    private Buffer deserializeBuffer(int capacity, ObjectInputStream in) throws IOException {
+    private static Buffer deserializeBuffer(int capacity, ObjectInputStream in) throws IOException {
         switch (in.readByte()) {
         case NATIVE_TYPE_BYTE: {
             ByteBuffer b = ByteBuffer.allocate(capacity);
@@ -269,7 +276,7 @@ public class MirurAgentCoder {
         }
     }
 
-    private void serialize(Buffer buf, ObjectOutputStream out) throws IOException {
+    private static void serialize(Buffer buf, ObjectOutputStream out) throws IOException {
         if (buf instanceof ByteBuffer) {
             out.writeByte(NATIVE_TYPE_BYTE);
             ByteBuffer b = (ByteBuffer) buf;
@@ -317,19 +324,27 @@ public class MirurAgentCoder {
         }
     }
 
-    public void exception(Object origObject, Throwable ex, OutputStream out0) throws IOException {
-        DataOutputStream out = new DataOutputStream(out0);
+    public static void exception(Object origObject, Throwable ex, ObjectOutputStream out) throws IOException {
+        StringWriter sout0 = new StringWriter();
+        PrintWriter sout1 = new PrintWriter(sout0);
+        ex.printStackTrace(sout1);
+        sout1.close();
 
-        try {
-            StringWriter sout0 = new StringWriter();
-            PrintWriter sout1 = new PrintWriter(sout0);
-            ex.printStackTrace(sout1);
-            sout1.close();
+        out.writeShort(TYPE_EXCEPTION);
+        out.writeUTF(sout0.toString());
+    }
 
-            out.writeShort(TYPE_EXCEPTION);
-            out.writeUTF(sout0.toString());
-        } finally {
-            out.close();
-        }
+    public static void startTentativeArray(int len, ObjectOutputStream out) throws IOException {
+        out.writeShort(TYPE_TENTATIVE_ARRAY);
+        out.writeInt(len);
+    }
+
+    public static void addTentativeValue(double v, ObjectOutputStream out) throws IOException {
+        out.writeByte(TYPE_TENTATIVE_ARRAY);
+        out.writeDouble(v);
+    }
+
+    public static void failTentativeArray(ObjectOutputStream out) throws IOException {
+        out.writeByte(TYPE_INVALID);
     }
 }
