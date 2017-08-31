@@ -30,8 +30,6 @@ development.
 ```
 cd mirur
 mvn clean package install
-# this is a workaround for an issue in Tycho
-mvn package install
 ```
 
 Now the new build is in ../mirur-update-site/update-site/
