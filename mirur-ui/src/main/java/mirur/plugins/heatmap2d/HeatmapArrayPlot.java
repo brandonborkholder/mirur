@@ -77,7 +77,7 @@ public final class HeatmapArrayPlot extends TaggedColorAxisPlot2D {
             getAxisY().setMax(dim2);
             getAxis().validate();
         } else {
-            FlippedFlatProjection projection = new FlippedFlatProjection(0, dim1, 0, dim2);
+            FlippedFlatProjection projection = new FlippedFlatProjection(0, dim2, 0, dim1);
             texture.setProjection(projection);
             ((Array2DTitlePainter) titlePainter).setProjection(projection);
 
