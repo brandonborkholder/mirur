@@ -223,21 +223,17 @@ IDebugContextListener {
 
     @Override
     public void handleDebugEvents(DebugEvent[] events) {
-        if (events.length == 1) {
-            DebugEvent event = events[0];
+        for (DebugEvent event : events) {
             int kind = event.getKind();
-            if ((kind == DebugEvent.RESUME && event.getDetail() == DebugEvent.EVALUATION_IMPLICIT) || kind == DebugEvent.SUSPEND) {
-                // probably generating a .toString on the variable
-            } else {
+
+            if (kind == DebugEvent.TERMINATE && event.getSource() instanceof IJavaDebugTarget) {
+                Activator.getAgentDeployer().clear((IJavaDebugTarget) event.getSource());
                 getVariableSelectionModel().fireClearVariableCacheData();
                 getVariableCache().clear();
-                if (kind == DebugEvent.TERMINATE && event.getSource() instanceof IJavaDebugTarget) {
-                    Activator.getAgentDeployer().clear((IJavaDebugTarget) event.getSource());
-                }
             }
-        } else {
-            for (DebugEvent e : events) {
-                handleDebugEvents(new DebugEvent[] { e });
+            if (kind == DebugEvent.RESUME && !event.isEvaluation()) {
+                getVariableSelectionModel().fireClearVariableCacheData();
+                getVariableCache().clear();
             }
         }
     }

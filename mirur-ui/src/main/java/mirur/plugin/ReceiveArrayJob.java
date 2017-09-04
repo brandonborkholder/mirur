@@ -34,7 +34,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -105,11 +107,16 @@ public class ReceiveArrayJob extends Job {
         long maxBytes = Activator.getPreferences().getMaxBytesToTransfer();
 
         IJavaDebugTarget target = (IJavaDebugTarget) frame.getDebugTarget();
+        IJavaThread thread = (IJavaThread) frame.getThread();
         IJavaValue portValue = target.newValue(port);
         IJavaValue maxBytesValue = target.newValue(maxBytes);
         IJavaValue value = (IJavaValue) var.getValue();
         IJavaValue[] args = new IJavaValue[] { value, maxBytesValue, portValue };
-        agentType.sendMessage("streamObjectAsync", "(Ljava/lang/Object;JI)V", args, (IJavaThread) frame.getThread());
+
+        DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { new DebugEvent(thread, DebugEvent.RESUME, DebugEvent.EVALUATION_IMPLICIT) });
+        agentType.sendMessage("streamObject", "(Ljava/lang/Object;JI)V", args, thread);
+        DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { new DebugEvent(thread, DebugEvent.SUSPEND, DebugEvent.EVALUATION_IMPLICIT) });
+
         logFine(LOGGER, "Called MirurAgent.streamObjectAsync(Object, long, int) successfully");
     }
 
