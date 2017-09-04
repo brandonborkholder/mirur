@@ -29,8 +29,17 @@ development.
 
 ```
 cd mirur
-mvn clean package install
+mvn versions:set -DnewVersion=X-SNAPSHOT && mvn tycho-versions:set-version -DnewVersion=X.qualifier
+git commit -a -m "Version to X" && git tag X
+mvn clean install
 ```
 
 Now the new build is in ../mirur-update-site/update-site/
+
+```
+cd ../mirur-update-site/update-site/
+unzip content.jar && unzip artifacts.jar
+java -jar ../eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.*.jar \
+  -processAll -pack -verbose -outputDir plugins plugins/mirur.mirur-ui_*
+```
 
