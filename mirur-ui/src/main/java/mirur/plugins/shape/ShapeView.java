@@ -16,16 +16,22 @@
  */
 package mirur.plugins.shape;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+
+import org.eclipse.jface.resource.ImageDescriptor;
+
+import com.metsci.glimpse.canvas.GlimpseCanvas;
 
 import mirur.core.VariableObject;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.MirurView;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-
-import com.metsci.glimpse.canvas.GlimpseCanvas;
+import mirur.plugins.image.ImagePlot;
 
 public class ShapeView implements MirurView {
     @Override
@@ -47,7 +53,26 @@ public class ShapeView implements MirurView {
     public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         Shape shape = (Shape) obj.getData();
 
-        ShapePlot plot = new ShapePlot(shape);
+        Rectangle2D bounds = shape.getBounds2D();
+
+        int padW = (int) Math.max(bounds.getWidth() * 0.05, 10);
+        int padH = (int) Math.max(bounds.getHeight() * 0.05, 10);
+        int width = 1200;
+        int height = (int) (bounds.getHeight() / bounds.getWidth() * width);
+
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+
+        Graphics2D g2d = (Graphics2D) image.getGraphics();
+        g2d.translate(-bounds.getMinX(), -bounds.getMinY());
+        g2d.scale(width / bounds.getWidth(), height / bounds.getHeight());
+        g2d.translate(padW, padH);
+
+        g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+        g2d.setColor(Color.black);
+        g2d.draw(shape);
+        g2d.dispose();
+
+        ImagePlot plot = new ImagePlot(image);
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());
