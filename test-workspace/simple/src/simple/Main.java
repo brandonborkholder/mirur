@@ -65,12 +65,12 @@ public class Main {
         buffer.limit((int) (v() * buffer.capacity() / 2) + buffer.position());
 
         Path2D.Float shape = new Path2D.Float();
-        shape.moveTo(1, 50);
-        shape.lineTo(90, 90);
-        shape.quadTo(50, 3, 10, 90);
-        shape.lineTo(50, 50);
+        shape.moveTo(100, 50);
+        shape.lineTo(190, 190);
+        shape.quadTo(150, 103, 200, 90);
+        shape.lineTo(150, 150);
         shape.moveTo(100, 100);
-        shape.quadTo(120, 120, 140, 80);
+        shape.quadTo(120, 120, 140, 380);
         BasicStroke stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g2d = (Graphics2D) img.getGraphics();
