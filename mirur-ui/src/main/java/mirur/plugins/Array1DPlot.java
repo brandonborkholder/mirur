@@ -33,7 +33,7 @@ public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;
     private GlimpsePainter dataPainter;
 
-    public Array1DPlot(GlimpseDataPainter2D dataPainter, Array1D array, DataUnitConverter unitConverter) {
+    public Array1DPlot(GlimpsePainter dataPainter, Array1D array, DataUnitConverter unitConverter) {
         getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
         getLabelHandlerY().setTickSpacing(40);
 
@@ -52,7 +52,7 @@ public class Array1DPlot extends SimplePlot2D {
         this.dataPainter = dataPainter;
     }
 
-    public void swapPainter(GlimpseDataPainter2D dataPainter, int[] indexMap) {
+    public void swapPainter(GlimpsePainter dataPainter, int[] indexMap) {
         removePainter(this.dataPainter);
         this.dataPainter = dataPainter;
 

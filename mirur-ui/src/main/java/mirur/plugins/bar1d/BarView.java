@@ -16,11 +16,11 @@
  */
 package mirur.plugins.bar1d;
 
+import com.metsci.glimpse.painter.base.GlimpsePainter;
+
 import mirur.core.Array1D;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.SimplePlugin1D;
-
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 
 public class BarView extends SimplePlugin1D {
     public BarView() {
@@ -28,7 +28,7 @@ public class BarView extends SimplePlugin1D {
     }
 
     @Override
-    protected GlimpseDataPainter2D createPainter(Array1D array, DataUnitConverter unitConverter) {
+    protected GlimpsePainter createPainter(Array1D array, DataUnitConverter unitConverter) {
         VerticalBarPainter painter = new VerticalBarPainter();
         painter.setData(array, unitConverter);
         return painter;

@@ -30,7 +30,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.painter.base.GlimpsePainter;
 
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
@@ -101,7 +101,7 @@ public abstract class SimplePlugin1D implements MirurView {
 
         DataUnitConverter unitConverter = VisitArray.visit(array1d.getData(), new ToFloatPrecisionVisitor()).get();
 
-        GlimpseDataPainter2D painter = createPainter(array1d, unitConverter);
+        GlimpsePainter painter = createPainter(array1d, unitConverter);
         Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter);
 
         if (obj.getData() instanceof Buffer) {
@@ -136,11 +136,11 @@ public abstract class SimplePlugin1D implements MirurView {
         return new SortAction(array) {
             @Override
             protected void swapPainter(Array1D arrayToPaint, int[] indexMap) {
-                GlimpseDataPainter2D newPainter = createPainter(arrayToPaint, unitConverter);
+                GlimpsePainter newPainter = createPainter(arrayToPaint, unitConverter);
                 plot.swapPainter(newPainter, indexMap);
             }
         };
     }
 
-    protected abstract GlimpseDataPainter2D createPainter(Array1D array, DataUnitConverter unitConverter);
+    protected abstract GlimpsePainter createPainter(Array1D array, DataUnitConverter unitConverter);
 }

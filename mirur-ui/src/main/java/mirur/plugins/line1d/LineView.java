@@ -16,7 +16,7 @@
  */
 package mirur.plugins.line1d;
 
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.painter.base.GlimpsePainter;
 
 import mirur.core.Array1D;
 import mirur.plugins.DataUnitConverter;
@@ -28,7 +28,7 @@ public class LineView extends SimplePlugin1D {
     }
 
     @Override
-    protected GlimpseDataPainter2D createPainter(Array1D array, DataUnitConverter unitConverter) {
+    protected GlimpsePainter createPainter(Array1D array, DataUnitConverter unitConverter) {
         LinePainter painter = new LinePainter(array, unitConverter);
         return painter;
     }

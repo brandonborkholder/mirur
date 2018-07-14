@@ -21,13 +21,11 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 
 import com.jogamp.opengl.util.gl2.GLUT;
-import com.metsci.glimpse.axis.Axis1D;
-import com.metsci.glimpse.context.GlimpseBounds;
 import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.base.GlimpsePainter1D;
+import com.metsci.glimpse.painter.base.GlimpsePainterBase;
 import com.metsci.glimpse.support.color.GlimpseColor;
 
-public class MarkerPainter extends GlimpsePainter1D {
+public class MarkerPainter extends GlimpsePainterBase {
     private static final GLUT glut = new GLUT();
 
     private final String text;
@@ -42,7 +40,8 @@ public class MarkerPainter extends GlimpsePainter1D {
     }
 
     @Override
-    public void paintTo(GlimpseContext context, GlimpseBounds bounds, Axis1D axis) {
+    protected void doPaintTo( GlimpseContext context )
+    {
         GL2 gl = context.getGL().getGL2();
 
         gl.glColor3fv(color, 0);
