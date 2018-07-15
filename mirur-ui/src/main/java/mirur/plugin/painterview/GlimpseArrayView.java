@@ -33,6 +33,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.FPSAnimator;
+import com.metsci.glimpse.gl.util.GLUtils;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
@@ -67,7 +68,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     @Override
     public void createPartControl(Composite parent) {
-        canvas = new NewtSwtGlimpseCanvas(parent, GLProfile.get(GLProfile.GL2), SWT.DOUBLE_BUFFERED);
+        canvas = new NewtSwtGlimpseCanvas(parent, GLUtils.getDefaultGLProfile(), SWT.DOUBLE_BUFFERED);
         canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
