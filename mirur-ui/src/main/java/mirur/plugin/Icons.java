@@ -101,6 +101,11 @@ public class Icons {
         }
     }
 
+    public static ImageDescriptor getDuplicateView(boolean enabled) {
+        // TODO
+        return null;
+    }
+
     public static ImageDescriptor getPin(boolean enabled) {
         if (enabled) {
             return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin.gif");

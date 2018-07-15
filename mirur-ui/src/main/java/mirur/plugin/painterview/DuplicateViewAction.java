@@ -39,8 +39,8 @@ public abstract class DuplicateViewAction extends Action {
         setId(DuplicateViewAction.class.getName());
         setText("New View");
         setToolTipText("Create New Mirur View");
-        setImageDescriptor(Icons.getPin(true));
-        setDisabledImageDescriptor(Icons.getPin(false));
+        setImageDescriptor(Icons.getDuplicateView(true));
+        setDisabledImageDescriptor(Icons.getDuplicateView(false));
     }
 
     @Override
