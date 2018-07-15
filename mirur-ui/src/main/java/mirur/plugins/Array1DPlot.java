@@ -29,7 +29,6 @@ import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.line1d.MarkerPainter;
 
 public class Array1DPlot extends SimplePlot2D {
-    private ShaderWrapperPainter shaderWrapper;
     private GlimpsePainter dataPainter;
     private MarkerPainter markerPainter;
 
@@ -47,8 +46,7 @@ public class Array1DPlot extends SimplePlot2D {
 
         setTitleFont(FontUtils.getDefaultPlain(14));
 
-        shaderWrapper = new ShaderWrapperPainter();
-        addPainter(dataPainter, shaderWrapper, DATA_LAYER);
+        addPainter(dataPainter, DATA_LAYER);
         this.dataPainter = dataPainter;
     }
 
@@ -56,7 +54,7 @@ public class Array1DPlot extends SimplePlot2D {
         removePainter(this.dataPainter);
         this.dataPainter = dataPainter;
 
-        addPainter(dataPainter, shaderWrapper, DATA_LAYER);
+        addPainter(dataPainter, DATA_LAYER);
         if (titlePainter instanceof Array1DTitlePainter) {
             ((Array1DTitlePainter) titlePainter).setIndexMap(indexMap);
         }
@@ -109,10 +107,6 @@ public class Array1DPlot extends SimplePlot2D {
         painter.setHorizontalPosition(HorizontalPosition.Left);
         painter.setVerticalPosition(VerticalPosition.Center);
         return painter;
-    }
-
-    public void setShaders(InitializablePipeline pipeline) {
-        shaderWrapper.setPipeline(pipeline);
     }
 
     protected void setTitlePainterData(Array1D array) {

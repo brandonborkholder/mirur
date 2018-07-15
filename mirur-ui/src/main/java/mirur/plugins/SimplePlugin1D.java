@@ -112,24 +112,10 @@ public abstract class SimplePlugin1D implements MirurView {
 
         DataPainterImpl result = new DataPainterImpl(plot);
 
-        result.addAction(getFisheyeAction(plot));
         result.addAction(getSortAction(plot, array1d, unitConverter));
 
         result.addAxis(plot.getAxis());
         return result;
-    }
-
-    protected Action getFisheyeAction(final Array1DPlot plot) {
-        return new FisheyeAction() {
-            @Override
-            public void run() {
-                if (isChecked()) {
-                    plot.setShaders(new FisheyePipeline());
-                } else {
-                    plot.setShaders(InitializablePipeline.DEFAULT);
-                }
-            }
-        };
     }
 
     protected Action getSortAction(final Array1DPlot plot, Array1D array, final DataUnitConverter unitConverter) {
