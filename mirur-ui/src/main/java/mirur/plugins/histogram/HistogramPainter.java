@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Mirur.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mirur.plugins.histogram1d;
+package mirur.plugins.histogram;
 
 import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
 import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
@@ -42,7 +42,7 @@ public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramP
     private LinePath path;
     private LineStyle style;
 
-    public HistogramPainter() {
+    public HistogramPainter(Float2IntMap counts, float binStart, float binSize) {
         prog = new LineProgram();
         path = new LinePath();
         style = new LineStyle();
@@ -50,6 +50,10 @@ public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramP
         style.feather_PX = 0;
         style.joinType = LineJoinType.JOIN_MITER;
         style.thickness_PX = 1;
+
+        this.binStart = binStart;
+        this.counts = counts;
+        setData(counts, 1, binSize);
     }
 
     @Override
@@ -57,12 +61,6 @@ public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramP
         super.setLookAndFeel(laf);
         setColor(laf.getColor(MirurLAF.DATA_COLOR));
         style.rgba = laf.getColor(MirurLAF.DATA_BORDER_COLOR);
-    }
-
-    public void setData(Float2IntMap counts, float binStart, float binSize) {
-        this.binStart = binStart;
-        this.counts = counts;
-        setData(counts, 1, binSize);
     }
 
     @Override

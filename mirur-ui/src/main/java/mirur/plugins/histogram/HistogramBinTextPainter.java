@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Mirur.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mirur.plugins.histogram1d;
-
-import mirur.core.Array1D;
-import mirur.plugins.DataUnitConverter;
+package mirur.plugins.histogram;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseContext;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 
+import mirur.core.PrimitiveArray;
+import mirur.plugins.DataUnitConverter;
+
 public class HistogramBinTextPainter extends SimpleTextPainter {
     private final Axis2D srcAxis;
     private HistogramPainter histPainter;
-    private Array1D array;
+    private PrimitiveArray array;
     private double lastBin;
     private DataUnitConverter unitConverter;
 
@@ -34,7 +34,7 @@ public class HistogramBinTextPainter extends SimpleTextPainter {
         this.srcAxis = srcAxis;
     }
 
-    public void setHistogramPainter(Array1D array, HistogramPainter painter, DataUnitConverter unitConverter) {
+    public void setHistogramPainter(PrimitiveArray array, HistogramPainter painter, DataUnitConverter unitConverter) {
         this.array = array;
         this.unitConverter = unitConverter;
         histPainter = painter;
@@ -62,6 +62,6 @@ public class HistogramBinTextPainter extends SimpleTextPainter {
     private String format(double bin, double binWidth, int count) {
         double binLo = unitConverter.painter2data(bin);
         double binHi = unitConverter.painter2data(bin + binWidth);
-        return String.format("%s[%d] has %d values in [%s, %s)", array.getName(), array.getSize(), count, binLo, binHi);
+        return String.format("%s has %d values in [%s, %s)", array.getName(), count, binLo, binHi);
     }
 }

@@ -24,6 +24,8 @@ import static java.lang.Math.min;
 public class MinMaxFiniteValueVisitor implements ArrayElementVisitor {
     private double min = Double.POSITIVE_INFINITY;
     private double max = Double.NEGATIVE_INFINITY;
+    private int finiteCount = 0;
+    private int totalCount = 0;
 
     public double getMin() {
         return min;
@@ -33,13 +35,23 @@ public class MinMaxFiniteValueVisitor implements ArrayElementVisitor {
         return max;
     }
 
+    public int getFiniteCount() {
+        return finiteCount;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
     protected void visitFinite(double v) {
         min = min(min, v);
         max = max(max, v);
+        finiteCount++;
     }
 
     @Override
     public void visit(double v) {
+        totalCount++;
         if (isNaN(v) || isInfinite(v)) {
             return;
         }
@@ -49,36 +61,43 @@ public class MinMaxFiniteValueVisitor implements ArrayElementVisitor {
 
     @Override
     public void visit(long v) {
+        totalCount++;
         visitFinite(v);
     }
 
     @Override
     public void visit(float v) {
+        totalCount++;
         visit((double) v);
     }
 
     @Override
     public void visit(int v) {
+        totalCount++;
         visitFinite(v);
     }
 
     @Override
     public void visit(short v) {
+        totalCount++;
         visitFinite(v);
     }
 
     @Override
     public void visit(char v) {
+        totalCount++;
         visitFinite(v);
     }
 
     @Override
     public void visit(byte v) {
+        totalCount++;
         visitFinite(v);
     }
 
     @Override
     public void visit(boolean v) {
+        totalCount++;
         visitFinite(v ? 1.0 : 0.0);
     }
 }

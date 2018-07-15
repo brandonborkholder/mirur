@@ -1,5 +1,4 @@
 automatically disable .toString() in the Variables view for arrays
 export to file doesn't preserve precision
 copy to clipboard function
-render complex numbers
-enable HistogramView on 2d data
+
