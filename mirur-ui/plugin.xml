@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            allowMultiple="false"
+            allowMultiple="true"
             category="org.eclipse.debug.ui"
             class="mirur.plugin.painterview.GlimpseArrayView"
             icon="icons/mirur.gif"
@@ -26,14 +26,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <view
-            allowMultiple="true"
-            category="org.eclipse.debug.ui"
-            class="mirur.plugin.painterview.StaticArrayView"
-            icon="icons/mirur.gif"
-            id="mirur.views.StaticPainter"
-            name="Mirur Snapshot">
-      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

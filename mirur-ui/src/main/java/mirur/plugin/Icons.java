@@ -103,9 +103,9 @@ public class Icons {
 
     public static ImageDescriptor getPin(boolean enabled) {
         if (enabled) {
-            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD);
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin.gif");
         } else {
-            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED);
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin_disabled.gif");
         }
     }
 
