@@ -25,11 +25,11 @@ import java.util.Map;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLProfile;
 
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.FPSAnimator;
@@ -52,7 +52,6 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     private SaveArrayToFileAction saveArrayAction;
     private ViewMenuAction viewMenuAction;
     private SelectListenerToggle selectListenerToggle;
-    private CreateStaticViewAction createStaticViewAction;
 
     private LookAndFeel laf;
     private NewtSwtGlimpseCanvas canvas;
@@ -96,10 +95,10 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         };
         saveArrayAction = new SaveArrayToFileAction();
         selectListenerToggle = new SelectListenerToggle(ID, this, this);
-        createStaticViewAction = new CreateStaticViewAction() {
+        DuplicateViewAction duplicateViewAction = new DuplicateViewAction(ID) {
             @Override
-            protected void initializeView(StaticArrayView view) {
-                view.initializePainter(canvas.getGLContext(), currentData, currentPainter, laf);
+            protected void initializeView(IViewPart view) {
+                // TODO need to copy context
             }
         };
 
@@ -108,10 +107,8 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
         tbm.add(saveArrayAction);
-
-        IMenuManager mm = getViewSite().getActionBars().getMenuManager();
-        mm.add(createStaticViewAction);
-        mm.add(selectListenerToggle);
+        tbm.add(duplicateViewAction);
+        tbm.add(selectListenerToggle);
 
         getSite().getPage().addPartListener(selectListenerToggle);
 
@@ -180,7 +177,6 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
         resetAction.setEnabled(hasValidPainter);
         viewMenuAction.setEnabled(hasValidPainter);
-        createStaticViewAction.setEnabled(hasValidPainter);
 
         currentPainter.attach(canvas);
         canvas.setLookAndFeel(laf);
