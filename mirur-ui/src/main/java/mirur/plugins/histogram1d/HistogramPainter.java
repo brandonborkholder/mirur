@@ -16,34 +16,78 @@
  */
 package mirur.plugins.histogram1d;
 
+import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
 import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
-import it.unimi.dsi.fastutil.floats.Float2IntMap;
+import static com.metsci.glimpse.support.shader.line.LineUtils.ppvAspectRatio;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.fixedfunc.GLPointerFunc;
-
-import mirur.plugin.painterview.MirurLAF;
+import javax.media.opengl.GL3;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseBounds;
+import com.metsci.glimpse.context.GlimpseContext;
 import com.metsci.glimpse.support.settings.LookAndFeel;
+import com.metsci.glimpse.support.shader.line.LineJoinType;
+import com.metsci.glimpse.support.shader.line.LinePath;
+import com.metsci.glimpse.support.shader.line.LineProgram;
+import com.metsci.glimpse.support.shader.line.LineStyle;
+
+import it.unimi.dsi.fastutil.floats.Float2IntMap;
+import mirur.plugin.painterview.MirurLAF;
 
 public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramPainter {
     private Float2IntMap counts;
-    private float[] borderColor = getBlack();
+
+    private LineProgram prog;
+    private LinePath path;
+    private LineStyle style;
+
+    public HistogramPainter() {
+        prog = new LineProgram();
+        path = new LinePath();
+        style = new LineStyle();
+        style.rgba = getBlack();
+        style.feather_PX = 0;
+        style.joinType = LineJoinType.JOIN_MITER;
+        style.thickness_PX = 1;
+    }
 
     @Override
     public void setLookAndFeel(LookAndFeel laf) {
         super.setLookAndFeel(laf);
         setColor(laf.getColor(MirurLAF.DATA_COLOR));
-        borderColor = laf.getColor(MirurLAF.DATA_BORDER_COLOR);
+        style.rgba = laf.getColor(MirurLAF.DATA_BORDER_COLOR);
     }
 
     public void setData(Float2IntMap counts, float binStart, float binSize) {
         this.binStart = binStart;
         this.counts = counts;
         setData(counts, 1, binSize);
+    }
+
+    @Override
+    public void setData(Float2IntMap counts, int totalCount, float binSize) {
+        super.setData(counts, totalCount, binSize);
+
+        final float denom = (asDensity) ? (binSize * totalCount) : totalCount;
+        boolean first = true;
+        for (Float2IntMap.Entry entry : counts.float2IntEntrySet()) {
+            float bin = entry.getFloatKey();
+            float freq = entry.getIntValue() / denom;
+
+            if (first) {
+                first = false;
+                path.moveTo(bin, 0);
+            } else {
+                path.lineTo(bin, 0);
+            }
+
+            path.lineTo(bin, freq);
+            path.lineTo(bin + binSize, freq);
+            path.lineTo(bin + binSize, 0);
+        }
+
+        path.closeLoop();
     }
 
     public int getCount(double binValue) {
@@ -59,16 +103,33 @@ public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramP
     }
 
     @Override
-    public void paintTo(GL2 gl, GlimpseBounds bounds, Axis2D axis) {
-        super.paintTo(gl, bounds, axis);
+    public void doPaintTo(GlimpseContext context) {
+        super.doPaintTo(context);
 
-        gl.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferHandle[0]);
-        gl.glVertexPointer(2, GL.GL_FLOAT, 8, 0);
-        gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+        GlimpseBounds bounds = getBounds(context);
+        Axis2D axis = requireAxis2D(context);
+        GL3 gl = context.getGL().getGL3();
 
-        gl.glColor4fv(borderColor, 0);
-        gl.glLineWidth(1);
+        enableStandardBlending(gl);
+        prog.begin(gl);
+        try {
+            prog.setViewport(gl, bounds);
+            prog.setAxisOrtho(gl, axis);
+            prog.setStyle(gl, style);
 
-        gl.glDrawArrays(GL.GL_LINES, 0, dataSize * 4);
+            prog.draw(gl, style, path, ppvAspectRatio(axis));
+        } finally {
+            prog.end(gl);
+            disableBlending(gl);
+        }
+    }
+
+    @Override
+    public void doDispose(GlimpseContext context) {
+        super.doDispose(context);
+
+        GL3 gl = getGL3(context);
+        prog.dispose(gl);
+        path.dispose(gl);
     }
 }

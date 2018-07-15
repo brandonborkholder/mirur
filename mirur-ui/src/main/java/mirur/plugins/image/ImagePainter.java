@@ -17,42 +17,49 @@
 package mirur.plugins.image;
 
 import static com.jogamp.opengl.util.texture.TextureIO.newTexture;
+import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
+import static com.metsci.glimpse.util.logging.LoggerUtils.getLogger;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
-import static javax.media.opengl.GL.GL_BLEND;
-import static javax.media.opengl.GL.GL_NEAREST;
-import static javax.media.opengl.GL.GL_ONE;
-import static javax.media.opengl.GL.GL_ONE_MINUS_SRC_ALPHA;
-import static javax.media.opengl.GL.GL_REPLACE;
-import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
-import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
-import static javax.media.opengl.GL2ES1.GL_TEXTURE_ENV;
-import static javax.media.opengl.GL2ES1.GL_TEXTURE_ENV_MODE;
-import static javax.media.opengl.GL2GL3.GL_QUADS;
 
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLException;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL3;
 import javax.media.opengl.GLProfile;
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureData;
-import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.context.GlimpseContext;
+import com.metsci.glimpse.gl.GLEditableBuffer;
+import com.metsci.glimpse.painter.base.GlimpsePainterBase;
+import com.metsci.glimpse.support.shader.triangle.ColorTexture2DProgram;
 
-public class ImagePainter extends GlimpseDataPainter2D {
+public class ImagePainter extends GlimpsePainterBase {
+    private static final Logger logger = getLogger(ImagePainter.class);
+
     final BufferedImage image;
-    Texture texture;
+    private Texture texture;
     private boolean initialized;
+
+    private ColorTexture2DProgram prog;
+    private GLEditableBuffer inXy;
+    private GLEditableBuffer inS;
 
     public ImagePainter(BufferedImage image) {
         this.image = image;
-        this.texture = null;
         this.initialized = false;
+
+        this.prog = new ColorTexture2DProgram();
+        this.inXy = new GLEditableBuffer(GL.GL_STATIC_DRAW, 0);
+        inXy.growQuad2f(0, 0, image.getWidth(), image.getHeight());
+        this.inS = new GLEditableBuffer(GL.GL_STATIC_DRAW, 0);
+        inS.growQuad2f(0, 1, 1, 0);
     }
 
-    protected void initIfNecessary(GL2 gl) {
+    private void initIfNecessary(GL gl) {
         if (initialized) {
             return;
         }
@@ -60,7 +67,7 @@ public class ImagePainter extends GlimpseDataPainter2D {
         try {
             GLProfile profile = gl.getContext().getGLDrawable().getGLProfile();
             texture = newTexture(gl, new AWTTextureData(profile, 0, 0, false, image));
-        } catch (GLException e) {
+        } catch (Exception e) {
             logWarning(logger, "Failed to create image texture", e);
         }
 
@@ -68,45 +75,37 @@ public class ImagePainter extends GlimpseDataPainter2D {
     }
 
     @Override
-    public void paintTo(GL2 gl, GlimpseBounds bounds, Axis2D axis) {
+    protected void doPaintTo(GlimpseContext context) {
+        GL3 gl = getGL3(context);
+        GlimpseBounds bounds = getBounds(context);
+
         initIfNecessary(gl);
         if (texture == null) {
             return;
         }
 
-        texture.setTexParameteri(gl, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        texture.setTexParameteri(gl, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
         texture.enable(gl);
         texture.bind(gl);
 
-        // See the "Alpha premultiplication" section in Texture's class comment
-        gl.glEnable(GL_BLEND);
-        gl.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        gl.glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        enableStandardBlending(gl);
+        prog.begin(context);
+        try {
+            prog.setPixelOrtho(context, bounds);
+            prog.setTexture(context, 0);
 
-        gl.glBegin(GL_QUADS);
-
-        try
-        {
-            float xLeft = 0;
-            float xRight = texture.getWidth();
-            float yTop = texture.getHeight();
-            float yBottom = 0;
-
-            gl.glTexCoord2f(0, 1);
-            gl.glVertex2f(xLeft, yBottom);
-
-            gl.glTexCoord2f(1, 1);
-            gl.glVertex2f(xRight, yBottom);
-
-            gl.glTexCoord2f(1, 0);
-            gl.glVertex2f(xRight, yTop);
-
-            gl.glTexCoord2f(0, 0);
-            gl.glVertex2f(xLeft, yTop);
+            prog.draw(context, texture, inXy, inS);
         } finally {
-            gl.glEnd();
-            texture.disable(gl);
+            prog.end(context);
+            disableBlending(gl);
         }
+    }
+
+    @Override
+    protected void doDispose(GlimpseContext context) {
+        prog.dispose(context);
+        inXy.dispose(context.getGL());
+        inS.dispose(context.getGL());
     }
 }

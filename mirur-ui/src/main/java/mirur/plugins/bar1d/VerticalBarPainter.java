@@ -16,46 +16,62 @@
  */
 package mirur.plugins.bar1d;
 
+import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
 import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL3;
+
+import com.metsci.glimpse.context.GlimpseContext;
+import com.metsci.glimpse.gl.GLEditableBuffer;
+import com.metsci.glimpse.painter.base.GlimpsePainterBase;
+import com.metsci.glimpse.support.settings.LookAndFeel;
+import com.metsci.glimpse.support.shader.triangle.FlatColorProgram;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;
 import mirur.plugin.painterview.MirurLAF;
 import mirur.plugins.DataUnitConverter;
-import mirur.plugins.SimpleVBO;
 
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
-import com.metsci.glimpse.support.settings.LookAndFeel;
+public class VerticalBarPainter extends GlimpsePainterBase {
+    private FlatColorProgram prog;
+    private GLEditableBuffer buf;
+    private float[] color;
 
-public class VerticalBarPainter extends GlimpseDataPainter2D {
-    private SimpleVBO vbo = new SimpleVBO();
-    private float[] color = getBlack();
+    public VerticalBarPainter(Array1D array, DataUnitConverter unitConverter) {
+        prog = new FlatColorProgram();
+        buf = new GLEditableBuffer(GL.GL_STATIC_DRAW, 0);
+        color = getBlack();
+
+        VisitArray.visit1d(array.getData(), new FillWithBarsVisitor(buf, unitConverter));
+    }
 
     @Override
     public void setLookAndFeel(LookAndFeel laf) {
         super.setLookAndFeel(laf);
-
         color = laf.getColor(MirurLAF.DATA_COLOR);
     }
 
-    public void setData(Array1D data, DataUnitConverter unitConverter) {
-        VisitArray.visit1d(data.getData(), new FillWithBarsVisitor(vbo, unitConverter));
+    @Override
+    protected void doPaintTo(GlimpseContext context) {
+        GL3 gl = getGL3(context);
+        enableStandardBlending(gl);
+        prog.begin(gl);
+        try {
+            prog.setAxisOrtho(gl, getAxis2D(context));
+            prog.setColor(gl, color);
+            prog.draw(gl, GL.GL_TRIANGLES, buf, 0, buf.sizeFloats() / 2);
+        } finally {
+            prog.end(gl);
+            disableBlending(gl);
+        }
     }
 
     @Override
-    public void paintTo(GL2 gl, GlimpseBounds bounds, Axis2D axis) {
-        gl.glColor4fv(color, 0);
-        vbo.draw(gl);
-    }
-
-    @Override
-    protected void dispose(GLContext context) {
-        super.dispose(context);
-        vbo.destroy(context.getGL().getGL2());
+    protected void doDispose(GlimpseContext context) {
+        GL3 gl = getGL3(context);
+        prog.dispose(gl);
+        buf.dispose(gl);
     }
 }

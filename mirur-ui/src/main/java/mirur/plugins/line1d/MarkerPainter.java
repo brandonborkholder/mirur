@@ -16,47 +16,42 @@
  */
 package mirur.plugins.line1d;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
+import static com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition.Left;
+import static com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition.Center;
+import static com.metsci.glimpse.support.color.GlimpseColor.getBlue;
 
-import com.jogamp.opengl.util.gl2.GLUT;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.base.GlimpsePainterBase;
-import com.metsci.glimpse.support.color.GlimpseColor;
+import java.util.Arrays;
 
-public class MarkerPainter extends GlimpsePainterBase {
-    private static final GLUT glut = new GLUT();
+import com.metsci.glimpse.painter.group.DelegatePainter;
+import com.metsci.glimpse.painter.info.AnnotationPainter;
+import com.metsci.glimpse.painter.shape.LineSetPainter;
 
-    private final String text;
-    private final float position;
+public class MarkerPainter extends DelegatePainter {
+    private AnnotationPainter annotationPainter;
+    private LineSetPainter linePainter;
 
-    private float[] color;
+    private float[][] lineDataX;
+    private float[][] lineDataY;
 
-    public MarkerPainter(String text, float position) {
-        this.text = text;
-        this.position = position;
-        color = GlimpseColor.getBlue();
+    public MarkerPainter() {
+        annotationPainter = new AnnotationPainter();
+        linePainter = new LineSetPainter();
+        linePainter.setLineColor(getBlue());
+
+        addPainter(linePainter);
+        addPainter(annotationPainter);
+
+        lineDataX = new float[0][];
+        lineDataY = new float[0][];
     }
 
-    @Override
-    protected void doPaintTo( GlimpseContext context )
-    {
-        GL2 gl = context.getGL().getGL2();
+    public void addMarker(String text, float position) {
+        annotationPainter.addAnnotation(text, position, 10, 10, 0, Left, Center, getBlue());
 
-        gl.glColor3fv(color, 0);
-        gl.glLineWidth(2);
-
-        gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glOrtho(axis.getMin(), axis.getMax(), -0.5, bounds.getHeight() - 1 + 0.5f, -1, 1);
-
-        gl.glRasterPos2f((float) (position + 10.0 / axis.getPixelsPerValue()), bounds.getHeight() - 12);
-        glut.glutBitmapString(GLUT.BITMAP_HELVETICA_12, text);
-
-        gl.glBegin(GL.GL_LINE_STRIP);
-        gl.glVertex2f(position, 0);
-        gl.glVertex2f(position, bounds.getHeight());
-        gl.glEnd();
+        lineDataX = Arrays.copyOf(lineDataX, lineDataX.length + 1);
+        lineDataY = Arrays.copyOf(lineDataY, lineDataY.length + 1);
+        lineDataX[lineDataX.length - 1] = new float[] { position, position };
+        lineDataY[lineDataY.length - 1] = new float[] { 0, 1000 };
+        linePainter.setData(lineDataX, lineDataY);
     }
 }

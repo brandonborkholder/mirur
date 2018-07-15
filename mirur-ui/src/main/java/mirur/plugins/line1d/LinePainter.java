@@ -16,51 +16,67 @@
  */
 package mirur.plugins.line1d;
 
+import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
 import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
+import static com.metsci.glimpse.support.shader.line.LineUtils.ppvAspectRatio;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
+import javax.media.opengl.GL3;
 
 import com.metsci.glimpse.axis.Axis2D;
 import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.context.GlimpseContext;
+import com.metsci.glimpse.painter.base.GlimpsePainterBase;
 import com.metsci.glimpse.support.settings.LookAndFeel;
+import com.metsci.glimpse.support.shader.line.LinePath;
+import com.metsci.glimpse.support.shader.line.LineProgram;
+import com.metsci.glimpse.support.shader.line.LineStyle;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;
 import mirur.plugin.painterview.MirurLAF;
 import mirur.plugins.DataUnitConverter;
-import mirur.plugins.SimpleVBO;
 
-public class LinePainter extends GlimpseDataPainter2D {
-    private SimpleVBO vbo = new SimpleVBO();
-    private float[] color = getBlack();
+public class LinePainter extends GlimpsePainterBase {
+    private LineProgram prog;
+    private LinePath path;
+    private LineStyle style;
 
     public LinePainter(Array1D data, DataUnitConverter unitConverter) {
-        VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(vbo, unitConverter));
+        VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(path, unitConverter));
+        style.rgba = getBlack();
     }
 
     @Override
     public void setLookAndFeel(LookAndFeel laf) {
         super.setLookAndFeel(laf);
-
-        color = laf.getColor(MirurLAF.DATA_COLOR);
+        style.rgba = laf.getColor(MirurLAF.DATA_COLOR);
     }
 
     @Override
-    public void paintTo(GL2 gl, GlimpseBounds bounds, Axis2D axis) {
-        gl.glColor4fv(color, 0);
-        gl.glLineWidth(2);
-        vbo.draw(gl);
+    public void doPaintTo(GlimpseContext context) {
+        GlimpseBounds bounds = getBounds(context);
+        Axis2D axis = requireAxis2D(context);
+        GL3 gl = context.getGL().getGL3();
 
-        gl.glPointSize(5);
-        vbo.draw(gl, GL.GL_POINTS);
+        enableStandardBlending(gl);
+        prog.begin(gl);
+        try {
+            prog.setViewport(gl, bounds);
+            prog.setAxisOrtho(gl, axis);
+            prog.setStyle(gl, style);
+
+            prog.draw(gl, style, path, ppvAspectRatio(axis));
+        } finally {
+            prog.end(gl);
+            disableBlending(gl);
+        }
     }
 
     @Override
-    protected void dispose(GLContext context) {
-        super.dispose(context);
-        vbo.destroy(context.getGL().getGL2());
+    protected void doDispose(GlimpseContext context) {
+        GL3 gl = getGL3(context);
+        prog.dispose(gl);
+        path.dispose(gl);
     }
 }

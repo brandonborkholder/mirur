@@ -16,39 +16,45 @@
  */
 package mirur.plugins.line1d;
 
-import javax.media.opengl.GL;
+import com.metsci.glimpse.support.shader.line.LinePath;
 
 import mirur.core.AbstractArray1dVisitor;
 import mirur.plugins.DataUnitConverter;
-import mirur.plugins.SimpleVBO;
 
 public class FillWithLinesVisitor extends AbstractArray1dVisitor {
-    private final SimpleVBO vbo;
+    private final LinePath path;
     private final DataUnitConverter unitConverter;
+    private boolean first;
 
-    public FillWithLinesVisitor(SimpleVBO vbo, DataUnitConverter unitConverter) {
-        this.vbo = vbo;
+    public FillWithLinesVisitor(LinePath path, DataUnitConverter unitConverter) {
+        this.path = path;
         this.unitConverter = unitConverter;
     }
 
     @Override
     protected void start(int size) {
-        vbo.allocate(size * 2);
-        vbo.begin(GL.GL_LINE_STRIP);
+        // nop
     }
 
     @Override
     protected void stop() {
-        vbo.end();
+        // nop
     }
 
     @Override
     protected void visit(int i, double v) {
-        vbo.add(i, (float) unitConverter.data2painter(v));
+        float y = (float) unitConverter.data2painter(v);
+
+        if (first) {
+            path.moveTo(i, y);
+            first = false;
+        } else {
+            path.moveTo(i, y);
+        }
     }
 
     @Override
     protected void visit(int i, float v) {
-        vbo.add(i, (float) unitConverter.data2painter(v));
+        visit(i, (double) v);
     }
 }

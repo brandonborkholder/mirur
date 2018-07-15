@@ -17,7 +17,6 @@
 package mirur.plugins;
 
 import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
 import com.metsci.glimpse.painter.base.GlimpsePainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
@@ -32,6 +31,7 @@ import mirur.plugins.line1d.MarkerPainter;
 public class Array1DPlot extends SimplePlot2D {
     private ShaderWrapperPainter shaderWrapper;
     private GlimpsePainter dataPainter;
+    private MarkerPainter markerPainter;
 
     public Array1DPlot(GlimpsePainter dataPainter, Array1D array, DataUnitConverter unitConverter) {
         getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
@@ -63,8 +63,12 @@ public class Array1DPlot extends SimplePlot2D {
     }
 
     public void addMarker(String name, int position) {
-        MarkerPainter p = new MarkerPainter(name, position);
-        axisLayoutX.addPainter(p);
+        if (markerPainter == null) {
+            markerPainter = new MarkerPainter();
+            axisLayoutX.addPainter(markerPainter);
+        }
+
+        markerPainter.addMarker(name, position);
     }
 
     @Override

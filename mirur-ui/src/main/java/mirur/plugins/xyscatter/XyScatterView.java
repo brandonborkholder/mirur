@@ -108,8 +108,7 @@ public class XyScatterView extends SimplePlugin2D {
         XyArrayTooltipPainter tooltipPainter = new XyArrayTooltipPainter(plot.getAxis(), index, array);
         plot.getLayoutCenter().addPainter(tooltipPainter, Plot2D.FOREGROUND_LAYER);
 
-        XyPointsPainter pointsPainter = new XyPointsPainter();
-        pointsPainter.setData(array, xUnitConverter, yUnitConverter);
+        XyPointsPainter pointsPainter = new XyPointsPainter(array, xUnitConverter, yUnitConverter);
         plot.getLayoutCenter().addPainter(pointsPainter, Plot2D.DATA_LAYER);
 
         plot.getAxisX().addAxisListener(new FixedPixelSelectionSizeListener(10));

@@ -16,41 +16,39 @@
  */
 package mirur.plugins.xyscatter;
 
-import javax.media.opengl.GL;
+import java.nio.FloatBuffer;
+
+import com.jogamp.common.nio.Buffers;
 
 import mirur.core.AbstractInterleavedVisitor;
 import mirur.plugins.DataUnitConverter;
-import mirur.plugins.SimpleVBO;
 
 public class FillWithPointsVisitor extends AbstractInterleavedVisitor {
-    private final SimpleVBO vbo;
     private final DataUnitConverter xUnitConverter;
     private final DataUnitConverter yUnitConverter;
+    private FloatBuffer dataBuffer;
 
-    public FillWithPointsVisitor(SimpleVBO vbo, DataUnitConverter xUnitConverter, DataUnitConverter yUnitConverter) {
-        this.vbo = vbo;
+    public FillWithPointsVisitor(DataUnitConverter xUnitConverter, DataUnitConverter yUnitConverter) {
         this.xUnitConverter = xUnitConverter;
         this.yUnitConverter = yUnitConverter;
     }
 
     @Override
     protected void start(int size) {
-        vbo.allocate(size);
-        vbo.begin(GL.GL_POINTS);
+        dataBuffer = Buffers.newDirectFloatBuffer(size * 2);
     }
 
-    @Override
-    protected void stop() {
-        vbo.end();
+    public FloatBuffer getDataBuffer() {
+        return dataBuffer;
     }
 
     @Override
     protected void visit(int i, double x, double y) {
-        vbo.add((float) xUnitConverter.data2painter(x), (float) yUnitConverter.data2painter(y));
+        dataBuffer.put((float) xUnitConverter.data2painter(x)).put((float) yUnitConverter.data2painter(y));
     }
 
     @Override
     protected void visit(int i, float x, float y) {
-        vbo.add((float) xUnitConverter.data2painter(x), (float) yUnitConverter.data2painter(y));
+        visit(i, (double) x, (double) y);
     }
 }

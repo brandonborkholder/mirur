@@ -29,8 +29,6 @@ public class BarView extends SimplePlugin1D {
 
     @Override
     protected GlimpsePainter createPainter(Array1D array, DataUnitConverter unitConverter) {
-        VerticalBarPainter painter = new VerticalBarPainter();
-        painter.setData(array, unitConverter);
-        return painter;
+        return new VerticalBarPainter(array, unitConverter);
     }
 }

@@ -18,60 +18,41 @@ package mirur.plugins.xyscatter;
 
 import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
-
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.painter.base.GlimpseDataPainter2D;
+import com.metsci.glimpse.painter.shape.PointSetPainter;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;
 import mirur.plugin.painterview.MirurLAF;
 import mirur.plugins.DataUnitConverter;
-import mirur.plugins.SimpleVBO;
 
-public class XyPointsPainter extends GlimpseDataPainter2D {
-    private SimpleVBO vbo = new SimpleVBO();
-    private float[] color = getBlack();
-    private float pointSize;
-
-    public XyPointsPainter() {
+public class XyPointsPainter extends PointSetPainter {
+    public XyPointsPainter(Array1D array, DataUnitConverter xUnitConverter, DataUnitConverter yUnitConverter) {
+        super(false);
         setShowAsDensity(false);
+        setPointColor(getBlack());
+
+        FillWithPointsVisitor visitor = new FillWithPointsVisitor(xUnitConverter, yUnitConverter);
+        VisitArray.visit1d(array.getData(), visitor);
+        dataBuffer = visitor.getDataBuffer();
+        dataSize = dataBuffer.position() / 2;
+        dataBuffer.flip();
+        newData = true;
     }
 
     @Override
     public void setLookAndFeel(LookAndFeel laf) {
         super.setLookAndFeel(laf);
-
-        color = laf.getColor(MirurLAF.DATA_COLOR);
-    }
-
-    public void setData(Array1D data, DataUnitConverter xUnitConverter, DataUnitConverter yUnitConverter) {
-        VisitArray.visit1d(data.getData(), new FillWithPointsVisitor(vbo, xUnitConverter, yUnitConverter));
-    }
-
-    @Override
-    public void paintTo(GL2 gl, GlimpseBounds bounds, Axis2D axis) {
-        gl.glColor4fv(color, 0);
-        gl.glPointSize(pointSize);
-        vbo.draw(gl);
-    }
-
-    @Override
-    protected void dispose(GLContext context) {
-        super.dispose(context);
-        vbo.destroy(context.getGL().getGL2());
+        setPointColor(laf.getColor(MirurLAF.DATA_COLOR));
     }
 
     public void setShowAsDensity(boolean density) {
         if (density) {
-            pointSize = 4;
-            color[3] = 0.5f;
+            setPointSize(4);
+            pointColor[3] = 0.5f;
         } else {
-            pointSize = 5;
-            color[3] = 1;
+            setPointSize(5);
+            pointColor[3] = 1;
         }
     }
 }

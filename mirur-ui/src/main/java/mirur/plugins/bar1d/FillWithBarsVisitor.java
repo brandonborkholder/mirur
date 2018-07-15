@@ -16,49 +16,43 @@
  */
 package mirur.plugins.bar1d;
 
-import javax.media.opengl.GL;
+import java.nio.FloatBuffer;
+
+import com.metsci.glimpse.gl.GLEditableBuffer;
 
 import mirur.core.AbstractArray1dVisitor;
 import mirur.plugins.DataUnitConverter;
-import mirur.plugins.SimpleVBO;
 
 public class FillWithBarsVisitor extends AbstractArray1dVisitor {
-    private final SimpleVBO vbo;
+    private final GLEditableBuffer buf;
     private final DataUnitConverter unitConverter;
     private float baseline;
 
-    public FillWithBarsVisitor(SimpleVBO vbo, DataUnitConverter unitConverter) {
-        this.vbo = vbo;
+    public FillWithBarsVisitor(GLEditableBuffer buf, DataUnitConverter unitConverter) {
+        this.buf = buf;
         this.unitConverter = unitConverter;
         baseline = (float) unitConverter.data2painter(0);
     }
 
     @Override
     protected void start(int size) {
-        vbo.allocate(size * 8);
-        vbo.begin(GL.GL_TRIANGLE_STRIP);
-    }
-
-    @Override
-    protected void stop() {
-        vbo.end();
+        buf.ensureRemainingFloats(size * 12);
     }
 
     @Override
     protected void visit(int i, double v) {
         float f = (float) unitConverter.data2painter(v);
-        vbo.add(i - 0.5f, f);
-        vbo.add(i - 0.5f, baseline);
-        vbo.add(i + 0.5f, f);
-        vbo.add(i + 0.5f, baseline);
+        FloatBuffer fbuf = buf.growFloats(12);
+        fbuf.put(i - 0.5f).put(baseline);
+        fbuf.put(i - 0.5f).put(f);
+        fbuf.put(i + 0.5f).put(f);
+        fbuf.put(i - 0.5f).put(baseline);
+        fbuf.put(i + 0.5f).put(baseline);
+        fbuf.put(i + 0.5f).put(f);
     }
 
     @Override
     protected void visit(int i, float v) {
-        float f = (float) unitConverter.data2painter(v);
-        vbo.add(i - 0.5f, f);
-        vbo.add(i - 0.5f, baseline);
-        vbo.add(i + 0.5f, f);
-        vbo.add(i + 0.5f, baseline);
+        visit(i, (double) v);
     }
 }
