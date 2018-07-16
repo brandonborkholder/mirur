@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.media.opengl.GLAnimatorControl;
-import javax.media.opengl.GLProfile;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;

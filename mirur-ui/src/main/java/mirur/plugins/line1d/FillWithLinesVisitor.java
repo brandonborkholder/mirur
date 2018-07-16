@@ -22,23 +22,22 @@ import mirur.core.AbstractArray1dVisitor;
 import mirur.plugins.DataUnitConverter;
 
 public class FillWithLinesVisitor extends AbstractArray1dVisitor {
-    private final LinePath path;
     private final DataUnitConverter unitConverter;
+    private LinePath path;
     private boolean first;
 
-    public FillWithLinesVisitor(LinePath path, DataUnitConverter unitConverter) {
-        this.path = path;
+    public FillWithLinesVisitor(DataUnitConverter unitConverter) {
         this.unitConverter = unitConverter;
+    }
+
+    public LinePath getPath() {
+        return path;
     }
 
     @Override
     protected void start(int size) {
-        // nop
-    }
-
-    @Override
-    protected void stop() {
-        // nop
+        path = new LinePath(size, 1);
+        first = true;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class FillWithLinesVisitor extends AbstractArray1dVisitor {
             path.moveTo(i, y);
             first = false;
         } else {
-            path.moveTo(i, y);
+            path.lineTo(i, y);
         }
     }
 

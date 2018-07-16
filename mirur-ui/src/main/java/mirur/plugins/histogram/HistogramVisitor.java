@@ -38,6 +38,7 @@ public class HistogramVisitor extends AbstractArrayElementVisitor {
         this.max = unitConverter.data2painter(dataMax);
         step = (max - min) / floor(sqrt(size)) * 1.01;
         this.unitConverter = unitConverter;
+        counts = new Float2IntOpenHashMap(size / 10);
     }
 
     public float getMin() {

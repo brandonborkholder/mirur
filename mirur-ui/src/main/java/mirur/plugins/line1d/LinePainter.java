@@ -43,8 +43,11 @@ public class LinePainter extends GlimpsePainterBase {
     private LineStyle style;
 
     public LinePainter(Array1D data, DataUnitConverter unitConverter) {
-        VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(path, unitConverter));
+        prog = new LineProgram();
+        path = VisitArray.visit1d(data.getData(), new FillWithLinesVisitor(unitConverter)).getPath();
+        style = new LineStyle();
         style.rgba = getBlack();
+        style.thickness_PX = 2;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class LinePainter extends GlimpsePainterBase {
     public void doPaintTo(GlimpseContext context) {
         GlimpseBounds bounds = getBounds(context);
         Axis2D axis = requireAxis2D(context);
-        GL3 gl = context.getGL().getGL3();
+        GL3 gl = getGL3(context);
 
         enableStandardBlending(gl);
         prog.begin(gl);
@@ -65,7 +68,6 @@ public class LinePainter extends GlimpsePainterBase {
             prog.setViewport(gl, bounds);
             prog.setAxisOrtho(gl, axis);
             prog.setStyle(gl, style);
-
             prog.draw(gl, style, path, ppvAspectRatio(axis));
         } finally {
             prog.end(gl);
