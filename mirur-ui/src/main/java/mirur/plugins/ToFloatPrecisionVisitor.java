@@ -18,6 +18,8 @@ package mirur.plugins;
 
 import static com.google.common.primitives.Doubles.isFinite;
 import static java.lang.Double.isInfinite;
+import static java.lang.Math.abs;
+import static java.lang.Math.log10;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -34,7 +36,10 @@ public class ToFloatPrecisionVisitor implements ArrayElementVisitor {
     }
 
     public DataUnitConverter get() {
+        double sigfigs = abs(log10(abs(dMax - dMin))) + abs(log10(max(abs(dMax), abs(dMin))));
         if (isInfinite(dMin) || isInfinite(dMax)) {
+            return DataUnitConverter.IDENTITY;
+        } else if (sigfigs < 7) {
             return DataUnitConverter.IDENTITY;
         } else {
             return new LinearScaleConverter(dMin, dMax);
