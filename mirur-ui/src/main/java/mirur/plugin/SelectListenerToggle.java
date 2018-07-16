@@ -16,24 +16,17 @@
  */
 package mirur.plugin;
 
-import static mirur.plugin.Activator.getPreferences;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
 
-public class SelectListenerToggle extends Action implements IPartListener2, IPropertyChangeListener {
-    public static final String SELECTED_KEY = "toggle.listen.array.selection";
-
-    private final String partID;
+public class SelectListenerToggle extends Action implements IPartListener2 {
     private final ViewPart part;
     private final VarObjectSelectListener listener;
 
-    public SelectListenerToggle(String partID, ViewPart part, VarObjectSelectListener listener) {
+    public SelectListenerToggle(ViewPart part, VarObjectSelectListener listener) {
         super("Sync Viewer", IAction.AS_CHECK_BOX);
         setId(SelectListenerToggle.class.getName());
         setText("Sync Viewer");
@@ -41,26 +34,10 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
         setImageDescriptor(Icons.getSync(true));
         setDisabledImageDescriptor(Icons.getSync(false));
 
-        this.partID = partID;
         this.part = part;
         this.listener = listener;
 
-        setChecked(getPreferences().doSyncWithVariablesView(partID));
-        getPreferences().addChangeListener(new Runnable() {
-            @Override
-            public void run() {
-                setChecked(getPreferences().doSyncWithVariablesView(SelectListenerToggle.this.partID));
-            }
-        });
-
-        addPropertyChangeListener(this);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        if (CHECKED.equals(event.getProperty())) {
-            getPreferences().setSyncWithVariablesView(partID, (Boolean) event.getNewValue());
-        }
+        setChecked(true);
     }
 
     @Override
@@ -77,29 +54,29 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
 
     @Override
     public void partClosed(IWorkbenchPartReference partRef) {
-        if (partID.equals(partRef.getId())) {
+        if (part.equals(partRef.getPart(false))) {
             remove();
         }
     }
 
     @Override
     public void partOpened(IWorkbenchPartReference partRef) {
-        if (partID.equals(partRef.getId())) {
-            add(false);
+        if (part.equals(partRef.getPart(false))) {
+            add();
         }
     }
 
     @Override
     public void partHidden(IWorkbenchPartReference partRef) {
-        if (partID.equals(partRef.getId())) {
+        if (part.equals(partRef.getPart(false))) {
             remove();
         }
     }
 
     @Override
     public void partVisible(IWorkbenchPartReference partRef) {
-        if (partID.equals(partRef.getId())) {
-            add(false);
+        if (part.equals(partRef.getPart(false))) {
+            add();
         }
     }
 
@@ -107,8 +84,8 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
     public void partInputChanged(IWorkbenchPartReference partRef) {
     }
 
-    private void add(boolean force) {
-        if (isChecked() || force) {
+    private void add() {
+        if (isChecked()) {
             Activator.getVariableSelectionModel().addArrayListener(part, listener);
         }
     }
@@ -120,7 +97,7 @@ public class SelectListenerToggle extends Action implements IPartListener2, IPro
     @Override
     public void run() {
         if (isChecked()) {
-            add(true);
+            add();
         } else {
             remove();
         }

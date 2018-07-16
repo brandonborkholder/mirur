@@ -49,7 +49,7 @@ public class ArrayStatsView extends ViewPart implements VarObjectSelectListener 
         initPage(statsPage);
         showPage(statsPage);
 
-        selectListenerToggle = new SelectListenerToggle(ID, this, this);
+        selectListenerToggle = new SelectListenerToggle(this, this);
         getSite().getPage().addPartListener(selectListenerToggle);
 
         saveArrayAction = new SaveArrayToFileAction();

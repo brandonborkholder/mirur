@@ -94,7 +94,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
             }
         };
         saveArrayAction = new SaveArrayToFileAction();
-        selectListenerToggle = new SelectListenerToggle(ID, this, this);
+        selectListenerToggle = new SelectListenerToggle(this, this);
         DuplicateViewAction duplicateViewAction = new DuplicateViewAction(ID) {
             @Override
             protected void initializeView(IViewPart view) {
