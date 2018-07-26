@@ -16,8 +16,6 @@
  */
 package mirur.plugin.painterview;
 
-import static mirur.plugin.Activator.getViewSelectionModel;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +38,7 @@ import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;
 import mirur.plugin.VarObjectSelectListener;
 import mirur.plugin.ViewSelectListener;
+import mirur.plugin.ViewSelectionModel;
 import mirur.plugin.statsview.SaveArrayToFileAction;
 import mirur.plugins.DataPainter;
 import mirur.plugins.InvalidPlaceholderView;
@@ -52,6 +51,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     private SaveArrayToFileAction saveArrayAction;
     private ViewMenuAction viewMenuAction;
     private SelectListenerToggle selectListenerToggle;
+    private ViewSelectionModel viewSelectModel;
 
     private LookAndFeel laf;
     private NewtSwtGlimpseCanvas canvas;
@@ -67,6 +67,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     @Override
     public void createPartControl(Composite parent) {
+        viewSelectModel = new ViewSelectionModel();
         canvas = new NewtSwtGlimpseCanvas(parent, GLUtils.getDefaultGLProfile(), SWT.DOUBLE_BUFFERED);
         canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
         laf = new MirurLAF();
@@ -103,7 +104,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         };
 
         IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-        tbm.add(new SelectViewAction());
+        tbm.add(new SelectViewAction(viewSelectModel));
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
         tbm.add(saveArrayAction);
@@ -114,7 +115,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
         invalidPlaceholder = new InvalidPlaceholderView();
 
-        getViewSelectionModel().addArrayListener(this);
+        viewSelectModel.addArrayListener(this);
         refreshDataAndPainter();
     }
 
@@ -139,6 +140,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     @Override
     public void variableSelected(VariableObject obj) {
         currentData = obj;
+        viewSelectModel.variableSelected(obj);
         saveArrayAction.variableSelected(obj);
         refreshDataAndPainter();
     }

@@ -102,8 +102,11 @@ public class Icons {
     }
 
     public static ImageDescriptor getDuplicateView(boolean enabled) {
-        // TODO
-        return null;
+        if (enabled) {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD);
+        } else {
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED);
+        }
     }
 
     public static ImageDescriptor getPin(boolean enabled) {

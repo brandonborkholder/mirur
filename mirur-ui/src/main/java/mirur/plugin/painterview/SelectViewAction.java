@@ -17,7 +17,6 @@
 package mirur.plugin.painterview;
 
 import static mirur.plugin.Activator.getVariableSelectionModel;
-import static mirur.plugin.Activator.getViewSelectionModel;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -33,11 +32,16 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import mirur.core.VariableObject;
 import mirur.plugin.Icons;
+import mirur.plugin.ViewSelectionModel;
 import mirur.plugins.MirurView;
 import mirur.plugins.MirurViews;
 
 public class SelectViewAction extends Action implements IMenuCreator {
-    public SelectViewAction() {
+    private final ViewSelectionModel viewSelectModel;
+
+    public SelectViewAction(ViewSelectionModel viewSelectModel) {
+        this.viewSelectModel = viewSelectModel;
+
         setId(SelectViewAction.class.getName());
         setMenuCreator(this);
         setText("Painters");
@@ -74,7 +78,7 @@ public class SelectViewAction extends Action implements IMenuCreator {
         if (obj == null) {
             new ActionContributionItem(new NoVariableSelected()).fill(menu, -1);
         } else {
-            MirurView selected = getViewSelectionModel().getActiveSelected();
+            MirurView selected = viewSelectModel.getActiveSelected();
 
             for (MirurView plugin : MirurViews.plugins()) {
                 if (plugin.supportsData(obj)) {
@@ -105,7 +109,7 @@ public class SelectViewAction extends Action implements IMenuCreator {
         }
     }
 
-    private static final class ViewRadioButton extends Action {
+    private final class ViewRadioButton extends Action {
         final MirurView view;
 
         public ViewRadioButton(MirurView view) {
@@ -116,7 +120,7 @@ public class SelectViewAction extends Action implements IMenuCreator {
 
         @Override
         public void run() {
-            getViewSelectionModel().select(view);
+            viewSelectModel.select(view);
         }
     }
 }

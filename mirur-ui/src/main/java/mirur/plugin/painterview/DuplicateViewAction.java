@@ -46,18 +46,21 @@ public abstract class DuplicateViewAction extends Action {
     @Override
     public void run() {
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        if (window != null) {
-            IWorkbenchPage page = window.getActivePage();
-            if (page == null) {
-                return;
-            }
-            try {
-                String id = viewId + "-" + System.nanoTime();
-                IViewPart view = page.showView(viewId, id, 1);
-                initializeView(view);
-            } catch (PartInitException ex) {
-                logWarning(LOGGER, "Error cloning view", ex);
-            }
+        if (window == null) {
+            return;
+        }
+
+        IWorkbenchPage page = window.getActivePage();
+        if (page == null) {
+            return;
+        }
+
+        try {
+            String id = viewId + "-" + System.nanoTime();
+            IViewPart view = page.showView(viewId, id, 1);
+            initializeView(view);
+        } catch (PartInitException ex) {
+            logWarning(LOGGER, "Error cloning view", ex);
         }
     }
 
