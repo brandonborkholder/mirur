@@ -26,13 +26,13 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.FPSAnimator;
 import com.metsci.glimpse.gl.util.GLUtils;
 import com.metsci.glimpse.support.settings.LookAndFeel;
 import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
+import com.metsci.glimpse.util.Pair;
 
 import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;
@@ -49,6 +49,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     private ResetAxesAction resetAction;
     private SaveArrayToFileAction saveArrayAction;
+    private PinPaintersMenuAction pinPaintersAction;
     private ViewMenuAction viewMenuAction;
     private SelectListenerToggle selectListenerToggle;
     private ViewSelectionModel viewSelectModel;
@@ -96,10 +97,21 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         };
         saveArrayAction = new SaveArrayToFileAction();
         selectListenerToggle = new SelectListenerToggle(this, this);
-        DuplicateViewAction duplicateViewAction = new DuplicateViewAction(ID) {
+        DuplicateViewAction duplicateViewAction = new DuplicateViewAction(ID);
+        pinPaintersAction = new PinPaintersMenuAction() {
             @Override
-            protected void initializeView(IViewPart view) {
-                // TODO need to copy context
+            protected void select(VariableObject obj, DataPainter painter) {
+                variableSelected(obj);
+                // XXX want to preserve state of the painter
+            }
+
+            @Override
+            protected Pair<VariableObject, DataPainter> getCurrent() {
+                if (currentData == null || currentPainter == invalidPlaceholder) {
+                    return null;
+                } else {
+                    return new Pair<>(currentData, currentPainter);
+                }
             }
         };
 
@@ -108,6 +120,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
         tbm.add(saveArrayAction);
+        tbm.add(pinPaintersAction);
         tbm.add(duplicateViewAction);
         tbm.add(selectListenerToggle);
 
@@ -140,6 +153,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     @Override
     public void variableSelected(VariableObject obj) {
         currentData = obj;
+        pinPaintersAction.variableSelected(obj);
         viewSelectModel.variableSelected(obj);
         saveArrayAction.variableSelected(obj);
         refreshDataAndPainter();

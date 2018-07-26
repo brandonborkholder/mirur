@@ -21,7 +21,6 @@ import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import java.util.logging.Logger;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -29,7 +28,7 @@ import org.eclipse.ui.PlatformUI;
 
 import mirur.plugin.Icons;
 
-public abstract class DuplicateViewAction extends Action {
+public class DuplicateViewAction extends Action {
     private static final Logger LOGGER = Logger.getLogger(DuplicateViewAction.class.getName());
 
     private final String viewId;
@@ -57,12 +56,9 @@ public abstract class DuplicateViewAction extends Action {
 
         try {
             String id = viewId + "-" + System.nanoTime();
-            IViewPart view = page.showView(viewId, id, 1);
-            initializeView(view);
+            page.showView(viewId, id, 1);
         } catch (PartInitException ex) {
             logWarning(LOGGER, "Error cloning view", ex);
         }
     }
-
-    protected abstract void initializeView(IViewPart view);
 }

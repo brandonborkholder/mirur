@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Control;
@@ -18,10 +19,12 @@ import com.metsci.glimpse.util.Pair;
 
 import mirur.core.VariableObject;
 import mirur.plugin.Icons;
+import mirur.plugin.VarObjectSelectListener;
 import mirur.plugins.DataPainter;
 
-public abstract class PinPaintersMenuAction extends Action implements IMenuCreator {
-    private List<ActionContributionItem> painterItems;
+public abstract class PinPaintersMenuAction extends Action implements IMenuCreator, VarObjectSelectListener {
+    private List<SelectDataPainterAction> painterItems;
+    private boolean allowPinCurrent;
 
     public PinPaintersMenuAction() {
         setId(PinPaintersMenuAction.class.getName());
@@ -32,13 +35,13 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
         setDisabledImageDescriptor(Icons.getPin(false));
 
         painterItems = new ArrayList<>();
+        allowPinCurrent = false;
     }
 
     private void pinCurrent() {
         Pair<VariableObject, DataPainter> cur = getCurrent();
         if (cur != null) {
-            Action action = new SelectDataPainterAction(cur.first(), cur.second());
-            painterItems.add(new ActionContributionItem(action));
+            painterItems.add(new SelectDataPainterAction(cur.first(), cur.second()));
         }
     }
 
@@ -70,9 +73,17 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
     @Override
     public Menu getMenu(Menu menu) {
-        new ActionContributionItem(new PinCurrentAction()).fill(menu, -1);
-        for (ActionContributionItem i : painterItems) {
-            i.fill(menu, -1);
+        if (allowPinCurrent) {
+            new ActionContributionItem(new PinCurrentAction()).fill(menu, -1);
+        }
+
+        if (allowPinCurrent && painterItems.size() > 0) {
+            new Separator().fill(menu, -1);
+        }
+
+        for (Action a : painterItems) {
+            ActionContributionItem item = new ActionContributionItem(a);
+            item.fill(menu, -1);
         }
 
         return menu;
@@ -80,7 +91,25 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
     protected abstract Pair<VariableObject, DataPainter> getCurrent();
 
-    protected abstract void select(DataPainter painter);
+    protected abstract void select(VariableObject obj, DataPainter painter);
+
+    @Override
+    public void variableSelected(VariableObject array) {
+        allowPinCurrent = true;
+        if (array == null) {
+            allowPinCurrent = false;
+        }
+        for (SelectDataPainterAction p : painterItems) {
+            if (p.obj == array) {
+                allowPinCurrent = false;
+            }
+        }
+    }
+
+    @Override
+    public void clearVariableCacheData() {
+        // nop
+    }
 
     private class PinCurrentAction extends Action {
         public PinCurrentAction() {
@@ -94,16 +123,18 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
     }
 
     private class SelectDataPainterAction extends Action {
+        private final VariableObject obj;
         private final DataPainter painter;
 
         public SelectDataPainterAction(VariableObject obj, DataPainter painter) {
+            this.obj = obj;
             this.painter = painter;
             setText(obj.getName() + " @ " + LocalTime.now().toString());
         }
 
         @Override
         public void run() {
-            select(painter);
+            select(obj, painter);
         }
     }
 }
