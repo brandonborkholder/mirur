@@ -1,8 +1,0 @@
-mirur.plugins.line1d.LineView
-mirur.plugins.bar1d.BarView
-mirur.plugins.histogram.HistogramView
-mirur.plugins.heatmap2d.HeatmapView
-mirur.plugins.image.ImageView
-mirur.plugins.shape.ShapeView
-mirur.plugins.complex.ComplexView
-mirur.plugins.xyscatter.XyScatterView

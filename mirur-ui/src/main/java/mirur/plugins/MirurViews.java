@@ -19,7 +19,15 @@ package mirur.plugins;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ServiceLoader;
+
+import mirur.plugins.bar1d.BarView;
+import mirur.plugins.complex.ComplexView;
+import mirur.plugins.heatmap2d.HeatmapView;
+import mirur.plugins.histogram.HistogramView;
+import mirur.plugins.image.ImageView;
+import mirur.plugins.line1d.LineView;
+import mirur.plugins.shape.ShapeView;
+import mirur.plugins.xyscatter.XyScatterView;
 
 public class MirurViews {
     private static MirurViews manager;
@@ -28,14 +36,17 @@ public class MirurViews {
 
     private MirurViews() {
         plugins = new ArrayList<>();
-
-        ServiceLoader<MirurView> loader = ServiceLoader.load(MirurView.class);
-        for (MirurView plugin : loader) {
-            plugins.add(plugin);
-        }
+        plugins.add(new LineView());
+        plugins.add(new BarView());
+        plugins.add(new HeatmapView());
+        plugins.add(new ImageView());
+        plugins.add(new ShapeView());
+        plugins.add(new HistogramView());
+        plugins.add(new ComplexView());
+        plugins.add(new XyScatterView());
     }
 
-    public static Collection<MirurView> plugins() {
+    public static synchronized Collection<MirurView> plugins() {
         if (manager == null) {
             manager = new MirurViews();
         }
