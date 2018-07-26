@@ -16,10 +16,15 @@
  */
 package mirur.plugins.complex;
 
+import static java.lang.Double.isNaN;
+
 import mirur.core.AbstractInterleavedVisitor;
 
 public class CplxAngleVisitor extends AbstractInterleavedVisitor {
+    private static final double twopi = 2 * Math.PI;
+
     private double dest[];
+    private double last;
 
     public double[] get() {
         return dest;
@@ -28,15 +33,26 @@ public class CplxAngleVisitor extends AbstractInterleavedVisitor {
     @Override
     protected void start(int length) {
         dest = new double[length >> 1];
+        last = Double.NaN;
     }
 
     @Override
     protected void visit(int i, double re, double im) {
-        dest[i >> 1] = Math.atan2(im, re);
+        double th = Math.atan2(im, re);
+        if (isNaN(last)) {
+            last = th;
+        } else {
+            while (last - th > Math.PI) {
+                th += twopi;
+            }
+        }
+
+        last = th;
+        dest[i >> 1] = th;
     }
 
     @Override
     protected void visit(int i, float re, float im) {
-        dest[i >> 1] = Math.atan2(im, re);
+        visit(i, (double) re, (double) im);
     }
 }
