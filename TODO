@@ -1,4 +1,6 @@
 automatically disable .toString() in the Variables view for arrays
 export to file doesn't preserve precision
 copy to clipboard function
+check all painters for errors
+clean up painter toolbar for sync and icon for pinning
 
