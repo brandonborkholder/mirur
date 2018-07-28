@@ -1,11 +1,13 @@
 package mirur.plugin.painterview;
 
-import java.time.LocalTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Point;
@@ -15,16 +17,16 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.metsci.glimpse.util.Pair;
-
 import mirur.core.VariableObject;
+import mirur.plugin.Activator;
 import mirur.plugin.Icons;
 import mirur.plugin.VarObjectSelectListener;
-import mirur.plugins.DataPainter;
 
 public abstract class PinPaintersMenuAction extends Action implements IMenuCreator, VarObjectSelectListener {
     private List<SelectDataPainterAction> painterItems;
-    private boolean allowPinCurrent;
+    private VariableObject selected;
+
+    private boolean doListenToVariablesView;
 
     public PinPaintersMenuAction() {
         setId(PinPaintersMenuAction.class.getName());
@@ -35,14 +37,37 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
         setDisabledImageDescriptor(Icons.getPin(false));
 
         painterItems = new ArrayList<>();
-        allowPinCurrent = false;
+
+        variableSelected(null);
+        doListenToVariablesView = true;
     }
 
-    private void pinCurrent() {
-        Pair<VariableObject, DataPainter> cur = getCurrent();
-        if (cur != null) {
-            painterItems.add(new SelectDataPainterAction(cur.first(), cur.second()));
+    private boolean doAllowPinCurrent() {
+        boolean allow = true;
+        if (selected == null) {
+            allow = false;
         }
+
+        for (SelectDataPainterAction p : painterItems) {
+            if (p.obj == selected) {
+                allow = false;
+            }
+        }
+
+        return allow;
+    }
+
+    protected abstract void pinCurrent();
+
+    protected abstract void select(VariableObject obj);
+
+    private void doSelect(VariableObject obj) {
+        selected = obj;
+        select(obj);
+    }
+
+    protected void add(VariableObject obj) {
+        painterItems.add(new SelectDataPainterAction(obj));
     }
 
     @Override
@@ -73,15 +98,19 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
     @Override
     public Menu getMenu(Menu menu) {
-        if (allowPinCurrent) {
+        new ActionContributionItem(new ListenToVariablesViewAction()).fill(menu, -1);
+
+        if (doAllowPinCurrent()) {
             new ActionContributionItem(new PinCurrentAction()).fill(menu, -1);
         }
 
-        if (allowPinCurrent && painterItems.size() > 0) {
+        if (painterItems.size() > 0) {
             new Separator().fill(menu, -1);
+            new ActionContributionItem(new ClearPinnedAction()).fill(menu, -1);
         }
 
-        for (Action a : painterItems) {
+        for (SelectDataPainterAction a : painterItems) {
+            a.updateUi();
             ActionContributionItem item = new ActionContributionItem(a);
             item.fill(menu, -1);
         }
@@ -89,21 +118,13 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
         return menu;
     }
 
-    protected abstract Pair<VariableObject, DataPainter> getCurrent();
-
-    protected abstract void select(VariableObject obj, DataPainter painter);
-
     @Override
     public void variableSelected(VariableObject array) {
-        allowPinCurrent = true;
-        if (array == null) {
-            allowPinCurrent = false;
+        if (!doListenToVariablesView) {
+            return;
         }
-        for (SelectDataPainterAction p : painterItems) {
-            if (p.obj == array) {
-                allowPinCurrent = false;
-            }
-        }
+
+        doSelect(array);
     }
 
     @Override
@@ -113,28 +134,85 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
     private class PinCurrentAction extends Action {
         public PinCurrentAction() {
-            setText("Pin Current");
+            super("Pin Current", IAction.AS_PUSH_BUTTON);
         }
 
         @Override
         public void run() {
+            doListenToVariablesView = false;
             pinCurrent();
         }
     }
 
     private class SelectDataPainterAction extends Action {
         private final VariableObject obj;
-        private final DataPainter painter;
+        private final Instant pinTime;
 
-        public SelectDataPainterAction(VariableObject obj, DataPainter painter) {
+        public SelectDataPainterAction(VariableObject obj) {
+            super(obj.getName(), IAction.AS_RADIO_BUTTON);
             this.obj = obj;
-            this.painter = painter;
-            setText(obj.getName() + " @ " + LocalTime.now().toString());
+            pinTime = Instant.now();
+        }
+
+        void updateUi() {
+            Duration ago = Duration.between(pinTime, Instant.now());
+            long x = ago.toMillis() / 1000;
+            long seconds = x % 60;
+            x /= 60;
+            long minutes = x % 60;
+            x /= 60;
+            long hours = x % 24;
+            x /= 24;
+            long days = x;
+            String agoStr = null;
+            if (days > 0) {
+                agoStr = String.format("%,dd%dh%dm%ds ago", days, hours, minutes, seconds);
+            } else if (hours > 0) {
+                agoStr = String.format("%dh%dm%ds ago", hours, minutes, seconds);
+            } else if (minutes > 0) {
+                agoStr = String.format("%dm%ds ago", minutes, seconds);
+            } else if (seconds > 0) {
+                agoStr = String.format("%ds ago", seconds);
+            }
+
+            setText(obj.getName() + " @ " + agoStr);
+            setChecked(obj == selected);
         }
 
         @Override
         public void run() {
-            select(obj, painter);
+            doListenToVariablesView = false;
+            doSelect(obj);
+        }
+    }
+
+    private class ListenToVariablesViewAction extends Action {
+        public ListenToVariablesViewAction() {
+            super("Sync Selection", IAction.AS_RADIO_BUTTON);
+            setId(ListenToVariablesViewAction.class.getName());
+            setChecked(doListenToVariablesView);
+            setImageDescriptor(Icons.getSync(doListenToVariablesView));
+        }
+
+        @Override
+        public void run() {
+            doListenToVariablesView = true;
+            doSelect(Activator.getVariableSelectionModel().getActiveSelected());
+        }
+    }
+
+    private class ClearPinnedAction extends Action {
+        public ClearPinnedAction() {
+            super("Clear Pinned", IAction.AS_PUSH_BUTTON);
+            setId(ClearPinnedAction.class.getName());
+            setImageDescriptor(Icons.getDelete());
+        }
+
+        @Override
+        public void run() {
+            doListenToVariablesView = true;
+            painterItems.clear();
+            doSelect(Activator.getVariableSelectionModel().getActiveSelected());
         }
     }
 }

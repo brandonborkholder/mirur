@@ -109,11 +109,15 @@ public class Icons {
         }
     }
 
+    public static ImageDescriptor getDelete() {
+        return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE);
+    }
+
     public static ImageDescriptor getPin(boolean enabled) {
         if (enabled) {
-            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin.gif");
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin.png");
         } else {
-            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin_disabled.gif");
+            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin_disabled.png");
         }
     }
 
