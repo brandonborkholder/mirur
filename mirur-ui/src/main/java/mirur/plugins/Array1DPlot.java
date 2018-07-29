@@ -30,31 +30,45 @@ import mirur.plugins.line1d.MarkerPainter;
 
 public class Array1DPlot extends SimplePlot2D {
     private GlimpsePainter dataPainter;
+    private DataUnitConverter unitConverter;
     private MarkerPainter markerPainter;
+    private double dataMin;
+    private double dataMax;
 
-    public Array1DPlot(GlimpsePainter dataPainter, Array1D array, DataUnitConverter unitConverter) {
-        getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
+    public Array1DPlot(Array1D array, double dataMin, double dataMax) {
+        this.dataMin = dataMin;
+        this.dataMax = dataMax;
+
         getLabelHandlerY().setTickSpacing(40);
 
         // since we center on the "array" index
         getAxisX().setMin(-0.5);
         getAxisX().setMax(array.getSize() - 0.5);
-        AxisUtils.adjustAxisToMinMax(array, getAxisY(), unitConverter);
         AxisUtils.padAxis(getAxisY());
 
         setTitlePainterData(array);
 
         setTitleFont(FontUtils.getDefaultPlain(14));
-
-        addPainter(dataPainter, DATA_LAYER);
-        this.dataPainter = dataPainter;
     }
 
-    public void swapPainter(GlimpsePainter dataPainter, int[] indexMap) {
-        removePainter(this.dataPainter);
+    public DataUnitConverter getUnitConverter() {
+        return unitConverter;
+    }
+
+    public void setPainter(GlimpsePainter dataPainter, DataUnitConverter unitConverter) {
+        if (this.dataPainter != null) {
+            removePainter(this.dataPainter);
+        }
         this.dataPainter = dataPainter;
+        this.unitConverter = unitConverter;
+
+        getLabelHandlerY().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
+        AxisUtils.adjustAxisToMinMax(dataMin, dataMax, getAxisY(), unitConverter);
 
         addPainter(dataPainter, DATA_LAYER);
+    }
+
+    public void setOrder(int[] indexMap) {
         if (titlePainter instanceof Array1DTitlePainter) {
             ((Array1DTitlePainter) titlePainter).setIndexMap(indexMap);
         }

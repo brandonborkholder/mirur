@@ -27,6 +27,7 @@ import com.metsci.glimpse.support.colormap.ColorGradient;
 import com.metsci.glimpse.support.texture.FloatTextureProjected2D.MutatorFloat2D;
 
 import mirur.core.Array2D;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
 import mirur.core.VisitArray;
 import mirur.plugins.AxisUtils;
@@ -63,7 +64,9 @@ public class HeatmapView extends SimplePlugin2D {
         final TaggedAxis1D axisZ = plot.getAxisZ();
 
         DataUnitConverter unitConverter = DataUnitConverter.IDENTITY;
-        AxisUtils.adjustAxisToMinMax(array, plot.getAxisZ(), unitConverter);
+        MinMaxFiniteValueVisitor minMaxVisitor = new MinMaxFiniteValueVisitor();
+        VisitArray.visit(array.getData(), minMaxVisitor);
+        AxisUtils.adjustAxisToMinMax(minMaxVisitor.getMin(), minMaxVisitor.getMax(), plot.getAxisZ(), unitConverter);
         t1.setValue(plot.getAxisZ().getMin());
         t2.setValue(plot.getAxisZ().getMax());
         AxisUtils.padAxis(plot.getAxisZ());
@@ -83,7 +86,7 @@ public class HeatmapView extends SimplePlugin2D {
                 plot.setColorGradient(gradient);
             }
         });
-        result.addAction(new ScaleChooserAction() {
+        result.addAction(new ScaleChooserAction("Color Axis Scale") {
             @Override
             protected void select(final ScaleOperator old, final ScaleOperator op, final boolean updateAxes) {
                 plot.getTexture().mutate(new MutatorFloat2D() {

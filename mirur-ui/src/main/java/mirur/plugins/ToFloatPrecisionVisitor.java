@@ -35,7 +35,7 @@ public class ToFloatPrecisionVisitor implements ArrayElementVisitor {
         dMax = Double.NEGATIVE_INFINITY;
     }
 
-    public DataUnitConverter get() {
+    public static DataUnitConverter create(double dMin, double dMax) {
         double sigfigs = abs(log10(abs(dMax - dMin))) + abs(log10(max(abs(dMax), abs(dMin))));
         if (isInfinite(dMin) || isInfinite(dMax)) {
             return DataUnitConverter.IDENTITY;
@@ -44,6 +44,10 @@ public class ToFloatPrecisionVisitor implements ArrayElementVisitor {
         } else {
             return new LinearScaleConverter(dMin, dMax);
         }
+    }
+
+    public DataUnitConverter get() {
+        return create(dMin, dMax);
     }
 
     @Override

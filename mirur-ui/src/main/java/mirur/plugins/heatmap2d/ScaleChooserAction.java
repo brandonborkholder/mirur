@@ -28,11 +28,11 @@ import mirur.plugins.DataPainterImpl.ResetAction;
 public abstract class ScaleChooserAction extends Action implements IMenuCreator, ResetAction {
 	private ScaleOperator cur;
 
-	public ScaleChooserAction() {
-		super("Color Axis Scale");
+	public ScaleChooserAction(String text) {
+		super(text, IAction.AS_DROP_DOWN_MENU);
 		setId(ScaleChooserAction.class.getName());
 		setMenuCreator(this);
-		setToolTipText("Select Color Axis Scale");
+		setToolTipText("Choose " + text);
 
 		cur = ScaleOperator.NORMAL;
 	}

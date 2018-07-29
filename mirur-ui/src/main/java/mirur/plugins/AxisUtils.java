@@ -19,10 +19,6 @@ package mirur.plugins;
 import com.metsci.glimpse.axis.Axis1D;
 import com.metsci.glimpse.axis.Axis2D;
 
-import mirur.core.MinMaxFiniteValueVisitor;
-import mirur.core.PrimitiveArray;
-import mirur.core.VisitArray;
-
 public class AxisUtils {
     public static void padAxis2d(Axis2D axis) {
         padAxis(axis.getAxisX());
@@ -36,17 +32,13 @@ public class AxisUtils {
         axis.validate();
     }
 
-    public static void adjustAxisToMinMax(PrimitiveArray array, Axis1D axis, DataUnitConverter unitConverter) {
-        MinMaxFiniteValueVisitor minMaxVisitor = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
-        double min = minMaxVisitor.getMin();
-        double max = minMaxVisitor.getMax();
-
-        if (min == max) {
-            max++;
+    public static void adjustAxisToMinMax(double minData, double maxData, Axis1D axis, DataUnitConverter unitConverter) {
+        if (minData == maxData) {
+            maxData++;
         }
 
-        axis.setMin(unitConverter.data2painter(min));
-        axis.setMax(unitConverter.data2painter(max));
+        axis.setMin(unitConverter.data2painter(minData));
+        axis.setMax(unitConverter.data2painter(maxData));
         axis.validate();
     }
 }

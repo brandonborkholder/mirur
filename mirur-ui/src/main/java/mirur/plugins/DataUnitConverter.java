@@ -18,6 +18,8 @@ package mirur.plugins;
 
 import com.metsci.glimpse.axis.painter.label.AxisUnitConverter;
 
+import mirur.plugins.heatmap2d.ScaleOperator;
+
 public interface DataUnitConverter {
     final DataUnitConverter IDENTITY = new DataUnitConverter() {
         @Override
@@ -75,15 +77,21 @@ public interface DataUnitConverter {
         }
     }
 
-    public static class LogConverter implements DataUnitConverter {
+    public static class ScaleOpConverter implements DataUnitConverter {
+        final ScaleOperator op;
+
+        public ScaleOpConverter(ScaleOperator op) {
+            this.op = op;
+        }
+
         @Override
         public double data2painter(double value) {
-            return Math.log(value);
+            return op.operate(value);
         }
 
         @Override
         public double painter2data(double value) {
-            return Math.exp(value);
+            return op.unoperate(value);
         }
     }
 

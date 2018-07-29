@@ -26,7 +26,6 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.metsci.glimpse.canvas.GlimpseCanvas;
@@ -34,8 +33,11 @@ import com.metsci.glimpse.painter.base.GlimpsePainter;
 
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VariableObject;
 import mirur.core.VisitArray;
+import mirur.plugins.heatmap2d.ScaleChooserAction;
+import mirur.plugins.heatmap2d.ScaleOperator;
 
 public abstract class SimplePlugin1D implements MirurView {
     private final String name;
@@ -52,22 +54,22 @@ public abstract class SimplePlugin1D implements MirurView {
         if (var instanceof Array1D) {
             Class<?> clazz = obj.getClass();
             return int[].class.equals(clazz) ||
-                   long[].class.equals(clazz) ||
-                   float[].class.equals(clazz) ||
-                   double[].class.equals(clazz) ||
-                   char[].class.equals(clazz) ||
-                   byte[].class.equals(clazz) ||
-                   short[].class.equals(clazz) ||
-                   boolean[].class.equals(clazz);
+                    long[].class.equals(clazz) ||
+                    float[].class.equals(clazz) ||
+                    double[].class.equals(clazz) ||
+                    char[].class.equals(clazz) ||
+                    byte[].class.equals(clazz) ||
+                    short[].class.equals(clazz) ||
+                    boolean[].class.equals(clazz);
         } else if (obj instanceof Buffer) {
             return ((Buffer) obj).hasArray() &&
-                   (obj instanceof ByteBuffer ||
-	                obj instanceof ShortBuffer ||
-	                obj instanceof CharBuffer ||
-	                obj instanceof IntBuffer ||
-	                obj instanceof FloatBuffer ||
-	                obj instanceof DoubleBuffer ||
-	                obj instanceof LongBuffer);
+                    (obj instanceof ByteBuffer ||
+                            obj instanceof ShortBuffer ||
+                            obj instanceof CharBuffer ||
+                            obj instanceof IntBuffer ||
+                            obj instanceof FloatBuffer ||
+                            obj instanceof DoubleBuffer ||
+                            obj instanceof LongBuffer);
         } else {
             return false;
         }
@@ -99,10 +101,13 @@ public abstract class SimplePlugin1D implements MirurView {
             array1d = new Array1DImpl(obj.getName(), arrayObj);
         }
 
-        DataUnitConverter unitConverter = VisitArray.visit(array1d.getData(), new ToFloatPrecisionVisitor()).get();
+        MinMaxFiniteValueVisitor minMaxVisitor = new MinMaxFiniteValueVisitor();
+        VisitArray.visit(array1d.getData(), minMaxVisitor);
+        DataUnitConverter unitConverter = ToFloatPrecisionVisitor.create(minMaxVisitor.getMin(), minMaxVisitor.getMax());
 
+        Array1DPlot plot = new Array1DPlot(array1d, minMaxVisitor.getMin(), minMaxVisitor.getMax());
         GlimpsePainter painter = createPainter(array1d, unitConverter);
-        Array1DPlot plot = new Array1DPlot(painter, array1d, unitConverter);
+        plot.setPainter(painter, unitConverter);
 
         if (obj.getData() instanceof Buffer) {
             Buffer buf = (Buffer) obj.getData();
@@ -112,20 +117,25 @@ public abstract class SimplePlugin1D implements MirurView {
 
         DataPainterImpl result = new DataPainterImpl(plot);
 
-        result.addAction(getSortAction(plot, array1d, unitConverter));
+        result.addAction(new SortAction(array1d) {
+            @Override
+            protected void swapPainter(Array1D array1d, int[] indexMap) {
+                GlimpsePainter newPainter = createPainter(array1d, plot.getUnitConverter());
+                plot.setPainter(newPainter, plot.getUnitConverter());
+                plot.setOrder(indexMap);
+            }
+        });
+        result.addAction(new ScaleChooserAction("Y Scale") {
+            @Override
+            protected void select(ScaleOperator old, ScaleOperator op, boolean updateAxes) {
+                DataUnitConverter unitConverter = new DataUnitConverter.ScaleOpConverter(op);
+                GlimpsePainter newPainter = createPainter(array1d, unitConverter);
+                plot.setPainter(newPainter, unitConverter);
+            }
+        });
 
         result.addAxis(plot.getAxis());
         return result;
-    }
-
-    protected Action getSortAction(final Array1DPlot plot, Array1D array, final DataUnitConverter unitConverter) {
-        return new SortAction(array) {
-            @Override
-            protected void swapPainter(Array1D arrayToPaint, int[] indexMap) {
-                GlimpsePainter newPainter = createPainter(arrayToPaint, unitConverter);
-                plot.swapPainter(newPainter, indexMap);
-            }
-        };
     }
 
     protected abstract GlimpsePainter createPainter(Array1D array, DataUnitConverter unitConverter);

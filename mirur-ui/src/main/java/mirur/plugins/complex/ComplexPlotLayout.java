@@ -45,6 +45,7 @@ import com.metsci.glimpse.plot.Plot2D;
 import com.metsci.glimpse.support.font.FontUtils;
 
 import mirur.core.Array1D;
+import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.VisitArray;
 import mirur.plugins.AxisUtils;
 import mirur.plugins.DataUnitConverter;
@@ -268,7 +269,9 @@ public class ComplexPlotLayout extends Plot2D {
         axis.getAxisX().setMin(-0.5);
         axis.getAxisX().setMax(array.getSize() - 0.5);
 
-        AxisUtils.adjustAxisToMinMax(array, axis.getAxisY(), unitConverter);
+        MinMaxFiniteValueVisitor minMaxVisitor = new MinMaxFiniteValueVisitor();
+        VisitArray.visit(array.getData(), minMaxVisitor);
+        AxisUtils.adjustAxisToMinMax(minMaxVisitor.getMin(), minMaxVisitor.getMax(), axis.getAxisY(), unitConverter);
         AxisUtils.padAxis(axis.getAxisY());
         axis.validate();
     }
