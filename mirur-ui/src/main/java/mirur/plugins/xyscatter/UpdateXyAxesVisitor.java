@@ -16,7 +16,7 @@
  */
 package mirur.plugins.xyscatter;
 
-import static com.google.common.primitives.Doubles.isFinite;
+import static java.lang.Double.isFinite;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 

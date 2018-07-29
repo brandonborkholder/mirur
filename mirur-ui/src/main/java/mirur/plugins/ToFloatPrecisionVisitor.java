@@ -16,7 +16,7 @@
  */
 package mirur.plugins;
 
-import static com.google.common.primitives.Doubles.isFinite;
+import static java.lang.Double.isFinite;
 import static java.lang.Double.isInfinite;
 import static java.lang.Math.abs;
 import static java.lang.Math.log10;
