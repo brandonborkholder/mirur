@@ -127,7 +127,7 @@ public abstract class SimplePlugin1D implements MirurView {
         });
         result.addAction(new ScaleChooserAction("Y Scale") {
             @Override
-            protected void select(ScaleOperator old, ScaleOperator op, boolean updateAxes) {
+            protected void select(ScaleOperator old, ScaleOperator op) {
                 DataUnitConverter unitConverter = new DataUnitConverter.ScaleOpConverter(op);
                 GlimpsePainter newPainter = createPainter(array1d, unitConverter);
                 plot.setPainter(newPainter, unitConverter);

@@ -88,7 +88,7 @@ public class HeatmapView extends SimplePlugin2D {
         });
         result.addAction(new ScaleChooserAction("Color Axis Scale") {
             @Override
-            protected void select(final ScaleOperator old, final ScaleOperator op, final boolean updateAxes) {
+            protected void select(final ScaleOperator old, final ScaleOperator op) {
                 plot.getTexture().mutate(new MutatorFloat2D() {
                     @Override
                     public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {
@@ -102,32 +102,24 @@ public class HeatmapView extends SimplePlugin2D {
                         data.flip();
                         op.operate(data);
 
-                        if (updateAxes) {
-                            double min = axisZ.getMin();
-                            min = op.operate(old.unoperate(min));
-                            double max = axisZ.getMax();
-                            max = op.operate(old.unoperate(max));
+                        double min = minMaxVisitor.getMin();
+                        min = op.operate(min);
+                        double max = minMaxVisitor.getMax();
+                        max = op.operate(max);
 
-                            if (!isFinite(min) && !isFinite(max)) {
-                                min = -1;
-                                max = 1;
-                            } else if (!isFinite(max)) {
-                                max = min + 1;
-                            } else if (!isFinite(min)) {
-                                min = max - 1;
-                            }
-                            axisZ.setMin(min);
-                            axisZ.setMax(max);
-
-                            double v = t1.getValue();
-                            v = op.operate(old.unoperate(v));
-                            v = isFinite(v) ? v : min;
-                            t1.setValue(v);
-                            v = t2.getValue();
-                            v = op.operate(old.unoperate(v));
-                            v = isFinite(v) ? v : max;
-                            t2.setValue(v);
+                        if (!isFinite(min) && !isFinite(max)) {
+                            min = -1;
+                            max = 1;
+                        } else if (!isFinite(max)) {
+                            max = min + 1;
+                        } else if (!isFinite(min)) {
+                            min = max - 1;
                         }
+
+                        axisZ.setMin(min);
+                        axisZ.setMax(max);
+                        t1.setValue(min);
+                        t2.setValue(max);
                     }
                 });
 
