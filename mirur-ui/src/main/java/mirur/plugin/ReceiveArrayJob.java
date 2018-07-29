@@ -19,7 +19,6 @@ package mirur.plugin;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logFine;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 import static mirur.core.MirurAgentCoder.decode;
-import static mirur.plugin.Activator.getStatistics;
 
 import java.io.BufferedInputStream;
 import java.io.ObjectInputStream;
@@ -98,7 +97,6 @@ public class ReceiveArrayJob extends Job {
         future.get();
 
         Object arrayObject = socketTask.get();
-        getStatistics().transformedViaAgent(var.getGenericSignature());
 
         new SubmitArrayToUIJob(name, var, frame, arrayObject).schedule();
     }
