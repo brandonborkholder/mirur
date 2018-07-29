@@ -29,7 +29,6 @@ public class LineView extends SimplePlugin1D {
 
     @Override
     protected GlimpsePainter createPainter(Array1D array, DataUnitConverter unitConverter) {
-        LinePainter painter = new LinePainter(array, unitConverter);
-        return painter;
+        return new LinePainter(array, unitConverter);
     }
 }

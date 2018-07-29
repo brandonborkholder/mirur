@@ -26,64 +26,69 @@ import org.eclipse.swt.widgets.Menu;
 import mirur.plugins.DataPainterImpl.ResetAction;
 
 public abstract class ScaleChooserAction extends Action implements IMenuCreator, ResetAction {
-	private ScaleOperator cur;
+    private ScaleOperator cur;
 
-	public ScaleChooserAction(String text) {
-		super(text, IAction.AS_DROP_DOWN_MENU);
-		setId(ScaleChooserAction.class.getName());
-		setMenuCreator(this);
-		setToolTipText("Choose " + text);
+    public ScaleChooserAction(String text) {
+        super(text, IAction.AS_DROP_DOWN_MENU);
+        setId(ScaleChooserAction.class.getName());
+        setMenuCreator(this);
+        setToolTipText("Choose " + text);
 
-		cur = ScaleOperator.NORMAL;
-	}
+        cur = ScaleOperator.NORMAL;
+    }
 
-	private void addScaleOption(Menu menu, String name, final ScaleOperator op) {
-		Action action = new Action(name, IAction.AS_RADIO_BUTTON) {
-			@Override
-			public void run() {
-				if (isChecked()) {
-					select(cur, op);
-					cur = op;
-				}
-			}
-		};
+    private void addScaleOption(Menu menu, String name, final ScaleOperator op) {
+        Action action = new Action(name, IAction.AS_RADIO_BUTTON) {
+            @Override
+            public void run() {
+                if (isChecked()) {
+                    ScaleOperator old = cur;
+                    cur = op;
+                    select(old, cur);
+                }
+            }
+        };
 
-		action.setChecked(op == cur);
-		ActionContributionItem item = new ActionContributionItem(action);
-		item.fill(menu, -1);
-	}
+        action.setChecked(op == cur);
+        ActionContributionItem item = new ActionContributionItem(action);
+        item.fill(menu, -1);
+    }
 
-	@Override
-	public void reset() {
-		select(cur, ScaleOperator.NORMAL);
-		cur = ScaleOperator.NORMAL;
-	}
+    @Override
+    public void reset() {
+        select(cur, ScaleOperator.NORMAL);
+        cur = ScaleOperator.NORMAL;
+    }
 
-	@Override
-	public void validate() {
-		// nop
-	}
+    @Override
+    public void validate() {
+        // nop
+    }
 
-	protected abstract void select(ScaleOperator old, ScaleOperator op);
+    protected abstract void select(ScaleOperator old, ScaleOperator op);
 
-	@Override
-	public void dispose() {
-	}
+    public ScaleOperator getOperator() {
+        return cur;
+    }
 
-	@Override
-	public Menu getMenu(Control parent) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void dispose() {
+    }
 
-	@Override
-	public Menu getMenu(Menu parent) {
-		Menu menu = new Menu(parent);
-		addScaleOption(menu, "normal", ScaleOperator.NORMAL);
-		addScaleOption(menu, "exp(x)", ScaleOperator.EXP);
-		addScaleOption(menu, "exp10(x)", ScaleOperator.EXP10);
-		addScaleOption(menu, "log(x)", ScaleOperator.LOG);
-		addScaleOption(menu, "log10(x)", ScaleOperator.LOG10);
+    @Override
+    public Menu getMenu(Control parent) {
+        throw new UnsupportedOperationException();
+    }
 
-		return menu;
-	}
+    @Override
+    public Menu getMenu(Menu parent) {
+        Menu menu = new Menu(parent);
+        addScaleOption(menu, "normal", ScaleOperator.NORMAL);
+        addScaleOption(menu, "exp(x)", ScaleOperator.EXP);
+        addScaleOption(menu, "exp10(x)", ScaleOperator.EXP10);
+        addScaleOption(menu, "log(x)", ScaleOperator.LOG);
+        addScaleOption(menu, "log10(x)", ScaleOperator.LOG10);
+
+        return menu;
+    }
 }

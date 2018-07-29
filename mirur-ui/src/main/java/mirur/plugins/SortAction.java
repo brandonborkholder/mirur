@@ -16,13 +16,13 @@
  */
 package mirur.plugins;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
 import mirur.core.SortHelperVisitor;
 import mirur.core.VisitArray;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 
 public abstract class SortAction extends Action {
     protected final Array1D unsorted;
@@ -37,15 +37,24 @@ public abstract class SortAction extends Action {
     }
 
     @Override
-    public void run() {
+    public abstract void run();
+
+    public int[] getIndexMap() {
+        if (isChecked()) {
+            return indexMapSorted;
+        } else {
+            return null;
+        }
+    }
+
+    public Array1D getArray() {
         if (isChecked()) {
             if (sorted == null) {
                 sort();
             }
-
-            swapPainter(sorted, indexMapSorted);
+            return sorted;
         } else {
-            swapPainter(unsorted, null);
+            return unsorted;
         }
     }
 
@@ -54,6 +63,4 @@ public abstract class SortAction extends Action {
         sorted = new Array1DImpl(unsorted.getName(), sortHelper.sorted);
         indexMapSorted = sortHelper.indexes;
     }
-
-    protected abstract void swapPainter(Array1D toPaint, int[] indexMap);
 }
