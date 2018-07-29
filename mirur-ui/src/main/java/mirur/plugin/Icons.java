@@ -36,8 +36,6 @@ import com.metsci.glimpse.support.colormap.ColorGradients;
 public class Icons {
     private static final Logger LOGGER = Logger.getLogger(Icons.class.getName());
 
-    private static final String NEWVIEW_PATH = "icons/new_view.gif";
-    private static final String CONFIG_PATH = "icons/config.gif";
     private static final String MIRUR_64_PATH = "icons/mirur_64.gif";
     private static final String MIRUR_LOGO_PATH = "icons/mirur-logo.png";
 
@@ -46,11 +44,11 @@ public class Icons {
     }
 
     public static ImageDescriptor getNewPainter(boolean enabled) {
-        return Activator.getImageDescriptor(NEWVIEW_PATH);
+        return Activator.getImageDescriptor("icons/painter.gif");
     }
 
     public static ImageDescriptor getConfig(boolean enabled) {
-        return Activator.getImageDescriptor(CONFIG_PATH);
+        return Activator.getImageDescriptor("icons/config.gif");
     }
 
     public static ImageDescriptor getRotate(boolean enabled) {
@@ -115,9 +113,9 @@ public class Icons {
 
     public static ImageDescriptor getPin(boolean enabled) {
         if (enabled) {
-            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin.png");
+            return Activator.getImageDescriptor("icons/pin.gif");
         } else {
-            return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor("icons/pin_disabled.png");
+            return Activator.getImageDescriptor("icons/pin_disabled.gif");
         }
     }
 

@@ -111,15 +111,20 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
             }
         };
         selectListenerToggle = new SelectListenerToggle(this, pinPaintersAction);
+        SelectViewAction selectViewAction = new SelectViewAction(viewSelectModel) {
+            @Override
+            protected VariableObject getCurrent() {
+                return currentData;
+            }
+        };
 
         IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
-        tbm.add(new SelectViewAction(viewSelectModel));
+        tbm.add(selectViewAction);
         tbm.add(viewMenuAction);
         tbm.add(resetAction);
         tbm.add(saveArrayAction);
         tbm.add(pinPaintersAction);
         tbm.add(new DuplicateViewAction(ID));
-        tbm.add(selectListenerToggle);
 
         getSite().getPage().addPartListener(selectListenerToggle);
 

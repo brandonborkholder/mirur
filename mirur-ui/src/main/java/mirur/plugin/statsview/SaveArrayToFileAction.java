@@ -36,7 +36,7 @@ public class SaveArrayToFileAction extends Action implements VarObjectSelectList
     public SaveArrayToFileAction() {
         super("Save Data", IAction.AS_PUSH_BUTTON);
         setId(SaveArrayToFileAction.class.getName());
-        setToolTipText("Save Array Values to File");
+        setToolTipText("Export Array to File");
         setImageDescriptor(Icons.getSaveAs(true));
         setDisabledImageDescriptor(Icons.getSaveAs(false));
     }

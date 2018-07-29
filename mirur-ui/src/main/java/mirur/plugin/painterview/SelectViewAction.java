@@ -16,8 +16,6 @@
  */
 package mirur.plugin.painterview;
 
-import static mirur.plugin.Activator.getVariableSelectionModel;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -36,7 +34,7 @@ import mirur.plugin.ViewSelectionModel;
 import mirur.plugins.MirurView;
 import mirur.plugins.MirurViews;
 
-public class SelectViewAction extends Action implements IMenuCreator {
+public abstract class SelectViewAction extends Action implements IMenuCreator {
     private final ViewSelectionModel viewSelectModel;
 
     public SelectViewAction(ViewSelectionModel viewSelectModel) {
@@ -69,11 +67,13 @@ public class SelectViewAction extends Action implements IMenuCreator {
         }
     }
 
+    protected abstract VariableObject getCurrent();
+
     @Override
     public Menu getMenu(Control parent) {
         Menu menu = new Menu(parent);
 
-        VariableObject obj = getVariableSelectionModel().getActiveSelected();
+        VariableObject obj = getCurrent();
 
         if (obj == null) {
             new ActionContributionItem(new NoVariableSelected()).fill(menu, -1);

@@ -106,13 +106,14 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
         if (painterItems.size() > 0) {
             new Separator().fill(menu, -1);
-            new ActionContributionItem(new ClearPinnedAction()).fill(menu, -1);
-        }
 
-        for (SelectDataPainterAction a : painterItems) {
-            a.updateUi();
-            ActionContributionItem item = new ActionContributionItem(a);
-            item.fill(menu, -1);
+            for (SelectDataPainterAction a : painterItems) {
+                a.updateUi();
+                ActionContributionItem item = new ActionContributionItem(a);
+                item.fill(menu, -1);
+            }
+
+            new ActionContributionItem(new ClearPinnedAction()).fill(menu, -1);
         }
 
         return menu;
@@ -188,7 +189,7 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
     private class ListenToVariablesViewAction extends Action {
         public ListenToVariablesViewAction() {
-            super("Sync Selection", IAction.AS_RADIO_BUTTON);
+            super("Sync Selection", IAction.AS_CHECK_BOX);
             setId(ListenToVariablesViewAction.class.getName());
             setChecked(doListenToVariablesView);
             setImageDescriptor(Icons.getSync(doListenToVariablesView));
@@ -196,8 +197,12 @@ public abstract class PinPaintersMenuAction extends Action implements IMenuCreat
 
         @Override
         public void run() {
-            doListenToVariablesView = true;
-            doSelect(Activator.getVariableSelectionModel().getActiveSelected());
+            doListenToVariablesView = isChecked();
+            if (doListenToVariablesView) {
+                doSelect(Activator.getVariableSelectionModel().getActiveSelected());
+            } else {
+                doSelect(null);
+            }
         }
     }
 
