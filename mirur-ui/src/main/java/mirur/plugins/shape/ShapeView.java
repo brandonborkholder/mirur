@@ -67,7 +67,7 @@ public class ShapeView implements MirurView {
         List<float[]> xs = new ArrayList<>();
         List<float[]> ys = new ArrayList<>();
 
-        Rectangle2D bounds = shape.getBounds2D();
+        final Rectangle2D bounds = shape.getBounds2D();
 
         AffineTransform xform = new AffineTransform();
         xform.concatenate(AffineTransform.getTranslateInstance(0, bounds.getMaxY()));

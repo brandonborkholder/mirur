@@ -64,7 +64,7 @@ public class HeatmapView extends SimplePlugin2D {
         final TaggedAxis1D axisZ = plot.getAxisZ();
 
         DataUnitConverter unitConverter = DataUnitConverter.IDENTITY;
-        MinMaxFiniteValueVisitor minMaxVisitor = new MinMaxFiniteValueVisitor();
+        final MinMaxFiniteValueVisitor minMaxVisitor = new MinMaxFiniteValueVisitor();
         VisitArray.visit(array.getData(), minMaxVisitor);
         AxisUtils.adjustAxisToMinMax(minMaxVisitor.getMin(), minMaxVisitor.getMax(), plot.getAxisZ(), unitConverter);
         t1.setValue(plot.getAxisZ().getMin());
