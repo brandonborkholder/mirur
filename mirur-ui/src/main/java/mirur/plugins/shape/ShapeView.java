@@ -16,22 +16,32 @@
  */
 package mirur.plugins.shape;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import static com.metsci.glimpse.plot.Plot2D.BACKGROUND_LAYER;
+import static com.metsci.glimpse.plot.Plot2D.DATA_LAYER;
+
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.metsci.glimpse.axis.painter.label.AxisUnitConverter;
 import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.painter.decoration.GridPainter;
+import com.metsci.glimpse.painter.shape.LineSetPainter;
+import com.metsci.glimpse.plot.SimplePlot2D;
+import com.metsci.glimpse.support.shader.line.LineJoinType;
+import com.metsci.glimpse.support.shader.line.LineStyle;
 
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import it.unimi.dsi.fastutil.floats.FloatList;
 import mirur.core.VariableObject;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.MirurView;
-import mirur.plugins.image.ImagePlot;
 
 public class ShapeView implements MirurView {
     @Override
@@ -53,26 +63,79 @@ public class ShapeView implements MirurView {
     public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         Shape shape = (Shape) obj.getData();
 
+        List<float[]> xs = new ArrayList<>();
+        List<float[]> ys = new ArrayList<>();
+
         Rectangle2D bounds = shape.getBounds2D();
 
-        int padW = (int) Math.max(bounds.getWidth() * 0.05, 10);
-        int padH = (int) Math.max(bounds.getHeight() * 0.05, 10);
-        int width = 1200;
-        int height = (int) (bounds.getHeight() / bounds.getWidth() * width);
+        AffineTransform xform = new AffineTransform();
+        xform.concatenate(AffineTransform.getTranslateInstance(0, bounds.getHeight()));
+        xform.concatenate(AffineTransform.getScaleInstance(1, -1));
 
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        PathIterator itr = shape.getPathIterator(xform, 30);
+        float[] coords = new float[2];
+        FloatList x = new FloatArrayList();
+        FloatList y = new FloatArrayList();
+        while (!itr.isDone()) {
+            int type = itr.currentSegment(coords);
+            switch (type) {
+            case PathIterator.SEG_MOVETO:
+                if (x.size() > 0) {
+                    xs.add(x.toFloatArray());
+                    ys.add(y.toFloatArray());
+                    x = new FloatArrayList();
+                    y = new FloatArrayList();
+                }
 
-        Graphics2D g2d = (Graphics2D) image.getGraphics();
-        g2d.translate(-bounds.getMinX(), -bounds.getMinY());
-        g2d.scale(width / bounds.getWidth(), height / bounds.getHeight());
-        g2d.translate(padW, padH);
+            case PathIterator.SEG_LINETO:
+                x.add(coords[0]);
+                y.add(coords[1]);
+                break;
 
-        g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-        g2d.setColor(Color.black);
-        g2d.draw(shape);
-        g2d.dispose();
+            case PathIterator.SEG_CLOSE:
+                x.add(x.getFloat(0));
+                y.add(y.getFloat(0));
+                break;
 
-        ImagePlot plot = new ImagePlot(image);
+            default:
+                throw new AssertionError();
+            }
+
+            itr.next();
+        }
+
+        xs.add(x.toFloatArray());
+        ys.add(y.toFloatArray());
+
+        LineSetPainter painter = new LineSetPainter();
+        painter.setData(xs.toArray(new float[0][]), ys.toArray(new float[0][]));
+        LineStyle style = new LineStyle();
+        style.thickness_PX = 2;
+        style.joinType = LineJoinType.JOIN_MITER;
+        painter.setLineStyle(style);
+
+        SimplePlot2D plot = new SimplePlot2D();
+        plot.getLayoutCenter().addPainter(new GridPainter(), BACKGROUND_LAYER);
+        plot.getLayoutCenter().addPainter(painter, DATA_LAYER);
+        plot.getLabelHandlerY().setTickSpacing(40);
+        plot.getLabelHandlerY().setAxisUnitConverter(new AxisUnitConverter() {
+            @Override
+            public double toAxisUnits(double value) {
+                return bounds.getHeight() - value;
+            }
+
+            @Override
+            public double fromAxisUnits(double value) {
+                return bounds.getHeight() - value;
+            }
+        });
+        plot.setTitleHeight(0);
+
+        plot.getAxisX().setMin(bounds.getMinX());
+        plot.getAxisY().setMin(bounds.getMinY());
+        plot.getAxisX().setMax(bounds.getMinX() + bounds.getWidth());
+        plot.getAxisY().setMax(bounds.getMinY() + bounds.getHeight());
+        plot.getAxis().validate();
 
         DataPainterImpl result = new DataPainterImpl(plot);
         result.addAxis(plot.getAxis());

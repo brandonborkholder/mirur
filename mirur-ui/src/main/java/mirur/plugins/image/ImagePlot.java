@@ -40,5 +40,7 @@ public class ImagePlot extends Plot2D {
         getAxisX().setMax(painter.image.getWidth() + 1);
         getAxisY().setMin(-1);
         getAxisY().setMax(painter.image.getHeight() + 1);
+        getAxis().lockAspectRatioXY(1);
+        getAxis().validate();
     }
 }

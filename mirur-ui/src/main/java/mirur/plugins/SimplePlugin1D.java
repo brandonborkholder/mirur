@@ -104,7 +104,7 @@ public abstract class SimplePlugin1D implements MirurView {
         Array1DPlot plot = new Array1DPlot(array1d);
 
         if (obj.getData() instanceof Buffer) {
-            Buffer buf = (Buffer) array1d.getData();
+            Buffer buf = (Buffer) obj.getData();
             plot.addMarker("position", buf.position());
             plot.addMarker("limit", buf.limit());
         }

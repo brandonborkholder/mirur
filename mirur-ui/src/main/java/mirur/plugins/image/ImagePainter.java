@@ -31,7 +31,6 @@ import javax.media.opengl.GLProfile;
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureData;
-import com.metsci.glimpse.context.GlimpseBounds;
 import com.metsci.glimpse.context.GlimpseContext;
 import com.metsci.glimpse.gl.GLEditableBuffer;
 import com.metsci.glimpse.painter.base.GlimpsePainterBase;
@@ -77,22 +76,21 @@ public class ImagePainter extends GlimpsePainterBase {
     @Override
     protected void doPaintTo(GlimpseContext context) {
         GL3 gl = getGL3(context);
-        GlimpseBounds bounds = getBounds(context);
 
         initIfNecessary(gl);
         if (texture == null) {
             return;
         }
 
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
         texture.enable(gl);
         texture.bind(gl);
 
         enableStandardBlending(gl);
         prog.begin(context);
         try {
-            prog.setPixelOrtho(context, bounds);
+            prog.setAxisOrtho(context, getAxis2D(context));
             prog.setTexture(context, 0);
 
             prog.draw(context, texture, inXy, inS);

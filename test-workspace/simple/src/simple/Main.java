@@ -62,7 +62,7 @@ public class Main {
             buffer.put((float) v() * 10);
         }
         buffer.position((int) (v() * buffer.capacity() / 2));
-        buffer.limit((int) (v() * buffer.capacity() / 2) + buffer.position());
+        buffer.limit((int) (v() * buffer.capacity() / 2) + buffer.position() - 1);
 
         Path2D.Float shape = new Path2D.Float();
         shape.moveTo(100, 50);
@@ -72,7 +72,7 @@ public class Main {
         shape.moveTo(100, 100);
         shape.quadTo(120, 120, 140, 380);
         BasicStroke stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage img = new BufferedImage(300, 300, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g2d = (Graphics2D) img.getGraphics();
         g2d.setColor(Color.blue);
         g2d.fillRect(20, 20, 50, 80);
