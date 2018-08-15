@@ -18,6 +18,7 @@ package mirur.plugins.shape;
 
 import static com.metsci.glimpse.plot.Plot2D.BACKGROUND_LAYER;
 import static com.metsci.glimpse.plot.Plot2D.DATA_LAYER;
+import static mirur.plugins.AxisUtils.padAxis2d;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -69,7 +70,7 @@ public class ShapeView implements MirurView {
         Rectangle2D bounds = shape.getBounds2D();
 
         AffineTransform xform = new AffineTransform();
-        xform.concatenate(AffineTransform.getTranslateInstance(0, bounds.getHeight()));
+        xform.concatenate(AffineTransform.getTranslateInstance(0, bounds.getMaxY()));
         xform.concatenate(AffineTransform.getScaleInstance(1, -1));
 
         PathIterator itr = shape.getPathIterator(xform, 30);
@@ -115,6 +116,8 @@ public class ShapeView implements MirurView {
         painter.setLineStyle(style);
 
         SimplePlot2D plot = new SimplePlot2D();
+        plot.getGridPainter().setShowMinorGrid(false);
+        plot.getCrosshairPainter().showSelectionBox(false);
         plot.getLayoutCenter().addPainter(new GridPainter(), BACKGROUND_LAYER);
         plot.getLayoutCenter().addPainter(painter, DATA_LAYER);
         plot.getLabelHandlerY().setTickSpacing(40);
@@ -132,9 +135,10 @@ public class ShapeView implements MirurView {
         plot.setTitleHeight(0);
 
         plot.getAxisX().setMin(bounds.getMinX());
-        plot.getAxisY().setMin(bounds.getMinY());
-        plot.getAxisX().setMax(bounds.getMinX() + bounds.getWidth());
-        plot.getAxisY().setMax(bounds.getMinY() + bounds.getHeight());
+        plot.getAxisX().setMax(bounds.getMaxX());
+        plot.getAxisY().setMin(0);
+        plot.getAxisY().setMax(bounds.getHeight());
+        padAxis2d(plot.getAxis());
         plot.getAxis().validate();
 
         DataPainterImpl result = new DataPainterImpl(plot);
