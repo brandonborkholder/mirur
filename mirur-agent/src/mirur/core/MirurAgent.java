@@ -237,49 +237,49 @@ public class MirurAgent implements Runnable {
         if (array instanceof boolean[][]) {
             long sum = 0;
             for (boolean[] a : (boolean[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 1L;
         } else if (array instanceof byte[][]) {
             long sum = 0;
             for (byte[] a : (byte[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 1L;
         } else if (array instanceof char[][]) {
             long sum = 0;
             for (char[] a : (char[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 2L;
         } else if (array instanceof short[][]) {
             long sum = 0;
             for (short[] a : (short[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 2L;
         } else if (array instanceof float[][]) {
             long sum = 0;
             for (float[] a : (float[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 4L;
         } else if (array instanceof int[][]) {
             long sum = 0;
             for (int[] a : (int[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 4L;
         } else if (array instanceof long[][]) {
             long sum = 0;
             for (long[] a : (long[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 8L;
         } else if (array instanceof double[][]) {
             long sum = 0;
             for (double[] a : (double[][]) array) {
-                sum += a.length;
+                sum += a == null ? 0 : a.length;
             }
             return sum * 8L;
         } else {
