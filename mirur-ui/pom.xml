@@ -138,10 +138,5 @@
             <artifactId>glimpse-core</artifactId>
             <version>3.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.metsci.glimpse</groupId>
-            <artifactId>glimpse-extras-swt</artifactId>
-            <version>3.1.0</version>
-        </dependency>
     </dependencies>
 </project>

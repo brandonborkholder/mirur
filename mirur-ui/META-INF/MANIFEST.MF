@@ -15,7 +15,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: lib/fastutil-7.0.13.jar,
  lib/glimpse-core-3.1.0.jar,
  lib/glimpse-text-3.1.0.jar,
- lib/glimpse-extras-swt-3.1.0.jar,
  lib/glimpse-util-3.1.0.jar,
  lib/gluegen-rt-2.2.4.jar,
  lib/gluegen-rt-main-2.2.4.jar,

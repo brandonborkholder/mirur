@@ -16,6 +16,7 @@
  */
 package mirur.plugin.painterview;
 
+import java.awt.Frame;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +25,15 @@ import javax.media.opengl.GLAnimatorControl;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.util.FPSAnimator;
+import com.metsci.glimpse.canvas.NewtSwingGlimpseCanvas;
 import com.metsci.glimpse.gl.util.GLUtils;
 import com.metsci.glimpse.support.settings.LookAndFeel;
-import com.metsci.glimpse.swt.canvas.NewtSwtGlimpseCanvas;
 
 import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;
@@ -54,7 +56,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
     private ViewSelectionModel viewSelectModel;
 
     private LookAndFeel laf;
-    private NewtSwtGlimpseCanvas canvas;
+    private NewtSwingGlimpseCanvas canvas;
     private GLAnimatorControl animator;
 
     private InvalidPlaceholderView invalidPlaceholder;
@@ -67,9 +69,13 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     @Override
     public void createPartControl(Composite parent) {
-        viewSelectModel = new ViewSelectionModel();
-        canvas = new NewtSwtGlimpseCanvas(parent, GLUtils.getDefaultGLProfile(), SWT.DOUBLE_BUFFERED);
+        Composite composite = new Composite(parent, SWT.EMBEDDED | SWT.NO_BACKGROUND);
+        Frame frame = SWT_AWT.new_Frame(composite);
+        canvas = new NewtSwingGlimpseCanvas(GLUtils.getDefaultGLProfile());
+        frame.add(canvas);
+
         canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
+        viewSelectModel = new ViewSelectionModel();
         laf = new MirurLAF();
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
@@ -136,7 +142,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     @Override
     public void setFocus() {
-        canvas.getCanvas().setFocus();
+        canvas.getCanvas().requestFocus();
     }
 
     @Override
