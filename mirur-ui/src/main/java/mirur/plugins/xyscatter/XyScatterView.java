@@ -42,7 +42,7 @@ public class XyScatterView extends SimplePlugin2D {
 
     @Override
     public boolean supportsData(VariableObject obj) {
-        if (obj instanceof Array1D) {
+        if (obj instanceof Array1D && ((Array1D) obj).getSize() % 2 == 0) {
             Class<?> clazz = ((Array1D) obj).getData().getClass();
             return int[].class.equals(clazz) ||
                     long[].class.equals(clazz) ||

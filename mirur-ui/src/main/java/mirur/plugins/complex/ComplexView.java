@@ -37,7 +37,7 @@ public class ComplexView extends SimplePlugin2D {
         if (obj instanceof Array2D) {
             // TODO support this
             return false;
-        } else if (obj instanceof Array1D) {
+        } else if (obj instanceof Array1D && ((Array1D) obj).getSize() % 2 == 0) {
             Class<?> clazz = ((Array1D) obj).getData().getClass();
             return int[].class.equals(clazz) ||
                     long[].class.equals(clazz) ||

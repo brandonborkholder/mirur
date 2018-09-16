@@ -12,7 +12,7 @@ import java.util.List;
 public class Main {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
-        double[] measurements = new double[500];
+        double[] measurements = new double[501];
         for (int i = 0; i < measurements.length; i++) {
             measurements[i] = v();
         }
