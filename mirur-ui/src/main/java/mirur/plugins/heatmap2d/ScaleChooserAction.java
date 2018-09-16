@@ -56,8 +56,9 @@ public abstract class ScaleChooserAction extends Action implements IMenuCreator,
 
     @Override
     public void reset() {
-        select(cur, ScaleOperator.NORMAL);
+        ScaleOperator old = cur;
         cur = ScaleOperator.NORMAL;
+        select(old, cur);
     }
 
     @Override

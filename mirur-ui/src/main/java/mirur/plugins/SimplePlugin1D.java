@@ -140,11 +140,12 @@ public abstract class SimplePlugin1D implements MirurView {
                     updatePainter();
                 }
             };
+
+            updatePainter();
+            addAxis(plot.getAxis());
+
             addAction(sortAction);
             addAction(scaleChooserAction);
-
-            addAxis(plot.getAxis());
-            updatePainter();
         }
 
         private void updatePainter() {

@@ -26,6 +26,8 @@
  */
 package mirur.plugins;
 
+import static java.lang.Double.isInfinite;
+import static java.lang.Double.isNaN;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
@@ -169,7 +171,9 @@ public class HdrAxisLabelHandler extends GridAxisLabelHandler {
             }
 
             String s = format("%,.3f", value);
-            if (value < 0) {
+            if (isInfinite(value) || isNaN(value)) {
+                // leave alone
+            } else if (value < 0) {
                 s = s.substring(0, 6);
             } else {
                 s = s.substring(0, 5);

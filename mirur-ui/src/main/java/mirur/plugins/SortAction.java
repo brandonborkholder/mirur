@@ -23,8 +23,9 @@ import mirur.core.Array1D;
 import mirur.core.Array1DImpl;
 import mirur.core.SortHelperVisitor;
 import mirur.core.VisitArray;
+import mirur.plugins.DataPainterImpl.ResetAction;
 
-public abstract class SortAction extends Action {
+public abstract class SortAction extends Action implements ResetAction {
     protected final Array1D unsorted;
     protected Array1D sorted;
     protected int[] indexMapSorted;
@@ -38,6 +39,17 @@ public abstract class SortAction extends Action {
 
     @Override
     public abstract void run();
+
+    @Override
+    public void reset() {
+        setChecked(false);
+        run();
+    }
+
+    @Override
+    public void validate() {
+        // nop
+    }
 
     public int[] getIndexMap() {
         if (isChecked()) {

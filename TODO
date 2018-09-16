@@ -5,4 +5,4 @@ check all painters for errors
 clean up painter toolbar for sync and icon for pinning
 minimize number of iterations over the arrays
 add timer to populating large arrays in the to avoid locking the system
-
+improper labeling when the Y-axis is not linear
