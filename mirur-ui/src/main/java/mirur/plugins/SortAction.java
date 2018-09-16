@@ -43,12 +43,11 @@ public abstract class SortAction extends Action implements ResetAction {
     @Override
     public void reset() {
         setChecked(false);
-        run();
     }
 
     @Override
     public void validate() {
-        // nop
+        run();
     }
 
     public int[] getIndexMap() {

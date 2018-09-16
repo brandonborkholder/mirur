@@ -34,11 +34,10 @@ public abstract class ToggleTransposeAction extends Action implements ResetActio
     @Override
     public void reset() {
         setChecked(false);
-        run();
     }
 
     @Override
     public void validate() {
-        // nop
+        run();
     }
 }

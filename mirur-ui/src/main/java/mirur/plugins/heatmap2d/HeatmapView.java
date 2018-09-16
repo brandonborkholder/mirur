@@ -88,7 +88,7 @@ public class HeatmapView extends SimplePlugin2D {
         });
         result.addAction(new ScaleChooserAction("Color Axis Scale") {
             @Override
-            protected void select(final ScaleOperator old, final ScaleOperator op) {
+            protected void select(final ScaleOperator op) {
                 plot.getTexture().mutate(new MutatorFloat2D() {
                     @Override
                     public void mutate(FloatBuffer data, int dataSizeX, int dataSizeY) {

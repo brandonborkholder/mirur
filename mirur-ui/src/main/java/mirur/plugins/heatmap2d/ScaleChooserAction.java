@@ -42,9 +42,8 @@ public abstract class ScaleChooserAction extends Action implements IMenuCreator,
             @Override
             public void run() {
                 if (isChecked()) {
-                    ScaleOperator old = cur;
                     cur = op;
-                    select(old, cur);
+                    select(cur);
                 }
             }
         };
@@ -56,17 +55,15 @@ public abstract class ScaleChooserAction extends Action implements IMenuCreator,
 
     @Override
     public void reset() {
-        ScaleOperator old = cur;
         cur = ScaleOperator.NORMAL;
-        select(old, cur);
     }
 
     @Override
     public void validate() {
-        // nop
+        select(cur);
     }
 
-    protected abstract void select(ScaleOperator old, ScaleOperator op);
+    protected abstract void select(ScaleOperator op);
 
     public ScaleOperator getOperator() {
         return cur;

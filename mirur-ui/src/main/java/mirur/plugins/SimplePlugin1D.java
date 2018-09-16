@@ -136,7 +136,7 @@ public abstract class SimplePlugin1D implements MirurView {
             };
             scaleChooserAction = new ScaleChooserAction("Y Scale") {
                 @Override
-                protected void select(ScaleOperator old, ScaleOperator op) {
+                protected void select(ScaleOperator op) {
                     updatePainter();
                 }
             };
