@@ -251,27 +251,27 @@ public class ComplexPlotLayout extends Plot2D {
     }
 
     public void setComplexData(Array1D complex, Array1D magnitudes, Array1D angles) {
-        DataUnitConverter unitConverter = VisitArray.visit(angles.getData(), new ToFloatPrecisionVisitor()).get();
+        MinMaxFiniteValueVisitor minMax = VisitArray.visit(angles.getData(), new MinMaxFiniteValueVisitor());
+        DataUnitConverter unitConverter = ToFloatPrecisionVisitor.create(minMax.getMin(), minMax.getMax());
         getLayoutXY1().addPainter(new LinePainter(angles, unitConverter));
-        updateAxesBounds(angles, axisXY, unitConverter);
+        updateAxesBounds(angles, axisXY, minMax.getMin(), minMax.getMax(), unitConverter);
         getLabelHandlerY1().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
 
-        unitConverter = VisitArray.visit(magnitudes.getData(), new ToFloatPrecisionVisitor()).get();
+        minMax = VisitArray.visit(magnitudes.getData(), new MinMaxFiniteValueVisitor());
+        unitConverter = ToFloatPrecisionVisitor.create(minMax.getMin(), minMax.getMax());
         getLayoutXY2().addPainter(new LinePainter(magnitudes, unitConverter));
-        updateAxesBounds(magnitudes, axisXY2, unitConverter);
+        updateAxesBounds(magnitudes, axisXY2, minMax.getMin(), minMax.getMax(), unitConverter);
         getLabelHandlerY2().setAxisUnitConverter(new DataAxisUnitConverter(unitConverter));
 
         titlePainter1.setArray(complex);
         titlePainter2.setArrays(angles, magnitudes);
     }
 
-    protected void updateAxesBounds(Array1D array, Axis2D axis, DataUnitConverter unitConverter) {
+    protected void updateAxesBounds(Array1D array, Axis2D axis, double dataMin, double dataMax, DataUnitConverter unitConverter) {
         axis.getAxisX().setMin(-0.5);
         axis.getAxisX().setMax(array.getSize() - 0.5);
 
-        MinMaxFiniteValueVisitor minMaxVisitor = new MinMaxFiniteValueVisitor();
-        VisitArray.visit(array.getData(), minMaxVisitor);
-        AxisUtils.adjustAxisToMinMax(minMaxVisitor.getMin(), minMaxVisitor.getMax(), axis.getAxisY(), unitConverter);
+        AxisUtils.adjustAxisToMinMax(dataMin, dataMax, axis.getAxisY(), unitConverter);
         AxisUtils.padAxis(axis.getAxisY());
         axis.validate();
     }

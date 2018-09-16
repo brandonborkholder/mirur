@@ -17,24 +17,15 @@
 package mirur.plugins.xyscatter;
 
 import mirur.core.AbstractInterleavedVisitor;
-import mirur.plugins.DataUnitConverter;
-import mirur.plugins.ToFloatPrecisionVisitor;
+import mirur.core.MinMaxFiniteValueVisitor;
 
-public class XyToFloatPrecisionVisitor extends AbstractInterleavedVisitor {
-    private ToFloatPrecisionVisitor xVisitor;
-    private ToFloatPrecisionVisitor yVisitor;
+public class XyMinMaxFiniteValueVisitor extends AbstractInterleavedVisitor {
+    public final MinMaxFiniteValueVisitor xVisitor;
+    public final MinMaxFiniteValueVisitor yVisitor;
 
-    public XyToFloatPrecisionVisitor() {
-        xVisitor = new ToFloatPrecisionVisitor();
-        yVisitor = new ToFloatPrecisionVisitor();
-    }
-
-    public DataUnitConverter getXUnitConverter() {
-        return xVisitor.get();
-    }
-
-    public DataUnitConverter getYUnitConverter() {
-        return yVisitor.get();
+    public XyMinMaxFiniteValueVisitor() {
+        xVisitor = new MinMaxFiniteValueVisitor();
+        yVisitor = new MinMaxFiniteValueVisitor();
     }
 
     @Override

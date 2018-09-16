@@ -34,6 +34,7 @@ import mirur.plugins.DataPainterImpl;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
 import mirur.plugins.SimplePlugin2D;
+import mirur.plugins.ToFloatPrecisionVisitor;
 
 public class XyScatterView extends SimplePlugin2D {
     public XyScatterView() {
@@ -59,9 +60,9 @@ public class XyScatterView extends SimplePlugin2D {
     public DataPainter create(GlimpseCanvas canvas, VariableObject obj) {
         Array1D array = (Array1D) obj;
 
-        XyToFloatPrecisionVisitor toFloatVisitor = VisitArray.visit1d(array.getData(), new XyToFloatPrecisionVisitor());
-        DataUnitConverter xUnitConverter = toFloatVisitor.getXUnitConverter();
-        DataUnitConverter yUnitConverter = toFloatVisitor.getYUnitConverter();
+        XyMinMaxFiniteValueVisitor xyVisitor = VisitArray.visit1d(array.getData(), new XyMinMaxFiniteValueVisitor());
+        DataUnitConverter xUnitConverter = ToFloatPrecisionVisitor.create(xyVisitor.xVisitor.getMin(), xyVisitor.xVisitor.getMax());
+        DataUnitConverter yUnitConverter = ToFloatPrecisionVisitor.create(xyVisitor.yVisitor.getMin(), xyVisitor.yVisitor.getMax());
         XyPointIndex index = new XyPointIndex(xUnitConverter, yUnitConverter);
         VisitArray.visit1d(array.getData(), index);
 
@@ -114,7 +115,8 @@ public class XyScatterView extends SimplePlugin2D {
         plot.getAxisX().addAxisListener(new FixedPixelSelectionSizeListener(10));
         plot.getAxisY().addAxisListener(new FixedPixelSelectionSizeListener(10));
 
-        VisitArray.visit1d(array.getData(), new UpdateXyAxesVisitor(xUnitConverter, yUnitConverter)).updateAxes(plot.getAxis());
+        AxisUtils.adjustAxisToMinMax(xyVisitor.xVisitor.getMin(), xyVisitor.xVisitor.getMax(), plot.getAxisX(), xUnitConverter);
+        AxisUtils.adjustAxisToMinMax(xyVisitor.yVisitor.getMin(), xyVisitor.yVisitor.getMax(), plot.getAxisY(), yUnitConverter);
         AxisUtils.padAxis2d(plot.getAxis());
         plot.getAxis().validate();
 

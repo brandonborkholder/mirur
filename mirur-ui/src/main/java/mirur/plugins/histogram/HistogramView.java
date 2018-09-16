@@ -65,7 +65,7 @@ public class HistogramView implements MirurView {
         PrimitiveArray array = (PrimitiveArray) obj;
 
         MinMaxFiniteValueVisitor minMax = VisitArray.visit(array.getData(), new MinMaxFiniteValueVisitor());
-        DataUnitConverter unitConverter = VisitArray.visit(array.getData(), new ToFloatPrecisionVisitor()).get();
+        DataUnitConverter unitConverter = ToFloatPrecisionVisitor.create(minMax.getMin(), minMax.getMax());
 
         HistogramVisitor histVisitor = new HistogramVisitor(minMax.getMin(), minMax.getMax(), minMax.getFiniteCount(), unitConverter);
         HistogramVisitor hist = VisitArray.visit(array.getData(), histVisitor);
