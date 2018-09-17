@@ -62,5 +62,12 @@
          point="org.eclipse.core.runtime.preferences">
          <initializer class="mirur.plugin.PreferencesInitializer"/>
    </extension>
+   <extension
+         point="org.eclipse.debug.ui.detailPaneFactories">
+      <detailFactories
+           class="mirur.plugin.detailpane.ArrayDetailPaneFactory"
+           name="Array Detail Factory">
+     </detailFactories>
+   </extension>
 
 </plugin>

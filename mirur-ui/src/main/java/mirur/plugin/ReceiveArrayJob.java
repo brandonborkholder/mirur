@@ -112,8 +112,11 @@ public class ReceiveArrayJob extends Job {
         IJavaValue[] args = new IJavaValue[] { value, maxBytesValue, portValue };
 
         DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { new DebugEvent(thread, DebugEvent.RESUME, DebugEvent.EVALUATION_IMPLICIT) });
-        agentType.sendMessage("streamObject", "(Ljava/lang/Object;JI)V", args, thread);
-        DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { new DebugEvent(thread, DebugEvent.SUSPEND, DebugEvent.EVALUATION_IMPLICIT) });
+        try {
+            agentType.sendMessage("streamObjectAsync", "(Ljava/lang/Object;JI)V", args, thread);
+        } finally {
+            DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { new DebugEvent(thread, DebugEvent.SUSPEND, DebugEvent.EVALUATION_IMPLICIT) });
+        }
 
         logFine(LOGGER, "Called MirurAgent.streamObjectAsync(Object, long, int) successfully");
     }
