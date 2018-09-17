@@ -14,55 +14,48 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 public class ArrayDetailPaneFactory implements IDetailPaneFactory {
     @Override
     public Set<String> getDetailPaneTypes(IStructuredSelection selection) {
-        Object o = null;
-        if (selection.size() == 1) {
-            o = selection.getFirstElement();
+        if (isValid(selection)) {
+            return Collections.singleton(ArrayDetailPane.ID);
+        } else {
+            return Collections.emptySet();
         }
-
-        try {
-            if (o instanceof IJavaVariable && isValid((IJavaVariable) o)) {
-                return Collections.singleton(ArrayDetailPane.ID);
-            }
-        } catch (DebugException ex) {
-            // ignore
-        }
-
-        return Collections.emptySet();
     }
 
     @Override
     public String getDefaultDetailPane(IStructuredSelection selection) {
+        if (isValid(selection)) {
+            return ArrayDetailPane.ID;
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isValid(IStructuredSelection selection) {
         Object o = null;
         if (selection.size() == 1) {
             o = selection.getFirstElement();
         }
 
         try {
-            if (o instanceof IJavaVariable && isValid((IJavaVariable) o)) {
-                return ArrayDetailPane.ID;
+            if (o instanceof IJavaVariable) {
+                IValue val = ((IJavaVariable) o).getValue();
+                if (val instanceof IJavaArray) {
+                    String sig = ((IJavaArray) val).getSignature();
+                    return sig.endsWith("[D") ||
+                            sig.endsWith("[B") ||
+                            sig.endsWith("[C") ||
+                            sig.endsWith("[S") ||
+                            sig.endsWith("[F") ||
+                            sig.endsWith("[J") ||
+                            sig.endsWith("[I") ||
+                            sig.endsWith("[Z");
+                }
             }
         } catch (DebugException ex) {
             // ignore
         }
 
-        return null;
-    }
-
-    private boolean isValid(IJavaVariable var) throws DebugException {
-        IValue val = var.getValue();
-        if (!(val instanceof IJavaArray)) {
-            return false;
-        }
-
-        String sig = ((IJavaArray) val).getSignature();
-        return sig.endsWith("[D") ||
-                sig.endsWith("[B") ||
-                sig.endsWith("[C") ||
-                sig.endsWith("[S") ||
-                sig.endsWith("[F") ||
-                sig.endsWith("[J") ||
-                sig.endsWith("[I") ||
-                sig.endsWith("[Z");
+        return false;
     }
 
     @Override
