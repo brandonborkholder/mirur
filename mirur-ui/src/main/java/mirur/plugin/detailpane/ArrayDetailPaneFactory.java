@@ -1,17 +1,24 @@
 package mirur.plugin.detailpane;
 
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
+
 import java.util.Collections;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.ui.IDetailPane;
 import org.eclipse.debug.ui.IDetailPaneFactory;
 import org.eclipse.jdt.debug.core.IJavaArray;
+import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
+import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class ArrayDetailPaneFactory implements IDetailPaneFactory {
+    private static final Logger LOGGER = Logger.getLogger(ArrayDetailPaneFactory.class.getName());
+
     @Override
     public Set<String> getDetailPaneTypes(IStructuredSelection selection) {
         if (isValid(selection)) {
@@ -30,7 +37,62 @@ public class ArrayDetailPaneFactory implements IDetailPaneFactory {
         }
     }
 
-    private boolean isValid(IStructuredSelection selection) {
+    static String toString(IStructuredSelection selection) {
+        if (selection.size() != 1) {
+            return "";
+        }
+
+        try {
+            // we assume it's valid
+            Object o = selection.getFirstElement();
+            IJavaArray array = (IJavaArray) ((IJavaVariable) o).getValue();
+            int numElements = 100;
+            StringBuilder sb = new StringBuilder();
+            boolean complete = visit(sb, array, numElements) >= 0;
+
+            if (!complete) {
+                sb.append(" ...");
+            }
+
+            return sb.toString();
+        } catch (DebugException ex) {
+            logWarning(LOGGER, "Error getting variable details", ex);
+            return "";
+        }
+    }
+
+    private static int visit(StringBuilder sb, IJavaArray array, int remaining) throws DebugException {
+        int i = 0;
+        sb.append("[");
+        for (; i < array.getSize() && remaining > 0; i++) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+
+            IJavaValue val = array.getValue(i);
+            if (val instanceof IJavaPrimitiveValue) {
+                sb.append(val.getValueString());
+                remaining--;
+            } else if (val instanceof IJavaArray) {
+                remaining = visit(sb, (IJavaArray) val, remaining);
+            } else {
+                throw new AssertionError();
+            }
+        }
+
+        if (i < array.getSize()) {
+            // did not complete
+            remaining = -1;
+        }
+
+        if (remaining >= 0) {
+            sb.append("]");
+        }
+
+        return remaining;
+    }
+
+    static boolean isValid(IStructuredSelection selection) {
         Object o = null;
         if (selection.size() == 1) {
             o = selection.getFirstElement();
