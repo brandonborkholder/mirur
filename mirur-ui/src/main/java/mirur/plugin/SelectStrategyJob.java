@@ -66,9 +66,7 @@ public class SelectStrategyJob extends Job {
     }
 
     private void execute() throws DebugException, InterruptedException {
-        if (ChromeDevToolsSupport.supports(var)) {
-            new ChromeDevToolsArrayJob(name, var, frame).schedule();
-        } else if (var instanceof IJavaVariable && frame instanceof IJavaStackFrame) {
+        if (var instanceof IJavaVariable && frame instanceof IJavaStackFrame) {
             IJavaStackFrame javaFrame = (IJavaStackFrame) frame;
             IJavaDebugTarget target = (IJavaDebugTarget) javaFrame.getDebugTarget();
             IJavaVariable jvar = (IJavaVariable) var;
