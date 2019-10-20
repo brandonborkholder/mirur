@@ -36,8 +36,6 @@ public class Activator extends AbstractUIPlugin {
 
     private static RemoteAgentDeployer agentDeployer;
 
-    private static StatisticsCollector statsCollector;
-
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
@@ -47,18 +45,13 @@ public class Activator extends AbstractUIPlugin {
 
         PluginLogSupport.initializeLogger();
 
-        statsCollector = new StatisticsCollector();
         agentDeployer = new RemoteAgentDeployer();
         variableCache = new VariableSelectionCache();
         varSelectionModel = new VariableSelectionModel();
-
-        statsCollector.started();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        statsCollector.shuttingDown();
-
         plugin = null;
         preferences.flush();
         super.stop(context);
@@ -86,10 +79,6 @@ public class Activator extends AbstractUIPlugin {
 
     public static RemoteAgentDeployer getAgentDeployer() {
         return agentDeployer;
-    }
-
-    public static StatisticsCollector getStatistics() {
-        return statsCollector;
     }
 
     public static Image getCachedImage(String name) {

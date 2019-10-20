@@ -81,8 +81,6 @@ public class ViewSelectionModel implements VarObjectSelectListener {
         lastSelectedQ.remove(selected);
         lastSelectedQ.push(selected);
 
-        Activator.getStatistics().selected(selected);
-
         for (ViewSelectListener l : viewListeners) {
             notifySelectedAsync(l, selected);
         }

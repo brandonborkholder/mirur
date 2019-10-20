@@ -16,7 +16,6 @@
  */
 package mirur.plugin;
 
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -27,9 +26,7 @@ public class MirurPreferencesPage extends FieldEditorPreferencePage implements I
 
     @Override
     protected void createFieldEditors() {
-        addField(new BooleanFieldEditor(Preferences.PREF_SUBMIT_STATISTICS, "Submit anonymous &usage statistics?", getFieldEditorParent()));
-        addField(new IntegerFieldEditor(Preferences.PREF_MAX_BYTES_TRANSFER, "Maximum size (bytes) of objects to transfer from remote JVM",
-                getFieldEditorParent()));
+        addField(new IntegerFieldEditor(Preferences.PREF_MAX_BYTES_TRANSFER, "Maximum size (bytes) of objects to transfer from remote JVM", getFieldEditorParent()));
     }
 
     @Override

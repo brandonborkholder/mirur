@@ -34,7 +34,6 @@ public class Preferences {
     private static final String PREFSUFFIX_SYNC_WITH_VARIABLES_VIEW = "toggle.variables.sync";
 
     public static final String ANONYMOUS_ID = "anonid";
-    public static final String PREF_SUBMIT_STATISTICS = "submit.statistics";
     public static final String PREF_MAX_BYTES_TRANSFER = "max.bytes.transfer";
 
     private final IEclipsePreferences prefNode;
@@ -75,14 +74,6 @@ public class Preferences {
 
     public void setSyncWithVariablesView(String viewId, boolean newValue) {
         prefNode.putBoolean(viewId + "." + PREFSUFFIX_SYNC_WITH_VARIABLES_VIEW, newValue);
-    }
-
-    public boolean doSubmitStatistics() {
-        return prefNode.getBoolean(PREF_SUBMIT_STATISTICS, true);
-    }
-
-    public void setSubmitStatistics(boolean newValue) {
-        prefNode.putBoolean(PREF_SUBMIT_STATISTICS, newValue);
     }
 
     public String getAnonymousId() {

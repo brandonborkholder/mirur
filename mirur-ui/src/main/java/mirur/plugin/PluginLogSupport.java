@@ -58,7 +58,6 @@ public class PluginLogSupport {
                 } else if (level.intValue() >= Level.SEVERE.intValue()) {
                     status = IStatus.ERROR;
                 } else if (level.intValue() >= Level.WARNING.intValue()) {
-                    Activator.getStatistics().logWarning(message, ex);
                     status = IStatus.WARNING;
                 } else {
                     status = IStatus.INFO;

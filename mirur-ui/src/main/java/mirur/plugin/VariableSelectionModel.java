@@ -90,8 +90,6 @@ public class VariableSelectionModel {
 
         lastSelected = selected;
 
-        Activator.getStatistics().selected(selected);
-
         for (VarObjectSelectListener l : arrayListeners) {
             notifySelectedAsync(l, selected);
         }
