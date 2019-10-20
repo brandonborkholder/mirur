@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/mirur.feature_2.0.0.qualifier.jar" id="mirur.feature" version="2.0.0.qualifier" os="linux,macosx,win32" arch="x86,x86_64">
+   <feature url="features/mirur.feature_2.1.0.qualifier.jar" id="mirur.feature" version="2.1.0.qualifier" os="linux,macosx,win32" arch="x86,x86_64">
       <category name="mirur.category"/>
    </feature>
    <!--
