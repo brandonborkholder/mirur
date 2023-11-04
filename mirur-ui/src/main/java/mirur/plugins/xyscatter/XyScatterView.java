@@ -16,14 +16,13 @@
  */
 package mirur.plugins.xyscatter;
 
-import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
-import com.metsci.glimpse.axis.painter.label.HdrAxisLabelHandler;
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
-import com.metsci.glimpse.plot.Plot2D;
-import com.metsci.glimpse.plot.SimplePlot2D;
-import com.metsci.glimpse.support.font.FontUtils;
+import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
+import com.metsci.glimpse.core.plot.Plot2D;
+import com.metsci.glimpse.core.plot.SimplePlot2D;
+import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.core.VariableObject;
@@ -33,6 +32,7 @@ import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.DataUnitConverter;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
+import mirur.plugins.HdrAxisLabelHandler;
 import mirur.plugins.SimplePlugin2D;
 import mirur.plugins.ToFloatPrecisionVisitor;
 

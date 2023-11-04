@@ -16,7 +16,7 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.Axis2D;
+import com.metsci.glimpse.core.axis.Axis2D;
 
 public class ResetAxesTask implements Runnable {
     private final Axis2D axis;

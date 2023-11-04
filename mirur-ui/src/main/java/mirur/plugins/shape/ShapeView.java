@@ -16,8 +16,8 @@
  */
 package mirur.plugins.shape;
 
-import static com.metsci.glimpse.plot.Plot2D.BACKGROUND_LAYER;
-import static com.metsci.glimpse.plot.Plot2D.DATA_LAYER;
+import static com.metsci.glimpse.core.plot.Plot2D.BACKGROUND_LAYER;
+import static com.metsci.glimpse.core.plot.Plot2D.DATA_LAYER;
 import static mirur.plugins.AxisUtils.padAxis2d;
 
 import java.awt.Shape;
@@ -29,13 +29,13 @@ import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.metsci.glimpse.axis.painter.label.AxisUnitConverter;
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.painter.decoration.GridPainter;
-import com.metsci.glimpse.painter.shape.LineSetPainter;
-import com.metsci.glimpse.plot.SimplePlot2D;
-import com.metsci.glimpse.support.shader.line.LineJoinType;
-import com.metsci.glimpse.support.shader.line.LineStyle;
+import com.metsci.glimpse.core.axis.painter.label.AxisUnitConverter;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.painter.decoration.GridPainter;
+import com.metsci.glimpse.core.painter.shape.LineSetPainter;
+import com.metsci.glimpse.core.plot.SimplePlot2D;
+import com.metsci.glimpse.core.support.shader.line.LineJoinType;
+import com.metsci.glimpse.core.support.shader.line.LineStyle;
 
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;

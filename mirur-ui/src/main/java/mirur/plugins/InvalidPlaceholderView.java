@@ -18,7 +18,7 @@ package mirur.plugins;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
 
 import mirur.core.VariableObject;
 

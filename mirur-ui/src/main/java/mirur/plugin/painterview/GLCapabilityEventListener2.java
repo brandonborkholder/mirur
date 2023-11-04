@@ -20,9 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javax.media.opengl.GLAutoDrawable;
-
-import com.metsci.glimpse.gl.GLCapabilityEventListener;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.metsci.glimpse.core.gl.GLCapabilityEventListener;
 
 /**
  * Eclipse's logging seems very slow and logging all OpenGL capabilities at start really makes it seem like the plugin

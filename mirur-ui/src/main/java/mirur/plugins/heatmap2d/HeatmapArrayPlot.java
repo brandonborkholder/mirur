@@ -18,21 +18,21 @@ package mirur.plugins.heatmap2d;
 
 import java.util.Map;
 
-import com.metsci.glimpse.axis.tagged.NamedConstraint;
-import com.metsci.glimpse.axis.tagged.Tag;
-import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
-import com.metsci.glimpse.gl.texture.ColorTexture1D;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
-import com.metsci.glimpse.painter.texture.TaggedHeatMapPainter;
-import com.metsci.glimpse.plot.TaggedColorAxisPlot2D;
-import com.metsci.glimpse.support.color.GlimpseColor;
-import com.metsci.glimpse.support.colormap.ColorGradient;
-import com.metsci.glimpse.support.colormap.ColorGradients;
-import com.metsci.glimpse.support.font.FontUtils;
-import com.metsci.glimpse.support.projection.FlatProjection;
-import com.metsci.glimpse.support.texture.FloatTextureProjected2D;
+import com.metsci.glimpse.core.axis.tagged.NamedConstraint;
+import com.metsci.glimpse.core.axis.tagged.Tag;
+import com.metsci.glimpse.core.axis.tagged.TaggedAxis1D;
+import com.metsci.glimpse.core.gl.texture.ColorTexture1D;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
+import com.metsci.glimpse.core.painter.texture.TaggedHeatMapPainter;
+import com.metsci.glimpse.core.plot.TaggedColorAxisPlot2D;
+import com.metsci.glimpse.core.support.color.GlimpseColor;
+import com.metsci.glimpse.core.support.colormap.ColorGradient;
+import com.metsci.glimpse.core.support.colormap.ColorGradients;
+import com.metsci.glimpse.core.support.font.FontUtils;
+import com.metsci.glimpse.core.support.projection.FlatProjection;
+import com.metsci.glimpse.core.support.texture.FloatTextureProjected2D;
 
 import mirur.core.Array2D;
 import mirur.plugins.Array2DTitlePainter;

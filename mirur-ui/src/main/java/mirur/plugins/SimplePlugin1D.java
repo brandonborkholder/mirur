@@ -28,8 +28,8 @@ import java.nio.ShortBuffer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.painter.base.GlimpsePainter;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.painter.base.GlimpsePainter;
 
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;

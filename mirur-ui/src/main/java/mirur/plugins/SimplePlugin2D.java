@@ -16,10 +16,10 @@
  */
 package mirur.plugins;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
 import mirur.core.Array2D;
 import mirur.core.VariableObject;
-
-import org.eclipse.jface.resource.ImageDescriptor;
 
 public abstract class SimplePlugin2D implements MirurView {
     private final String name;

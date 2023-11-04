@@ -16,7 +16,7 @@
  */
 package mirur.plugins.complex;
 
-import com.metsci.glimpse.axis.Axis1D;
+import com.metsci.glimpse.core.axis.Axis1D;
 
 import mirur.core.ElementToStringVisitor;
 import mirur.core.VisitArray;

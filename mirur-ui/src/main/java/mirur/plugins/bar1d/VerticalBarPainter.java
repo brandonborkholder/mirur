@@ -16,18 +16,17 @@
  */
 package mirur.plugins.bar1d;
 
-import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
-import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
-import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
+import static com.metsci.glimpse.core.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.core.gl.util.GLUtils.enableStandardBlending;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlack;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL3;
-
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.gl.GLEditableBuffer;
-import com.metsci.glimpse.painter.base.GlimpsePainterBase;
-import com.metsci.glimpse.support.settings.LookAndFeel;
-import com.metsci.glimpse.support.shader.triangle.FlatColorProgram;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL3;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.gl.GLEditableBuffer;
+import com.metsci.glimpse.core.painter.base.GlimpsePainterBase;
+import com.metsci.glimpse.core.support.settings.LookAndFeel;
+import com.metsci.glimpse.core.support.shader.triangle.FlatColorProgram;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;

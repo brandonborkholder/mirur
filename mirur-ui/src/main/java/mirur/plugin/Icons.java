@@ -30,8 +30,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.metsci.glimpse.support.colormap.ColorGradient;
-import com.metsci.glimpse.support.colormap.ColorGradients;
+import com.metsci.glimpse.core.support.colormap.ColorGradient;
+import com.metsci.glimpse.core.support.colormap.ColorGradients;
 
 public class Icons {
     private static final Logger LOGGER = Logger.getLogger(Icons.class.getName());

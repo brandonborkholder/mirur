@@ -37,8 +37,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 
-import mirur.core.MirurAgent;
-
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaClassType;
@@ -47,6 +45,8 @@ import org.eclipse.jdt.debug.core.IJavaObject;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
+
+import mirur.core.MirurAgent;
 
 public class RemoteAgentDeployer {
     private static final Logger LOGGER = Logger.getLogger(RemoteAgentDeployer.class.getName());

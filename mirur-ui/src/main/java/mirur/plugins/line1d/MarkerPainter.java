@@ -16,15 +16,15 @@
  */
 package mirur.plugins.line1d;
 
-import static com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition.Left;
-import static com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition.Center;
-import static com.metsci.glimpse.support.color.GlimpseColor.getBlue;
+import static com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition.Left;
+import static com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition.Center;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlue;
 
 import java.util.Arrays;
 
-import com.metsci.glimpse.painter.group.DelegatePainter;
-import com.metsci.glimpse.painter.info.AnnotationPainter;
-import com.metsci.glimpse.painter.shape.LineSetPainter;
+import com.metsci.glimpse.core.painter.group.DelegatePainter;
+import com.metsci.glimpse.core.painter.info.AnnotationPainter;
+import com.metsci.glimpse.core.painter.shape.LineSetPainter;
 
 public class MarkerPainter extends DelegatePainter {
     private AnnotationPainter annotationPainter;

@@ -18,7 +18,7 @@ package mirur.plugins.xyscatter;
 
 import java.util.Collection;
 
-import com.metsci.glimpse.painter.shape.PointSetPainter.IdXy;
+import com.metsci.glimpse.core.painter.shape.PointSetPainter.IdXy;
 import com.metsci.glimpse.util.quadtree.QuadTreeXys;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;

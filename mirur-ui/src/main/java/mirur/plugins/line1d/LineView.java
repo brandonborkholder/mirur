@@ -16,7 +16,7 @@
  */
 package mirur.plugins.line1d;
 
-import com.metsci.glimpse.painter.base.GlimpsePainter;
+import com.metsci.glimpse.core.painter.base.GlimpsePainter;
 
 import mirur.core.Array1D;
 import mirur.plugins.DataUnitConverter;

@@ -16,7 +16,7 @@
  */
 package mirur.plugins.heatmap2d;
 
-import com.metsci.glimpse.support.projection.FlatProjection;
+import com.metsci.glimpse.core.support.projection.FlatProjection;
 
 public class FlippedFlatProjection extends FlatProjection {
     public FlippedFlatProjection(double minX, double maxX, double minY, double maxY) {

@@ -16,9 +16,9 @@
  */
 package mirur.plugins.xyscatter;
 
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.info.TooltipPainter;
+import com.metsci.glimpse.core.axis.Axis2D;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.painter.info.TooltipPainter;
 
 import it.unimi.dsi.fastutil.ints.IntList;
 import mirur.core.Array1D;
@@ -75,7 +75,7 @@ public class XyArrayTooltipPainter extends TooltipPainter {
                 sb.append("\n");
             }
 
-            int idx = indexes.get(i);
+            int idx = indexes.getInt(i);
             sb.append("[");
             sb.append(idx * 2);
             sb.append(",");

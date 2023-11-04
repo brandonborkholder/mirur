@@ -16,26 +16,25 @@
  */
 package mirur.plugins.histogram;
 
-import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
-import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
-import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
-import static com.metsci.glimpse.support.shader.line.LineUtils.ppvAspectRatio;
+import static com.metsci.glimpse.core.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.core.gl.util.GLUtils.enableStandardBlending;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlack;
+import static com.metsci.glimpse.core.support.shader.line.LineUtils.ppvAspectRatio;
 
-import javax.media.opengl.GL3;
-
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.support.settings.LookAndFeel;
-import com.metsci.glimpse.support.shader.line.LineJoinType;
-import com.metsci.glimpse.support.shader.line.LinePath;
-import com.metsci.glimpse.support.shader.line.LineProgram;
-import com.metsci.glimpse.support.shader.line.LineStyle;
+import com.jogamp.opengl.GL3;
+import com.metsci.glimpse.core.axis.Axis2D;
+import com.metsci.glimpse.core.context.GlimpseBounds;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.support.settings.LookAndFeel;
+import com.metsci.glimpse.core.support.shader.line.LineJoinType;
+import com.metsci.glimpse.core.support.shader.line.LinePath;
+import com.metsci.glimpse.core.support.shader.line.LineProgram;
+import com.metsci.glimpse.core.support.shader.line.LineStyle;
 
 import it.unimi.dsi.fastutil.floats.Float2IntMap;
 import mirur.plugin.painterview.MirurLAF;
 
-public class HistogramPainter extends com.metsci.glimpse.painter.plot.HistogramPainter {
+public class HistogramPainter extends com.metsci.glimpse.core.painter.plot.HistogramPainter {
     private Float2IntMap counts;
 
     private LineProgram prog;

@@ -16,10 +16,10 @@
  */
 package mirur.plugins.xyscatter;
 
-import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlack;
 
-import com.metsci.glimpse.painter.shape.PointSetPainter;
-import com.metsci.glimpse.support.settings.LookAndFeel;
+import com.metsci.glimpse.core.painter.shape.PointSetPainter;
+import com.metsci.glimpse.core.support.settings.LookAndFeel;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;

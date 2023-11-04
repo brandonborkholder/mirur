@@ -36,8 +36,8 @@ import static java.lang.Math.pow;
 import static java.lang.Math.signum;
 import static java.lang.String.format;
 
-import com.metsci.glimpse.axis.Axis1D;
-import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.core.axis.Axis1D;
+import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
 
 /**
  * High dynamic range axis label handler. The tick labels are always a fixed width (modulo the negative sign) so zooming

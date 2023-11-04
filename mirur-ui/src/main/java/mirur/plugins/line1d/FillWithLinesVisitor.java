@@ -16,7 +16,7 @@
  */
 package mirur.plugins.line1d;
 
-import com.metsci.glimpse.support.shader.line.LinePath;
+import com.metsci.glimpse.core.support.shader.line.LinePath;
 
 import mirur.core.AbstractArray1dVisitor;
 import mirur.plugins.DataUnitConverter;

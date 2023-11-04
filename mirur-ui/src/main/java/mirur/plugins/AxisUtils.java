@@ -16,8 +16,8 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.Axis1D;
-import com.metsci.glimpse.axis.Axis2D;
+import com.metsci.glimpse.core.axis.Axis1D;
+import com.metsci.glimpse.core.axis.Axis2D;
 
 public class AxisUtils {
     public static void padAxis2d(Axis2D axis) {

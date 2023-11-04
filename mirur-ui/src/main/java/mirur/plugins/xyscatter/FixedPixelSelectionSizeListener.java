@@ -16,8 +16,8 @@
  */
 package mirur.plugins.xyscatter;
 
-import com.metsci.glimpse.axis.Axis1D;
-import com.metsci.glimpse.axis.listener.AxisListener1D;
+import com.metsci.glimpse.core.axis.Axis1D;
+import com.metsci.glimpse.core.axis.listener.AxisListener1D;
 
 public class FixedPixelSelectionSizeListener implements AxisListener1D {
     private int selectionSize_PX;

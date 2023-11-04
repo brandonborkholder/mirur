@@ -16,9 +16,9 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.Axis1D;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.axis.Axis1D;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
 
 import mirur.core.Array1D;
 import mirur.core.ElementToStringVisitor;

@@ -18,7 +18,7 @@ package mirur.plugins.histogram;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
 
 import mirur.core.MinMaxFiniteValueVisitor;
 import mirur.core.PrimitiveArray;

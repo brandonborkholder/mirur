@@ -16,9 +16,9 @@
  */
 package mirur.plugins.histogram;
 
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.axis.Axis2D;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugins.DataUnitConverter;

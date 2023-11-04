@@ -18,9 +18,9 @@ package mirur.plugins.image;
 
 import java.awt.image.BufferedImage;
 
-import com.metsci.glimpse.painter.decoration.BackgroundPainter;
-import com.metsci.glimpse.painter.decoration.BorderPainter;
-import com.metsci.glimpse.plot.Plot2D;
+import com.metsci.glimpse.core.painter.decoration.BackgroundPainter;
+import com.metsci.glimpse.core.painter.decoration.BorderPainter;
+import com.metsci.glimpse.core.plot.Plot2D;
 
 public class ImagePlot extends Plot2D {
     public ImagePlot(BufferedImage image) {

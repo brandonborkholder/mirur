@@ -16,19 +16,22 @@
  */
 package mirur.plugins;
 
-import static com.metsci.glimpse.painter.decoration.WatermarkPainter.bottomLeft;
-import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
-import static com.metsci.glimpse.support.font.FontUtils.getDefaultBold;
+import static com.metsci.glimpse.core.painter.decoration.WatermarkPainter.defaultConfig;
+import static com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition.Left;
+import static com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition.Bottom;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getRed;
+import static com.metsci.glimpse.core.support.font.FontUtils.getDefaultBold;
 import static java.lang.Math.max;
 
 import java.awt.image.BufferedImage;
 
-import com.metsci.glimpse.layout.GlimpseLayout;
-import com.metsci.glimpse.painter.decoration.BackgroundPainter;
-import com.metsci.glimpse.painter.decoration.WatermarkPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
+import com.metsci.glimpse.core.layout.GlimpseLayout;
+import com.metsci.glimpse.core.painter.decoration.BackgroundPainter;
+import com.metsci.glimpse.core.painter.decoration.WatermarkPainter;
+import com.metsci.glimpse.core.painter.decoration.WatermarkPainter.WatermarkConfig;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
 
 import mirur.plugin.Icons;
 
@@ -41,8 +44,13 @@ public class InvalidPlaceholderLayout extends GlimpseLayout {
         BufferedImage image = Icons.getMirurLogoImage();
         final double[] minDimensions = { image.getWidth() * 0.4, image.getHeight() * 0.4 };
 
-        WatermarkPainter logoPainter = new WatermarkPainter(image,
-                bottomLeft.withMaxAreaFraction(1).withMaxWidthFraction(0.3).withMaxHeightFraction(0.2)) {
+        WatermarkConfig config = defaultConfig
+        		.withHorizontalPos(Left)
+        		.withVerticalPos(Bottom)
+        		.withMaxAreaFraction(1)
+        		.withMaxWidthFraction(0.3)
+        		.withMaxHeightPixels(0.2);
+        WatermarkPainter logoPainter = new WatermarkPainter(image, config) {
             @Override
             protected double[] computeQuadGeometry(double wImage, double hImage, double wBounds, double hBounds) {
                 double[] q = super.computeQuadGeometry(wImage, hImage, wBounds, hBounds);

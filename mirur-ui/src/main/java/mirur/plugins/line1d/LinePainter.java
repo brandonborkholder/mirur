@@ -16,21 +16,20 @@
  */
 package mirur.plugins.line1d;
 
-import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
-import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
-import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
-import static com.metsci.glimpse.support.shader.line.LineUtils.ppvAspectRatio;
+import static com.metsci.glimpse.core.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.core.gl.util.GLUtils.enableStandardBlending;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlack;
+import static com.metsci.glimpse.core.support.shader.line.LineUtils.ppvAspectRatio;
 
-import javax.media.opengl.GL3;
-
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseBounds;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.base.GlimpsePainterBase;
-import com.metsci.glimpse.support.settings.LookAndFeel;
-import com.metsci.glimpse.support.shader.line.LinePath;
-import com.metsci.glimpse.support.shader.line.LineProgram;
-import com.metsci.glimpse.support.shader.line.LineStyle;
+import com.jogamp.opengl.GL3;
+import com.metsci.glimpse.core.axis.Axis2D;
+import com.metsci.glimpse.core.context.GlimpseBounds;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.painter.base.GlimpsePainterBase;
+import com.metsci.glimpse.core.support.settings.LookAndFeel;
+import com.metsci.glimpse.core.support.shader.line.LinePath;
+import com.metsci.glimpse.core.support.shader.line.LineProgram;
+import com.metsci.glimpse.core.support.shader.line.LineStyle;
 
 import mirur.core.Array1D;
 import mirur.core.VisitArray;

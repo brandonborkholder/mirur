@@ -16,11 +16,11 @@
  */
 package mirur.plugins.histogram;
 
-import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.plot.SimplePlot2D;
-import com.metsci.glimpse.support.font.FontUtils;
+import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.core.plot.SimplePlot2D;
+import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugins.AxisUtils;

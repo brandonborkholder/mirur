@@ -16,13 +16,13 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.painter.label.GridAxisLabelHandler;
-import com.metsci.glimpse.painter.base.GlimpsePainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.HorizontalPosition;
-import com.metsci.glimpse.painter.info.SimpleTextPainter.VerticalPosition;
-import com.metsci.glimpse.plot.SimplePlot2D;
-import com.metsci.glimpse.support.font.FontUtils;
+import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
+import com.metsci.glimpse.core.painter.base.GlimpsePainter;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
+import com.metsci.glimpse.core.plot.SimplePlot2D;
+import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;

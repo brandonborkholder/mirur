@@ -18,8 +18,8 @@ package mirur.plugins;
 
 import org.eclipse.swt.widgets.Menu;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.layout.GlimpseLayout;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.layout.GlimpseLayout;
 
 public interface DataPainter {
     GlimpseLayout getLayout();

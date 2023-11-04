@@ -16,11 +16,11 @@
  */
 package mirur.plugins;
 
-import mirur.core.VariableObject;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+
+import mirur.core.VariableObject;
 
 public interface MirurView {
     boolean supportsData(VariableObject obj);

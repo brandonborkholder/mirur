@@ -26,12 +26,12 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.swt.widgets.Menu;
 
-import com.metsci.glimpse.axis.Axis1D;
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.axis.tagged.Tag;
-import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.layout.GlimpseLayout;
+import com.metsci.glimpse.core.axis.Axis1D;
+import com.metsci.glimpse.core.axis.Axis2D;
+import com.metsci.glimpse.core.axis.tagged.Tag;
+import com.metsci.glimpse.core.axis.tagged.TaggedAxis1D;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.layout.GlimpseLayout;
 
 public class DataPainterImpl implements DataPainter {
 	private final GlimpseLayout layout;

@@ -21,8 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.media.opengl.GLAnimatorControl;
-
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -30,10 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
+import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.util.FPSAnimator;
-import com.metsci.glimpse.canvas.NewtSwingGlimpseCanvas;
-import com.metsci.glimpse.gl.util.GLUtils;
-import com.metsci.glimpse.support.settings.LookAndFeel;
+import com.metsci.glimpse.core.canvas.NewtSwingGlimpseCanvas;
+import com.metsci.glimpse.core.gl.util.GLUtils;
+import com.metsci.glimpse.core.support.settings.LookAndFeel;
 
 import mirur.core.VariableObject;
 import mirur.plugin.SelectListenerToggle;

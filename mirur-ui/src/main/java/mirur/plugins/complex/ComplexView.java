@@ -16,7 +16,7 @@
  */
 package mirur.plugins.complex;
 
-import com.metsci.glimpse.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
 
 import mirur.core.Array1D;
 import mirur.core.Array1DImpl;

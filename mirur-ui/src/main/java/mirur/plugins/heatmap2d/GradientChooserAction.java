@@ -24,8 +24,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
-import com.metsci.glimpse.support.colormap.ColorGradient;
-import com.metsci.glimpse.support.colormap.ColorGradients;
+import com.metsci.glimpse.core.support.colormap.ColorGradient;
+import com.metsci.glimpse.core.support.colormap.ColorGradients;
 
 import mirur.plugin.Icons;
 import mirur.plugins.DataPainterImpl.ResetAction;

@@ -17,24 +17,23 @@
 package mirur.plugins.image;
 
 import static com.jogamp.opengl.util.texture.TextureIO.newTexture;
-import static com.metsci.glimpse.gl.util.GLUtils.disableBlending;
-import static com.metsci.glimpse.gl.util.GLUtils.enableStandardBlending;
+import static com.metsci.glimpse.core.gl.util.GLUtils.disableBlending;
+import static com.metsci.glimpse.core.gl.util.GLUtils.enableStandardBlending;
 import static com.metsci.glimpse.util.logging.LoggerUtils.getLogger;
 import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
 
 import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL3;
-import javax.media.opengl.GLProfile;
-
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureData;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.gl.GLEditableBuffer;
-import com.metsci.glimpse.painter.base.GlimpsePainterBase;
-import com.metsci.glimpse.support.shader.triangle.ColorTexture2DProgram;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.gl.GLEditableBuffer;
+import com.metsci.glimpse.core.painter.base.GlimpsePainterBase;
+import com.metsci.glimpse.core.support.shader.triangle.ColorTexture2DProgram;
 
 public class ImagePainter extends GlimpsePainterBase {
     private static final Logger logger = getLogger(ImagePainter.class);

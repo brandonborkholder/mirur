@@ -20,11 +20,11 @@ import static java.lang.Double.isFinite;
 
 import java.nio.FloatBuffer;
 
-import com.metsci.glimpse.axis.tagged.Tag;
-import com.metsci.glimpse.axis.tagged.TaggedAxis1D;
-import com.metsci.glimpse.canvas.GlimpseCanvas;
-import com.metsci.glimpse.support.colormap.ColorGradient;
-import com.metsci.glimpse.support.texture.FloatTextureProjected2D.MutatorFloat2D;
+import com.metsci.glimpse.core.axis.tagged.Tag;
+import com.metsci.glimpse.core.axis.tagged.TaggedAxis1D;
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+import com.metsci.glimpse.core.support.colormap.ColorGradient;
+import com.metsci.glimpse.core.support.texture.FloatTextureProjected2D.MutatorFloat2D;
 
 import mirur.core.Array2D;
 import mirur.core.MinMaxFiniteValueVisitor;

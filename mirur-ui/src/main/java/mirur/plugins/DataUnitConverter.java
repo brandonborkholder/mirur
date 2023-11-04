@@ -16,7 +16,7 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.painter.label.AxisUnitConverter;
+import com.metsci.glimpse.core.axis.painter.label.AxisUnitConverter;
 
 import mirur.plugins.heatmap2d.ScaleOperator;
 

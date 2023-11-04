@@ -16,12 +16,12 @@
  */
 package mirur.plugin.painterview;
 
-import static com.metsci.glimpse.support.color.GlimpseColor.getBlack;
-import static com.metsci.glimpse.support.color.GlimpseColor.getGray;
-import static com.metsci.glimpse.support.color.GlimpseColor.getRed;
-import static com.metsci.glimpse.support.color.GlimpseColor.getWhite;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlack;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getGray;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getRed;
+import static com.metsci.glimpse.core.support.color.GlimpseColor.getWhite;
 
-import com.metsci.glimpse.support.settings.SwingLookAndFeel;
+import com.metsci.glimpse.core.support.settings.SwingLookAndFeel;
 
 public class MirurLAF extends SwingLookAndFeel {
     public static final String DATA_COLOR = "mirur.data.color";

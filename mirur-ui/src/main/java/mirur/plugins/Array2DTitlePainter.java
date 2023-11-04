@@ -16,10 +16,10 @@
  */
 package mirur.plugins;
 
-import com.metsci.glimpse.axis.Axis2D;
-import com.metsci.glimpse.context.GlimpseContext;
-import com.metsci.glimpse.painter.info.SimpleTextPainter;
-import com.metsci.glimpse.support.projection.InvertibleProjection;
+import com.metsci.glimpse.core.axis.Axis2D;
+import com.metsci.glimpse.core.context.GlimpseContext;
+import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
+import com.metsci.glimpse.core.support.projection.InvertibleProjection;
 
 import mirur.core.Array2D;
 import mirur.core.ElementToStringVisitor;

@@ -18,7 +18,7 @@ package mirur.plugins.bar1d;
 
 import java.nio.FloatBuffer;
 
-import com.metsci.glimpse.gl.GLEditableBuffer;
+import com.metsci.glimpse.core.gl.GLEditableBuffer;
 
 import mirur.core.AbstractArray1dVisitor;
 import mirur.plugins.DataUnitConverter;

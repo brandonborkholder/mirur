@@ -18,14 +18,14 @@ package mirur.plugins.image;
 
 import java.awt.image.BufferedImage;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
+import com.metsci.glimpse.core.canvas.GlimpseCanvas;
+
 import mirur.core.VariableObject;
 import mirur.plugins.DataPainter;
 import mirur.plugins.DataPainterImpl;
 import mirur.plugins.MirurView;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-
-import com.metsci.glimpse.canvas.GlimpseCanvas;
 
 public class ImageView implements MirurView {
     @Override
