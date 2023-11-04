@@ -61,8 +61,6 @@
                             </artifactItems>
                             <includes>*.so,*.dll,*.jnilib</includes>
                             <outputDirectory>${basedir}</outputDirectory>
-                            <overwriteReleases>true</overwriteReleases>
-                            <overwriteSnapshots>true</overwriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>

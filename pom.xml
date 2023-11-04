@@ -7,6 +7,7 @@
     <version>2.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <description>Visually debug arrays in your IDE.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tycho.version>2.7.3</tycho.version>
