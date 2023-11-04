@@ -9,12 +9,12 @@
     </parent>
 
     <artifactId>mirur.jogl-parent</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
     <packaging>pom</packaging>
     <name>jogl-parent</name>
 
     <properties>
-        <jogl.version>2.2.0</jogl.version>
+        <jogl.version>2.4.0-rc-20200202</jogl.version>
     </properties>
 
     <build>
@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.1</version>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <id>unpack</id>
@@ -47,13 +47,13 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.jogamp.jogl</groupId>
+                                    <groupId>com.metsci.ext.org.jogamp.jogl</groupId>
                                     <artifactId>jogl-all</artifactId>
                                     <version>${jogl.version}</version>
                                     <classifier>${jogl.classifier}</classifier>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.jogamp.gluegen</groupId>
+                                    <groupId>com.metsci.ext.org.jogamp.gluegen</groupId>
                                     <artifactId>gluegen-rt</artifactId>
                                     <version>${jogl.version}</version>
                                     <classifier>${jogl.classifier}</classifier>
@@ -70,7 +70,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.3.2</version>
                 <configuration>
                     <filesets>
                         <fileset>
