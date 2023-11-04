@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: mirur-jogl-win64
 Bundle-SymbolicName: mirur.jogl-win64;singleton:=true
-Bundle-Version: 0.6.0
-Fragment-Host: mirur.mirur-ui;bundle-version="0.6.0"
+Bundle-Version: 0.7.0
+Fragment-Host: mirur.mirur-ui;bundle-version="0.7.0"
 Eclipse-PlatformFilter: (& (osgi.os=win32) (osgi.arch=x86_64))
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

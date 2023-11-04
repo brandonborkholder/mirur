@@ -65,8 +65,8 @@
    <extension
          point="org.eclipse.debug.ui.detailPaneFactories">
       <detailFactories
-           class="mirur.plugin.detailpane.ArrayDetailPaneFactory"
-           name="Array Detail Factory">
+           id="mirur.plugin.detailpane.ArrayDetailPaneFactory"
+           class="mirur.plugin.detailpane.ArrayDetailPaneFactory">
      </detailFactories>
    </extension>
 

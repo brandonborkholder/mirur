@@ -4,5 +4,5 @@ Bundle-Name: Mirur Java Agent
 Bundle-SymbolicName: mirur.jdk-agent
 Bundle-Version: 2.1.0.qualifier
 Export-Package: mirur.core
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Mirur
