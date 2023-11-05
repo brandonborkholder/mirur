@@ -205,7 +205,6 @@ public class RemoteAgentDeployer {
         // new URL(String)
         IJavaValue classNameString = target.newValue(classpathDir.toURI().toURL().toString());
         IJavaValue[] args = new IJavaValue[] { classNameString };
-        // IJavaObject urlObject = (IJavaObject) urlType.sendMessage("<init>", "(Ljava/lang/String;)V", args, thread);
         IJavaObject urlObject = urlType.newInstance("(Ljava/lang/String;)V", args, thread);
         logFiner(LOGGER, "Called URL.<init>(String) successfully");
 
