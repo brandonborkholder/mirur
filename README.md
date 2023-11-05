@@ -44,6 +44,10 @@ java -jar ../eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.*.jar \
 
 ## Testing
 
-You can run `mirur.mirur-ui` as an Eclipse application to test. However, it
-depends on natives that you must install into your host Eclipse first. For example,
-copy `mirur.jogl-win64/
+You can run `mirur.mirur-ui` as an Eclipse application to test. However, you must add
+the following JVM arguments to your debug configuration:
+```
+--add-exports java.base/java.lang=ALL-UNNAMED
+--add-exports java.desktop/sun.awt=ALL-UNNAMED
+--add-exports java.desktop/sun.java2d=ALL-UNNAMED
+```
