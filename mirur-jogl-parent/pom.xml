@@ -50,6 +50,7 @@
                                     <groupId>com.metsci.ext.org.jogamp.jogl</groupId>
                                     <artifactId>jogl-all</artifactId>
                                     <version>${jogl.version}</version>
+                                    <!-- each child overrides this property -->
                                     <classifier>${jogl.classifier}</classifier>
                                 </artifactItem>
                                 <artifactItem>
