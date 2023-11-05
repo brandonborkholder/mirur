@@ -23,9 +23,7 @@
 
     <modules>
         <module>mirur-jogl-parent</module>
-        <module>mirur-jogl-linux32</module>
         <module>mirur-jogl-linux64</module>
-        <module>mirur-jogl-win32</module>
         <module>mirur-jogl-win64</module>
         <module>mirur-jogl-osx</module>
         <module>mirur-agent</module>
@@ -82,17 +80,7 @@
                         <environment>
                             <os>linux</os>
                             <ws>gtk</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
                             <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
                         </environment>
                         <environment>
                             <os>win32</os>
@@ -103,11 +91,6 @@
                             <os>macosx</os>
                             <ws>cocoa</ws>
                             <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86</arch>
                         </environment>
                     </environments>
                 </configuration>

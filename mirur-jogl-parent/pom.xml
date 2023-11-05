@@ -15,7 +15,7 @@
 	<name>jogl-parent</name>
 
 	<properties>
-		<jogl.version>2.4.0-rc-20200202</jogl.version>
+		<jogl.version>2.4.0</jogl.version>
 	</properties>
 
 	<build>
@@ -48,7 +48,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>com.metsci.ext.org.jogamp.jogl</groupId>
+									<groupId>org.jogamp.jogl</groupId>
 									<artifactId>jogl-all</artifactId>
 									<version>${jogl.version}</version>
 									<!-- each child overrides this property -->
@@ -60,7 +60,7 @@
 									</fileMappers>
 								</artifactItem>
 								<artifactItem>
-									<groupId>com.metsci.ext.org.jogamp.gluegen</groupId>
+									<groupId>org.jogamp.gluegen</groupId>
 									<artifactId>gluegen-rt</artifactId>
 									<version>${jogl.version}</version>
 									<classifier>${jogl.classifier}</classifier>
@@ -88,6 +88,7 @@
 								<include>*.dll</include>
 								<include>*.so</include>
 								<include>*.jnilib</include>
+								<include>*.dylib</include>
 							</includes>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
