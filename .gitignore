@@ -56,5 +56,6 @@ search-git.sh
 *.so
 *.jar
 *.jnilib
+*.dylib
 
 .metadata
