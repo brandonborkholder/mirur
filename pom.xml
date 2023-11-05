@@ -19,6 +19,10 @@
             <url>http://download.eclipse.org/releases/indigo/</url>
             <layout>p2</layout>
         </repository>
+        <repository>
+            <id>jogamp</id>
+            <url>https://jogamp.org/deployment/maven/</url>
+        </repository>
     </repositories>
 
     <modules>
