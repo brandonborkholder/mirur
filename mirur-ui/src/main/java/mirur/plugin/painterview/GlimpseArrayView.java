@@ -41,9 +41,11 @@ import java.util.Map;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.themes.IThemeManager;
 
 import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.util.FPSAnimator;
@@ -92,7 +94,7 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
         canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
         viewSelectModel = new ViewSelectionModel();
-        laf = new MirurLAF();
+        laf = new MirurLAF(composite.getBackground(), composite.getForeground());
         animator = new FPSAnimator(canvas.getGLDrawable(), 20);
         animator.start();
 
