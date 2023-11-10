@@ -76,7 +76,7 @@ public class RemoteAgentDeployer {
         // mark as attempted
         cache.put(target, null);
 
-        if (!isValidJVMVersion(target.getVersion())) {
+        if (isJVMEarlierThan5(target.getVersion())) {
             throw new VariableTransferException(VariableTransferException.ERR_Invalid_Jvm_Version);
         }
 
@@ -146,6 +146,7 @@ public class RemoteAgentDeployer {
             classFile.deleteOnExit();
         }
 
+        tmpClasspathDir.deleteOnExit();
         return tmpClasspathDir;
     }
 
@@ -167,12 +168,20 @@ public class RemoteAgentDeployer {
         }
     }
 
-    private boolean isValidJVMVersion(String version) {
+    private boolean isJVMEarlierThan5(String version) {
         int secondDot = version.indexOf('.');
         secondDot = version.indexOf('.', secondDot + 1);
         String major = version.substring(0, secondDot);
 
-        return Double.parseDouble(major) >= 1.5;
+        return Double.parseDouble(major) < 1.5;
+    }
+
+    private boolean isJVMEarlierThan9(String version) {
+        int secondDot = version.indexOf('.');
+        secondDot = version.indexOf('.', secondDot + 1);
+        String major = version.substring(0, secondDot);
+
+        return Double.parseDouble(major) < 9;
     }
 
     private IJavaClassType loadAgentClass(IJavaDebugTarget target, IJavaThread thread, File classpathDir, String agentClassName)
