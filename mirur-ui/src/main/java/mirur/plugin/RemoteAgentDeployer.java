@@ -76,6 +76,7 @@ public class RemoteAgentDeployer {
         // mark as attempted
         cache.put(target, null);
 
+        // Earlier than Java 5, won't work
         if (isJVMEarlierThan5(target.getVersion())) {
             throw new VariableTransferException(VariableTransferException.ERR_Invalid_Jvm_Version);
         }
@@ -90,9 +91,18 @@ public class RemoteAgentDeployer {
             }
         }
 
-        IJavaClassType agentType = loadRemoteAgent(target, thread);
-        cache.put(target, agentType);
+        Callable<IJavaClassType> loaderFn;
 
+        if (isJVMEarlierThan9(target.getVersion())) {
+            // Earlier than Java 9, use simple URLClassLoader
+            loaderFn = () -> loadAgentClasses(target, thread, agentClassesDir, MirurAgent.class.getName());
+        } else {
+            // Use Java 9+ modules
+            loaderFn = () -> loadAgentModule(target, thread, agentClassesDir, MirurAgent.class.getName());
+        }
+
+        IJavaClassType agentType = loadRemoteAgent(target, thread, loaderFn);
+        cache.put(target, agentType);
         return agentType;
     }
 
@@ -116,8 +126,8 @@ public class RemoteAgentDeployer {
         cache.remove(target);
     }
 
-    private IJavaClassType loadRemoteAgent(IJavaDebugTarget target, IJavaThread thread) throws VariableTransferException {
-        FutureTask<IJavaClassType> future = new FutureTask<>(new LoadAgentClasses(target, thread, MirurAgent.class.getName()));
+    private IJavaClassType loadRemoteAgent(IJavaDebugTarget target, IJavaThread thread, Callable<IJavaClassType> loaderFn) throws VariableTransferException {
+        FutureTask<IJavaClassType> future = new FutureTask<>(loaderFn);
         thread.queueRunnable(future);
 
         try {
@@ -184,7 +194,7 @@ public class RemoteAgentDeployer {
         return Double.parseDouble(major) < 9;
     }
 
-    private IJavaClassType loadAgentClass(IJavaDebugTarget target, IJavaThread thread, File classpathDir, String agentClassName)
+    private IJavaClassType loadAgentClasses(IJavaDebugTarget target, IJavaThread thread, File classpathDir, String agentClassName)
             throws DebugException, MalformedURLException {
         logFine(LOGGER, "Loading the agent using the isolated ClassLoader");
 
@@ -244,20 +254,61 @@ public class RemoteAgentDeployer {
         return (IJavaClassType) ((IJavaClassObject) classObject).getInstanceType();
     }
 
-    private class LoadAgentClasses implements Callable<IJavaClassType> {
-        final IJavaDebugTarget target;
-        final IJavaThread thread;
-        final String agentClassName;
+    /**
+     * <pre>
+     * Path path = Paths.get("/path/to/files");
+     * ModuleFinder finder = ModuleFinder.of(path);
+     * ModuleLayer parent = ModuleLayer.boot();
+     * Configuration cf = parent.configuration().resolve(finder, ModuleFinder.of(), Set.of("mirur.core.agent"));
+     * ClassLoader scl = ClassLoader.getSystemClassLoader();
+     * ModuleLayer layer = parent.defineModulesWithOneLoader(cf, scl);
+     * Class<?> c = layer.findLoader("mirur.core.agent").loadClass("mirur.agent");
+     * </pre>
+     */
+    private IJavaClassType loadAgentModule(IJavaDebugTarget target, IJavaThread thread, File classpathDir, String agentClassName) throws DebugException {
+        IJavaClassType pathsType = (IJavaClassType) target.getJavaTypes("java.nio.file.Paths")[0];
+        IJavaClassType moduleFinderType = (IJavaClassType) target.getJavaTypes("java.lang.ModuleFinder")[0];
+        IJavaClassType moduleLayerType = (IJavaClassType) target.getJavaTypes("java.lang.ModuleLayer")[0];
+        IJavaClassType setType = (IJavaClassType) target.getJavaTypes("java.util.Set")[0];
+        IJavaClassType configurationType = (IJavaClassType) target.getJavaTypes("java.lang.module.Configuration")[0];
+        IJavaClassType classLoaderType = (IJavaClassType) target.getJavaTypes("java.lang.ClassLoader")[0];
 
-        LoadAgentClasses(IJavaDebugTarget target, IJavaThread thread, String agentClassName) {
-            this.target = target;
-            this.thread = thread;
-            this.agentClassName = agentClassName;
-        }
+        // Path path = Paths.get("/path/to/files");
+        IJavaValue[] args = new IJavaValue[] { target.newValue(classpathDir.getAbsolutePath()) };
+        IJavaValue path = pathsType.sendMessage("get", "(Ljava/lang/String;)Ljava/nio/file/Path;", args, thread);
 
-        @Override
-        public IJavaClassType call() throws Exception {
-            return loadAgentClass(target, thread, agentClassesDir, agentClassName);
-        }
+        // ModuleFinder finder = ModuleFinder.of(path);
+        args = new IJavaValue[] { path };
+        IJavaValue finder = moduleFinderType.sendMessage("of", "(Ljava/nio/file/Path;)Ljava/lang/ModuleFinder;", args, thread);
+
+        // ModuleLayer parent = ModuleLayer.boot();
+        args = new IJavaValue[] {};
+        IJavaValue parent = moduleLayerType.sendMessage("boot", "()Ljava/lang/ModuleLayer;", args, thread);
+
+        // Configuration cf = parent.configuration().resolve(finder, ModuleFinder.of(), Set.of("mirur.core.agent"));
+        args = new IJavaValue[] { parent };
+        IJavaValue configuration = moduleLayerType.sendMessage("configuration", "()Ljava/lang/module/Configuration;", args, thread);
+        args = new IJavaValue[] {};
+        IJavaValue emptyModuleFinder = moduleFinderType.sendMessage("of", "()Ljava/lang/ModuleFinder;", args, thread);
+        args = new IJavaValue[] { target.newValue("mirur.core.agent") };
+        IJavaValue agentModuleNameSet = setType.sendMessage("of", "(Ljava/lang/String;)Ljava/util/Set;", args, thread);
+        args = new IJavaValue[] { configuration, finder, emptyModuleFinder, agentModuleNameSet };
+        IJavaValue cf = configurationType.sendMessage("resolve", "(Ljava/lang/module/Configuration;Ljava/lang/ModuleFinder;Ljava/util/Collection;)Ljava/lang/module/Configuration;", args, thread);
+
+        // ClassLoader scl = ClassLoader.getSystemClassLoader();
+        args = new IJavaValue[] {};
+        IJavaValue scl = classLoaderType.sendMessage("getSystemClassLoader", "()V", args, thread);
+
+        // ModuleLayer layer = parent.defineModulesWithOneLoader(cf, scl);
+        args = new IJavaValue[] { parent, cf, scl };
+        IJavaValue layer = moduleLayerType.sendMessage("defineModulesWithOneLoader", "(Ljava/lang/ModuleLayer;Ljava/lang/module/Configuration;Ljava/lang/ClassLoader;)Ljava/lang/ModuleLayer;", args, thread);
+
+        // Class<?> c = layer.findLoader("mirur.core.agent").loadClass("mirur.agent");
+        args = new IJavaValue[] { layer, target.newValue("mirur.core.agent") };
+        IJavaValue loader = moduleLayerType.sendMessage("findLoader", "(Ljava/lang/String;)Ljava/lang/ClassLoader;", args, thread);
+        args = new IJavaValue[] { loader, target.newValue(agentClassName) };
+        IJavaValue c = classLoaderType.sendMessage("loadClass", "(Ljava/lang/String;)Ljava/lang/Class;", args, thread);
+
+        return (IJavaClassType) ((IJavaClassObject) c).getInstanceType();
     }
 }
