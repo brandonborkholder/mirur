@@ -20,7 +20,17 @@
                 <version>${tycho.version}</version>
                 <configuration>
                     <createArtifactRepository>true</createArtifactRepository>
+                    <includeAllDependencies>true</includeAllDependencies>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>build-update-zip</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble-repository</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.eclipse.tycho.extras</groupId>
