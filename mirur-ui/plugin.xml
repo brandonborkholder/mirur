@@ -8,7 +8,7 @@
             allowMultiple="true"
             category="org.eclipse.debug.ui"
             class="mirur.plugin.painterview.GlimpseArrayView"
-            icon="icons/mirur.gif"
+            icon="icons/mirur.png"
             id="mirur.views.Painter"
             name="Mirur Painter">
       </view>
@@ -19,7 +19,7 @@
             allowMultiple="false"
             category="org.eclipse.debug.ui"
             class="mirur.plugin.statsview.ArrayStatsView"
-            icon="icons/mirur.gif"
+            icon="icons/mirur.png"
             id="mirur.views.Statistics"
             name="Mirur Statistics">
       </view>

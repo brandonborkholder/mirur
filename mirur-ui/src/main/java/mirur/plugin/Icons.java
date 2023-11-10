@@ -53,7 +53,7 @@ import com.metsci.glimpse.core.support.colormap.ColorGradients;
 public class Icons {
     private static final Logger LOGGER = Logger.getLogger(Icons.class.getName());
 
-    private static final String MIRUR_64_PATH = "icons/mirur_64.gif";
+    private static final String MIRUR_64_PATH = "icons/mirur_64.png";
     private static final String MIRUR_LOGO_PATH = "icons/mirur-logo.png";
 
     public static Image getMirurLargeIcon() {
