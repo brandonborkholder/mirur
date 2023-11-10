@@ -41,6 +41,7 @@ import static com.metsci.glimpse.core.support.color.GlimpseColor.getWhite;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.themes.ColorDefinition;
 import org.eclipse.ui.internal.themes.WorkbenchThemeManager;
@@ -54,7 +55,8 @@ public class MirurLAF extends SwingLookAndFeel {
 
     public MirurLAF(Color background, Color foreground) {
         float[] bg = GlimpseColor.fromColorRgb(background.getRed() / 255f, background.getGreen() /255f, background.getBlue() / 255f);
-        float[] fg = GlimpseColor.fromColorRgb(foreground.getRed() / 255f, foreground.getGreen() /255f, foreground.getBlue() / 255f);
+//        float[] fg = GlimpseColor.fromColorRgb(foreground.getRed() / 255f, foreground.getGreen() /255f, foreground.getBlue() / 255f);
+        float[] fg = GlimpseColor.getWhite();
 
         map.put(PLOT_BACKGROUND_COLOR, bg);
         map.put(FRAME_BACKGROUND_COLOR, bg);
