@@ -36,15 +36,8 @@ package mirur.plugin.painterview;
 import static com.metsci.glimpse.core.support.color.GlimpseColor.getBlack;
 import static com.metsci.glimpse.core.support.color.GlimpseColor.getGray;
 import static com.metsci.glimpse.core.support.color.GlimpseColor.getRed;
-import static com.metsci.glimpse.core.support.color.GlimpseColor.getWhite;
 
-import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.themes.ColorDefinition;
-import org.eclipse.ui.internal.themes.WorkbenchThemeManager;
 
 import com.metsci.glimpse.core.support.color.GlimpseColor;
 import com.metsci.glimpse.core.support.settings.SwingLookAndFeel;
