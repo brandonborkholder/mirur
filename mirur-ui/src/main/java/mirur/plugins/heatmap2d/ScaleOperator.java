@@ -1,6 +1,6 @@
 /*
  * Mirur - Visually debug arrays in your IDE.
- * Copyright © ${year} Brandon Borkholder (support@mirur.io)
+ * Copyright © 2023 Brandon Borkholder (support@mirur.io)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

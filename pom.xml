@@ -117,6 +117,7 @@
                         <project.name>Mirur</project.name>
                         <owner>Brandon Borkholder</owner>
                         <email>support@mirur.io</email>
+                        <year>2023</year>
                     </properties>
                     <quiet>false</quiet>
                     <strictCheck>true</strictCheck>
