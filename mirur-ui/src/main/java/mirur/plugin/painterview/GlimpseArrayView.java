@@ -33,22 +33,30 @@
  */
 package mirur.plugin.painterview;
 
+import static com.metsci.glimpse.core.gl.util.GLUtils.getDefaultGLProfile;
+import static com.metsci.glimpse.util.logging.LoggerUtils.logWarning;
+import static java.util.Collections.synchronizedMap;
+import static org.eclipse.swt.SWT.EMBEDDED;
+import static org.eclipse.swt.SWT.NO_BACKGROUND;
+import static org.eclipse.swt.SWT.READ_ONLY;
+import static org.eclipse.swt.SWT.WRAP;
+
 import java.awt.Frame;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jogamp.opengl.GLAnimatorControl;
+import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.metsci.glimpse.core.canvas.NewtSwingGlimpseCanvas;
-import com.metsci.glimpse.core.gl.util.GLUtils;
 import com.metsci.glimpse.core.support.settings.LookAndFeel;
 
 import mirur.core.VariableObject;
@@ -62,6 +70,14 @@ import mirur.plugins.InvalidPlaceholderView;
 import mirur.plugins.MirurView;
 
 public class GlimpseArrayView extends ViewPart implements VarObjectSelectListener, ViewSelectListener {
+    private static final Logger LOGGER = Logger.getLogger(GlimpseArrayView.class.getName());
+
+    private static final String OPENGL_INIT_HELP = "Failed to initialize OpenGL.\n\n"
+            + "Ensure your system has OpenGL drivers installed and add the following arguments to the vmargs in your eclipse.ini\n"
+            + "--add-exports java.base/java.lang=ALL-UNNAMED\n"
+            + "--add-exports java.desktop/sun.awt=ALL-UNNAMED\n"
+            + "--add-exports java.desktop/sun.java2d=ALL-UNNAMED";
+
     private static final String ID = "mirur.views.Painter";
 
     private ResetAxesAction resetAction;
@@ -85,20 +101,31 @@ public class GlimpseArrayView extends ViewPart implements VarObjectSelectListene
 
     @Override
     public void createPartControl(Composite parent) {
-        Composite composite = new Composite(parent, SWT.EMBEDDED | SWT.NO_BACKGROUND);
+        Composite composite = new Composite(parent, EMBEDDED | NO_BACKGROUND);
+        Frame frame = SWT_AWT.new_Frame(composite);
 
         laf = new MirurLAF(composite.getBackground(), null);
 
-        Frame frame = SWT_AWT.new_Frame(composite);
-        canvas = new NewtSwingGlimpseCanvas(GLUtils.getDefaultGLProfile());
-        frame.add(canvas);
+        try {
+            canvas = new NewtSwingGlimpseCanvas(getDefaultGLProfile());
+            frame.add(canvas);
 
-        canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
+            canvas.getGLDrawable().addGLEventListener(new GLCapabilityEventListener2());
+            animator = new FPSAnimator(canvas.getGLDrawable(), 20);
+            animator.start();
+        } catch (GLException ex) {
+            logWarning(LOGGER, "Failed to initialize OpenGL", ex);
+
+            frame.dispose();
+            composite.dispose();
+            animator = new FPSAnimator(20);
+
+            Text errorLabel = new Text(parent, READ_ONLY | WRAP);
+            errorLabel.setText(OPENGL_INIT_HELP);
+        }
+
         viewSelectModel = new ViewSelectionModel();
-        animator = new FPSAnimator(canvas.getGLDrawable(), 20);
-        animator.start();
-
-        cachedPainters = Collections.synchronizedMap(new HashMap<Key, DataPainter>());
+        cachedPainters = synchronizedMap(new HashMap<Key, DataPainter>());
 
         resetAction = new ResetAxesAction() {
             @Override

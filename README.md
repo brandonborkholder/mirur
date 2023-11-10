@@ -33,7 +33,7 @@ git commit -a -m "Version to X" && git tag X
 mvn clean install
 ```
 
-Now the new build is in ../mirur-update-site/update-site/
+Now the new build is in `../mirur-update-site/update-site/`
 
 ```
 cd ../mirur-update-site/update-site/
