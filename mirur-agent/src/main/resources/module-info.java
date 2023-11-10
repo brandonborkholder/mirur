@@ -1,1 +1,0 @@
-open module mirur.core.agent { }
