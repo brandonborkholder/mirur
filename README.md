@@ -20,11 +20,11 @@ including `List<Number>` or `AtomicLong[]`.
 
 ## Building
 
-The update-site branch contains the website and the update-site folder for
-releases. Both the development branch (e.g. master) and update-site need to be
-checked out alongside each other build. The update-site branch is in a folder
-named mirur-update-site on the same level as the mirur repository for
-development.
+The `gh-pages` branch contains the website and the update-site folder for
+releases. Both the development branch (e.g. `master`) and `gh-pages` need to be
+checked out alongside each other build. The build assumes `gh-pages` is checked
+out in a folder called `mirur-update-site` at the same level as the main code.
+For example, `mirur` and `mirur-update-site` are sibling folders.
 
 ```
 cd mirur
@@ -46,6 +46,7 @@ java -jar ../eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.*.jar \
 
 You can run `mirur.mirur-ui` as an Eclipse application to test. However, you must add
 the following JVM arguments to your debug configuration:
+
 ```
 --add-exports java.base/java.lang=ALL-UNNAMED
 --add-exports java.desktop/sun.awt=ALL-UNNAMED
