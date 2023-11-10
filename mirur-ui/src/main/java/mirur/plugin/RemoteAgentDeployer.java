@@ -92,14 +92,13 @@ public class RemoteAgentDeployer {
         }
 
         Callable<IJavaClassType> loaderFn;
-
-        if (isJVMEarlierThan9(target.getVersion())) {
-            // Earlier than Java 9, use simple URLClassLoader
-            loaderFn = () -> loadAgentClasses(target, thread, agentClassesDir, MirurAgent.class.getName());
-        } else {
-            // Use Java 9+ modules
-            loaderFn = () -> loadAgentModule(target, thread, agentClassesDir, MirurAgent.class.getName());
-        }
+        // if (isJVMEarlierThan9(target.getVersion())) {
+        // Earlier than Java 9, use simple URLClassLoader
+        loaderFn = () -> loadAgentClasses(target, thread, agentClassesDir, MirurAgent.class.getName());
+        // } else {
+        // // Use Java 9+ modules
+        // loaderFn = () -> loadAgentModule(target, thread, agentClassesDir, MirurAgent.class.getName());
+        // }
 
         IJavaClassType agentType = loadRemoteAgent(target, thread, loaderFn);
         cache.put(target, agentType);
@@ -197,6 +196,13 @@ public class RemoteAgentDeployer {
     private IJavaClassType loadAgentClasses(IJavaDebugTarget target, IJavaThread thread, File classpathDir, String agentClassName)
             throws DebugException, MalformedURLException {
         logFine(LOGGER, "Loading the agent using the isolated ClassLoader");
+
+        // Force the JVM to load URLClassLoader if not already loaded
+        {
+            IJavaClassType classType = (IJavaClassType) target.getJavaTypes("java.lang.Class")[0];
+            IJavaValue[] args = new IJavaValue[] { target.newValue(URLClassLoader.class.getName()) };
+            classType.sendMessage("forName", "(Ljava/lang/String;)Ljava/lang/Class;", args, thread);
+        }
 
         // java.net.URLClassLoader
         IJavaType[] types = target.getJavaTypes(URLClassLoader.class.getName());
