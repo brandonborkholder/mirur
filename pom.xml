@@ -10,7 +10,8 @@
     <description>Visually debug arrays in your IDE.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tycho.version>1.7.0</tycho.version>
+        <!-- 1.1.0 is the last version that I can get to deploy/publish p2 repository -->
+        <tycho.version>1.1.0</tycho.version>
     </properties>
 
     <repositories>

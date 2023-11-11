@@ -38,6 +38,7 @@ Now the new build is in `../mirur-update-site/update-site/`
 ```
 cd ../mirur-update-site/update-site/
 unzip content.jar && unzip artifacts.jar
+# Note this does not work on recent versions of the jarprocessor as of 2023
 java -jar ../eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.*.jar \
   -processAll -pack -verbose -outputDir plugins plugins/mirur.mirur-ui_*
 ```
