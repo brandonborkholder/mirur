@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Mirur Java Agent
 Bundle-SymbolicName: mirur.jdk-agent
-Bundle-Version: 2.2.0.qualifier
+Bundle-Version: 2.2.1.qualifier
 Export-Package: mirur.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Mirur
