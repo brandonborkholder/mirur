@@ -33,6 +33,8 @@
  */
 package mirur.plugins.heatmap2d;
 
+import static com.metsci.glimpse.core.support.font.FontUtils.getDefaultBold;
+
 import java.util.Map;
 
 import com.metsci.glimpse.core.axis.tagged.NamedConstraint;
@@ -44,10 +46,8 @@ import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.core.painter.texture.TaggedHeatMapPainter;
 import com.metsci.glimpse.core.plot.TaggedColorAxisPlot2D;
-import com.metsci.glimpse.core.support.color.GlimpseColor;
 import com.metsci.glimpse.core.support.colormap.ColorGradient;
 import com.metsci.glimpse.core.support.colormap.ColorGradients;
-import com.metsci.glimpse.core.support.font.FontUtils;
 import com.metsci.glimpse.core.support.projection.FlatProjection;
 import com.metsci.glimpse.core.support.texture.FloatTextureProjected2D;
 
@@ -127,7 +127,7 @@ public final class HeatmapArrayPlot extends TaggedColorAxisPlot2D {
         getAxisPainterX().setAxisLabelBufferSize(3);
         getLabelHandlerY().setTickSpacing(50);
         getLabelHandlerZ().setTickSpacing(50);
-        setTitleFont(FontUtils.getDefaultPlain(14));
+        setTitleFont(getDefaultBold(14));
         getCrosshairPainter().showSelectionBox(false);
     }
 
@@ -153,7 +153,6 @@ public final class HeatmapArrayPlot extends TaggedColorAxisPlot2D {
         SimpleTextPainter painter = new Array2DTitlePainter(getAxis());
         painter.setHorizontalPosition(HorizontalPosition.Left);
         painter.setVerticalPosition(VerticalPosition.Center);
-        painter.setColor(GlimpseColor.getBlack());
         return painter;
     }
 

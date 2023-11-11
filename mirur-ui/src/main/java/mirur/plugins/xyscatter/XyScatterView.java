@@ -33,13 +33,14 @@
  */
 package mirur.plugins.xyscatter;
 
+import static com.metsci.glimpse.core.support.font.FontUtils.getDefaultBold;
+
 import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.core.canvas.GlimpseCanvas;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.core.plot.Plot2D;
 import com.metsci.glimpse.core.plot.SimplePlot2D;
-import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.core.VariableObject;
@@ -96,7 +97,7 @@ public class XyScatterView extends SimplePlugin2D {
                 setBorderSize(5);
                 getLabelHandlerX().setTickSpacing(40);
                 getLabelHandlerY().setTickSpacing(40);
-                setTitleFont(FontUtils.getDefaultPlain(14));
+                setTitleFont(getDefaultBold(14));
             }
 
             @Override

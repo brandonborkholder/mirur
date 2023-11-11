@@ -33,11 +33,12 @@
  */
 package mirur.plugins.histogram;
 
+import static com.metsci.glimpse.core.support.font.FontUtils.getDefaultBold;
+
 import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.core.plot.SimplePlot2D;
-import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.PrimitiveArray;
 import mirur.plugins.AxisUtils;
@@ -56,7 +57,7 @@ public class HistogramPlot extends SimplePlot2D {
 
         ((HistogramBinTextPainter) titlePainter).setHistogramPainter(array, dataPainter, unitConverter);
 
-        setTitleFont(FontUtils.getDefaultPlain(14));
+        setTitleFont(getDefaultBold(14));
         addPainter(dataPainter, DATA_LAYER);
     }
 

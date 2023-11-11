@@ -59,7 +59,6 @@ import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.core.plot.Plot2D;
-import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.core.MinMaxFiniteValueVisitor;
@@ -102,8 +101,8 @@ public class ComplexPlotLayout extends Plot2D {
 
         toggleOpenPlot(true, true);
         toggleOpenPlot(false, true);
-        titlePainter1.setFont(FontUtils.getDefaultPlain(14));
-        titlePainter2.setFont(FontUtils.getDefaultPlain(14));
+        titlePainter1.setFont(getDefaultBold(14), true);
+        titlePainter2.setFont(getDefaultBold(14), true);
     }
 
     @Override
@@ -175,7 +174,7 @@ public class ComplexPlotLayout extends Plot2D {
         SimpleTextPainter labelPainter = new SimpleTextPainter();
         labelPainter.setBackgroundColor(getGray());
         labelPainter.setColor(getWhite());
-        labelPainter.setFont(getDefaultBold(14));
+        labelPainter.setFont(getDefaultBold(14), true);
         labelPainter.setHorizontalPosition(HorizontalPosition.Right);
         labelPainter.setVerticalPosition(isAngle ? VerticalPosition.Bottom : VerticalPosition.Top);
         labelPainter.setPaintBackground(true);

@@ -33,13 +33,14 @@
  */
 package mirur.plugins;
 
+import static com.metsci.glimpse.core.support.font.FontUtils.getDefaultBold;
+
 import com.metsci.glimpse.core.axis.painter.label.GridAxisLabelHandler;
 import com.metsci.glimpse.core.painter.base.GlimpsePainter;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.HorizontalPosition;
 import com.metsci.glimpse.core.painter.info.SimpleTextPainter.VerticalPosition;
 import com.metsci.glimpse.core.plot.SimplePlot2D;
-import com.metsci.glimpse.core.support.font.FontUtils;
 
 import mirur.core.Array1D;
 import mirur.plugins.DataUnitConverter.DataAxisUnitConverter;
@@ -59,7 +60,7 @@ public class Array1DPlot extends SimplePlot2D {
 
         setTitlePainterData(array);
 
-        setTitleFont(FontUtils.getDefaultPlain(14));
+        setTitleFont(getDefaultBold(14));
     }
 
     public void setPainter(GlimpsePainter dataPainter, int[] indexMap, DataUnitConverter unitConverter, double minData, double maxData) {

@@ -84,7 +84,7 @@ public class InvalidPlaceholderLayout extends GlimpseLayout {
         textPainter.setHorizontalPosition(HorizontalPosition.Center);
         textPainter.setVerticalPosition(VerticalPosition.Center);
         textPainter.setPaintBackground(false);
-        textPainter.setFont(getDefaultBold(12));
+        textPainter.setFont(getDefaultBold(12), true);
         addPainter(textPainter);
     }
 }
