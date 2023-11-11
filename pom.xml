@@ -75,22 +75,6 @@
                 <version>${tycho.version}</version>
                 <extensions>true</extensions>
             </plugin>
-
-           <!--Enable the replacement of the SNAPSHOT version in the final product configuration-->
-           <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-packaging-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <executions>
-                    <execution>
-                        <id>package-feature</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <finalName>${project.artifactId}_${unqualifiedVersion}.${buildQualifier}</finalName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>target-platform-configuration</artifactId>
