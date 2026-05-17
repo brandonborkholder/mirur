@@ -176,6 +176,8 @@ Mirur is an Eclipse plug-in built with Maven and Tycho. The main UI bundle is `m
 
 ## Issue backlog
 
+High-priority issue drafts for the seven sections above are available under `docs/issues/high-priority/` so they can be copied directly into GitHub issues or used by another issue tracker.
+
 ### Build and dependency issues
 
 - [ ] Replace Indigo p2 target with a pinned `.target` file.
