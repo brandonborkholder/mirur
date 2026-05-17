@@ -20,6 +20,11 @@ including `List<Number>` or `AtomicLong[]`.
 
 ## Building
 
+Mirur resolves Eclipse plug-in APIs through the pinned target definition in
+`releng/target-platform/mirur.target`. See `docs/development.md` for the selected
+Eclipse release train, supported Eclipse matrix, and target-platform update
+process.
+
 The `gh-pages` branch contains the website and the update-site folder for
 releases. Both the development branch (e.g. `master`) and `gh-pages` need to be
 checked out alongside each other build. The build assumes `gh-pages` is checked
