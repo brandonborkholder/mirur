@@ -12,14 +12,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 1.1.0 is the last version that I can get to deploy/publish p2 repository -->
         <tycho.version>1.1.0</tycho.version>
+        <mirur.target-platform.version>2.2.1-SNAPSHOT</mirur.target-platform.version>
     </properties>
 
     <repositories>
-        <repository>
-            <id>eclipse-repo</id>
-            <url>http://download.eclipse.org/releases/indigo/</url>
-            <layout>p2</layout>
-        </repository>
         <repository>
             <id>jogamp</id>
             <url>https://jogamp.org/deployment/maven/</url>
@@ -27,6 +23,7 @@
     </repositories>
 
     <modules>
+        <module>releng/target-platform</module>
         <module>mirur-jogl-parent</module>
         <module>mirur-jogl-linux64</module>
         <module>mirur-jogl-win64</module>
@@ -81,6 +78,13 @@
                 <artifactId>target-platform-configuration</artifactId>
                 <version>${tycho.version}</version>
                 <configuration>
+                    <target>
+                        <artifact>
+                            <groupId>mirur</groupId>
+                            <artifactId>mirur-target-platform</artifactId>
+                            <version>${mirur.target-platform.version}</version>
+                        </artifact>
+                    </target>
                     <environments>
                         <environment>
                             <os>linux</os>
