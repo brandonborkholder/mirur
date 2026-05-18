@@ -25,28 +25,20 @@ Mirur resolves Eclipse plug-in APIs through the pinned target definition in
 Eclipse release train, supported Eclipse matrix, and target-platform update
 process.
 
-The `gh-pages` branch contains the website and the update-site folder for
-releases. Both the development branch (e.g. `master`) and `gh-pages` need to be
-checked out alongside each other build. The build assumes `gh-pages` is checked
-out in a folder called `mirur-update-site` at the same level as the main code.
-For example, `mirur` and `mirur-update-site` are sibling folders.
+Build and verify the project with Maven:
 
 ```
-cd mirur
-mvn versions:set -DnewVersion=X-SNAPSHOT && mvn tycho-versions:set-version -DnewVersion=X.qualifier
-git commit -a -m "Version to X" && git tag X
-mvn clean install
+mvn clean verify
 ```
 
-Now the new build is in `../mirur-update-site/update-site/`
+The p2 update-site repository is produced at
+`mirur-repository/target/repository`. A normal `mvn install` or `mvn verify` does
+not copy that repository into a sibling checkout. Release automation should
+archive and publish the repository artifact from that target directory.
 
-```
-cd ../mirur-update-site/update-site/
-unzip content.jar && unzip artifacts.jar
-# Note this does not work on recent versions of the jarprocessor as of 2023
-java -jar ../eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.*.jar \
-  -processAll -pack -verbose -outputDir plugins plugins/mirur.mirur-ui_*
-```
+See `docs/release.md` for the release checklist, version/tag steps, signing and
+checksum guidance, rollback procedure, and how to keep the existing public p2
+update-site URL stable for current installs.
 
 ## Testing
 
