@@ -22,31 +22,6 @@
                     <createArtifactRepository>true</createArtifactRepository>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.eclipse.tycho.extras</groupId>
-                <artifactId>tycho-p2-extras-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <executions>
-                    <execution>
-                        <id>copy-to-update-site</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>mirror</goal>
-                        </goals>
-                        <configuration>
-                            <source>
-                                <repository>
-                                    <url>${project.baseUri}/target/repository</url>
-                                </repository>
-                            </source>
-                            <includePacked>true</includePacked>
-                            <append>true</append>
-                            <compress>false</compress>
-                            <destination>${basedir}/../../mirur-update-site/update-site/</destination>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
