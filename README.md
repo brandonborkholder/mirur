@@ -50,8 +50,13 @@ java -jar ../eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.*.jar \
 
 ## Testing
 
-You can run `mirur.mirur-ui` as an Eclipse application to test. However, you must add
-the following JVM arguments to your debug configuration:
+Use Eclipse IDE 2026-03 or newer on JDK 21 and run `mirur.mirur-ui` as an
+Eclipse application. See `docs/development.md` for target-platform setup and
+runtime workbench launch instructions.
+
+Manual debugger testing still requires the following JVM arguments in the launch
+configuration. Mirur maintainers own the follow-up to isolate or remove this
+JDK-internal access.
 
 ```
 --add-exports java.base/java.lang=ALL-UNNAMED
