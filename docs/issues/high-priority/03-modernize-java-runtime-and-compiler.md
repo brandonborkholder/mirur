@@ -6,8 +6,11 @@ High
 ## Labels
 `modernization`, `java`, `eclipse`, `build`
 
+## Status
+Resolved by PR #30 for the initial Java 21 baseline. The remaining JDK-internal access is tracked as a separate follow-up in `docs/modernization-tasks.md`.
+
 ## Background
-The build compiles with source/target 8 while using a JDK 11 toolchain, and the bundles declare JavaSE-1.8 or older execution environments. Current Eclipse IDE releases require newer Java runtimes, so Mirur needs an explicit support matrix and compiler strategy.
+Historically, the build compiled with source/target 8 while using a JDK 11 toolchain, and the bundles declared JavaSE-1.8 or older execution environments. Current Eclipse IDE releases require newer Java runtimes, so Mirur needed an explicit support matrix and compiler strategy.
 
 ## Scope
 - Define the minimum supported Eclipse release, runtime JDK, build JDK, and Java language level.
@@ -22,7 +25,9 @@ The build compiles with source/target 8 while using a JDK 11 toolchain, and the 
 - Runtime workbench instructions are updated for the selected JDK.
 - Any remaining `--add-exports` or internal JDK access is documented with owner and follow-up tasks.
 
-## References
-- Parent POM currently sets `source` and `target` to `8` and requests a JDK 11 toolchain.
-- Bundles currently declare JavaSE-1.8 or J2SE-1.5 execution environments.
+## Resolution references
+- Parent POM now uses `maven-compiler-plugin` with `<release>21</release>`.
+- Tycho target-platform configuration now uses `JavaSE-21`.
+- Bundles and fragments now declare `Bundle-RequiredExecutionEnvironment: JavaSE-21`.
+- `docs/development.md` documents the Java/Eclipse support matrix, runtime workbench launch instructions, and the owner/follow-up for remaining `--add-exports` requirements.
 - See `docs/modernization-tasks.md`, section "Modernize Java runtime and compiler strategy".

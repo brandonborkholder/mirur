@@ -45,13 +45,14 @@ External references checked on 2026-05-17:
 
 ### 3. Modernize Java runtime and compiler strategy
 
-- Decide and document the support matrix:
-  - Minimum runtime Eclipse/JDK combination.
-  - JDK used to run Maven/Tycho in CI.
-  - Java language level used to compile Mirur bundles.
-- Move from source/target `8` and JavaSE-1.8 bundle execution environments to a supported baseline such as Java 17 if the selected Eclipse release train requires it.
-- Prefer `maven-compiler-plugin` `release` over separate `source`/`target` where compatible with the selected Tycho version.
-- Revisit JVM arguments in `README.md`; the current `--add-exports` requirements indicate deep reflection/internal API access that should be minimized or isolated.
+Status: resolved by PR #30 for the initial Java 21 baseline. The repository now
+documents the Eclipse/JDK/build matrix in `docs/development.md`, builds with
+`maven-compiler-plugin` `<release>21</release>`, configures Tycho for
+`JavaSE-21`, and declares `JavaSE-21` bundle execution environments.
+
+Remaining follow-up: the runtime workbench still documents required
+`--add-exports` arguments for manual debugger testing. Keep the code issue below
+open until that JDK-internal access is isolated or removed.
 
 ### 4. Rework third-party dependency handling
 
@@ -193,7 +194,7 @@ High-priority issue drafts for the seven sections above are available under `doc
 
 ### Eclipse/OSGi issues
 
-- [ ] Update `Bundle-RequiredExecutionEnvironment` values.
+- [x] Update `Bundle-RequiredExecutionEnvironment` values.
 - [ ] Review `Require-Bundle` version ranges and replace with `Import-Package` where appropriate.
 - [ ] Add/validate source bundles for update-site consumers.
 - [ ] Validate native fragment host ranges and platform filters.
@@ -213,7 +214,7 @@ High-priority issue drafts for the seven sections above are available under `doc
 ### Documentation issues
 
 - [ ] Expand `README.md` with current build prerequisites, target-platform setup, and troubleshooting.
-- [ ] Add `docs/development.md` for importing into Eclipse and launching a runtime workbench.
+- [x] Add `docs/development.md` for importing into Eclipse and launching a runtime workbench.
 - [ ] Add `docs/release.md` for versioning, signing, p2 publishing, and rollback.
 - [ ] Add root `AGENTS.md` for coding agents.
 - [ ] Move or explain `test-workspace` examples.
