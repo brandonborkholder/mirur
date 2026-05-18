@@ -31,7 +31,7 @@ mvn -B -Dtycho.localArtifacts=ignore clean verify
 | Latest tested Eclipse release | Eclipse IDE 2026-03 / Platform 4.39 | Update after validating Mirur on a newer quarterly Eclipse IDE release. |
 | Runtime JDK for Eclipse | JDK 21 | Use a 64-bit JDK that matches the selected Eclipse IDE runtime requirement. |
 | Build JDK for Maven/Tycho | JDK 21 | Tycho `5.0.2` requires JDK 21 and Maven 3.9.9 or newer. |
-| Java language/API level | Java 21 | The parent POM uses `maven-compiler-plugin` with `<release>21</release>`, and bundles/fragments declare `JavaSE-21`. |
+| Java language/API level | Java 21 for the Eclipse plug-in; Java 8 for the injected agent | The parent POM uses `maven-compiler-plugin` with `<release>21</release>`, while `mirur-agent` keeps `JavaSE-1.8`/`javacTarget = 1.8` so remote agent classes remain loadable in older debuggee VMs. |
 
 When evaluating a newer Eclipse release, start with
 `https://download.eclipse.org/releases/latest/` locally, then update

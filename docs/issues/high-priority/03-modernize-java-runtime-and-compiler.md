@@ -28,6 +28,6 @@ Historically, the build compiled with source/target 8 while using a JDK 11 toolc
 ## Resolution references
 - Parent POM now uses `maven-compiler-plugin` with `<release>21</release>`.
 - Tycho target-platform configuration now uses `JavaSE-21`.
-- Bundles and fragments now declare `Bundle-RequiredExecutionEnvironment: JavaSE-21`.
+- Eclipse plug-in bundles and fragments now declare `Bundle-RequiredExecutionEnvironment: JavaSE-21`; `mirur-agent` remains `JavaSE-1.8` so injected agent classes stay loadable in Java 8+ debuggee VMs.
 - `docs/development.md` documents the Java/Eclipse support matrix, runtime workbench launch instructions, and the owner/follow-up for remaining `--add-exports` requirements.
 - See `docs/modernization-tasks.md`, section "Modernize Java runtime and compiler strategy".
