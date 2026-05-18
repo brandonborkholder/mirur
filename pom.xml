@@ -10,8 +10,8 @@
     <description>Visually debug arrays in your IDE.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- 1.1.0 is the last version that I can get to deploy/publish p2 repository -->
-        <tycho.version>1.1.0</tycho.version>
+        <!-- Keep Tycho on the latest supported release line used for headless Eclipse builds. -->
+        <tycho.version>5.0.2</tycho.version>
         <mirur.target-platform.version>2.2.1-SNAPSHOT</mirur.target-platform.version>
     </properties>
 
@@ -35,36 +35,14 @@
     </modules>
     <build>
         <plugins>
-            <!-- Compile to Java 8 -->
+            <!-- Compile Java sources to the bundle execution environment while running Tycho on JDK 21+. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <release>21</release>
                 </configuration>
-            </plugin>
-
-            <!-- Use the JDK 11 toolchain -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-toolchains-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <toolchains>
-                        <jdk>
-                            <version>11</version>
-                        </jdk>
-                    </toolchains>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>toolchain</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -85,6 +63,7 @@
                             <version>${mirur.target-platform.version}</version>
                         </artifact>
                     </target>
+                    <executionEnvironment>JavaSE-21</executionEnvironment>
                     <environments>
                         <environment>
                             <os>linux</os>
