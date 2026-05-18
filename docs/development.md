@@ -13,6 +13,16 @@ and includes only the Platform/UI, Debug UI, JDT Debug, core runtime, and JFace
 Text installable units that Mirur declares directly in `mirur-ui/META-INF/MANIFEST.MF`.
 Transitive dependencies are resolved by p2 from the same pinned repository.
 
+## Maven/Tycho build
+
+Run Maven with JDK 21. Tycho `5.0.2` requires Maven `3.9.9` or newer
+and JDK `21` for the Tycho plug-ins themselves, while Mirur
+compiles its Java sources for Java 21 (`<release>21</release>`).
+
+```bash
+mvn -B -Dtycho.localArtifacts=ignore clean verify
+```
+
 ## Eclipse compatibility matrix
 
 | Compatibility item | Eclipse release | Notes |

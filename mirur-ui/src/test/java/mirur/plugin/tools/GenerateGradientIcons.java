@@ -10,9 +10,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.metsci.glimpse.support.color.GlimpseColor;
-import com.metsci.glimpse.support.colormap.ColorGradient;
-import com.metsci.glimpse.support.colormap.ColorGradients;
+import com.metsci.glimpse.core.support.color.GlimpseColor;
+import com.metsci.glimpse.core.support.colormap.ColorGradient;
+import com.metsci.glimpse.core.support.colormap.ColorGradients;
 
 public class GenerateGradientIcons {
     public static void main(String[] args) throws Exception {
