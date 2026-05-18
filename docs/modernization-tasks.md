@@ -48,7 +48,7 @@ External references checked on 2026-05-17:
 Status: resolved by PR #30 for the initial Java 21 baseline. The repository now
 documents the Eclipse/JDK/build matrix in `docs/development.md`, builds with
 `maven-compiler-plugin` `<release>21</release>`, configures Tycho for
-`JavaSE-21`, and declares `JavaSE-21` bundle execution environments.
+`JavaSE-21`, and declares `JavaSE-21` bundle execution environments for Eclipse plug-in bundles while keeping `mirur-agent` on Java 8 bytecode for older debuggee VMs.
 
 Remaining follow-up: the runtime workbench still documents required
 `--add-exports` arguments for manual debugger testing. Keep the code issue below
