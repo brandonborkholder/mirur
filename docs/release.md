@@ -23,12 +23,13 @@ old site.
 2. Choose the release version, then update Maven and Tycho/PDE metadata:
 
    ```sh
-   mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT
+   mvn versions:set -DnewVersion=X.Y.Z
    mvn tycho-versions:set-version -DnewVersion=X.Y.Z.qualifier
    ```
 
-   For a final release, use the release version in Maven metadata and the matching
-   `.qualifier` value in Eclipse metadata before tagging.
+   Use the final release version (without `-SNAPSHOT`) in Maven metadata and the
+   matching `.qualifier` value in Eclipse metadata before verifying and tagging;
+   reserve the next `-SNAPSHOT` Maven version for the post-release bump.
 3. Run the full verification build:
 
    ```sh
