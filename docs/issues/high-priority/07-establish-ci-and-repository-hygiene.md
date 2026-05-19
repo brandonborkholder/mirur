@@ -10,7 +10,7 @@ High
 Modernization work needs repeatable tooling so build failures are visible and future dependency/target-platform updates are safer. The repository should define Maven, CI, generated-file handling, formatting, and agent/developer operating instructions.
 
 ## Scope
-- Add Maven Wrapper and pin the Maven version used by CI.
+- Require Maven 3.9.x in the parent POM and use the environment-provided Maven in CI.
 - Add CI that runs a full Tycho build, license checks, and dependency/license reports.
 - Add optional Linux UI smoke tests under xvfb if/when UI tests exist.
 - Add or refresh `.gitignore` for generated outputs, copied libraries, native artifacts, IDE metadata, and test output.
@@ -20,7 +20,7 @@ Modernization work needs repeatable tooling so build failures are visible and fu
 
 ## Acceptance criteria
 - CI runs on pull requests and main-branch pushes.
-- Developers can run the same build locally through `./mvnw`.
+- Developers can run the same build locally with Maven 3.9.x.
 - Generated artifacts are ignored or explicitly documented if committed.
 - `AGENTS.md` exists with project-specific build and Eclipse plug-in instructions.
 

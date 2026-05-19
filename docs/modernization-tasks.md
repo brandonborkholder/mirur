@@ -84,9 +84,9 @@ open until that JDK-internal access is isolated or removed.
 
 ### 7. Establish CI and repository hygiene
 
-- Add Maven Wrapper (`mvnw`, `.mvn/wrapper`) and commit the Maven version used by CI.
+- Require Maven 3.9.x in the parent POM and use the environment-provided Maven in CI.
 - Add GitHub Actions or another CI workflow that runs at least:
-  - `./mvnw -B -Dtycho.localArtifacts=ignore clean verify`
+  - `mvn -B -Dtycho.localArtifacts=ignore clean verify`
   - license check
   - dependency vulnerability/license reporting
   - optional UI smoke test on Linux with xvfb
@@ -187,7 +187,7 @@ High-priority issue drafts for the seven sections above are available under `doc
 - [ ] Remove Pack200/jarprocessor release steps.
 - [ ] Stop publishing to a sibling checkout during `install`.
 - [ ] Review and modernize Maven plug-in versions.
-- [ ] Add Maven Wrapper.
+- [ ] Require Maven 3.9.x in the parent POM.
 - [ ] Add CI with JDK/Eclipse/Tycho matrix.
 - [ ] Add dependency vulnerability and license reports.
 - [ ] Decide whether copied jars in `mirur-ui/lib` are generated or committed; enforce with `.gitignore` and documentation.
@@ -222,7 +222,7 @@ High-priority issue drafts for the seven sections above are available under `doc
 
 ## Suggested first implementation sequence
 
-1. Add `AGENTS.md`, Maven Wrapper, `.gitignore`, and CI skeleton.
+1. Add `AGENTS.md`, Maven-version enforcement, `.gitignore`, and CI skeleton.
 2. Capture current build failures and document prerequisites.
 3. Add `releng/target-platform/mirur.target` pinned to a current Eclipse release.
 4. Upgrade Tycho until `mvn clean verify` resolves and packages the p2 repository.

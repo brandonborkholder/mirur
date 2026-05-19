@@ -2,6 +2,32 @@
 target/
 pom.xml.versionsBackup
 
+# Maven/Tycho/p2 generated outputs
+**/target/
+.target/
+site/
+.mvn/timing.properties
+*.versionsBackup
+
+# Runtime artifacts copied by dependency/build steps
+lib/
+**/lib/*.jar
+**/lib/*.pack.gz
+**/*.dll
+**/*.so
+**/*.jnilib
+**/*.dylib
+**/*.a
+**/*.la
+
+# Test and workspace output
+surefire-reports/
+failsafe-reports/
+test-output/
+.metadata/
+replay_pid*
+
+
 # Eclipse
 .settings/
 .classpath

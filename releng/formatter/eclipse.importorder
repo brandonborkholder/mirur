@@ -1,0 +1,7 @@
+# Eclipse JDT import order for Mirur Java sources.
+# Import this in Eclipse via Java > Code Style > Organize Imports.
+java
+javax
+org
+com
+mirur
