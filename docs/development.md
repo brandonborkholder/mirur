@@ -36,7 +36,7 @@ for debugger scenarios.
 Run just the plug-in smoke tests after the upstream modules have been built with:
 
 ```bash
-mvn -B -Dtycho.localArtifacts=ignore -pl mirur-agent,mirur-ui,mirur-ui.tests -am verify
+mvn -B -Dtycho.localArtifacts=ignore -pl mirur-agent,mirur-ui,mirur-ui.tests,releng/target-platform -am verify
 ```
 
 On Linux CI agents, run this command under `xvfb-run` when no display server is
