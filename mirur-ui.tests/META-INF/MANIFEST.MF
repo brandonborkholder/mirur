@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mirur UI Smoke Tests
+Bundle-SymbolicName: mirur.mirur-ui.tests
+Bundle-Version: 2.2.1.qualifier
+Bundle-Vendor: Mirur
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.junit,
+ mirur.mirur-ui
