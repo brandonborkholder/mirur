@@ -534,6 +534,20 @@ http://creativecommons.org/licenses/by/3.0/
    </url>
 
    <plugin
+         id="mirur.mirur-core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="mirur.mirur-render"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="mirur.mirur-ui"
          download-size="0"
          install-size="0"
