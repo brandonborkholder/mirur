@@ -28,8 +28,11 @@ jobs:
       - name: Show Maven version
         run: mvn -version
 
-      - name: Full Tycho verify and license header check
-        run: mvn -B -Dtycho.localArtifacts=ignore clean verify
+      - name: Full Tycho install and license header check
+        run: mvn -B -Dtycho.localArtifacts=ignore clean install -DskipTests
+
+      - name: Run UI-capable test phase under xvfb
+        run: xvfb-run --auto-servernum mvn -B -Dtycho.localArtifacts=ignore -DskipTests=false verify
 
       - name: Generate Maven dependency tree report
         if: always()
@@ -48,32 +51,3 @@ jobs:
             **/target/reports/dependency-tree.txt
             target/generated-license-reports/**
           if-no-files-found: warn
-
-  linux-ui-smoke:
-    name: Optional Linux UI smoke tests
-    runs-on: ubuntu-latest
-    needs: tycho-build
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '21'
-          cache: maven
-
-      - name: Detect UI smoke tests
-        id: smoke-tests
-        run: |
-          if find . \( -name '*UiSmokeTest.java' -o -name '*UISmokeTest.java' -o -path '*/src/test/*/ui/*' \) -print -quit | grep -q .; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "No UI smoke tests were found; skipping xvfb run."
-          fi
-
-      - name: Run UI-capable test phase under xvfb
-        if: steps.smoke-tests.outputs.run == 'true'
-        run: xvfb-run --auto-servernum mvn -B -Dtycho.localArtifacts=ignore -DskipTests=false verify
