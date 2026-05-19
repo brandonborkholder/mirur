@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
 
-class SubmitToMirurAction : AnAction(), DumbAware {
+open class SubmitToMirurAction : AnAction(), DumbAware {
     override fun actionPerformed(e: AnActionEvent) {
         NotificationGroupManager.getInstance()
             .getNotificationGroup("Mirur")
