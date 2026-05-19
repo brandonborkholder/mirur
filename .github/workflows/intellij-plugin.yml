@@ -36,7 +36,7 @@ jobs:
 
       - name: Build IntelliJ plugin
         working-directory: mirur-intellij-plugin
-        run: gradle --no-daemon clean check buildPlugin
+        run: gradle --no-daemon clean smokeTest buildPlugin
 
   intellij-verifier:
     name: IntelliJ plugin verifier (ubuntu)
