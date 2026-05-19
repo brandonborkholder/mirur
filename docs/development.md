@@ -15,13 +15,15 @@ Transitive dependencies are resolved by p2 from the same pinned repository.
 
 ## Maven/Tycho build
 
-Run Maven with JDK 21. Tycho `5.0.2` requires Maven `3.9.9` or newer
-and JDK `21` for the Tycho plug-ins themselves, while Mirur
-compiles its Java sources for Java 21 (`<release>21</release>`).
+Run Maven 3.9.x with JDK 21. The parent POM enforces Maven 3.9.x. Tycho `5.0.2` requires JDK `21` for the Tycho plug-ins themselves, while Mirur compiles its Java sources for Java 21 (`<release>21</release>`).
 
 ```bash
 mvn -B -Dtycho.localArtifacts=ignore clean verify
 ```
+
+CI assumes Maven 3.9.x is available in the environment and generates dependency and third-party license reports as workflow artifacts.
+Use the Eclipse formatter and import-order files under `releng/formatter/`
+when configuring a workspace.
 
 ## Automated Eclipse smoke tests
 

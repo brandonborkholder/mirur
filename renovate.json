@@ -1,0 +1,23 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "dependencyDashboard": true,
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "description": "Group Maven/Tycho updates so target-platform changes can be validated together.",
+      "matchManagers": [
+        "maven"
+      ],
+      "groupName": "maven and tycho dependencies"
+    }
+  ],
+  "ignorePaths": [
+    "**/target/**",
+    "test-workspace/**"
+  ]
+}
