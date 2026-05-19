@@ -23,7 +23,27 @@ compiles its Java sources for Java 21 (`<release>21</release>`).
 mvn -B -Dtycho.localArtifacts=ignore clean verify
 ```
 
-## Java and Eclipse support matrix
+## Automated Eclipse smoke tests
+
+The `mirur-ui.tests` module is a Tycho `eclipse-test-plugin` that launches the
+Eclipse IDE workbench with the Mirur UI bundle installed. Its smoke tests start
+the bundle, verify the registered workbench extensions for Mirur views,
+preferences, and debug detail panes, and instantiate the lightweight Statistics
+view. The test workspace is created under `mirur-ui.tests/target/workspaces/` so
+the checked-in `test-workspace/` directory can remain a manual/sample workspace
+for debugger scenarios.
+
+Run just the plug-in smoke tests after the upstream modules have been built with:
+
+```bash
+mvn -B -Dtycho.localArtifacts=ignore -pl mirur-agent,mirur-ui,mirur-ui.tests -am verify
+```
+
+On Linux CI agents, run this command under `xvfb-run` when no display server is
+available because the tests intentionally exercise the Eclipse workbench UI
+harness.
+
+## Eclipse compatibility matrix
 
 | Compatibility item | Supported baseline | Notes |
 | --- | --- | --- |
