@@ -29,6 +29,8 @@
         <module>mirur-jogl-win64</module>
         <module>mirur-jogl-osx</module>
         <module>mirur-agent</module>
+        <module>mirur-core</module>
+        <module>mirur-render</module>
         <module>mirur-ui</module>
         <module>mirur-ui.tests</module>
         <module>mirur-feature</module>
@@ -52,6 +54,10 @@
                                     <version>[3.9,4.0)</version>
                                     <message>Mirur requires Maven 3.9.x.</message>
                                 </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[21,22)</version>
+                                    <message>Mirur requires JDK 21 for Maven/Tycho builds.</message>
+                                </requireJavaVersion>
                             </rules>
                         </configuration>
                     </execution>

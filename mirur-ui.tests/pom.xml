@@ -24,7 +24,7 @@
                     <useUIThread>true</useUIThread>
                     <application>org.eclipse.ui.ide.workbench</application>
                     <appArgLine>-data ${project.build.directory}/workspaces/smoke --launcher.suppressErrors</appArgLine>
-                    <argLine>-Djava.awt.headless=true</argLine>
+                    <argLine>-Djava.awt.headless=false</argLine>
                 </configuration>
             </plugin>
         </plugins>

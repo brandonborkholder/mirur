@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mirur Core
+Bundle-SymbolicName: mirur.mirur-core;singleton:=true
+Bundle-Version: 2.2.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: mirur.core
