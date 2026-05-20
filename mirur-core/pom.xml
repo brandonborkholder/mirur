@@ -12,4 +12,11 @@
     <artifactId>mirur.mirur-core</artifactId>
     <packaging>eclipse-plugin</packaging>
     <name>mirur-core</name>
+    <dependencies>
+        <dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.3.1</version>
+        </dependency>
+    </dependencies>
 </project>
