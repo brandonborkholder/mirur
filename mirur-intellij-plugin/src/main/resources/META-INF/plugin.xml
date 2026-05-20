@@ -1,0 +1,31 @@
+<idea-plugin>
+    <id>io.mirur.intellij</id>
+    <name>Mirur</name>
+    <vendor email="support@mirur.io" url="https://mirur.io">Mirur</vendor>
+
+    <description><![CDATA[
+      Mirur visualization tool window and debugger actions for arrays.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Mirur" displayType="BALLOON"/>
+        <toolWindow id="Mirur"
+                    anchor="right"
+                    factoryClass="io.mirur.intellij.MirurToolWindowFactory"
+                    icon="AllIcons.Toolwindows.ToolWindowMessages"/>
+        <applicationService serviceImplementation="io.mirur.intellij.MirurSettingsService"/>
+        <projectService serviceImplementation="io.mirur.intellij.MirurSubmissionBus"/>
+    </extensions>
+
+    <actions>
+        <action id="Mirur.SubmitSelection"
+                class="io.mirur.intellij.XDebuggerSubmitToMirurAction"
+                text="Submit to Mirur"
+                description="Submit selected debugger value or editor selection to Mirur">
+            <add-to-group group-id="DebuggerPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

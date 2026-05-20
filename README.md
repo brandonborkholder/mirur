@@ -40,6 +40,8 @@ See `docs/release.md` for the release checklist, version/tag steps, signing and
 checksum guidance, rollback procedure, and how to keep the existing public p2
 update-site URL stable for current installs.
 
+IntelliJ packaging/CI/publication guidance is in `docs/intellij-release.md`, with validation checklists in `docs/intellij-parity-checklist.md` and `docs/intellij-smoke-test.md`.
+
 ## Testing
 
 Use Eclipse IDE 2026-03 or newer on JDK 21 and run `mirur.mirur-ui` as an
