@@ -70,38 +70,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>com.github.wvengen</groupId>
-                <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.7.0</version>
-                <dependencies>
-                    <!-- ProGuard 7.8.x adds Java 25 class-file support (Guardsquare/proguard#481). -->
-                    <dependency>
-                        <groupId>com.guardsquare</groupId>
-                        <artifactId>proguard-base</artifactId>
-                        <version>7.8.2</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.guardsquare</groupId>
-                        <artifactId>proguard-core</artifactId>
-                        <version>9.2.0</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>proguard-shrink</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>proguard</goal>
-                        </goals>
-                        <configuration>
-                            <obfuscate>false</obfuscate>
-                            <includeDependency>false</includeDependency>
-                            <proguardInclude>${basedir}/src/main/proguard/proguard.conf</proguardInclude>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -191,4 +159,51 @@
             <version>2.4.0</version>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.wvengen</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <version>2.7.0</version>
+                        <dependencies>
+                            <!-- ProGuard 7.8.x adds Java 25 class-file support (Guardsquare/proguard#481). -->
+                            <dependency>
+                                <groupId>com.guardsquare</groupId>
+                                <artifactId>proguard-base</artifactId>
+                                <version>7.8.2</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.guardsquare</groupId>
+                                <artifactId>proguard-core</artifactId>
+                                <version>9.2.0</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>proguard-shrink</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>proguard</goal>
+                                </goals>
+                                <configuration>
+                                    <obfuscate>false</obfuscate>
+                                    <includeDependency>false</includeDependency>
+                                    <proguardInclude>${basedir}/src/main/proguard/proguard.conf</proguardInclude>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
