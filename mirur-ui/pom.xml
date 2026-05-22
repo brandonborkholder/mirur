@@ -84,6 +84,12 @@
                         </goals>
                         <configuration>
                             <target>
+                                <mkdir dir="lib/repackaged" />
+                                <copy todir="lib/repackaged" overwrite="false">
+                                    <fileset dir="lib">
+                                        <include name="*.jar" />
+                                    </fileset>
+                                </copy>
                                 <move todir="lib" overwrite="true" verbose="true">
                                     <fileset dir="lib/repackaged">
                                         <include name="*.jar" />
