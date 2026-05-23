@@ -42,8 +42,6 @@ class MirurToolWindowFactory : ToolWindowFactory, DumbAware {
         panel.add(JBScrollPane(snapshotLabel), BorderLayout.CENTER)
         panel.add(statusLabel, BorderLayout.SOUTH)
 
-        controller.consumePendingSubmissions()
-
         val connection = project.messageBus.connect(toolWindow.disposable)
         connection.subscribe(
             MirurSubmissionBus.TOPIC,
@@ -53,6 +51,8 @@ class MirurToolWindowFactory : ToolWindowFactory, DumbAware {
                 }
             },
         )
+
+        controller.consumePendingSubmissions()
 
         val content = contentManager.factory.createContent(panel, "Views", false)
         contentManager.addContent(content)

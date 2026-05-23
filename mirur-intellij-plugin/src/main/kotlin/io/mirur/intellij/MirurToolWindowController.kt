@@ -1,6 +1,8 @@
 package io.mirur.intellij
 
 import com.intellij.xdebugger.XDebuggerManager
+import com.intellij.xdebugger.evaluation.XDebuggerEvaluator
+import com.intellij.xdebugger.frame.XValue
 
 class MirurToolWindowController(
     private val submissionBus: MirurSubmissionBus,
@@ -39,11 +41,34 @@ class MirurToolWindowController(
 
         val refreshed = MirurVariableSnapshot(
             name = variableName,
-            signature = "debug-expression",
-            value = variableName,
+            signature = currentSnapshot?.signature ?: "debug-expression",
+            value = currentSnapshot?.value,
         )
-        applySnapshot(refreshed)
-        status("Refreshed '$variableName' from active debug session.")
+        val evaluator = session.currentStackFrame?.evaluator
+        if (evaluator == null) {
+            applySnapshot(refreshed)
+            status("Refreshed '$variableName' using latest known value (no evaluator available).")
+            return
+        }
+
+        evaluator.evaluate(variableName, object : XDebuggerEvaluator.XEvaluationCallback {
+            override fun evaluated(result: XValue) {
+                val valuePresentation = result.javaClass.simpleName
+                applySnapshot(
+                    MirurVariableSnapshot(
+                        name = variableName,
+                        signature = result.javaClass.simpleName,
+                        value = valuePresentation,
+                    ),
+                )
+                status("Refreshed '$variableName' from active debug session.")
+            }
+
+            override fun errorOccurred(errorMessage: String) {
+                applySnapshot(refreshed)
+                status("Refresh failed for '$variableName': $errorMessage")
+            }
+        }, null)
     }
 
     fun setPinned(enabled: Boolean) {

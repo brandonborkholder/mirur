@@ -3,7 +3,7 @@ package io.mirur.intellij
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.util.messages.Topic
-import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicReference
 
 @Service(Service.Level.PROJECT)
 class MirurSubmissionBus(private val project: Project) {
@@ -11,20 +11,15 @@ class MirurSubmissionBus(private val project: Project) {
         fun onSubmission(snapshot: MirurVariableSnapshot)
     }
 
-    private val queue = ConcurrentLinkedQueue<MirurVariableSnapshot>()
+    private val latestSnapshot = AtomicReference<MirurVariableSnapshot?>()
 
     fun submit(snapshot: MirurVariableSnapshot) {
-        queue.add(snapshot)
+        latestSnapshot.set(snapshot)
         project.messageBus.syncPublisher(TOPIC).onSubmission(snapshot)
     }
 
     fun drain(): List<MirurVariableSnapshot> {
-        val out = mutableListOf<MirurVariableSnapshot>()
-        while (true) {
-            val item = queue.poll() ?: break
-            out.add(item)
-        }
-        return out
+        return latestSnapshot.getAndSet(null)?.let(::listOf) ?: emptyList()
     }
 
     companion object {
