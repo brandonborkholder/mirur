@@ -1,22 +1,39 @@
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.1.21"
-    id("org.jetbrains.intellij.platform") version "2.7.2"
+    id("org.jetbrains.intellij.platform") version "2.16.0"
 }
 
 group = "io.mirur"
 version = "0.1.0-SNAPSHOT"
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
 repositories {
     mavenCentral()
     intellijPlatform {
         defaultRepositories()
+        marketplace()
     }
 }
 
+val localIdePath = providers.environmentVariable("MIRUR_INTELLIJ_IDE_PATH").orNull
+
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity("2024.2.4")
+        if (!localIdePath.isNullOrBlank()) {
+            local(localIdePath)
+        } else {
+            intellijIdeaCommunity("2024.2.4")
+        }
         bundledPlugin("com.intellij.java")
         pluginVerifier()
         // no IntelliJ test framework dependency yet; smokeTest covers plugin descriptor wiring
@@ -27,18 +44,10 @@ intellijPlatform {
     pluginConfiguration {
         ideaVersion {
             sinceBuild = "242"
+            untilBuild = "242.*"
         }
     }
 }
-
-tasks {
-    patchPluginXml {
-        sinceBuild.set("242")
-        untilBuild.set("242.*")
-    }
-}
-
-
 
 tasks.register("smokeTest") {
     group = "verification"
@@ -55,7 +64,6 @@ tasks.register("smokeTest") {
         require("MirurSettingsService" in text) { "Settings service registration missing" }
     }
 }
-
 
 tasks.test {
     enabled = false
