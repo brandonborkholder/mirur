@@ -2,24 +2,26 @@ package io.mirur.intellij
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import com.intellij.util.messages.Topic
-import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Service(Service.Level.PROJECT)
 class MirurSubmissionBus(private val project: Project) {
-    interface Listener {
-        fun onSubmission(snapshot: MirurVariableSnapshot)
-    }
-
-    private val latestSnapshot = AtomicReference<MirurVariableSnapshot?>()
+    private val queue = ConcurrentLinkedQueue<MirurVariableSnapshot>()
+    private val listeners = CopyOnWriteArrayList<(MirurVariableSnapshot) -> Unit>()
 
     fun submit(snapshot: MirurVariableSnapshot) {
-        latestSnapshot.set(snapshot)
-        project.messageBus.syncPublisher(TOPIC).onSubmission(snapshot)
+        queue.add(snapshot)
+        listeners.forEach { listener -> listener(snapshot) }
     }
 
     fun drain(): List<MirurVariableSnapshot> {
         return latestSnapshot.getAndSet(null)?.let(::listOf) ?: emptyList()
+    }
+
+    fun addListener(listener: (MirurVariableSnapshot) -> Unit): () -> Unit {
+        listeners.add(listener)
+        return { listeners.remove(listener) }
     }
 
     companion object {
