@@ -32,7 +32,7 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.14.3'
+          gradle-version: 9.0.0
 
       - name: Build IntelliJ plugin
         working-directory: mirur-intellij-plugin
@@ -55,7 +55,7 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.14.3'
+          gradle-version: 9.0.0
 
       - name: Run IntelliJ plugin verifier
         working-directory: mirur-intellij-plugin
