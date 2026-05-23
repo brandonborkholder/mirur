@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>io.mirur.intellij</id>
+    <id>io.mirur</id>
     <name>Mirur</name>
     <vendor email="support@mirur.io" url="https://mirur.io">Mirur</vendor>
 

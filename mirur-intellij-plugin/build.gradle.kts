@@ -58,7 +58,7 @@ tasks.register("smokeTest") {
         require(pluginXml.exists()) { "plugin.xml is missing" }
 
         val text = pluginXml.readText()
-        require("<id>io.mirur.intellij</id>" in text) { "plugin id missing" }
+        require("<id>io.mirur</id>" in text) { "plugin id missing" }
         require("Mirur.SubmitSelection" in text) { "Submit action missing" }
         require("MirurToolWindowFactory" in text) { "Tool window factory registration missing" }
         require("MirurSettingsService" in text) { "Settings service registration missing" }
