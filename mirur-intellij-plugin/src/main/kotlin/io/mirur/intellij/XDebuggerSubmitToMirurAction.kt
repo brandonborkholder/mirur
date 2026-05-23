@@ -37,6 +37,11 @@ class XDebuggerSubmitToMirurAction : SubmitToMirurAction(), DumbAware {
                 name = expression,
                 signature = "debug-expression",
                 value = expression,
+                elementType = "double",
+                shape = listOf(expression.length),
+                min = 0.0,
+                max = expression.length.toDouble(),
+                sampleCount = expression.length,
             )
         )
 
