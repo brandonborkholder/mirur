@@ -1,9 +1,6 @@
 package io.mirur.intellij
 
-import com.intellij.openapi.project.Project
-
 class MirurToolWindowController(
-    private val project: Project,
     private val render: (MirurVariableSnapshot?) -> Unit,
 ) {
     private var currentVariableIdentity: String? = null
@@ -26,7 +23,7 @@ class MirurToolWindowController(
     }
 
     fun refreshFromActiveDebugSession() {
-        MirurDebuggerRefresher.refresh(project)?.let(::onSubmission)
+        currentSnapshot?.let(::onSubmission)
     }
 
     fun setPinned(value: Boolean) {
@@ -40,6 +37,6 @@ class MirurToolWindowController(
     fun getCurrentSnapshot(): MirurVariableSnapshot? = currentSnapshot
 
     private fun variableIdentity(snapshot: MirurVariableSnapshot): String {
-        return "${snapshot.variableName}@${snapshot.stackFrame}"
+        return "${snapshot.name}@${snapshot.signature}"
     }
 }
