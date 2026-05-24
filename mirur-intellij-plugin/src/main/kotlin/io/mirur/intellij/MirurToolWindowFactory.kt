@@ -37,16 +37,16 @@ class MirurToolWindowFactory : ToolWindowFactory, DumbAware {
         footer.add(eventLabel)
         panel.add(footer, BorderLayout.SOUTH)
 
-        val controller = MirurToolWindowController(project) { snapshot ->
+        val controller = MirurToolWindowController { snapshot ->
             if (snapshot == null) {
                 variableLabel.text = "Variable: --"
                 shapeLabel.text = "Shape: --"
                 dtypeLabel.text = "DType: --"
                 eventLabel.text = "State: idle"
             } else {
-                variableLabel.text = "Variable: ${snapshot.variableName}"
-                shapeLabel.text = "Shape: ${snapshot.shape.joinToString(prefix = "[", postfix = "]")}"
-                dtypeLabel.text = "DType: ${snapshot.dataType}"
+                variableLabel.text = "Variable: ${snapshot.name}"
+                shapeLabel.text = "Shape: ${snapshot.shape.joinToString(prefix = "[", postfix = "]")}" 
+                dtypeLabel.text = "DType: ${snapshot.elementType}"
                 eventLabel.text = if (pinButton.isSelected) "State: pinned" else "State: live"
             }
         }
@@ -64,12 +64,6 @@ class MirurToolWindowFactory : ToolWindowFactory, DumbAware {
         connection.subscribe(MirurSubmissionBus.TOPIC, MirurSubmissionBus.Listener { snapshot ->
             controller.onSubmission(snapshot)
         })
-
-        Disposer.register(toolWindow.disposable) {
-            if (!connection.isDisposed) {
-                connection.dispose()
-            }
-        }
 
         val content = contentManager.factory.createContent(panel, "Views", false)
         contentManager.addContent(content)
