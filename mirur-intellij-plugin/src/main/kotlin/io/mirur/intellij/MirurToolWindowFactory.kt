@@ -9,6 +9,8 @@ import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import java.awt.BorderLayout
 import java.awt.FlowLayout
+import javax.swing.JButton
+import javax.swing.JToggleButton
 
 class MirurToolWindowFactory : ToolWindowFactory, DumbAware {
     override fun shouldBeAvailable(project: Project): Boolean = true
@@ -16,35 +18,58 @@ class MirurToolWindowFactory : ToolWindowFactory, DumbAware {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val contentManager = toolWindow.contentManager
         val panel = JBPanel<JBPanel<*>>(BorderLayout())
-        panel.add(JBLabel("Mirur is ready. Debugger integration will be added in Phase 4."), BorderLayout.NORTH)
+
+        val controls = JBPanel<JBPanel<*>>(FlowLayout(FlowLayout.LEFT, 8, 0))
+        val refreshButton = JButton("Refresh")
+        val pinButton = JToggleButton("Pin")
+        controls.add(refreshButton)
+        controls.add(pinButton)
+        panel.add(controls, BorderLayout.NORTH)
 
         val footer = JBPanel<JBPanel<*>>(FlowLayout(FlowLayout.LEFT, 12, 0))
-        val badgeLabel = JBLabel("Dataset: --")
-        val minMaxLabel = JBLabel("Min/Max: --")
-        val samplingLabel = JBLabel("Sampling: --")
+        val variableLabel = JBLabel("Variable: --")
+        val shapeLabel = JBLabel("Shape: --")
+        val dtypeLabel = JBLabel("DType: --")
         val eventLabel = JBLabel("State: idle")
-        footer.add(badgeLabel)
-        footer.add(minMaxLabel)
-        footer.add(samplingLabel)
+        footer.add(variableLabel)
+        footer.add(shapeLabel)
+        footer.add(dtypeLabel)
         footer.add(eventLabel)
         panel.add(footer, BorderLayout.SOUTH)
 
-        val controller = MirurDatasetFooterController(project) { state ->
-            val dataset = state.dataset
-            if (dataset == null) {
-                badgeLabel.text = "Dataset: --"
-                minMaxLabel.text = "Min/Max: --"
-                samplingLabel.text = "Sampling: --"
+        val controller = MirurToolWindowController(project) { snapshot ->
+            if (snapshot == null) {
+                variableLabel.text = "Variable: --"
+                shapeLabel.text = "Shape: --"
+                dtypeLabel.text = "DType: --"
                 eventLabel.text = "State: idle"
             } else {
-                badgeLabel.text = "Dataset: ${MirurDatasetFormatting.datasetBadge(dataset)}"
-                minMaxLabel.text = "Min/Max: ${MirurDatasetFormatting.minMax(dataset)}"
-                samplingLabel.text = "Sampling: ${MirurDatasetFormatting.sampling(dataset)}"
-                eventLabel.text = "State: ${state.event.name.lowercase()}"
+                variableLabel.text = "Variable: ${snapshot.variableName}"
+                shapeLabel.text = "Shape: ${snapshot.shape.joinToString(prefix = "[", postfix = "]")}"
+                dtypeLabel.text = "DType: ${snapshot.dataType}"
+                eventLabel.text = if (pinButton.isSelected) "State: pinned" else "State: live"
             }
         }
-        controller.start()
-        Disposer.register(toolWindow.disposable, controller)
+
+        refreshButton.addActionListener { controller.refreshFromActiveDebugSession() }
+        pinButton.addActionListener {
+            controller.setPinned(pinButton.isSelected)
+            eventLabel.text = if (controller.isPinned()) "State: pinned" else "State: live"
+        }
+
+        val submissionBus = MirurSubmissionBus.getInstance(project)
+        controller.consumePendingSubmissions(submissionBus.drain())
+
+        val connection = project.messageBus.connect(toolWindow.disposable)
+        connection.subscribe(MirurSubmissionBus.TOPIC, MirurSubmissionBus.Listener { snapshot ->
+            controller.onSubmission(snapshot)
+        })
+
+        Disposer.register(toolWindow.disposable) {
+            if (!connection.isDisposed) {
+                connection.dispose()
+            }
+        }
 
         val content = contentManager.factory.createContent(panel, "Views", false)
         contentManager.addContent(content)
