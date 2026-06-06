@@ -2,6 +2,9 @@
 target/
 pom.xml.versionsBackup
 
+# Gradle
+.gradle/
+
 # Maven/Tycho/p2 generated outputs
 **/target/
 .target/
