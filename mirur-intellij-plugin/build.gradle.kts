@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.1.21"
+    id("org.jetbrains.kotlin.jvm") version "2.3.21"
     id("org.jetbrains.intellij.platform") version "2.16.0"
 }
 
@@ -32,7 +32,7 @@ dependencies {
         if (!localIdePath.isNullOrBlank()) {
             local(localIdePath)
         } else {
-            intellijIdeaCommunity("2024.2.4")
+            intellijIdea("2026.1.3")
         }
         bundledPlugin("com.intellij.java")
         pluginVerifier()
@@ -43,8 +43,8 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "242"
-            untilBuild = "242.*"
+            sinceBuild = "261"
+            untilBuild = "261.*"
         }
     }
 }
