@@ -4,6 +4,7 @@ pom.xml.versionsBackup
 
 # Gradle
 .gradle/
+build/
 
 # Maven/Tycho/p2 generated outputs
 **/target/
@@ -89,3 +90,5 @@ search-git.sh
 *.dylib
 
 .metadata
+
+.intellijPlatform/
